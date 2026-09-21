@@ -91,6 +91,85 @@ def get_fred(ids: list[str], errors: dict[str, str]) -> dict[str, pd.Series]:
     return out
 
 
+
+def bls_unemployment(errors: dict[str, str]) -> pd.Series | None:
+    """Monthly U.S. unemployment rate from the BLS public API."""
+    try:
+        now = datetime.now(timezone.utc)
+        payload = {
+            "seriesid": ["LNS14000000"],
+            "startyear": str(now.year - 9),
+            "endyear": str(now.year),
+        }
+        r = HTTP.post(
+            "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+            json=payload,
+            timeout=10,
+        )
+        r.raise_for_status()
+        data = r.json()
+        rows = (((data.get("Results") or {}).get("series") or [{}])[0].get("data") or [])
+        pts = {}
+        for row in rows:
+            period = row.get("period", "")
+            if not period.startswith("M") or period == "M13":
+                continue
+            ts = pd.Timestamp(year=int(row["year"]), month=int(period[1:]), day=1)
+            pts[ts] = float(row["value"])
+        if not pts:
+            raise ValueError("BLS returned no unemployment observations")
+        return pd.Series(pts, dtype=float).sort_index()
+    except Exception as exc:
+        errors["bls:unemployment"] = repr(exc)
+        return None
+
+
+def treasury_deficit(errors: dict[str, str]) -> pd.Series | None:
+    """Monthly U.S. federal deficit/surplus from Treasury Fiscal Data."""
+    try:
+        url = (
+            "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/"
+            "v1/accounting/mts/mts_table_1?page[size]=1000&sort=record_date"
+        )
+        rows = request(url, 12).json().get("data") or []
+        if not rows:
+            raise ValueError("Treasury returned no rows")
+        df = pd.DataFrame(rows)
+        value_cols = [
+            x for x in df.columns
+            if "deficit" in x.lower() and "current" in x.lower() and "amt" in x.lower()
+        ]
+        if not value_cols:
+            value_cols = [x for x in df.columns if "deficit" in x.lower() and "amt" in x.lower()]
+        if not value_cols:
+            raise ValueError("No deficit field found: " + ",".join(df.columns))
+        vcol = value_cols[0]
+        df["record_date"] = pd.to_datetime(df["record_date"], errors="coerce")
+        df[vcol] = pd.to_numeric(df[vcol], errors="coerce")
+        df = df.dropna(subset=["record_date", vcol]).copy()
+        if "record_type_cd" in df.columns:
+            monthly = df[df["record_type_cd"].astype(str).str.upper().eq("MTH")]
+            if not monthly.empty:
+                df = monthly
+        if "classification_desc" in df.columns:
+            desc = df["classification_desc"].astype(str)
+            preferred = df[desc.str.contains("deficit|surplus", case=False, regex=True, na=False)]
+            if not preferred.empty:
+                df = preferred
+        # Treasury table can expose more than one comparison row per record date.
+        # Choose the row with the largest absolute monthly amount, which is the
+        # government-wide total rather than a component/subtotal.
+        df["_abs"] = df[vcol].abs()
+        df = df.sort_values(["record_date", "_abs"]).groupby("record_date", as_index=False).tail(1)
+        s = pd.Series(df[vcol].values, index=df["record_date"], dtype=float).sort_index()
+        if s.empty:
+            raise ValueError("No usable Treasury deficit observations")
+        return s
+    except Exception as exc:
+        errors["treasury:fiscal_deficit"] = repr(exc)
+        return None
+
+
 def align(*series: pd.Series) -> list[pd.Series]:
     idx = pd.DatetimeIndex([])
     for s in series:
@@ -280,12 +359,21 @@ def main():
     if "MTSDS133FMS" in fs:
         f=F("MTSDS133FMS").rolling(12,min_periods=6).sum()
         put("fiscal_deficit",score(-f),f,"USD mn / 12m")
+    else:
+        tdef = treasury_deficit(errors)
+        if tdef is not None:
+            # Treasury reports deficit/surplus monthly; higher positive deficit = more fiscal pressure.
+            put("fiscal_deficit",score(tdef),tdef,"USD mn / month","direct")
 
     emp=[]
     if "UNRATE" in fs: emp.append(score(F("UNRATE")))
     if "ICSA" in fs: emp.append(score(F("ICSA")))
     if emp:
         put("employment",avg(*emp),F("UNRATE") if "UNRATE" in fs else avg(*emp),"% unemployment")
+    else:
+        unrate = bls_unemployment(errors)
+        if unrate is not None:
+            put("employment",score(unrate),unrate,"% unemployment","direct")
 
     if "SPY" in mk:
         spy=C("SPY")
