@@ -18,6 +18,7 @@ CONFIG = json.loads((ROOT / "indicator_config.json").read_text(encoding="utf-8")
 MANUAL = ROOT / "manual_inputs.json"
 HTTP = requests.Session()
 HTTP.headers.update({"User-Agent": "Mozilla/5.0 MarketRegimeLab/1.1"})
+# Daily importance model v1: structural importance + current extremeness + D1/D2 shocks.
 
 FRED_IDS = [
     "NFCI", "BAMLH0A0HYM2", "T10Y2Y", "T10Y3M", "DGS2", "DGS10",
