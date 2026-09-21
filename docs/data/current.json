@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-21T16:44:37.611210+00:00",
+  "generated_at": "2026-09-21T16:48:49.459842+00:00",
   "status": "ok",
   "working_count": 24,
   "total_count": 28,
@@ -8,7 +8,9 @@
     "fred:DGS2,DGS10,DTWEXBGS,BAA10Y": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
     "fred:ISRATIO,BUSINV,MTSDS133FMS,UNRATE": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
     "fred:ICSA,DFF,ECBDFR,WALCL": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
-    "fred:LOANINV": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))"
+    "fred:LOANINV": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+    "treasury:fiscal_deficit": "ValueError('No deficit field found: record_date,parent_id,classification_id,classification_desc,current_month_gross_rcpt_amt,current_month_gross_outly_amt,current_month_dfct_sur_amt,table_nbr,src_line_nbr,print_order_nbr,line_code_nbr,data_type_cd,record_type_cd,sequence_level_nbr,sequence_number_cd,record_fiscal_year,record_fiscal_quarter,record_calendar_year,record_calendar_quarter,record_calendar_month,record_calendar_day')",
+    "bls:unemployment": "ValueError(\"could not convert string to float: '-'\")"
   },
   "derivative_definition": {
     "d1": "一级导：当前指标分 - 上一期指标分（变化动能）",
@@ -23,7 +25,7 @@
       "type": "proxy",
       "definition": "IWM 相对 SPY 的20日强弱 + IWM 成交量活跃度。当前为公开数据代理版，后续可替换成更纯的零售成交数据。",
       "score": 38.76,
-      "raw": -5.5468,
+      "raw": -5.5666,
       "raw_unit": "% relative 20d",
       "d1": -7.54,
       "d2": -8.4,
@@ -759,11 +761,11 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "SPY 相对20/50/200日均线的位置 + RSP相对SPY强弱。",
-      "score": 35.75,
-      "raw": 0.0829,
+      "score": 35.95,
+      "raw": 0.083,
       "raw_unit": "SPY/MA200 - 1",
-      "d1": 13.06,
-      "d2": 13.0,
+      "d1": 13.26,
+      "d2": 13.19,
       "asof": "2026-09-21",
       "history": [
         {
@@ -1484,7 +1486,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 35.75
+          "score": 35.95
         }
       ],
       "quality": "direct"
@@ -1496,11 +1498,11 @@
       "cadence": "每日刷新/源数据按发布更新",
       "type": "composite",
       "definition": "Fed有效利率 + ECB存款便利利率的方向变化。",
-      "score": 20.5,
-      "raw": 4.6222,
+      "score": 20.9,
+      "raw": 4.58,
       "raw_unit": "% 10Y 20d",
-      "d1": 7.28,
-      "d2": 7.94,
+      "d1": 7.67,
+      "d2": 8.33,
       "asof": "2026-09-21",
       "history": [
         {
@@ -2221,7 +2223,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 20.5
+          "score": 20.9
         }
       ],
       "quality": "proxy"
@@ -2233,11 +2235,11 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "VIX水平 + SPY短期回撤。分数越高代表恐慌越强。",
-      "score": 26.85,
-      "raw": 15.02,
+      "score": 27.18,
+      "raw": 15.07,
       "raw_unit": "VIX",
-      "d1": -17.99,
-      "d2": -12.24,
+      "d1": -17.66,
+      "d2": -11.9,
       "asof": "2026-09-21",
       "history": [
         {
@@ -2958,7 +2960,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 26.85
+          "score": 27.18
         }
       ],
       "quality": "composite"
@@ -2970,11 +2972,11 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "VIX + 美国高收益债OAS。分数越高代表风险厌恶越强。",
-      "score": 15.81,
-      "raw": 15.02,
+      "score": 16.14,
+      "raw": 15.07,
       "raw_unit": "VIX",
-      "d1": 1.59,
-      "d2": 6.55,
+      "d1": 1.92,
+      "d2": 6.88,
       "asof": "2026-09-21",
       "history": [
         {
@@ -3695,7 +3697,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 15.81
+          "score": 16.14
         }
       ],
       "quality": "composite"
@@ -3707,11 +3709,11 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "VIX水平与VIX短期跳升幅度的组合。当前是波动率代理版。",
-      "score": 22.35,
-      "raw": -12.1637,
+      "score": 22.95,
+      "raw": -11.8713,
       "raw_unit": "% VIX 5d",
-      "d1": -5.29,
-      "d2": -8.73,
+      "d1": -4.7,
+      "d2": -8.13,
       "asof": "2026-09-21",
       "history": [
         {
@@ -4432,7 +4434,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 22.35
+          "score": 22.95
         }
       ],
       "quality": "proxy"
@@ -5182,7 +5184,7 @@
       "type": "composite",
       "definition": "2Y和10Y美债收益率的历史位置，用于描述利率环境。",
       "score": 99.21,
-      "raw": 4.957,
+      "raw": 4.955,
       "raw_unit": "10Y yield",
       "d1": -0.66,
       "d2": -1.32,
@@ -6655,11 +6657,11 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "黄金价格的历史位置与20日动量。",
-      "score": 43.19,
-      "raw": 398.27,
+      "score": 43.32,
+      "raw": 398.4,
       "raw_unit": "GLD",
-      "d1": -3.97,
-      "d2": -5.49,
+      "d1": -3.84,
+      "d2": -5.36,
       "asof": "2026-09-21",
       "history": [
         {
@@ -7380,7 +7382,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 43.19
+          "score": 43.32
         }
       ],
       "quality": "direct"
@@ -7392,11 +7394,11 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "WTI价格的历史位置与20日动量。",
-      "score": 83.27,
-      "raw": 91.55,
+      "score": 82.8,
+      "raw": 91.32,
       "raw_unit": "WTI future",
-      "d1": -11.77,
-      "d2": -10.65,
+      "d1": -12.24,
+      "d2": -11.11,
       "asof": "2026-09-21",
       "history": [
         {
@@ -8117,7 +8119,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 83.27
+          "score": 82.8
         }
       ],
       "quality": "direct"
@@ -8930,11 +8932,11 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "V1使用SPY相对200日均线及其长期百分位做代理；后续可替换为CAPE/ERP等基本面估值。",
-      "score": 58.65,
-      "raw": 1.0829,
+      "score": 58.89,
+      "raw": 1.083,
       "raw_unit": "SPY/MA200",
-      "d1": 11.51,
-      "d2": 11.03,
+      "d1": 11.75,
+      "d2": 11.27,
       "asof": "2026-09-21",
       "history": [
         {
@@ -9655,7 +9657,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 58.65
+          "score": 58.89
         }
       ],
       "quality": "proxy"
@@ -9668,7 +9670,7 @@
       "type": "direct",
       "definition": "SPY成交量的历史百分位。",
       "score": 0.13,
-      "raw": 20853265.0,
+      "raw": 21064223.0,
       "raw_unit": "shares",
       "d1": -53.44,
       "d2": -77.38,
@@ -10405,7 +10407,7 @@
       "type": "direct",
       "definition": "SPY 5日平均成交量相对20日平均成交量的变化。",
       "score": 90.21,
-      "raw": 20.9118,
+      "raw": 20.9855,
       "raw_unit": "%",
       "d1": -4.23,
       "d2": -6.88,
@@ -11141,11 +11143,11 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "SPY相对等权RSP的60日超额表现；越高代表市值权重集中度越强。",
-      "score": 89.81,
-      "raw": 4.8627,
+      "score": 89.42,
+      "raw": 4.8362,
       "raw_unit": "% SPY-RSP 60d",
-      "d1": 21.69,
-      "d2": 5.69,
+      "d1": 21.3,
+      "d2": 5.29,
       "asof": "2026-09-21",
       "history": [
         {
@@ -11866,7 +11868,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 89.81
+          "score": 89.42
         }
       ],
       "quality": "proxy"
@@ -12615,11 +12617,11 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "VIX、HY OAS、NFCI、SPY回撤四项组合。",
-      "score": 22.71,
-      "raw": 22.7072,
+      "score": 22.88,
+      "raw": 22.8836,
       "raw_unit": "score",
-      "d1": -7.89,
-      "d2": -3.97,
+      "d1": -7.72,
+      "d2": -3.79,
       "asof": "2026-09-21",
       "history": [
         {
@@ -13340,7 +13342,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 22.71
+          "score": 22.88
         }
       ],
       "quality": "composite"
@@ -13353,7 +13355,7 @@
       "type": "composite",
       "definition": "系统性风险分数的60日位置 + 近60日恶化速度。",
       "score": 11.59,
-      "raw": 22.7072,
+      "raw": 22.8836,
       "raw_unit": "systemic score",
       "d1": -13.57,
       "d2": -3.25,
@@ -14089,11 +14091,11 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "SPY 20日实现波动率相对60日实现波动率，以及60日实现波动率本身的变化。",
-      "score": 35.98,
-      "raw": 11.6149,
+      "score": 36.24,
+      "raw": 11.6211,
       "raw_unit": "% annualized",
-      "d1": 6.75,
-      "d2": 8.86,
+      "d1": 7.01,
+      "d2": 9.13,
       "asof": "2026-09-21",
       "history": [
         {
@@ -14814,7 +14816,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 35.98
+          "score": 36.24
         }
       ],
       "quality": "direct"
@@ -14826,11 +14828,11 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "V1使用SPY/200日均线比值在近5年历史中的百分位。",
-      "score": 58.65,
-      "raw": 1.0829,
+      "score": 58.89,
+      "raw": 1.083,
       "raw_unit": "SPY/MA200",
-      "d1": 11.51,
-      "d2": 11.03,
+      "d1": 11.75,
+      "d2": 11.27,
       "asof": "2026-09-21",
       "history": [
         {
@@ -15551,7 +15553,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 58.65
+          "score": 58.89
         }
       ],
       "quality": "proxy"
@@ -15563,11 +15565,11 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "SPY/200日均线比值的20日变化速度。",
-      "score": 42.99,
-      "raw": -0.3021,
+      "score": 43.12,
+      "raw": -0.2893,
       "raw_unit": "% / 20d",
-      "d1": 10.98,
-      "d2": 4.23,
+      "d1": 11.11,
+      "d2": 4.37,
       "asof": "2026-09-21",
       "history": [
         {
@@ -16288,7 +16290,7 @@
         },
         {
           "date": "2026-09-21",
-          "score": 42.99
+          "score": 43.12
         }
       ],
       "quality": "proxy"
@@ -16301,7 +16303,7 @@
       "type": "direct",
       "definition": "美国商业银行信贷余额同比增速及其变化。",
       "score": 87.17,
-      "raw": 3.024,
+      "raw": 3.0289,
       "raw_unit": "HYG/LQD 60d",
       "d1": -0.79,
       "d2": -9.39,
@@ -16573,7 +16575,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.06
+          "score": 42.2
         },
         {
           "date": "2026-04-10",
@@ -17038,7 +17040,7 @@
       "type": "direct",
       "definition": "10Y-2Y与10Y-3M期限利差组合。",
       "score": 4.5,
-      "raw": 0.972,
+      "raw": 0.97,
       "raw_unit": "10Y-13W",
       "d1": 2.25,
       "d2": 3.7,
