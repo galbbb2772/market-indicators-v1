@@ -115,7 +115,10 @@ def bls_unemployment(errors: dict[str, str]) -> pd.Series | None:
             if not period.startswith("M") or period == "M13":
                 continue
             ts = pd.Timestamp(year=int(row["year"]), month=int(period[1:]), day=1)
-            pts[ts] = float(row["value"])
+            val = pd.to_numeric(row.get("value"), errors="coerce")
+            if pd.isna(val):
+                continue
+            pts[ts] = float(val)
         if not pts:
             raise ValueError("BLS returned no unemployment observations")
         return pd.Series(pts, dtype=float).sort_index()
@@ -135,12 +138,16 @@ def treasury_deficit(errors: dict[str, str]) -> pd.Series | None:
         if not rows:
             raise ValueError("Treasury returned no rows")
         df = pd.DataFrame(rows)
-        value_cols = [
-            x for x in df.columns
-            if "deficit" in x.lower() and "current" in x.lower() and "amt" in x.lower()
-        ]
+        value_cols = []
+        if "current_month_dfct_sur_amt" in df.columns:
+            value_cols = ["current_month_dfct_sur_amt"]
         if not value_cols:
-            value_cols = [x for x in df.columns if "deficit" in x.lower() and "amt" in x.lower()]
+            value_cols = [
+                x for x in df.columns
+                if ("deficit" in x.lower() or "dfct" in x.lower()) and "current" in x.lower() and "amt" in x.lower()
+            ]
+        if not value_cols:
+            value_cols = [x for x in df.columns if ("deficit" in x.lower() or "dfct" in x.lower()) and "amt" in x.lower()]
         if not value_cols:
             raise ValueError("No deficit field found: " + ",".join(df.columns))
         vcol = value_cols[0]
