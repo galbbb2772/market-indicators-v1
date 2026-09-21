@@ -132,7 +132,7 @@ def treasury_deficit(errors: dict[str, str]) -> pd.Series | None:
     try:
         url = (
             "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/"
-            "v1/accounting/mts/mts_table_1?page[size]=1000&sort=record_date"
+            "v1/accounting/mts/mts_table_1?page[size]=1000&sort=-record_date"
         )
         rows = request(url, 12).json().get("data") or []
         if not rows:
@@ -385,7 +385,7 @@ def main():
         tdef = treasury_deficit(errors)
         if tdef is not None:
             # Treasury reports deficit/surplus monthly; higher positive deficit = more fiscal pressure.
-            put("fiscal_deficit",score(tdef,window=120),tdef,"USD mn / month","direct")
+            put("fiscal_deficit",score(tdef,window=120),tdef,"USD / month","direct")
 
     emp=[]
     if "UNRATE" in fs: emp.append(score(F("UNRATE")))
