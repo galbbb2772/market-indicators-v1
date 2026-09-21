@@ -473,12 +473,56 @@ def main():
             out[item["id"]]={**item,"score":None,"raw":None,"raw_unit":"","d1":None,"d2":None,"asof":None,"history":[],"quality":"source_error"}
 
     ordered=[out[x["id"]] for x in CONFIG]
+
+    # 每日重要度：把长期“市场重要性”与当天异常程度、D1、D2结合。
+    # 这是“今天该优先看什么”的关注分，不是买卖信号，也不代表方向。
+    # 50% 基础重要性 + 30% Level偏离中性程度 + 12% D1冲击 + 8% D2加速度。
+    for item in ordered:
+        if item.get("score") is None:
+            item["daily_importance_score"] = None
+            item["daily_importance_rank"] = None
+            item["attention_state"] = "no_data"
+            continue
+        base = float(item.get("importance_score", 50))
+        extreme = min(100.0, abs(float(item["score"]) - 50.0) * 2.0)
+        d1_shock = min(100.0, abs(float(item.get("d1") or 0.0)) * 5.0)
+        d2_shock = min(100.0, abs(float(item.get("d2") or 0.0)) * 4.0)
+        daily = 0.50 * base + 0.30 * extreme + 0.12 * d1_shock + 0.08 * d2_shock
+        item["daily_importance_score"] = round(float(np.clip(daily, 0, 100)), 2)
+        if daily >= 80:
+            item["attention_state"] = "critical"
+        elif daily >= 65:
+            item["attention_state"] = "high"
+        elif daily >= 50:
+            item["attention_state"] = "watch"
+        else:
+            item["attention_state"] = "normal"
+
+    ranked = sorted(
+        [x for x in ordered if x.get("daily_importance_score") is not None],
+        key=lambda x: (-x["daily_importance_score"], x.get("importance_rank", 999))
+    )
+    for rank, item in enumerate(ranked, 1):
+        item["daily_importance_rank"] = rank
+
+    denom = sum(float(x.get("importance_score", 50)) for x in ranked) or 1.0
+    market_attention = sum(
+        float(x["daily_importance_score"]) * float(x.get("importance_score", 50))
+        for x in ranked
+    ) / denom
+
     working=sum(x["score"] is not None for x in ordered)
     payload={
         "generated_at":datetime.now(timezone.utc).isoformat(),
         "status":"ok" if working>=20 else "partial",
         "working_count":working,
         "total_count":len(ordered),
+        "market_attention_score":round(float(market_attention),2),
+        "importance_method":{
+            "base":"长期基础重要性 0-100，由宏观传导、系统性、领先性和市场覆盖面排序",
+            "daily":"每日重要度 = 50%基础重要性 + 30%Level极端度 + 12%D1冲击 + 8%D2加速度",
+            "note":"每日重要度只表示今天值得优先关注的程度，不代表看多/看空或交易信号"
+        },
         "errors":errors,
         "derivative_definition":{
             "d1":"一级导：当前指标分 - 上一期指标分（变化动能）",
