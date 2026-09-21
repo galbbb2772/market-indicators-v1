@@ -1,8 +1,14 @@
 {
-  "generated_at": "2026-09-21T17:03:27.177470+00:00",
+  "generated_at": "2026-09-21T23:06:20.288448+00:00",
   "status": "ok",
   "working_count": 28,
   "total_count": 28,
+  "market_attention_score": 64.16,
+  "importance_method": {
+    "base": "长期基础重要性 0-100，由宏观传导、系统性、领先性和市场覆盖面排序",
+    "daily": "每日重要度 = 50%基础重要性 + 30%Level极端度 + 12%D1冲击 + 8%D2加速度",
+    "note": "每日重要度只表示今天值得优先关注的程度，不代表看多/看空或交易信号"
+  },
   "errors": {
     "fred:NFCI,BAMLH0A0HYM2,T10Y2Y,T10Y3M": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
     "fred:DGS2,DGS10,DTWEXBGS,BAA10Y": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
@@ -22,11 +28,14 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "IWM 相对 SPY 的20日强弱 + IWM 成交量活跃度。当前为公开数据代理版，后续可替换成更纯的零售成交数据。",
-      "score": 38.82,
-      "raw": -5.6529,
+      "importance_score": 60,
+      "importance_rank": 24,
+      "importance_reason": "散户活跃度反映风险偏好，但结构性噪声较大。",
+      "score": 42.26,
+      "raw": -5.8122,
       "raw_unit": "% relative 20d",
-      "d1": -7.47,
-      "d2": -8.33,
+      "d1": -4.03,
+      "d2": -4.89,
       "asof": "2026-09-21",
       "history": [
         {
@@ -747,10 +756,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 38.82
+          "score": 42.26
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 38.63,
+      "attention_state": "normal",
+      "daily_importance_rank": 26
     },
     {
       "id": "market_support",
@@ -759,11 +771,14 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "SPY 相对20/50/200日均线的位置 + RSP相对SPY强弱。",
-      "score": 36.41,
-      "raw": 0.0833,
+      "importance_score": 75,
+      "importance_rank": 17,
+      "importance_reason": "广度、均线与等权表现能验证指数上涨是否健康。",
+      "score": 38.59,
+      "raw": 0.0849,
       "raw_unit": "SPY/MA200 - 1",
-      "d1": 13.72,
-      "d2": 13.66,
+      "d1": 15.91,
+      "d2": 15.84,
       "asof": "2026-09-21",
       "history": [
         {
@@ -1160,7 +1175,7 @@
         },
         {
           "date": "2026-05-26",
-          "score": 68.88
+          "score": 68.92
         },
         {
           "date": "2026-05-27",
@@ -1484,10 +1499,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 36.41
+          "score": 38.59
         }
       ],
-      "quality": "direct"
+      "quality": "direct",
+      "daily_importance_score": 58.96,
+      "attention_state": "watch",
+      "daily_importance_rank": 16
     },
     {
       "id": "global_cb_rhythm",
@@ -1496,11 +1514,14 @@
       "cadence": "每日刷新/源数据按发布更新",
       "type": "composite",
       "definition": "Fed有效利率 + ECB存款便利利率的方向变化。",
-      "score": 20.5,
-      "raw": 4.6222,
+      "importance_score": 88,
+      "importance_rank": 9,
+      "importance_reason": "主要央行政策方向决定全球流动性环境。",
+      "score": 20.11,
+      "raw": 4.7488,
       "raw_unit": "% 10Y 20d",
-      "d1": 7.28,
-      "d2": 7.94,
+      "d1": 6.88,
+      "d2": 7.54,
       "asof": "2026-09-21",
       "history": [
         {
@@ -2221,10 +2242,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 20.5
+          "score": 20.11
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 68.47,
+      "attention_state": "high",
+      "daily_importance_rank": 12
     },
     {
       "id": "largecap_panic",
@@ -2233,11 +2257,14 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "VIX水平 + SPY短期回撤。分数越高代表恐慌越强。",
-      "score": 27.18,
-      "raw": 15.08,
+      "importance_score": 85,
+      "importance_rank": 11,
+      "importance_reason": "大盘波动和短期回撤是即时压力确认层。",
+      "score": 25.73,
+      "raw": 14.87,
       "raw_unit": "VIX",
-      "d1": -17.66,
-      "d2": -11.9,
+      "d1": -19.11,
+      "d2": -13.36,
       "asof": "2026-09-21",
       "history": [
         {
@@ -2958,10 +2985,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 27.18
+          "score": 25.73
         }
       ],
-      "quality": "composite"
+      "quality": "composite",
+      "daily_importance_score": 72.8,
+      "attention_state": "high",
+      "daily_importance_rank": 11
     },
     {
       "id": "market_fear",
@@ -2970,11 +3000,14 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "VIX + 美国高收益债OAS。分数越高代表风险厌恶越强。",
-      "score": 16.14,
-      "raw": 15.08,
+      "importance_score": 87,
+      "importance_rank": 10,
+      "importance_reason": "波动率与信用压力结合，可较直接观察风险厌恶。",
+      "score": 15.01,
+      "raw": 14.87,
       "raw_unit": "VIX",
-      "d1": 1.92,
-      "d2": 6.88,
+      "d1": 0.79,
+      "d2": 5.75,
       "asof": "2026-09-21",
       "history": [
         {
@@ -3119,7 +3152,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 51.46
+          "score": 51.52
         },
         {
           "date": "2026-02-27",
@@ -3695,10 +3728,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 16.14
+          "score": 15.01
         }
       ],
-      "quality": "composite"
+      "quality": "composite",
+      "daily_importance_score": 66.81,
+      "attention_state": "high",
+      "daily_importance_rank": 13
     },
     {
       "id": "options_anomaly",
@@ -3707,11 +3743,14 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "VIX水平与VIX短期跳升幅度的组合。当前是波动率代理版。",
-      "score": 23.08,
-      "raw": -11.8129,
+      "importance_score": 73,
+      "importance_rank": 18,
+      "importance_reason": "期权波动异常是短期风险与事件定价的重要确认项。",
+      "score": 20.5,
+      "raw": -13.0409,
       "raw_unit": "% VIX 5d",
-      "d1": -4.56,
-      "d2": -8.0,
+      "d1": -7.14,
+      "d2": -10.58,
       "asof": "2026-09-21",
       "history": [
         {
@@ -4432,10 +4471,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 23.08
+          "score": 20.5
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 61.87,
+      "attention_state": "watch",
+      "daily_importance_rank": 15
     },
     {
       "id": "liquidity_risk",
@@ -4444,11 +4486,14 @@
       "cadence": "每日刷新/周频源更新",
       "type": "composite",
       "definition": "NFCI金融条件 + 高收益债利差 + Fed资产负债表4周变化。",
-      "score": 2.38,
-      "raw": 2.381,
+      "importance_score": 98,
+      "importance_rank": 2,
+      "importance_reason": "流动性决定风险资产的边际定价和压力传导速度。",
+      "score": 3.04,
+      "raw": 3.0423,
       "raw_unit": "score",
-      "d1": 0.4,
-      "d2": 1.32,
+      "d1": 1.06,
+      "d2": 1.98,
       "asof": "2026-09-21",
       "history": [
         {
@@ -4601,7 +4646,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.25
+          "score": 27.38
         },
         {
           "date": "2026-02-27",
@@ -5169,10 +5214,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 2.38
+          "score": 3.04
         }
       ],
-      "quality": "composite"
+      "quality": "composite",
+      "daily_importance_score": 78.45,
+      "attention_state": "high",
+      "daily_importance_rank": 3
     },
     {
       "id": "treasury_rate_regime",
@@ -5181,11 +5229,14 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "2Y和10Y美债收益率的历史位置，用于描述利率环境。",
-      "score": 99.21,
-      "raw": 4.957,
+      "importance_score": 92,
+      "importance_rank": 6,
+      "importance_reason": "美债利率是全球风险资产的折现率核心。",
+      "score": 99.34,
+      "raw": 4.963,
       "raw_unit": "10Y yield",
-      "d1": -0.66,
-      "d2": -1.32,
+      "d1": -0.53,
+      "d2": -1.19,
       "asof": "2026-09-21",
       "history": [
         {
@@ -5906,10 +5957,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 99.21
+          "score": 99.34
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 76.3,
+      "attention_state": "high",
+      "daily_importance_rank": 8
     },
     {
       "id": "usd_credit",
@@ -5918,11 +5972,14 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "广义美元指数强弱 + Baa-10Y信用利差。",
-      "score": 43.25,
-      "raw": 43.254,
+      "importance_score": 84,
+      "importance_rank": 12,
+      "importance_reason": "美元融资环境与信用压力影响全球资产与跨境流动性。",
+      "score": 43.65,
+      "raw": 43.6508,
       "raw_unit": "score",
-      "d1": 3.17,
-      "d2": 4.76,
+      "d1": 3.57,
+      "d2": 5.16,
       "asof": "2026-09-21",
       "history": [
         {
@@ -6075,7 +6132,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 52.71
+          "score": 52.78
         },
         {
           "date": "2026-02-27",
@@ -6643,10 +6700,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 43.25
+          "score": 43.65
         }
       ],
-      "quality": "composite"
+      "quality": "composite",
+      "daily_importance_score": 49.6,
+      "attention_state": "normal",
+      "daily_importance_rank": 23
     },
     {
       "id": "gold",
@@ -6655,11 +6715,14 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "黄金价格的历史位置与20日动量。",
-      "score": 43.19,
-      "raw": 398.245,
+      "importance_score": 55,
+      "importance_rank": 26,
+      "importance_reason": "黄金更适合观察避险、实际利率与美元环境的交叉验证。",
+      "score": 43.32,
+      "raw": 398.38,
       "raw_unit": "GLD",
-      "d1": -3.97,
-      "d2": -5.49,
+      "d1": -3.84,
+      "d2": -5.36,
       "asof": "2026-09-21",
       "history": [
         {
@@ -7380,10 +7443,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 43.19
+          "score": 43.32
         }
       ],
-      "quality": "direct"
+      "quality": "direct",
+      "daily_importance_score": 35.53,
+      "attention_state": "normal",
+      "daily_importance_rank": 28
     },
     {
       "id": "oil",
@@ -7392,11 +7458,14 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "WTI价格的历史位置与20日动量。",
-      "score": 82.21,
-      "raw": 91.24,
+      "importance_score": 57,
+      "importance_rank": 25,
+      "importance_reason": "原油影响通胀和增长，但对美股的方向并非单一。",
+      "score": 84.79,
+      "raw": 92.18,
       "raw_unit": "WTI future",
-      "d1": -12.83,
-      "d2": -11.71,
+      "d1": -10.25,
+      "d2": -9.13,
       "asof": "2026-09-21",
       "history": [
         {
@@ -8117,10 +8186,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 82.21
+          "score": 84.79
         }
       ],
-      "quality": "direct"
+      "quality": "direct",
+      "daily_importance_score": 58.45,
+      "attention_state": "watch",
+      "daily_importance_rank": 17
     },
     {
       "id": "buffett_cash",
@@ -8129,6 +8201,9 @@
       "cadence": "每日刷新/季度源更新",
       "type": "manual",
       "definition": "Berkshire现金及短期国债占相关资产口径。V1保留自动延用最近值接口，季度数据后续接SEC/财报解析。",
+      "importance_score": 45,
+      "importance_rank": 28,
+      "importance_reason": "Berkshire现金仓位有参考价值，但低频且主体单一。",
       "score": 28.94,
       "raw": 28.9385,
       "raw_unit": "%",
@@ -8149,7 +8224,10 @@
           "score": 28.94
         }
       ],
-      "quality": "manual"
+      "quality": "manual",
+      "daily_importance_score": 38.08,
+      "attention_state": "normal",
+      "daily_importance_rank": 27
     },
     {
       "id": "high_yield",
@@ -8158,11 +8236,14 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "ICE BofA美国高收益债OAS历史位置。分数越高代表信用压力越大。",
-      "score": 2.38,
-      "raw": 0.7494,
+      "importance_score": 96,
+      "importance_rank": 3,
+      "importance_reason": "高收益信用利差往往能较早反映融资压力与违约风险。",
+      "score": 3.04,
+      "raw": 0.7487,
       "raw_unit": "HYG/LQD",
-      "d1": 0.4,
-      "d2": 1.32,
+      "d1": 1.06,
+      "d2": 1.98,
       "asof": "2026-09-21",
       "history": [
         {
@@ -8315,7 +8396,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.25
+          "score": 27.38
         },
         {
           "date": "2026-02-27",
@@ -8883,10 +8964,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 2.38
+          "score": 3.04
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 77.45,
+      "attention_state": "high",
+      "daily_importance_rank": 5
     },
     {
       "id": "inventory_cycle",
@@ -8895,11 +8979,14 @@
       "cadence": "每日刷新/月频源更新",
       "type": "composite",
       "definition": "库存销售比 + 总商业库存变化，用于跟踪库存周期。",
-      "score": 43.92,
-      "raw": -13.7768,
+      "importance_score": 66,
+      "importance_rank": 21,
+      "importance_reason": "库存周期影响制造业和盈利节奏，但更新频率较低。",
+      "score": 44.25,
+      "raw": -14.2109,
       "raw_unit": "% XLI-SPY 120d",
-      "d1": 2.18,
-      "d2": 2.18,
+      "d1": 2.51,
+      "d2": 2.51,
       "asof": "2026-09-21",
       "history": [
         {
@@ -9620,10 +9707,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 43.92
+          "score": 44.25
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 38.76,
+      "attention_state": "normal",
+      "daily_importance_rank": 25
     },
     {
       "id": "fiscal_deficit",
@@ -9632,6 +9722,9 @@
       "cadence": "每日刷新/月频源更新",
       "type": "direct",
       "definition": "联邦月度盈余/赤字的滚动12个月总和。赤字越深，风险分越高。",
+      "importance_score": 80,
+      "importance_rank": 14,
+      "importance_reason": "财政扩张影响利率供给、期限溢价与中期宏观环境。",
       "score": 97.78,
       "raw": 432285727964.6,
       "raw_unit": "USD / month",
@@ -9776,7 +9869,10 @@
           "score": 97.78
         }
       ],
-      "quality": "direct"
+      "quality": "direct",
+      "daily_importance_score": 78.0,
+      "attention_state": "high",
+      "daily_importance_rank": 4
     },
     {
       "id": "employment",
@@ -9785,6 +9881,9 @@
       "cadence": "每日刷新/周月频源更新",
       "type": "composite",
       "definition": "失业率 + 初请失业金人数。分数越高代表劳动力市场压力越大。",
+      "importance_score": 91,
+      "importance_rank": 7,
+      "importance_reason": "就业决定居民收入、消费韧性及货币政策反应。",
       "score": 57.39,
       "raw": 4.1,
       "raw_unit": "% unemployment",
@@ -10017,7 +10116,10 @@
           "score": 57.39
         }
       ],
-      "quality": "direct"
+      "quality": "direct",
+      "daily_importance_score": 52.7,
+      "attention_state": "watch",
+      "daily_importance_rank": 22
     },
     {
       "id": "valuation_cycle",
@@ -10026,11 +10128,14 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "V1使用SPY相对200日均线及其长期百分位做代理；后续可替换为CAPE/ERP等基本面估值。",
-      "score": 59.13,
-      "raw": 1.0833,
+      "importance_score": 70,
+      "importance_rank": 19,
+      "importance_reason": "估值影响中长期预期回报，但短期择时能力较弱。",
+      "score": 60.79,
+      "raw": 1.0849,
       "raw_unit": "SPY/MA200",
-      "d1": 11.98,
-      "d2": 11.51,
+      "d1": 13.65,
+      "d2": 13.17,
       "asof": "2026-09-21",
       "history": [
         {
@@ -10427,7 +10532,7 @@
         },
         {
           "date": "2026-05-26",
-          "score": 78.81
+          "score": 78.89
         },
         {
           "date": "2026-05-27",
@@ -10751,10 +10856,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 59.13
+          "score": 60.79
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 53.88,
+      "attention_state": "watch",
+      "daily_importance_rank": 20
     },
     {
       "id": "market_volume",
@@ -10763,11 +10871,14 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "SPY成交量的历史百分位。",
-      "score": 0.13,
-      "raw": 21709063.0,
+      "importance_score": 64,
+      "importance_rank": 22,
+      "importance_reason": "成交量验证价格变化质量，但通常属于二级确认。",
+      "score": 29.1,
+      "raw": 49311754.0,
       "raw_unit": "shares",
-      "d1": -53.44,
-      "d2": -77.38,
+      "d1": -24.47,
+      "d2": -48.41,
       "asof": "2026-09-21",
       "history": [
         {
@@ -11488,10 +11599,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 0.13
+          "score": 29.1
         }
       ],
-      "quality": "direct"
+      "quality": "direct",
+      "daily_importance_score": 64.54,
+      "attention_state": "watch",
+      "daily_importance_rank": 14
     },
     {
       "id": "volume_speed",
@@ -11500,11 +11614,14 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "SPY 5日平均成交量相对20日平均成交量的变化。",
-      "score": 90.34,
-      "raw": 21.2107,
+      "importance_score": 61,
+      "importance_rank": 23,
+      "importance_reason": "成交量加速度能捕捉交易活跃度突变，但噪声更高。",
+      "score": 94.84,
+      "raw": 30.5217,
       "raw_unit": "%",
-      "d1": -4.1,
-      "d2": -6.75,
+      "d1": 0.4,
+      "d2": -2.25,
       "asof": "2026-09-21",
       "history": [
         {
@@ -12225,10 +12342,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 90.34
+          "score": 94.84
         }
       ],
-      "quality": "direct"
+      "quality": "direct",
+      "daily_importance_score": 58.36,
+      "attention_state": "watch",
+      "daily_importance_rank": 18
     },
     {
       "id": "concentration",
@@ -12237,11 +12357,14 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "SPY相对等权RSP的60日超额表现；越高代表市值权重集中度越强。",
-      "score": 89.81,
-      "raw": 4.8682,
+      "importance_score": 82,
+      "importance_rank": 13,
+      "importance_reason": "指数集中度过高时，少数权重股会放大整体脆弱性。",
+      "score": 91.4,
+      "raw": 5.1608,
       "raw_unit": "% SPY-RSP 60d",
-      "d1": 21.69,
-      "d2": 5.69,
+      "d1": 23.28,
+      "d2": 7.28,
       "asof": "2026-09-21",
       "history": [
         {
@@ -12962,10 +13085,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 89.81
+          "score": 91.4
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 80.17,
+      "attention_state": "critical",
+      "daily_importance_rank": 1
     },
     {
       "id": "leverage_liquidity",
@@ -12974,11 +13100,14 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "NFCI + HYG/LQD相对强弱 + 高收益利差。V1是公开代理版。",
-      "score": 2.38,
-      "raw": 2.381,
+      "importance_score": 90,
+      "importance_rank": 8,
+      "importance_reason": "杠杆与融资条件会放大市场波动和去杠杆冲击。",
+      "score": 3.04,
+      "raw": 3.0423,
       "raw_unit": "score",
-      "d1": 0.4,
-      "d2": 1.32,
+      "d1": 1.06,
+      "d2": 1.98,
       "asof": "2026-09-21",
       "history": [
         {
@@ -13131,7 +13260,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.25
+          "score": 27.38
         },
         {
           "date": "2026-02-27",
@@ -13699,10 +13828,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 2.38
+          "score": 3.04
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 74.45,
+      "attention_state": "high",
+      "daily_importance_rank": 9
     },
     {
       "id": "systemic_risk",
@@ -13711,11 +13843,14 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "VIX、HY OAS、NFCI、SPY回撤四项组合。",
-      "score": 22.57,
-      "raw": 22.575,
+      "importance_score": 100,
+      "importance_rank": 1,
+      "importance_reason": "直接反映跨资产、信用、波动与回撤的系统性风险，是总风险层。",
+      "score": 19.93,
+      "raw": 19.9295,
       "raw_unit": "score",
-      "d1": -8.02,
-      "d2": -4.1,
+      "d1": -10.67,
+      "d2": -6.75,
       "asof": "2026-09-21",
       "history": [
         {
@@ -13860,7 +13995,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 47.88
+          "score": 47.93
         },
         {
           "date": "2026-02-27",
@@ -14436,10 +14571,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 22.57
+          "score": 19.93
         }
       ],
-      "quality": "composite"
+      "quality": "composite",
+      "daily_importance_score": 76.6,
+      "attention_state": "high",
+      "daily_importance_rank": 7
     },
     {
       "id": "risk_60d",
@@ -14448,11 +14586,14 @@
       "cadence": "日更",
       "type": "composite",
       "definition": "系统性风险分数的60日位置 + 近60日恶化速度。",
-      "score": 11.39,
-      "raw": 22.575,
+      "importance_score": 79,
+      "importance_rank": 15,
+      "importance_reason": "用于识别系统风险是否在中期窗口持续积累。",
+      "score": 6.83,
+      "raw": 19.9295,
       "raw_unit": "systemic score",
-      "d1": -13.77,
-      "d2": -3.45,
+      "d1": -18.33,
+      "d2": -8.02,
       "asof": "2026-09-21",
       "history": [
         {
@@ -15173,10 +15314,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 11.39
+          "score": 6.83
         }
       ],
-      "quality": "composite"
+      "quality": "composite",
+      "daily_importance_score": 78.97,
+      "attention_state": "high",
+      "daily_importance_rank": 2
     },
     {
       "id": "vol_60d_change",
@@ -15185,11 +15329,14 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "SPY 20日实现波动率相对60日实现波动率，以及60日实现波动率本身的变化。",
-      "score": 36.64,
-      "raw": 11.6336,
+      "importance_score": 77,
+      "importance_rank": 16,
+      "importance_reason": "波动率结构的变化有助于识别风险状态切换。",
+      "score": 38.29,
+      "raw": 11.7094,
       "raw_unit": "% annualized",
-      "d1": 7.41,
-      "d2": 9.52,
+      "d1": 9.06,
+      "d2": 11.18,
       "asof": "2026-09-21",
       "history": [
         {
@@ -15418,7 +15565,7 @@
         },
         {
           "date": "2026-03-25",
-          "score": 57.34
+          "score": 57.41
         },
         {
           "date": "2026-03-26",
@@ -15910,10 +16057,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 36.64
+          "score": 38.29
         }
       ],
-      "quality": "direct"
+      "quality": "direct",
+      "daily_importance_score": 54.54,
+      "attention_state": "watch",
+      "daily_importance_rank": 19
     },
     {
       "id": "valuation_percentile",
@@ -15922,11 +16072,14 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "V1使用SPY/200日均线比值在近5年历史中的百分位。",
-      "score": 59.13,
-      "raw": 1.0833,
+      "importance_score": 68,
+      "importance_rank": 20,
+      "importance_reason": "历史估值位置是慢变量，适合做背景而非主触发器。",
+      "score": 60.79,
+      "raw": 1.0849,
       "raw_unit": "SPY/MA200",
-      "d1": 11.98,
-      "d2": 11.51,
+      "d1": 13.65,
+      "d2": 13.17,
       "asof": "2026-09-21",
       "history": [
         {
@@ -16323,7 +16476,7 @@
         },
         {
           "date": "2026-05-26",
-          "score": 78.81
+          "score": 78.89
         },
         {
           "date": "2026-05-27",
@@ -16647,10 +16800,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 59.13
+          "score": 60.79
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 52.88,
+      "attention_state": "watch",
+      "daily_importance_rank": 21
     },
     {
       "id": "valuation_speed",
@@ -16659,11 +16815,14 @@
       "cadence": "日更",
       "type": "proxy",
       "definition": "SPY/200日均线比值的20日变化速度。",
-      "score": 43.12,
-      "raw": -0.2636,
+      "importance_score": 52,
+      "importance_rank": 27,
+      "importance_reason": "估值变化速度是衍生变量，主要用于辅助确认。",
+      "score": 45.11,
+      "raw": -0.1172,
       "raw_unit": "% / 20d",
-      "d1": 11.11,
-      "d2": 4.37,
+      "d1": 13.1,
+      "d2": 6.35,
       "asof": "2026-09-21",
       "history": [
         {
@@ -17384,10 +17543,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 43.12
+          "score": 45.11
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 38.83,
+      "attention_state": "normal",
+      "daily_importance_rank": 24
     },
     {
       "id": "credit_cycle",
@@ -17396,11 +17558,14 @@
       "cadence": "每日刷新/月频源更新",
       "type": "direct",
       "definition": "美国商业银行信贷余额同比增速及其变化。",
-      "score": 87.17,
-      "raw": 3.0321,
+      "importance_score": 94,
+      "importance_rank": 5,
+      "importance_reason": "信贷扩张/收缩对经济与资产定价具有核心传导作用。",
+      "score": 86.24,
+      "raw": 2.9308,
       "raw_unit": "HYG/LQD 60d",
-      "d1": -0.79,
-      "d2": -9.39,
+      "d1": -1.72,
+      "d2": -10.32,
       "asof": "2026-09-21",
       "history": [
         {
@@ -18101,7 +18266,7 @@
         },
         {
           "date": "2026-09-14",
-          "score": 86.77
+          "score": 86.9
         },
         {
           "date": "2026-09-15",
@@ -18121,10 +18286,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 87.17
+          "score": 86.24
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 73.08,
+      "attention_state": "high",
+      "daily_importance_rank": 10
     },
     {
       "id": "yield_curve",
@@ -18133,11 +18301,14 @@
       "cadence": "日更",
       "type": "direct",
       "definition": "10Y-2Y与10Y-3M期限利差组合。",
-      "score": 4.5,
-      "raw": 0.972,
+      "importance_score": 95,
+      "importance_rank": 4,
+      "importance_reason": "收益率曲线连接货币政策、增长预期和衰退风险。",
+      "score": 3.97,
+      "raw": 0.981,
       "raw_unit": "10Y-13W",
-      "d1": 2.25,
-      "d2": 3.7,
+      "d1": 1.72,
+      "d2": 3.17,
       "asof": "2026-09-21",
       "history": [
         {
@@ -18858,10 +19029,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 4.5
+          "score": 3.97
         }
       ],
-      "quality": "proxy"
+      "quality": "proxy",
+      "daily_importance_score": 77.16,
+      "attention_state": "high",
+      "daily_importance_rank": 6
     }
   ]
 }
