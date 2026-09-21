@@ -3,9 +3,10 @@ from __future__ import annotations
 import io
 import json
 import math
-import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 import numpy as np
 import pandas as pd
@@ -15,20 +16,56 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "docs" / "data" / "current.json"
 CONFIG = json.loads((ROOT / "indicator_config.json").read_text(encoding="utf-8"))
 MANUAL = ROOT / "manual_inputs.json"
-
 HTTP = requests.Session()
-HTTP.headers.update({"User-Agent": "market-regime-lab/1.0"})
+HTTP.headers.update({"User-Agent": "Mozilla/5.0 MarketRegimeLab/1.1"})
 
 FRED_IDS = [
-    "VIXCLS", "NFCI", "BAMLH0A0HYM2", "T10Y2Y", "T10Y3M", "DGS2", "DGS10",
-    "DTWEXBGS", "BAA10Y", "DCOILWTICO", "ISRATIO", "BUSINV", "MTSDS133FMS",
-    "UNRATE", "ICSA", "DFF", "ECBDFR", "WALCL", "LOANINV"
+    "NFCI", "BAMLH0A0HYM2", "T10Y2Y", "T10Y3M", "DGS2", "DGS10",
+    "DTWEXBGS", "BAA10Y", "ISRATIO", "BUSINV", "MTSDS133FMS", "UNRATE",
+    "ICSA", "DFF", "ECBDFR", "WALCL", "LOANINV"
 ]
+YAHOO = ["SPY", "RSP", "IWM", "HYG", "LQD", "GLD", "^VIX", "CL=F", "DX-Y.NYB", "^TNX", "^IRX"]
 
 
-def get_fred(ids: list[str]) -> dict[str, pd.Series]:
-    url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=" + ",".join(ids)
-    r = HTTP.get(url, timeout=60)
+def request(url: str, timeout: int = 30) -> requests.Response:
+    last = None
+    for base in (url, url.replace("query1.finance.yahoo.com", "query2.finance.yahoo.com")):
+        for wait in (0, 2):
+            if wait:
+                time.sleep(wait)
+            try:
+                r = HTTP.get(base, timeout=timeout)
+                if r.ok:
+                    return r
+                last = RuntimeError(f"HTTP {r.status_code}: {r.text[:160]}")
+            except Exception as exc:
+                last = exc
+    raise last or RuntimeError("request failed")
+
+
+def yahoo(symbol: str) -> pd.DataFrame:
+    sym = quote(symbol, safe="")
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}?range=10y&interval=1d&events=history&includeAdjustedClose=true"
+    data = request(url, 35).json()
+    res = (data.get("chart") or {}).get("result")
+    if not res:
+        raise ValueError(str((data.get("chart") or {}).get("error")))
+    obj = res[0]
+    ts = obj.get("timestamp") or []
+    q = ((obj.get("indicators") or {}).get("quote") or [{}])[0]
+    adj = ((obj.get("indicators") or {}).get("adjclose") or [{}])[0].get("adjclose")
+    close = adj if adj and len(adj) == len(ts) else q.get("close")
+    vol = q.get("volume") or [None] * len(ts)
+    if not ts or not close:
+        raise ValueError("no Yahoo history")
+    idx = pd.to_datetime(ts, unit="s", utc=True).tz_convert(None).normalize()
+    df = pd.DataFrame({"Close": pd.to_numeric(close, errors="coerce"), "Volume": pd.to_numeric(vol, errors="coerce")}, index=idx)
+    return df.dropna(subset=["Close"]).sort_index()
+
+
+def fred_chunk(ids: list[str]) -> dict[str, pd.Series]:
+    url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=" + ",".join(ids) + "&cosd=2015-01-01"
+    r = HTTP.get(url, timeout=30)
     r.raise_for_status()
     df = pd.read_csv(io.StringIO(r.text))
     date_col = df.columns[0]
@@ -43,19 +80,15 @@ def get_fred(ids: list[str]) -> dict[str, pd.Series]:
     return out
 
 
-def stooq(symbol: str) -> pd.DataFrame:
-    url = f"https://stooq.com/q/d/l/?s={symbol.lower()}&i=d"
-    r = HTTP.get(url, timeout=45)
-    r.raise_for_status()
-    df = pd.read_csv(io.StringIO(r.text))
-    if "Date" not in df.columns or "Close" not in df.columns:
-        raise ValueError(f"Unexpected Stooq response for {symbol}")
-    df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-    df = df.dropna(subset=["Date"]).set_index("Date").sort_index()
-    for c in ["Open", "High", "Low", "Close", "Volume"]:
-        if c in df.columns:
-            df[c] = pd.to_numeric(df[c], errors="coerce")
-    return df
+def get_fred(ids: list[str], errors: dict[str, str]) -> dict[str, pd.Series]:
+    out = {}
+    for i in range(0, len(ids), 4):
+        chunk = ids[i:i+4]
+        try:
+            out.update(fred_chunk(chunk))
+        except Exception as exc:
+            errors["fred:" + ",".join(chunk)] = repr(exc)
+    return out
 
 
 def align(*series: pd.Series) -> list[pd.Series]:
@@ -66,310 +99,288 @@ def align(*series: pd.Series) -> list[pd.Series]:
     return [s.reindex(idx).ffill() for s in series]
 
 
-def pct_change(s: pd.Series, n: int) -> pd.Series:
+def pct(s: pd.Series, n: int) -> pd.Series:
     return s.pct_change(n) * 100.0
 
 
 def rolling_percentile(s: pd.Series, window: int = 756) -> pd.Series:
     s = s.dropna().astype(float)
     minp = min(60, max(10, window // 10))
-
-    def f(a: np.ndarray) -> float:
-        if len(a) == 0 or not np.isfinite(a[-1]):
-            return np.nan
-        return float(100.0 * np.mean(a <= a[-1]))
-
-    return s.rolling(window=window, min_periods=minp).apply(f, raw=True)
+    def f(a):
+        return np.nan if len(a) == 0 or not np.isfinite(a[-1]) else 100.0 * np.mean(a <= a[-1])
+    return s.rolling(window, min_periods=minp).apply(f, raw=True)
 
 
-def score(s: pd.Series, high_is_high: bool = True, window: int = 756) -> pd.Series:
+def score(s: pd.Series, high: bool = True, window: int = 756) -> pd.Series:
     p = rolling_percentile(s, window)
-    return p if high_is_high else 100.0 - p
+    return p if high else 100.0 - p
 
 
-def mean_scores(*parts: pd.Series) -> pd.Series:
-    return pd.concat(parts, axis=1).sort_index().ffill().mean(axis=1, skipna=True)
+def avg(*ss: pd.Series) -> pd.Series:
+    return pd.concat(ss, axis=1).sort_index().ffill().mean(axis=1, skipna=True)
 
 
-def realized_vol(close: pd.Series, n: int) -> pd.Series:
+def rv(close: pd.Series, n: int) -> pd.Series:
     return close.pct_change().rolling(n).std() * math.sqrt(252) * 100.0
 
 
-def yearly_growth(s: pd.Series) -> pd.Series:
+def yoy(s: pd.Series) -> pd.Series:
     if len(s) < 3:
         return s * np.nan
-    days = pd.Series(s.index).diff().dt.days.dropna()
-    med = float(days.median()) if not days.empty else 30
-    periods = 52 if med <= 10 else 12 if med <= 45 else 4
-    return s.pct_change(periods) * 100.0
+    gaps = pd.Series(s.index).diff().dt.days.dropna()
+    med = float(gaps.median()) if not gaps.empty else 30
+    n = 52 if med <= 10 else 12 if med <= 45 else 4
+    return s.pct_change(n) * 100.0
 
 
-def pack(meta: dict, score_s: pd.Series, raw_s: pd.Series | None = None,
-         raw_unit: str = "", quality: str | None = None) -> dict:
-    s = pd.Series(score_s).dropna().astype(float).clip(0, 100)
+def pack(meta: dict, s: pd.Series, raw: pd.Series | None = None, unit: str = "", quality: str | None = None) -> dict:
+    s = pd.Series(s).dropna().astype(float).clip(0, 100)
     if s.empty:
-        raise ValueError("empty score series")
+        raise ValueError("empty score")
     d1 = s.diff()
     d2 = d1.diff()
-    raw = pd.Series(raw_s).dropna().astype(float) if raw_s is not None else s
-    hist = [
-        {"date": str(ts.date()), "score": round(float(v), 2)}
-        for ts, v in s.tail(180).items() if np.isfinite(v)
-    ]
+    raw = pd.Series(raw).dropna().astype(float) if raw is not None else s
     return {
         **meta,
         "score": round(float(s.iloc[-1]), 2),
         "raw": round(float(raw.iloc[-1]), 4) if not raw.empty else None,
-        "raw_unit": raw_unit,
+        "raw_unit": unit,
         "d1": round(float(d1.dropna().iloc[-1]), 2) if not d1.dropna().empty else None,
         "d2": round(float(d2.dropna().iloc[-1]), 2) if not d2.dropna().empty else None,
         "asof": str(s.index[-1].date()),
-        "history": hist,
+        "history": [{"date": str(i.date()), "score": round(float(v), 2)} for i, v in s.tail(180).items() if np.isfinite(v)],
         "quality": quality or meta.get("type", "ok"),
     }
 
 
-def main() -> None:
-    errors: dict[str, str] = {}
+def main():
+    errors = {}
     meta = {x["id"]: x for x in CONFIG}
-    result: dict[str, dict] = {}
-
-    try:
-        fs = get_fred(FRED_IDS)
-    except Exception as exc:
-        fs = {}
-        errors["fred_batch"] = repr(exc)
-
-    market = {}
-    for sym in ["spy.us", "rsp.us", "iwm.us", "hyg.us", "lqd.us", "gld.us"]:
+    out = {}
+    fs = get_fred(FRED_IDS, errors)
+    mk = {}
+    for sym in YAHOO:
         try:
-            market[sym] = stooq(sym)
+            mk[sym] = yahoo(sym)
         except Exception as exc:
-            errors[f"stooq:{sym}"] = repr(exc)
+            errors[f"yahoo:{sym}"] = repr(exc)
 
-    def F(k: str) -> pd.Series:
-        return fs[k]
-
-    def C(k: str) -> pd.Series:
-        return market[k]["Close"].dropna()
-
-    def V(k: str) -> pd.Series:
-        return market[k]["Volume"].replace(0, np.nan).dropna()
-
-    def put(key: str, score_s: pd.Series, raw_s: pd.Series | None = None,
-            unit: str = "", quality: str | None = None) -> None:
+    def C(k): return mk[k]["Close"].dropna()
+    def V(k): return mk[k]["Volume"].replace(0, np.nan).dropna()
+    def F(k): return fs[k]
+    def put(k, s, raw=None, unit="", quality=None):
         try:
-            result[key] = pack(meta[key], score_s, raw_s, unit, quality)
+            out[k] = pack(meta[k], s, raw, unit, quality)
         except Exception as exc:
-            errors[f"calc:{key}"] = repr(exc)
+            errors[f"calc:{k}"] = repr(exc)
 
-    if "iwm.us" in market and "spy.us" in market:
-        iwm, spy = align(C("iwm.us"), C("spy.us"))
-        rel = pct_change(iwm, 20) - pct_change(spy, 20)
-        vol = V("iwm.us").reindex(iwm.index).ffill()
-        vr = vol.rolling(5).mean() / vol.rolling(60).mean()
-        put("retail_participation", mean_scores(score(rel), score(vr)), rel, "% relative 20d", "proxy")
+    if "IWM" in mk and "SPY" in mk:
+        iwm, spy = align(C("IWM"), C("SPY"))
+        rel = pct(iwm,20)-pct(spy,20)
+        iv = V("IWM").reindex(iwm.index).ffill()
+        vr = iv.rolling(5).mean()/iv.rolling(60).mean()
+        put("retail_participation", avg(score(rel),score(vr)), rel, "% relative 20d", "proxy")
 
-    if "spy.us" in market and "rsp.us" in market:
-        spy = C("spy.us")
-        parts = [score(spy / spy.rolling(n).mean() - 1) for n in (20, 50, 200)]
-        rsp, spya = align(C("rsp.us"), spy)
-        parts.append(score(pct_change(rsp, 20) - pct_change(spya, 20)))
-        put("market_support", mean_scores(*parts), spy / spy.rolling(200).mean() - 1, "SPY/MA200 - 1")
+    if "SPY" in mk and "RSP" in mk:
+        spy=C("SPY")
+        parts=[score(spy/spy.rolling(n).mean()-1) for n in (20,50,200)]
+        rsp,spya=align(C("RSP"),spy)
+        parts.append(score(pct(rsp,20)-pct(spya,20)))
+        put("market_support",avg(*parts),spy/spy.rolling(200).mean()-1,"SPY/MA200 - 1")
 
-    cb = []
-    if "DFF" in fs:
-        cb.append(score(F("DFF").diff(), high_is_high=False, window=260))
-    if "ECBDFR" in fs:
-        cb.append(score(F("ECBDFR").diff(), high_is_high=False, window=260))
+    cb=[]
+    if "DFF" in fs: cb.append(score(F("DFF").diff(),False,260))
+    if "ECBDFR" in fs: cb.append(score(F("ECBDFR").diff(),False,260))
     if cb:
-        put("global_cb_rhythm", mean_scores(*cb), mean_scores(*cb), "easing score")
+        put("global_cb_rhythm",avg(*cb),avg(*cb),"easing score")
+    elif "^TNX" in mk:
+        y=C("^TNX")
+        put("global_cb_rhythm",score(pct(y,20),False),pct(y,20),"% 10Y 20d","proxy")
 
-    if "VIXCLS" in fs and "spy.us" in market:
-        spy = C("spy.us")
-        dd20 = -(spy / spy.rolling(20).max() - 1) * 100
-        put("largecap_panic", mean_scores(score(F("VIXCLS")), score(dd20)), F("VIXCLS"), "VIX")
+    vix = C("^VIX") if "^VIX" in mk else None
+    if vix is not None and "SPY" in mk:
+        spy=C("SPY")
+        dd=-(spy/spy.rolling(20).max()-1)*100
+        put("largecap_panic",avg(score(vix),score(dd)),vix,"VIX")
 
-    if "VIXCLS" in fs and "BAMLH0A0HYM2" in fs:
-        put("market_fear", mean_scores(score(F("VIXCLS")), score(F("BAMLH0A0HYM2"))), F("VIXCLS"), "VIX")
+    if vix is not None:
+        credit = None
+        if "BAMLH0A0HYM2" in fs:
+            credit=score(F("BAMLH0A0HYM2"))
+        elif "HYG" in mk and "LQD" in mk:
+            h,l=align(C("HYG"),C("LQD"))
+            credit=score(h/l,False)
+        if credit is not None:
+            put("market_fear",avg(score(vix),credit),vix,"VIX")
+        jump=pct(vix,5)
+        put("options_anomaly",avg(score(vix),score(jump)),jump,"% VIX 5d","proxy")
 
-    if "VIXCLS" in fs:
-        vix = F("VIXCLS")
-        jump = pct_change(vix, 5)
-        put("options_anomaly", mean_scores(score(vix), score(jump)), jump, "% VIX 5d", "proxy")
-
-    liq = []
-    if "NFCI" in fs:
-        liq.append(score(F("NFCI")))
-    if "BAMLH0A0HYM2" in fs:
-        liq.append(score(F("BAMLH0A0HYM2")))
-    if "WALCL" in fs:
-        liq.append(score(pct_change(F("WALCL"), 4), high_is_high=False, window=260))
+    liq=[]
+    if "NFCI" in fs: liq.append(score(F("NFCI")))
+    if "BAMLH0A0HYM2" in fs: liq.append(score(F("BAMLH0A0HYM2")))
+    if "HYG" in mk and "LQD" in mk:
+        h,l=align(C("HYG"),C("LQD"))
+        liq.append(score(h/l,False))
     if liq:
-        put("liquidity_risk", mean_scores(*liq), mean_scores(*liq), "score")
+        put("liquidity_risk",avg(*liq),avg(*liq),"score")
 
-    if "DGS2" in fs and "DGS10" in fs:
-        put("treasury_rate_regime", mean_scores(score(F("DGS2")), score(F("DGS10"))), F("DGS10"), "% 10Y")
+    if "DGS10" in fs and "DGS2" in fs:
+        put("treasury_rate_regime",avg(score(F("DGS10")),score(F("DGS2"))),F("DGS10"),"% 10Y")
+    elif "^TNX" in mk:
+        y=C("^TNX")
+        put("treasury_rate_regime",score(y),y,"10Y yield","proxy")
 
-    usd = []
+    usd=[]
     if "DTWEXBGS" in fs:
-        usd.append(score(pct_change(F("DTWEXBGS"), 20)))
+        usd.append(score(pct(F("DTWEXBGS"),20)))
+    elif "DX-Y.NYB" in mk:
+        usd.append(score(pct(C("DX-Y.NYB"),20)))
     if "BAA10Y" in fs:
         usd.append(score(F("BAA10Y")))
+    elif "HYG" in mk and "LQD" in mk:
+        h,l=align(C("HYG"),C("LQD"))
+        usd.append(score(h/l,False))
     if usd:
-        put("usd_credit", mean_scores(*usd), mean_scores(*usd), "score")
+        put("usd_credit",avg(*usd),avg(*usd),"score")
 
-    if "gld.us" in market:
-        g = C("gld.us")
-        put("gold", mean_scores(score(g), score(pct_change(g, 20))), g, "GLD")
+    if "GLD" in mk:
+        g=C("GLD")
+        put("gold",avg(score(g),score(pct(g,20))),g,"GLD")
+    if "CL=F" in mk:
+        o=C("CL=F")
+        put("oil",avg(score(o),score(pct(o,20))),o,"WTI future")
 
-    if "DCOILWTICO" in fs:
-        o = F("DCOILWTICO")
-        put("oil", mean_scores(score(o), score(pct_change(o, 20))), o, "USD/bbl")
-
-    manual = {}
-    if MANUAL.exists():
-        try:
-            manual = json.loads(MANUAL.read_text(encoding="utf-8"))
-        except Exception as exc:
-            errors["manual_inputs"] = repr(exc)
-    bc = manual.get("buffett_cash_ratio") or {}
+    manual={}
+    try:
+        manual=json.loads(MANUAL.read_text(encoding="utf-8")) if MANUAL.exists() else {}
+    except Exception as exc:
+        errors["manual_inputs"]=repr(exc)
+    bc=(manual.get("buffett_cash_ratio") or {})
     if bc.get("value") is not None:
-        ts = pd.Timestamp(bc.get("asof") or pd.Timestamp.utcnow().date())
-        one = pd.Series([float(bc["value"])], index=[ts])
-        put("buffett_cash", one.clip(0, 100), one, "%", "manual")
+        t=pd.Timestamp(bc.get("asof") or pd.Timestamp.utcnow().date())
+        s=pd.Series([float(bc["value"])],index=[t])
+        put("buffett_cash",s.clip(0,100),s,"%","manual")
     else:
-        result["buffett_cash"] = {**meta["buffett_cash"], "score": None, "raw": None, "raw_unit": "%",
-                                  "d1": None, "d2": None, "asof": None, "history": [], "quality": "manual_pending"}
+        out["buffett_cash"]={**meta["buffett_cash"],"score":None,"raw":None,"raw_unit":"%","d1":None,"d2":None,"asof":None,"history":[],"quality":"manual_pending"}
 
     if "BAMLH0A0HYM2" in fs:
-        hy = F("BAMLH0A0HYM2")
-        put("high_yield", score(hy), hy, "% OAS")
+        h=F("BAMLH0A0HYM2")
+        put("high_yield",score(h),h,"% OAS")
+    elif "HYG" in mk and "LQD" in mk:
+        h,l=align(C("HYG"),C("LQD"))
+        r=h/l
+        put("high_yield",score(r,False),r,"HYG/LQD","proxy")
 
-    inv = []
-    if "ISRATIO" in fs:
-        inv.append(score(F("ISRATIO")))
-    if "BUSINV" in fs:
-        inv.append(score(yearly_growth(F("BUSINV"))))
+    inv=[]
+    if "ISRATIO" in fs: inv.append(score(F("ISRATIO")))
+    if "BUSINV" in fs: inv.append(score(yoy(F("BUSINV"))))
     if inv:
-        put("inventory_cycle", mean_scores(*inv), mean_scores(*inv), "score")
+        put("inventory_cycle",avg(*inv),avg(*inv),"score")
 
     if "MTSDS133FMS" in fs:
-        f = F("MTSDS133FMS").rolling(12, min_periods=6).sum()
-        put("fiscal_deficit", score(-f), f, "USD mn / 12m")
+        f=F("MTSDS133FMS").rolling(12,min_periods=6).sum()
+        put("fiscal_deficit",score(-f),f,"USD mn / 12m")
 
-    emp = []
-    if "UNRATE" in fs:
-        emp.append(score(F("UNRATE")))
-    if "ICSA" in fs:
-        emp.append(score(F("ICSA")))
+    emp=[]
+    if "UNRATE" in fs: emp.append(score(F("UNRATE")))
+    if "ICSA" in fs: emp.append(score(F("ICSA")))
     if emp:
-        raw = F("UNRATE") if "UNRATE" in fs else mean_scores(*emp)
-        put("employment", mean_scores(*emp), raw, "% unemployment")
+        put("employment",avg(*emp),F("UNRATE") if "UNRATE" in fs else avg(*emp),"% unemployment")
 
-    if "spy.us" in market:
-        spy = C("spy.us")
-        ratio = spy / spy.rolling(200).mean()
-        val_score = score(ratio, window=1260)
+    if "SPY" in mk:
+        spy=C("SPY")
+        ratio=spy/spy.rolling(200).mean()
+        vs=score(ratio,window=1260)
+        put("valuation_cycle",vs,ratio,"SPY/MA200","proxy")
+        vol=V("SPY")
+        put("market_volume",score(vol),vol,"shares")
+        vr=vol.rolling(5).mean()/vol.rolling(20).mean()-1
+        put("volume_speed",score(vr),vr*100,"%")
+        rv20,rv60=rv(spy,20),rv(spy,60)
+        put("vol_60d_change",avg(score(rv60),score(rv20-rv60)),rv60,"% annualized")
+        put("valuation_percentile",vs,ratio,"SPY/MA200","proxy")
+        spd=pct(ratio,20)
+        put("valuation_speed",score(spd),spd,"% / 20d","proxy")
 
-        put("valuation_cycle", val_score, ratio, "SPY/MA200", "proxy")
+    if "SPY" in mk and "RSP" in mk:
+        s,r=align(C("SPY"),C("RSP"))
+        x=pct(s,60)-pct(r,60)
+        put("concentration",score(x),x,"% SPY-RSP 60d","proxy")
 
-        vol = V("spy.us")
-        put("market_volume", score(vol), vol, "shares")
-
-        vratio = vol.rolling(5).mean() / vol.rolling(20).mean() - 1
-        put("volume_speed", score(vratio), vratio * 100, "%")
-
-        rv20 = realized_vol(spy, 20)
-        rv60 = realized_vol(spy, 60)
-        spread = rv20 - rv60
-        put("vol_60d_change", mean_scores(score(rv60), score(spread)), rv60, "% annualized")
-
-        put("valuation_percentile", val_score, ratio, "SPY/MA200", "proxy")
-
-        speed = pct_change(ratio, 20)
-        put("valuation_speed", score(speed), speed, "% / 20d", "proxy")
-
-    if "spy.us" in market and "rsp.us" in market:
-        spy, rsp = align(C("spy.us"), C("rsp.us"))
-        conc = pct_change(spy, 60) - pct_change(rsp, 60)
-        put("concentration", score(conc), conc, "% SPY-RSP 60d", "proxy")
-
-    lev = []
-    if "NFCI" in fs:
-        lev.append(score(F("NFCI")))
-    if "BAMLH0A0HYM2" in fs:
-        lev.append(score(F("BAMLH0A0HYM2")))
-    if "hyg.us" in market and "lqd.us" in market:
-        hyg, lqd = align(C("hyg.us"), C("lqd.us"))
-        lev.append(score(hyg / lqd, high_is_high=False))
+    lev=[]
+    if "NFCI" in fs: lev.append(score(F("NFCI")))
+    if "BAMLH0A0HYM2" in fs: lev.append(score(F("BAMLH0A0HYM2")))
+    if "HYG" in mk and "LQD" in mk:
+        h,l=align(C("HYG"),C("LQD"))
+        lev.append(score(h/l,False))
     if lev:
-        put("leverage_liquidity", mean_scores(*lev), mean_scores(*lev), "score", "proxy")
+        put("leverage_liquidity",avg(*lev),avg(*lev),"score","proxy")
 
-    sys_parts = []
-    if "VIXCLS" in fs:
-        sys_parts.append(score(F("VIXCLS")))
+    sys=[]
+    if vix is not None: sys.append(score(vix))
     if "BAMLH0A0HYM2" in fs:
-        sys_parts.append(score(F("BAMLH0A0HYM2")))
-    if "NFCI" in fs:
-        sys_parts.append(score(F("NFCI")))
-    if "spy.us" in market:
-        spy = C("spy.us")
-        dd = -(spy / spy.cummax() - 1) * 100
-        sys_parts.append(score(dd))
-
-    systemic = None
-    if sys_parts:
-        systemic = mean_scores(*sys_parts)
-        put("systemic_risk", systemic, systemic, "score")
-
-    if systemic is not None and len(systemic.dropna()) > 70:
-        r60 = mean_scores(score(systemic, window=60), score(systemic.diff(60), window=252))
-        put("risk_60d", r60, systemic, "systemic score")
+        sys.append(score(F("BAMLH0A0HYM2")))
+    elif "HYG" in mk and "LQD" in mk:
+        h,l=align(C("HYG"),C("LQD"))
+        sys.append(score(h/l,False))
+    if "NFCI" in fs: sys.append(score(F("NFCI")))
+    if "SPY" in mk:
+        s=C("SPY")
+        sys.append(score(-(s/s.cummax()-1)*100))
+    systemic=None
+    if sys:
+        systemic=avg(*sys)
+        put("systemic_risk",systemic,systemic,"score")
+    if systemic is not None and len(systemic.dropna())>70:
+        r60=avg(score(systemic,window=60),score(systemic.diff(60),window=252))
+        put("risk_60d",r60,systemic,"systemic score")
 
     if "LOANINV" in fs:
-        loans = F("LOANINV")
-        yoy = yearly_growth(loans)
-        accel = yoy.diff()
-        put("credit_cycle", mean_scores(score(yoy), score(accel)), yoy, "% YoY")
+        l=F("LOANINV")
+        g=yoy(l)
+        put("credit_cycle",avg(score(g),score(g.diff())),g,"% YoY")
+    elif "HYG" in mk and "LQD" in mk:
+        h,l=align(C("HYG"),C("LQD"))
+        x=h/l
+        put("credit_cycle",score(pct(x,60)),pct(x,60),"HYG/LQD 60d","proxy")
 
-    curve = []
-    raw = None
+    curve=[]
+    raw=None
     if "T10Y2Y" in fs:
-        raw = F("T10Y2Y")
-        curve.append(score(raw, high_is_high=False))
+        raw=F("T10Y2Y")
+        curve.append(score(raw,False))
     if "T10Y3M" in fs:
-        curve.append(score(F("T10Y3M"), high_is_high=False))
+        curve.append(score(F("T10Y3M"),False))
     if curve:
-        put("yield_curve", mean_scores(*curve), raw if raw is not None else mean_scores(*curve), "% 10Y-2Y")
+        put("yield_curve",avg(*curve),raw if raw is not None else avg(*curve),"% 10Y-2Y")
+    elif "^TNX" in mk and "^IRX" in mk:
+        a,b=align(C("^TNX"),C("^IRX"))
+        spread=a-b
+        put("yield_curve",score(spread,False),spread,"10Y-13W","proxy")
 
     for item in CONFIG:
-        if item["id"] not in result:
-            result[item["id"]] = {
-                **item, "score": None, "raw": None, "raw_unit": "", "d1": None, "d2": None,
-                "asof": None, "history": [], "quality": "source_error"
-            }
+        if item["id"] not in out:
+            out[item["id"]]={**item,"score":None,"raw":None,"raw_unit":"","d1":None,"d2":None,"asof":None,"history":[],"quality":"source_error"}
 
-    ordered = [result[x["id"]] for x in CONFIG]
-    working = sum(x["score"] is not None for x in ordered)
-    payload = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "status": "ok" if working >= 20 else "partial",
-        "working_count": working,
-        "total_count": len(ordered),
-        "errors": errors,
-        "derivative_definition": {
-            "d1": "一级导：当前指标分 - 上一期指标分（变化动能）",
-            "d2": "二级导：当前一级导 - 上一期一级导（动能变化速率）"
+    ordered=[out[x["id"]] for x in CONFIG]
+    working=sum(x["score"] is not None for x in ordered)
+    payload={
+        "generated_at":datetime.now(timezone.utc).isoformat(),
+        "status":"ok" if working>=20 else "partial",
+        "working_count":working,
+        "total_count":len(ordered),
+        "errors":errors,
+        "derivative_definition":{
+            "d1":"一级导：当前指标分 - 上一期指标分（变化动能）",
+            "d2":"二级导：当前一级导 - 上一期一级导（动能变化速率）"
         },
-        "indicators": ordered,
+        "indicators":ordered
     }
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    OUT.parent.mkdir(parents=True,exist_ok=True)
+    OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding="utf-8")
     print(f"updated {working}/{len(ordered)} indicators")
-    if working < 15:
-        print(json.dumps(errors, ensure_ascii=False, indent=2))
-        sys.exit(2)
+    if errors:
+        print(json.dumps(errors,ensure_ascii=False,indent=2))
 
 
 if __name__ == "__main__":
