@@ -1,0 +1,7 @@
+{
+  "buffett_cash_ratio": {
+    "value": null,
+    "asof": null,
+    "note": "V1预留。填入季度披露的口径后，日更任务会每天沿用最新已披露值。"
+  }
+}
