@@ -1,7 +1,21 @@
 {
   "buffett_cash_ratio": {
-    "value": null,
-    "asof": null,
-    "note": "V1预留。填入季度披露的口径后，日更任务会每天沿用最新已披露值。"
+    "value": 28.9385,
+    "asof": "2026-06-30",
+    "history": [
+      {
+        "asof": "2025-12-31",
+        "value": 30.5448
+      },
+      {
+        "asof": "2026-03-31",
+        "value": 31.733
+      },
+      {
+        "asof": "2026-06-30",
+        "value": 28.9385
+      }
+    ],
+    "note": "(cash and cash equivalents across segments + short-term U.S. Treasury Bills) / total assets; Berkshire quarterly reports."
   }
 }
