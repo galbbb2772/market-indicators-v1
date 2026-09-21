@@ -46,7 +46,7 @@ def request(url: str, timeout: int = 30) -> requests.Response:
 def yahoo(symbol: str) -> pd.DataFrame:
     sym = quote(symbol, safe="")
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}?range=10y&interval=1d&events=history&includeAdjustedClose=true"
-    data = request(url, 35).json()
+    data = request(url, 8).json()
     res = (data.get("chart") or {}).get("result")
     if not res:
         raise ValueError(str((data.get("chart") or {}).get("error")))
@@ -65,7 +65,7 @@ def yahoo(symbol: str) -> pd.DataFrame:
 
 def fred_chunk(ids: list[str]) -> dict[str, pd.Series]:
     url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=" + ",".join(ids) + "&cosd=2015-01-01"
-    r = HTTP.get(url, timeout=30)
+    r = HTTP.get(url, timeout=8)
     r.raise_for_status()
     df = pd.read_csv(io.StringIO(r.text))
     date_col = df.columns[0]
