@@ -1,0 +1,226 @@
+[
+  {
+    "id": "retail_participation",
+    "name": "散户参与度指标",
+    "category": "资金/参与者",
+    "cadence": "日更",
+    "type": "proxy",
+    "definition": "IWM 相对 SPY 的20日强弱 + IWM 成交量活跃度。当前为公开数据代理版，后续可替换成更纯的零售成交数据。"
+  },
+  {
+    "id": "market_support",
+    "name": "市场支撑度指标",
+    "category": "市场结构",
+    "cadence": "日更",
+    "type": "direct",
+    "definition": "SPY 相对20/50/200日均线的位置 + RSP相对SPY强弱。"
+  },
+  {
+    "id": "global_cb_rhythm",
+    "name": "世界央行加/降息节奏指标",
+    "category": "宏观/流动性",
+    "cadence": "每日刷新/源数据按发布更新",
+    "type": "composite",
+    "definition": "Fed有效利率 + ECB存款便利利率的方向变化。"
+  },
+  {
+    "id": "largecap_panic",
+    "name": "大盘恐慌指标",
+    "category": "风险/情绪",
+    "cadence": "日更",
+    "type": "composite",
+    "definition": "VIX水平 + SPY短期回撤。分数越高代表恐慌越强。"
+  },
+  {
+    "id": "market_fear",
+    "name": "市场恐慌指标",
+    "category": "风险/情绪",
+    "cadence": "日更",
+    "type": "composite",
+    "definition": "VIX + 美国高收益债OAS。分数越高代表风险厌恶越强。"
+  },
+  {
+    "id": "options_anomaly",
+    "name": "期权市场异常指标",
+    "category": "期权/波动",
+    "cadence": "日更",
+    "type": "proxy",
+    "definition": "VIX水平与VIX短期跳升幅度的组合。当前是波动率代理版。"
+  },
+  {
+    "id": "liquidity_risk",
+    "name": "流动性风险指标",
+    "category": "宏观/流动性",
+    "cadence": "每日刷新/周频源更新",
+    "type": "composite",
+    "definition": "NFCI金融条件 + 高收益债利差 + Fed资产负债表4周变化。"
+  },
+  {
+    "id": "treasury_rate_regime",
+    "name": "美国国债期限/利率指标",
+    "category": "利率/债券",
+    "cadence": "日更",
+    "type": "composite",
+    "definition": "2Y和10Y美债收益率的历史位置，用于描述利率环境。"
+  },
+  {
+    "id": "usd_credit",
+    "name": "美元信用指标",
+    "category": "宏观/美元",
+    "cadence": "日更",
+    "type": "composite",
+    "definition": "广义美元指数强弱 + Baa-10Y信用利差。"
+  },
+  {
+    "id": "gold",
+    "name": "黄金指标",
+    "category": "跨资产",
+    "cadence": "日更",
+    "type": "direct",
+    "definition": "黄金价格的历史位置与20日动量。"
+  },
+  {
+    "id": "oil",
+    "name": "原油指标",
+    "category": "跨资产",
+    "cadence": "日更",
+    "type": "direct",
+    "definition": "WTI价格的历史位置与20日动量。"
+  },
+  {
+    "id": "buffett_cash",
+    "name": "巴菲特现金占比指标",
+    "category": "资金/机构",
+    "cadence": "每日刷新/季度源更新",
+    "type": "manual",
+    "definition": "Berkshire现金及短期国债占相关资产口径。V1保留自动延用最近值接口，季度数据后续接SEC/财报解析。"
+  },
+  {
+    "id": "high_yield",
+    "name": "高收益债指标",
+    "category": "信用/债券",
+    "cadence": "日更",
+    "type": "direct",
+    "definition": "ICE BofA美国高收益债OAS历史位置。分数越高代表信用压力越大。"
+  },
+  {
+    "id": "inventory_cycle",
+    "name": "库存周期指标",
+    "category": "宏观/经济",
+    "cadence": "每日刷新/月频源更新",
+    "type": "composite",
+    "definition": "库存销售比 + 总商业库存变化，用于跟踪库存周期。"
+  },
+  {
+    "id": "fiscal_deficit",
+    "name": "美国财政赤字指标",
+    "category": "宏观/财政",
+    "cadence": "每日刷新/月频源更新",
+    "type": "direct",
+    "definition": "联邦月度盈余/赤字的滚动12个月总和。赤字越深，风险分越高。"
+  },
+  {
+    "id": "employment",
+    "name": "美国就业/劳动力指标",
+    "category": "宏观/经济",
+    "cadence": "每日刷新/周月频源更新",
+    "type": "composite",
+    "definition": "失业率 + 初请失业金人数。分数越高代表劳动力市场压力越大。"
+  },
+  {
+    "id": "valuation_cycle",
+    "name": "市场周期估值高低指标",
+    "category": "估值",
+    "cadence": "日更",
+    "type": "proxy",
+    "definition": "V1使用SPY相对200日均线及其长期百分位做代理；后续可替换为CAPE/ERP等基本面估值。"
+  },
+  {
+    "id": "market_volume",
+    "name": "市场成交量/成交额指标",
+    "category": "市场结构",
+    "cadence": "日更",
+    "type": "direct",
+    "definition": "SPY成交量的历史百分位。"
+  },
+  {
+    "id": "volume_speed",
+    "name": "市场成交量变化速度指标",
+    "category": "市场结构",
+    "cadence": "日更",
+    "type": "direct",
+    "definition": "SPY 5日平均成交量相对20日平均成交量的变化。"
+  },
+  {
+    "id": "concentration",
+    "name": "市场风险集中度指标",
+    "category": "风险/结构",
+    "cadence": "日更",
+    "type": "proxy",
+    "definition": "SPY相对等权RSP的60日超额表现；越高代表市值权重集中度越强。"
+  },
+  {
+    "id": "leverage_liquidity",
+    "name": "市场杠杆/保证金/流动性指标",
+    "category": "风险/结构",
+    "cadence": "日更",
+    "type": "proxy",
+    "definition": "NFCI + HYG/LQD相对强弱 + 高收益利差。V1是公开代理版。"
+  },
+  {
+    "id": "systemic_risk",
+    "name": "市场系统性风险指标",
+    "category": "风险/结构",
+    "cadence": "日更",
+    "type": "composite",
+    "definition": "VIX、HY OAS、NFCI、SPY回撤四项组合。"
+  },
+  {
+    "id": "risk_60d",
+    "name": "60天市场风险警报指标",
+    "category": "风险/情绪",
+    "cadence": "日更",
+    "type": "composite",
+    "definition": "系统性风险分数的60日位置 + 近60日恶化速度。"
+  },
+  {
+    "id": "vol_60d_change",
+    "name": "60日波动率变化指标",
+    "category": "期权/波动",
+    "cadence": "日更",
+    "type": "direct",
+    "definition": "SPY 20日实现波动率相对60日实现波动率，以及60日实现波动率本身的变化。"
+  },
+  {
+    "id": "valuation_percentile",
+    "name": "大盘估值历史百分位",
+    "category": "估值",
+    "cadence": "日更",
+    "type": "proxy",
+    "definition": "V1使用SPY/200日均线比值在近5年历史中的百分位。"
+  },
+  {
+    "id": "valuation_speed",
+    "name": "大盘估值变化速度指标",
+    "category": "估值",
+    "cadence": "日更",
+    "type": "proxy",
+    "definition": "SPY/200日均线比值的20日变化速度。"
+  },
+  {
+    "id": "credit_cycle",
+    "name": "信贷周期/信贷速度指标",
+    "category": "信用/宏观",
+    "cadence": "每日刷新/月频源更新",
+    "type": "direct",
+    "definition": "美国商业银行信贷余额同比增速及其变化。"
+  },
+  {
+    "id": "yield_curve",
+    "name": "债券收益率曲线指标",
+    "category": "利率/债券",
+    "cadence": "日更",
+    "type": "direct",
+    "definition": "10Y-2Y与10Y-3M期限利差组合。"
+  }
+]
