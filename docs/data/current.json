@@ -1,0 +1,11 @@
+{
+  "generated_at": null,
+  "status": "waiting_first_update",
+  "working_count": 0,
+  "total_count": 28,
+  "derivative_definition": {
+    "d1": "一级导：当前指标分 - 上一期指标分（变化动能）",
+    "d2": "二级导：当前一级导 - 上一期一级导（动能变化速率）"
+  },
+  "indicators": []
+}
