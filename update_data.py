@@ -24,7 +24,7 @@ FRED_IDS = [
     "DTWEXBGS", "BAA10Y", "ISRATIO", "BUSINV", "MTSDS133FMS", "UNRATE",
     "ICSA", "DFF", "ECBDFR", "WALCL", "LOANINV"
 ]
-YAHOO = ["SPY", "RSP", "IWM", "HYG", "LQD", "GLD", "^VIX", "CL=F", "DX-Y.NYB", "^TNX", "^IRX"]
+YAHOO = ["SPY", "RSP", "IWM", "HYG", "LQD", "GLD", "XLI", "HG=F", "^VIX", "CL=F", "DX-Y.NYB", "^TNX", "^IRX"]
 
 
 def request(url: str, timeout: int = 30) -> requests.Response:
@@ -342,7 +342,17 @@ def main():
     except Exception as exc:
         errors["manual_inputs"]=repr(exc)
     bc=(manual.get("buffett_cash_ratio") or {})
-    if bc.get("value") is not None:
+    bch=bc.get("history") or []
+    if bch:
+        pts={}
+        for row in bch:
+            if row.get("value") is None or not row.get("asof"):
+                continue
+            pts[pd.Timestamp(row["asof"])]=float(row["value"])
+        s=pd.Series(pts,dtype=float).sort_index()
+        if not s.empty:
+            put("buffett_cash",s.clip(0,100),s,"%","manual")
+    elif bc.get("value") is not None:
         t=pd.Timestamp(bc.get("asof") or pd.Timestamp.utcnow().date())
         s=pd.Series([float(bc["value"])],index=[t])
         put("buffett_cash",s.clip(0,100),s,"%","manual")
@@ -362,6 +372,11 @@ def main():
     if "BUSINV" in fs: inv.append(score(yoy(F("BUSINV"))))
     if inv:
         put("inventory_cycle",avg(*inv),avg(*inv),"score")
+    elif "XLI" in mk and "SPY" in mk and "HG=F" in mk:
+        xli,spy=align(C("XLI"),C("SPY"))
+        cyc=pct(xli,120)-pct(spy,120)
+        copper=pct(C("HG=F"),120)
+        put("inventory_cycle",avg(score(cyc),score(copper)),cyc,"% XLI-SPY 120d","proxy")
 
     if "MTSDS133FMS" in fs:
         f=F("MTSDS133FMS").rolling(12,min_periods=6).sum()
@@ -370,7 +385,7 @@ def main():
         tdef = treasury_deficit(errors)
         if tdef is not None:
             # Treasury reports deficit/surplus monthly; higher positive deficit = more fiscal pressure.
-            put("fiscal_deficit",score(tdef),tdef,"USD mn / month","direct")
+            put("fiscal_deficit",score(tdef,window=120),tdef,"USD mn / month","direct")
 
     emp=[]
     if "UNRATE" in fs: emp.append(score(F("UNRATE")))
