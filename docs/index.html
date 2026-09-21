@@ -8,24 +8,25 @@
 :root{--bg:#07101f;--p:#0f1b2f;--p2:#13243d;--line:#233b5e;--t:#eef5ff;--m:#91a8ca;--g:#61dfb2;--r:#ff738b;--y:#ffc95c}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#132c51 0,#07101f 38%);color:var(--t);font-family:Inter,system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
 .wrap{max-width:1260px;margin:auto;padding:18px}.head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.title{margin:0;font-size:clamp(27px,5vw,40px);font-weight:850}.sub{color:var(--m);line-height:1.65;margin-top:8px}.badge{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:#0a1628;color:#bad0f2;font-size:12px;white-space:nowrap}
-.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.sum{background:rgba(15,27,47,.92);border:1px solid var(--line);border-radius:15px;padding:14px}.sum b{font-size:23px}.sum small{display:block;color:var(--m);margin-top:4px}
+.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:18px 0}.sum{background:rgba(15,27,47,.92);border:1px solid var(--line);border-radius:15px;padding:14px}.sum b{font-size:23px}.sum small{display:block;color:var(--m);margin-top:4px}
 .note{font-size:12px;color:var(--m);line-height:1.6;margin:8px 0 14px}.controls{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}.controls input,.controls select{background:#0b1729;border:1px solid var(--line);color:var(--t);border-radius:11px;padding:10px 12px}.controls input{flex:1;min-width:220px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{background:linear-gradient(180deg,rgba(19,36,61,.97),rgba(12,24,42,.97));border:1px solid var(--line);border-radius:16px;padding:14px}.top{display:flex;justify-content:space-between;gap:10px}.name{font-weight:760}.cat{font-size:11px;color:#95aed2;margin-top:3px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{background:linear-gradient(180deg,rgba(19,36,61,.97),rgba(12,24,42,.97));border:1px solid var(--line);border-radius:16px;padding:14px}.top{display:flex;justify-content:space-between;gap:10px}.badges{display:flex;flex-direction:column;gap:5px;align-items:flex-end}.name{font-weight:760}.cat{font-size:11px;color:#95aed2;margin-top:3px}
 .score{font-size:31px;font-weight:850;margin:12px 0 2px}.score.na{font-size:18px;color:#8197b8;margin:20px 0}.bar{height:6px;background:#172a45;border-radius:99px;overflow:hidden;margin:8px 0 12px}.fill{height:100%;background:linear-gradient(90deg,#4d88ea,#ffc95c,#ff738b)}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.metric{background:#0a1527;border:1px solid #1c304d;border-radius:10px;padding:8px;min-width:0}.metric small{display:block;color:var(--m);font-size:10px}.metric b{font-size:13px;overflow-wrap:anywhere}.pos{color:var(--g)}.neg{color:var(--r)}.flat{color:#d7e0ef}.desc{color:#aebed8;font-size:12px;line-height:1.5;margin-top:10px;min-height:54px}.foot{display:flex;justify-content:space-between;gap:8px;color:#728aaa;font-size:10px;margin-top:10px}canvas{width:100%;height:50px;display:block;margin-top:8px}.empty{grid-column:1/-1;padding:22px;border:1px solid var(--line);border-radius:16px;color:var(--m)}
-@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.summary{grid-template-columns:1fr 1fr}}@media(max-width:580px){.grid{grid-template-columns:1fr}.head{display:block}.badge{display:inline-block;margin-top:12px}.wrap{padding:13px}}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.metric{background:#0a1527;border:1px solid #1c304d;border-radius:10px;padding:8px;min-width:0}.metric small{display:block;color:var(--m);font-size:10px}.metric b{font-size:13px;overflow-wrap:anywhere}.pos{color:var(--g)}.neg{color:var(--r)}.flat{color:#d7e0ef}.desc{color:#aebed8;font-size:12px;line-height:1.5;margin-top:10px;min-height:42px}.reason{color:#86a4ce;font-size:11px;line-height:1.45;margin-top:7px;padding-top:7px;border-top:1px solid #1c304d}.foot{display:flex;justify-content:space-between;gap:8px;color:#728aaa;font-size:10px;margin-top:10px}canvas{width:100%;height:50px;display:block;margin-top:8px}.empty{grid-column:1/-1;padding:22px;border:1px solid var(--line);border-radius:16px;color:var(--m)}
+@media(max-width:1050px){.summary{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.summary{grid-template-columns:1fr 1fr}}@media(max-width:580px){.grid{grid-template-columns:1fr}.head{display:block}.badge{display:inline-block;margin-top:12px}.wrap{padding:13px}.metrics{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body><main class="wrap">
-<div class="head"><div><h1 class="title">Market Regime Lab</h1><div class="sub">28 个独立市场指标 · 不对接交易系统。每个指标显示 <b>Level</b>、<b>D1 一级导</b>（变化动能）和 <b>D2 二级导</b>（动能变化速率）。</div></div><div class="badge" id="updated">等待首次更新</div></div>
+<div class="head"><div><h1 class="title">Market Regime Lab</h1><div class="sub">28 个独立市场指标 · 不对接交易系统。现在额外加入 <b>基础重要性排名</b> 和 <b>每日重要度</b>；同时保留 Level、D1 一级导和 D2 二级导。</div></div><div class="badge" id="updated">等待首次更新</div></div>
 <section class="summary">
+<div class="sum"><b id="attention">—</b><small>市场总体关注度 / 100</small></div>
 <div class="sum"><b id="working">0/28</b><small>正常取数</small></div>
 <div class="sum"><b id="high">—</b><small>Level ≥ 80</small></div>
 <div class="sum"><b id="rising">—</b><small>D1 上升</small></div>
 <div class="sum"><b id="accel">—</b><small>D2 加速</small></div>
 </section>
-<div class="note">0–100 主要表示指标自身在历史中的相对位置，不统一等同于“风险高低”或买卖信号。proxy 表示公开代理变量；低频宏观数据会每天检查，但仅在数据源发布新值时变化。</div>
-<div class="controls"><input id="q" placeholder="搜索指标…" oninput="render()"><select id="cat" onchange="render()"><option value="">全部类别</option></select><select id="kind" onchange="render()"><option value="">全部类型</option><option value="direct">direct</option><option value="composite">composite</option><option value="proxy">proxy</option><option value="manual">manual</option></select></div>
+<div class="note"><b>基础重要性</b>是长期结构性权重；<b>每日重要度</b> = 50%基础重要性 + 30% Level 极端度 + 12% D1 冲击 + 8% D2 加速度，用来回答“今天最该先看什么”。它不是买卖信号，也不等于看多/看空。Level 仍表示指标自身的历史相对位置。</div>
+<div class="controls"><input id="q" placeholder="搜索指标…" oninput="render()"><select id="sort" onchange="render()"><option value="daily">按今日重要度</option><option value="base">按基础重要性</option><option value="level">按 Level</option></select><select id="cat" onchange="render()"><option value="">全部类别</option></select><select id="kind" onchange="render()"><option value="">全部类型</option><option value="direct">direct</option><option value="composite">composite</option><option value="proxy">proxy</option><option value="manual">manual</option></select></div>
 <div class="grid" id="grid"><div class="empty">正在读取数据…</div></div>
 </main>
 <script>
@@ -39,19 +40,23 @@ function spark(canvas,hist){
  vals.forEach((v,i)=>{const x=2+i/(vals.length-1)*(w-4),y=h-4-(v-mn)/den*(h-8);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();
 }
 function render(){
- const root=document.querySelector('#grid'),q=document.querySelector('#q').value.toLowerCase(),cat=document.querySelector('#cat').value,kind=document.querySelector('#kind').value;
- const list=DATA.indicators.filter(x=>(!q||(x.name+' '+x.category+' '+x.definition).toLowerCase().includes(q))&&(!cat||x.category===cat)&&(!kind||x.type===kind));
- root.innerHTML='';if(!list.length){root.innerHTML='<div class="empty">还没有可显示的数据。第一次 GitHub Actions 更新完成后，这里会自动出现 28 个指标。</div>';return}
+ const root=document.querySelector('#grid'),q=document.querySelector('#q').value.toLowerCase(),cat=document.querySelector('#cat').value,kind=document.querySelector('#kind').value,sort=document.querySelector('#sort').value;
+ let list=DATA.indicators.filter(x=>(!q||(x.name+' '+x.category+' '+x.definition+' '+(x.importance_reason||'')).toLowerCase().includes(q))&&(!cat||x.category===cat)&&(!kind||x.type===kind));
+ if(sort==='daily') list.sort((a,b)=>(b.daily_importance_score??-1)-(a.daily_importance_score??-1)||(a.importance_rank??999)-(b.importance_rank??999));
+ if(sort==='base') list.sort((a,b)=>(a.importance_rank??999)-(b.importance_rank??999));
+ if(sort==='level') list.sort((a,b)=>(b.score??-1)-(a.score??-1));
+ root.innerHTML='';if(!list.length){root.innerHTML='<div class="empty">还没有可显示的数据。</div>';return}
  list.forEach(x=>{const c=document.createElement('article');c.className='card';
- const s=x.score==null?'<div class="score na">等待数据</div>':`<div class="score">${fmt(x.score)}</div><div class="bar"><div class="fill" style="width:${Math.max(0,Math.min(100,x.score))}%"></div></div>`;
- c.innerHTML=`<div class="top"><div><div class="name">${x.name}</div><div class="cat">${x.category} · ${x.cadence}</div></div><span class="badge">${x.type||x.quality||'—'}</span></div>${s}<div class="metrics"><div class="metric"><small>原始值</small><b>${fmt(x.raw)} ${x.raw_unit||''}</b></div><div class="metric"><small>D1 一级导</small><b class="${cls(x.d1)}">${fmt(x.d1)}</b></div><div class="metric"><small>D2 二级导</small><b class="${cls(x.d2)}">${fmt(x.d2)}</b></div></div><canvas></canvas><div class="desc">${x.definition}</div><div class="foot"><span>${x.quality||'—'}</span><span>as of ${x.asof||'—'}</span></div>`;
+ const daily=x.daily_importance_score;
+ const s=daily==null?'<div class="score na">等待数据</div>':`<div class="cat" style="margin-top:12px">今日重要度</div><div class="score">${fmt(daily)}</div><div class="bar"><div class="fill" style="width:${Math.max(0,Math.min(100,daily))}%"></div></div>`;
+ c.innerHTML=`<div class="top"><div><div class="name">${x.name}</div><div class="cat">${x.category} · ${x.cadence}</div></div><div class="badges"><span class="badge">今日 #${x.daily_importance_rank??'—'}</span><span class="badge">基础 #${x.importance_rank??'—'} · ${fmt(x.importance_score)}</span></div></div>${s}<div class="metrics"><div class="metric"><small>Level</small><b>${fmt(x.score)}</b></div><div class="metric"><small>D1 一级导</small><b class="${cls(x.d1)}">${fmt(x.d1)}</b></div><div class="metric"><small>D2 二级导</small><b class="${cls(x.d2)}">${fmt(x.d2)}</b></div><div class="metric"><small>原始值</small><b>${fmt(x.raw)} ${x.raw_unit||''}</b></div></div><canvas></canvas><div class="desc">${x.definition}</div><div class="reason"><b>重要性：</b>${x.importance_reason||'—'}</div><div class="foot"><span>${x.type||x.quality||'—'} · ${x.attention_state||'—'}</span><span>as of ${x.asof||'—'}</span></div>`;
  root.appendChild(c);spark(c.querySelector('canvas'),x.history);
  });
 }
 fetch('./data/current.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
  DATA=d;const inds=d.indicators||[],cats=[...new Set(inds.map(x=>x.category))].sort(),sel=document.querySelector('#cat');
  cats.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;sel.appendChild(o)});
- const good=inds.filter(x=>x.score!=null);document.querySelector('#working').textContent=`${good.length}/28`;document.querySelector('#high').textContent=good.filter(x=>x.score>=80).length;
+ const good=inds.filter(x=>x.score!=null);document.querySelector('#attention').textContent=fmt(d.market_attention_score);document.querySelector('#working').textContent=`${good.length}/28`;document.querySelector('#high').textContent=good.filter(x=>x.score>=80).length;
  document.querySelector('#rising').textContent=good.filter(x=>x.d1>0).length;document.querySelector('#accel').textContent=good.filter(x=>x.d2>0).length;
  document.querySelector('#updated').textContent=d.generated_at?'更新时间 '+new Date(d.generated_at).toLocaleString():'等待首次更新';render();
 }).catch(e=>{document.querySelector('#grid').innerHTML='<div class="empty">读取 current.json 失败：'+e+'</div>'});
