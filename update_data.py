@@ -934,32 +934,44 @@ def main():
 
     ordered=[out[x["id"]] for x in CONFIG]
 
-    # Market-state contribution model:
-    # 0-100 score where >50 means healthier/more supportive conditions and
-    # <50 means more stressed/negative conditions. Core61 gets full weight;
-    # legacy supplemental factors get 35% weight to reduce double-counting.
-    state_rows=[]
+    # Market Model V2: pruned active set with fixed bucket weights.
+    # Short market structure and event/sentiment dominate; macro is a lower-weight state anchor.
     for item in ordered:
         item["market_contribution_points"]=None
-        pol=float(item.get("impact_polarity",0) or 0)
-        if item.get("score") is None or pol == 0:
-            continue
-        layer_mult=1.0 if item.get("layer")=="core61" else 0.35
-        w=float(item.get("importance_score",50))*layer_mult
-        state_rows.append((item,w,pol))
-    state_denom=sum(w for _,w,_ in state_rows) or 1.0
-    state_edge=0.0
-    state_d1=0.0
-    state_d2=0.0
-    for item,w,pol in state_rows:
-        edge=pol*((float(item["score"])-50.0)/50.0)
-        state_edge += w*edge
-        state_d1 += w*pol*float(item.get("d1") or 0.0)
-        state_d2 += w*pol*float(item.get("d2") or 0.0)
-        item["market_contribution_points"]=round((w/state_denom)*pol*(float(item["score"])-50.0),3)
-    market_state=float(np.clip(50.0+50.0*(state_edge/state_denom),0,100))
-    market_state_d1=state_d1/state_denom
-    market_state_d2=state_d2/state_denom
+        item["model_v2_role"]="archived"
+        item["model_v2_bucket"]=None
+        item["transition_driver"]=False
+    active_map,bucket_weights=market_model_maps()
+    for item in ordered:
+        m=active_map.get(item["id"])
+        if m:
+            item["model_v2_role"]="active"
+            item["model_v2_bucket"]=m["bucket"]
+            item["transition_driver"]=bool(m.get("transition_driver",True))
+        elif item["id"] in MODEL.get("context_only",[]):
+            item["model_v2_role"]="context"
+
+    market_state,market_state_d1,market_state_d2,bucket_scores,_ = weighted_model_state(ordered)
+
+    # Per-indicator contribution points are reported in score points and sum approximately
+    # to market_state-50. Missing factors are automatically renormalized inside their bucket.
+    item_by_id={x["id"]:x for x in ordered}
+    for bucket,bw in bucket_weights.items():
+        members=[]
+        for m in MODEL.get("active",[]):
+            if m.get("bucket")!=bucket:
+                continue
+            item=item_by_id.get(m["id"])
+            if not item or item.get("score") is None:
+                continue
+            pol=float(item.get("impact_polarity",0) or 0)
+            if pol==0:
+                continue
+            w=float(item.get("importance_score",50))*float(m.get("multiplier",1.0))
+            members.append((m,item,pol,w))
+        den=sum(x[3] for x in members) or 1.0
+        for m,item,pol,w in members:
+            item["market_contribution_points"]=round(float(bw)*(w/den)*pol*(float(item["score"])-50.0),3)
     # Four-zone traffic-light framework.
     # This is an operational research regime, not a buy/sell instruction.
     if market_state >= 65:
