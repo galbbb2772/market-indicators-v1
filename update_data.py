@@ -249,6 +249,7 @@ def main():
     errors = {}
     meta = {x["id"]: x for x in CONFIG}
     out = {}
+    series_store = {}
     fs = get_fred(FRED_IDS, errors)
     mk = {}
     for sym in YAHOO:
@@ -262,7 +263,11 @@ def main():
     def F(k): return fs[k]
     def put(k, s, raw=None, unit="", quality=None):
         try:
-            out[k] = pack(meta[k], s, raw, unit, quality)
+            ss = pd.Series(s).dropna().astype(float).clip(0, 100).sort_index()
+            if ss.empty:
+                raise ValueError("empty score")
+            series_store[k] = ss
+            out[k] = pack(meta[k], ss, raw, unit, quality)
         except Exception as exc:
             errors[f"calc:{k}"] = repr(exc)
 
@@ -481,6 +486,9 @@ def main():
     # leave the indicator empty instead of fabricating a value.
 
     def hist_score(key):
+        s = series_store.get(key)
+        if s is not None and not s.empty:
+            return s
         obj = out.get(key) or {}
         rows = obj.get("history") or []
         if not rows:
@@ -765,6 +773,125 @@ def main():
             volatility_state="常态波动"
         market_regime=f"{volatility_state} · {market_structure}"
 
+    # Historical validation of the traffic-light score.
+    # This is an exploratory, non-point-in-time diagnostic: some macro series are
+    # indexed by observation date rather than their exact public release timestamp.
+    regime_backtest={
+        "status":"unavailable",
+        "note":"Exploratory only; not a point-in-time production backtest."
+    }
+    if "SPY" in mk and series_store:
+        try:
+            spy_bt=C("SPY").dropna().sort_index()
+            idx=spy_bt.index
+            weighted_edges=[]
+            weights=[]
+            cover=[]
+            for cfg in CONFIG:
+                key=cfg["id"]
+                pol=float(cfg.get("impact_polarity",0) or 0)
+                s=series_store.get(key)
+                if pol == 0 or s is None or s.empty:
+                    continue
+                layer_mult=1.0 if cfg.get("layer")=="core61" else 0.35
+                w=float(cfg.get("importance_score",50))*layer_mult
+                aligned=s.reindex(idx).ffill()
+                edge=pol*(aligned-50.0)
+                weighted_edges.append(edge*w)
+                weights.append(aligned.notna().astype(float)*w)
+                cover.append(aligned.notna().astype(int))
+            if weighted_edges:
+                num=pd.concat(weighted_edges,axis=1).sum(axis=1,min_count=1)
+                den=pd.concat(weights,axis=1).sum(axis=1,min_count=1)
+                cov=pd.concat(cover,axis=1).sum(axis=1)
+                hist_state=(50.0+num/den).clip(0,100)
+                hist_state=hist_state.where((den>0)&(cov>=20)).dropna()
+                bt=pd.DataFrame({"state":hist_state,"close":spy_bt.reindex(hist_state.index)})
+                bt["fwd_1d"]=(bt["close"].shift(-1)/bt["close"]-1)*100
+                bt["fwd_5d"]=(bt["close"].shift(-5)/bt["close"]-1)*100
+                bt["fwd_20d"]=(bt["close"].shift(-20)/bt["close"]-1)*100
+                lows=[]
+                vals=bt["close"].to_numpy(dtype=float)
+                for i in range(len(bt)):
+                    tail=vals[i+1:min(len(vals),i+21)]
+                    lows.append(float((np.nanmin(tail)/vals[i]-1)*100) if len(tail) else np.nan)
+                bt["worst_20d"]=lows
+
+                def light_for(v, t1=45.0, t2=55.0, t3=65.0):
+                    if v < t1: return "red"
+                    if v < t2: return "yellow"
+                    if v < t3: return "blue"
+                    return "green"
+
+                def summarize_thresholds(t1,t2,t3):
+                    x=bt.copy()
+                    x["light"]=[light_for(v,t1,t2,t3) for v in x["state"]]
+                    stats={}
+                    for light in ("red","yellow","blue","green"):
+                        g=x[x["light"]==light]
+                        valid20=g["fwd_20d"].dropna()
+                        stats[light]={
+                            "n":int(len(g)),
+                            "avg_state":round(float(g["state"].mean()),2) if len(g) else None,
+                            "avg_fwd_1d_pct":round(float(g["fwd_1d"].mean()),3) if g["fwd_1d"].notna().any() else None,
+                            "avg_fwd_5d_pct":round(float(g["fwd_5d"].mean()),3) if g["fwd_5d"].notna().any() else None,
+                            "avg_fwd_20d_pct":round(float(valid20.mean()),3) if len(valid20) else None,
+                            "median_fwd_20d_pct":round(float(valid20.median()),3) if len(valid20) else None,
+                            "positive_20d_rate_pct":round(float((valid20>0).mean()*100),1) if len(valid20) else None,
+                            "avg_worst_20d_pct":round(float(g["worst_20d"].mean()),3) if g["worst_20d"].notna().any() else None
+                        }
+                    return stats
+
+                current_stats=summarize_thresholds(45,55,65)
+
+                # Small grid search for a candidate split. It is deliberately
+                # constrained and labelled exploratory to avoid overfitting.
+                candidates=[]
+                for t1 in np.arange(40,50.1,2.5):
+                    for t2 in np.arange(50,60.1,2.5):
+                        for t3 in np.arange(60,70.1,2.5):
+                            if not (t1<t2<t3):
+                                continue
+                            st=summarize_thresholds(float(t1),float(t2),float(t3))
+                            if min(st[z]["n"] for z in ("red","yellow","blue","green")) < 12:
+                                continue
+                            means=[st[z]["avg_fwd_20d_pct"] for z in ("red","yellow","blue","green")]
+                            if any(v is None for v in means):
+                                continue
+                            monotonic=sum(1 for a,b in zip(means,means[1:]) if b>=a)
+                            spread=means[-1]-means[0]
+                            rates=[st[z]["positive_20d_rate_pct"] or 0 for z in ("red","yellow","blue","green")]
+                            rate_spread=(rates[-1]-rates[0])/100.0
+                            score_obj=3.0*monotonic + spread + rate_spread
+                            candidates.append((score_obj,float(t1),float(t2),float(t3),st))
+                best=max(candidates,key=lambda z:z[0]) if candidates else None
+
+                corr_df=bt[["state","fwd_20d"]].dropna()
+                corr=float(corr_df["state"].corr(corr_df["fwd_20d"],method="spearman")) if len(corr_df)>10 else None
+                regime_backtest={
+                    "status":"ok",
+                    "sample_start":str(bt.index.min().date()),
+                    "sample_end":str(bt.index.max().date()),
+                    "observations":int(len(bt)),
+                    "score_min":round(float(bt["state"].min()),2),
+                    "score_max":round(float(bt["state"].max()),2),
+                    "spearman_state_vs_fwd20":round(corr,3) if corr is not None and np.isfinite(corr) else None,
+                    "current_thresholds":{"red_below":45.0,"yellow_below":55.0,"blue_below":65.0,"green_from":65.0},
+                    "current_stats":current_stats,
+                    "exploratory_candidate":({
+                        "red_below":best[1],
+                        "yellow_below":best[2],
+                        "blue_below":best[3],
+                        "green_from":best[3],
+                        "objective":round(float(best[0]),3),
+                        "stats":best[4]
+                    } if best else None),
+                    "history":[{"date":str(i.date()),"score":round(float(v),2)} for i,v in hist_state.tail(756).items()],
+                    "note":"Exploratory only. Uses available reconstructed indicator histories and may contain observation-date/release-date mismatch for macro series. Do not treat the candidate thresholds as final until a point-in-time out-of-sample validation is done."
+                }
+        except Exception as exc:
+            errors["regime_backtest"]=repr(exc)
+
     positive=sorted(
         [x for x in ordered if (x.get("market_contribution_points") or 0)>0],
         key=lambda x:x["market_contribution_points"],reverse=True
@@ -835,6 +962,7 @@ def main():
         "market_structure":market_structure,
         "volatility_state":volatility_state,
         "market_regime":market_regime,
+        "regime_backtest":regime_backtest,
         "trend_efficiency":round(trend_efficiency,4) if trend_efficiency is not None else None,
         "volatility_percentile":round(vol_percentile,2) if vol_percentile is not None else None,
         "top_positive_contributors":[{"id":x["id"],"name":x["name"],"points":x["market_contribution_points"]} for x in positive[:8]],
