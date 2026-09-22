@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-22T05:35:15.634458+00:00",
+  "generated_at": "2026-09-22T07:52:44.900265+00:00",
   "status": "ok",
   "working_count": 68,
   "total_count": 82,
-  "market_attention_score": 61.78,
-  "market_state_score": 54.22,
-  "market_state_d1": -1.38,
-  "market_state_d2": -0.62,
+  "market_attention_score": 61.08,
+  "market_state_score": 54.46,
+  "market_state_d1": -1.96,
+  "market_state_d2": -1.21,
   "market_state_label": "neutral",
   "traffic_light": "yellow",
   "traffic_framework": {
@@ -45,11 +45,11 @@
   "market_regime": "常态波动 · 区域震荡",
   "regime_backtest": {
     "status": "ok",
-    "sample_start": "2016-12-21",
+    "sample_start": "2016-12-22",
     "sample_end": "2026-09-21",
-    "observations": 2449,
+    "observations": 2448,
     "score_min": 9.5,
-    "score_max": 90.85,
+    "score_max": 90.81,
     "spearman_state_vs_fwd20": -0.146,
     "current_thresholds": {
       "red_below": 45.0,
@@ -89,14 +89,14 @@
         "avg_worst_20d_pct": -1.967
       },
       "green": {
-        "n": 270,
-        "avg_state": 68.06,
+        "n": 269,
+        "avg_state": 67.99,
         "avg_fwd_1d_pct": 0.025,
-        "avg_fwd_5d_pct": 0.204,
-        "avg_fwd_20d_pct": 0.961,
-        "median_fwd_20d_pct": 1.294,
-        "positive_20d_rate_pct": 64.8,
-        "avg_worst_20d_pct": -1.644
+        "avg_fwd_5d_pct": 0.207,
+        "avg_fwd_20d_pct": 0.964,
+        "median_fwd_20d_pct": 1.299,
+        "positive_20d_rate_pct": 64.7,
+        "avg_worst_20d_pct": -1.646
       }
     },
     "exploratory_candidate": {
@@ -104,7 +104,7 @@
       "yellow_below": 55.0,
       "blue_below": 60.0,
       "green_from": 60.0,
-      "objective": 5.572,
+      "objective": 5.574,
       "stats": {
         "red": {
           "n": 984,
@@ -137,14 +137,14 @@
           "avg_worst_20d_pct": -2.28
         },
         "green": {
-          "n": 550,
-          "avg_state": 65.19,
+          "n": 549,
+          "avg_state": 65.15,
           "avg_fwd_1d_pct": 0.046,
-          "avg_fwd_5d_pct": 0.235,
-          "avg_fwd_20d_pct": 1.241,
+          "avg_fwd_5d_pct": 0.236,
+          "avg_fwd_20d_pct": 1.243,
           "median_fwd_20d_pct": 1.71,
           "positive_20d_rate_pct": 72.5,
-          "avg_worst_20d_pct": -1.565
+          "avg_worst_20d_pct": -1.566
         }
       }
     },
@@ -167,7 +167,7 @@
       },
       {
         "date": "2023-09-21",
-        "score": 58.91
+        "score": 58.92
       },
       {
         "date": "2023-09-22",
@@ -239,7 +239,7 @@
       },
       {
         "date": "2023-10-17",
-        "score": 59.76
+        "score": 59.77
       },
       {
         "date": "2023-10-18",
@@ -271,7 +271,7 @@
       },
       {
         "date": "2023-10-27",
-        "score": 50.54
+        "score": 50.55
       },
       {
         "date": "2023-10-30",
@@ -451,7 +451,7 @@
       },
       {
         "date": "2024-01-03",
-        "score": 64.31
+        "score": 64.3
       },
       {
         "date": "2024-01-04",
@@ -611,11 +611,11 @@
       },
       {
         "date": "2024-03-01",
-        "score": 65.49
+        "score": 65.48
       },
       {
         "date": "2024-03-04",
-        "score": 67.36
+        "score": 67.37
       },
       {
         "date": "2024-03-05",
@@ -663,7 +663,7 @@
       },
       {
         "date": "2024-03-20",
-        "score": 69.16
+        "score": 69.15
       },
       {
         "date": "2024-03-21",
@@ -695,7 +695,7 @@
       },
       {
         "date": "2024-04-02",
-        "score": 67.38
+        "score": 67.37
       },
       {
         "date": "2024-04-03",
@@ -911,7 +911,7 @@
       },
       {
         "date": "2024-06-18",
-        "score": 62.23
+        "score": 62.22
       },
       {
         "date": "2024-06-20",
@@ -1139,7 +1139,7 @@
       },
       {
         "date": "2024-09-10",
-        "score": 59.54
+        "score": 59.53
       },
       {
         "date": "2024-09-11",
@@ -1699,7 +1699,7 @@
       },
       {
         "date": "2025-04-02",
-        "score": 49.79
+        "score": 49.8
       },
       {
         "date": "2025-04-03",
@@ -2147,7 +2147,7 @@
       },
       {
         "date": "2025-09-12",
-        "score": 58.97
+        "score": 58.98
       },
       {
         "date": "2025-09-15",
@@ -2259,7 +2259,7 @@
       },
       {
         "date": "2025-10-22",
-        "score": 50.84
+        "score": 50.85
       },
       {
         "date": "2025-10-23",
@@ -2547,7 +2547,7 @@
       },
       {
         "date": "2026-02-05",
-        "score": 47.19
+        "score": 47.18
       },
       {
         "date": "2026-02-06",
@@ -2559,7 +2559,7 @@
       },
       {
         "date": "2026-02-10",
-        "score": 53.17
+        "score": 53.16
       },
       {
         "date": "2026-02-11",
@@ -2635,7 +2635,7 @@
       },
       {
         "date": "2026-03-10",
-        "score": 49.44
+        "score": 49.43
       },
       {
         "date": "2026-03-11",
@@ -3187,7 +3187,7 @@
     {
       "id": "institutional_panic",
       "name": "机构恐慌指标",
-      "points": 0.934
+      "points": 0.945
     },
     {
       "id": "us_loans_speed",
@@ -3195,24 +3195,24 @@
       "points": 0.843
     },
     {
+      "id": "market_fear",
+      "name": "市场恐慌指标",
+      "points": 0.828
+    },
+    {
       "id": "us_loans_total",
       "name": "美国贷款总量指标",
       "points": 0.825
     },
     {
-      "id": "market_fear",
-      "name": "市场恐慌指标",
-      "points": 0.796
+      "id": "market_pessimism",
+      "name": "市场悲观度指标",
+      "points": 0.729
     },
     {
       "id": "global_cb_rhythm",
       "name": "世界央行加息指标",
       "points": 0.711
-    },
-    {
-      "id": "market_pessimism",
-      "name": "市场悲观度指标",
-      "points": 0.707
     },
     {
       "id": "sector_realestate_vol",
@@ -4029,7 +4029,7 @@
       "market_contribution_points": 0.125,
       "daily_importance_score": 40.63,
       "attention_state": "normal",
-      "daily_importance_rank": 64
+      "daily_importance_rank": 63
     },
     {
       "id": "market_topic_heat",
@@ -4043,17 +4043,13 @@
       "importance_score": 60,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 77,
-      "score": 62.3,
-      "raw": 62.3016,
+      "score": 61.38,
+      "raw": 61.3757,
       "raw_unit": "score",
-      "d1": 20.41,
-      "d2": 26.72,
-      "asof": "2026-09-21",
+      "d1": -0.93,
+      "d2": -21.34,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 33.36
-        },
         {
           "date": "2026-01-07",
           "score": 39.7
@@ -4168,7 +4164,7 @@
         },
         {
           "date": "2026-02-18",
-          "score": 60.01
+          "score": 59.96
         },
         {
           "date": "2026-02-19",
@@ -4769,13 +4765,17 @@
         {
           "date": "2026-09-21",
           "score": 62.3
+        },
+        {
+          "date": "2026-09-22",
+          "score": 61.38
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": -0.187,
-      "daily_importance_score": 57.38,
-      "attention_state": "watch",
-      "daily_importance_rank": 42
+      "market_contribution_points": -0.173,
+      "daily_importance_score": 44.21,
+      "attention_state": "normal",
+      "daily_importance_rank": 58
     },
     {
       "id": "cross_asset_correlation",
@@ -6267,7 +6267,7 @@
       "market_contribution_points": 0.711,
       "daily_importance_score": 71.47,
       "attention_state": "high",
-      "daily_importance_rank": 17
+      "daily_importance_rank": 16
     },
     {
       "id": "global_cb_cycle_entry",
@@ -7013,7 +7013,7 @@
       "market_contribution_points": -0.792,
       "daily_importance_score": 71.08,
       "attention_state": "high",
-      "daily_importance_rank": 18
+      "daily_importance_rank": 17
     },
     {
       "id": "retail_panic",
@@ -7027,17 +7027,13 @@
       "importance_score": 72,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 57,
-      "score": 56.42,
+      "score": 55.03,
       "raw": -4.5453,
       "raw_unit": "% IWM 20d",
-      "d1": 0.73,
-      "d2": 6.88,
-      "asof": "2026-09-21",
+      "d1": -1.39,
+      "d2": -2.12,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 36.77
-        },
         {
           "date": "2026-01-07",
           "score": 41.87
@@ -7753,13 +7749,17 @@
         {
           "date": "2026-09-21",
           "score": 56.42
+        },
+        {
+          "date": "2026-09-22",
+          "score": 55.03
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": -0.117,
-      "daily_importance_score": 42.49,
+      "market_contribution_points": -0.092,
+      "daily_importance_score": 40.53,
       "attention_state": "normal",
-      "daily_importance_rank": 62
+      "daily_importance_rank": 65
     },
     {
       "id": "institutional_panic",
@@ -7773,17 +7773,13 @@
       "importance_score": 86,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 26,
-      "score": 7.03,
-      "raw": 7.0326,
+      "score": 6.57,
+      "raw": 6.5697,
       "raw_unit": "score",
-      "d1": 0.97,
-      "d2": 3.24,
-      "asof": "2026-09-21",
+      "d1": -0.46,
+      "d2": -1.43,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 11.09
-        },
         {
           "date": "2026-01-07",
           "score": 14.4
@@ -8499,11 +8495,15 @@
         {
           "date": "2026-09-21",
           "score": 7.03
+        },
+        {
+          "date": "2026-09-22",
+          "score": 6.57
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.934,
-      "daily_importance_score": 70.4,
+      "market_contribution_points": 0.945,
+      "daily_importance_score": 69.79,
       "attention_state": "high",
       "daily_importance_rank": 20
     },
@@ -8932,7 +8932,7 @@
         },
         {
           "date": "2026-05-29",
-          "score": 91.27
+          "score": 91.23
         },
         {
           "date": "2026-06-01",
@@ -9251,7 +9251,7 @@
       "market_contribution_points": -0.691,
       "daily_importance_score": 64.22,
       "attention_state": "watch",
-      "daily_importance_rank": 31
+      "daily_importance_rank": 29
     },
     {
       "id": "money_making_effect",
@@ -9997,7 +9997,7 @@
       "market_contribution_points": -0.387,
       "daily_importance_score": 60.55,
       "attention_state": "watch",
-      "daily_importance_rank": 35
+      "daily_importance_rank": 36
     },
     {
       "id": "trump_activity",
@@ -10061,17 +10061,13 @@
       "importance_score": 88,
       "importance_reason": "大盘波动和短期回撤是即时压力确认层。",
       "importance_rank": 22,
-      "score": 25.73,
-      "raw": 14.87,
+      "score": 24.34,
+      "raw": 14.68,
       "raw_unit": "VIX",
-      "d1": -19.11,
-      "d2": -13.36,
-      "asof": "2026-09-21",
+      "d1": -1.39,
+      "d2": 17.72,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 28.11
-        },
         {
           "date": "2026-01-07",
           "score": 39.62
@@ -10787,13 +10783,17 @@
         {
           "date": "2026-09-21",
           "score": 25.73
+        },
+        {
+          "date": "2026-09-22",
+          "score": 24.34
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.54,
-      "daily_importance_score": 74.3,
+      "market_contribution_points": 0.571,
+      "daily_importance_score": 65.9,
       "attention_state": "high",
-      "daily_importance_rank": 12
+      "daily_importance_rank": 25
     },
     {
       "id": "ghost_story_density",
@@ -10832,17 +10832,13 @@
       "importance_score": 90,
       "importance_reason": "波动率与信用压力结合，可较直接观察风险厌恶。",
       "importance_rank": 20,
-      "score": 15.01,
-      "raw": 14.87,
+      "score": 13.62,
+      "raw": 14.68,
       "raw_unit": "VIX",
-      "d1": 0.79,
-      "d2": 5.75,
-      "asof": "2026-09-21",
+      "d1": -1.39,
+      "d2": -2.18,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 18.98
-        },
         {
           "date": "2026-01-07",
           "score": 24.14
@@ -11558,13 +11554,17 @@
         {
           "date": "2026-09-21",
           "score": 15.01
+        },
+        {
+          "date": "2026-09-22",
+          "score": 13.62
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.796,
-      "daily_importance_score": 68.31,
+      "market_contribution_points": 0.828,
+      "daily_importance_score": 68.36,
       "attention_state": "high",
-      "daily_importance_rank": 23
+      "daily_importance_rank": 22
     },
     {
       "id": "options_anomaly",
@@ -11578,17 +11578,13 @@
       "importance_score": 78,
       "importance_reason": "期权波动异常是短期风险与事件定价的重要确认项。",
       "importance_rank": 42,
-      "score": 20.5,
-      "raw": -13.0409,
+      "score": 17.72,
+      "raw": -14.6512,
       "raw_unit": "% VIX 5d",
-      "d1": -7.14,
-      "d2": -10.58,
-      "asof": "2026-09-21",
+      "d1": -2.78,
+      "d2": 4.37,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 48.74
-        },
         {
           "date": "2026-01-07",
           "score": 56.68
@@ -12304,13 +12300,17 @@
         {
           "date": "2026-09-21",
           "score": 20.5
+        },
+        {
+          "date": "2026-09-22",
+          "score": 17.72
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.582,
-      "daily_importance_score": 64.37,
+      "market_contribution_points": 0.637,
+      "daily_importance_score": 61.43,
       "attention_state": "watch",
-      "daily_importance_rank": 30
+      "daily_importance_rank": 33
     },
     {
       "id": "geo_news_impact",
@@ -12324,11 +12324,11 @@
       "importance_score": 76,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 47,
-      "score": 49.51,
-      "raw": 49.515,
+      "score": 48.72,
+      "raw": 48.7213,
       "raw_unit": "score",
-      "d1": 6.88,
-      "d2": -18.21,
+      "d1": 6.08,
+      "d2": -19.0,
       "asof": "2026-09-22",
       "history": [
         {
@@ -13049,14 +13049,14 @@
         },
         {
           "date": "2026-09-22",
-          "score": 49.51
+          "score": 48.72
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.009,
-      "daily_importance_score": 48.25,
+      "market_contribution_points": 0.025,
+      "daily_importance_score": 48.5,
       "attention_state": "normal",
-      "daily_importance_rank": 56
+      "daily_importance_rank": 53
     },
     {
       "id": "geo_lag_reaction",
@@ -13070,11 +13070,11 @@
       "importance_score": 70,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 59,
-      "score": 40.17,
-      "raw": 40.1675,
+      "score": 38.84,
+      "raw": 38.8448,
       "raw_unit": "score",
-      "d1": -17.72,
-      "d2": -30.47,
+      "d1": -19.05,
+      "d2": -31.79,
       "asof": "2026-09-22",
       "history": [
         {
@@ -13199,7 +13199,7 @@
         },
         {
           "date": "2026-02-18",
-          "score": 35.63
+          "score": 35.58
         },
         {
           "date": "2026-02-19",
@@ -13795,14 +13795,14 @@
         },
         {
           "date": "2026-09-22",
-          "score": 40.17
+          "score": 38.84
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.174,
-      "daily_importance_score": 59.53,
+      "market_contribution_points": 0.198,
+      "daily_importance_score": 61.13,
       "attention_state": "watch",
-      "daily_importance_rank": 38
+      "daily_importance_rank": 34
     },
     {
       "id": "treasury_short_default",
@@ -13841,11 +13841,11 @@
       "importance_score": 90,
       "importance_reason": "美元融资环境与信用压力影响全球资产与跨境流动性。",
       "importance_rank": 18,
-      "score": 41.01,
-      "raw": 41.0053,
+      "score": 42.66,
+      "raw": 42.6587,
       "raw_unit": "score",
-      "d1": -2.65,
-      "d2": -6.22,
+      "d1": -0.99,
+      "d2": -4.56,
       "asof": "2026-09-22",
       "history": [
         {
@@ -14566,14 +14566,14 @@
         },
         {
           "date": "2026-09-22",
-          "score": 41.01
+          "score": 42.66
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.205,
-      "daily_importance_score": 53.97,
+      "market_contribution_points": 0.167,
+      "daily_importance_score": 51.46,
       "attention_state": "watch",
-      "daily_importance_rank": 47
+      "daily_importance_rank": 49
     },
     {
       "id": "buffett_cash",
@@ -14611,7 +14611,7 @@
       "market_contribution_points": 0.266,
       "daily_importance_score": 40.58,
       "attention_state": "normal",
-      "daily_importance_rank": 65
+      "daily_importance_rank": 64
     },
     {
       "id": "business_cycle",
@@ -14625,11 +14625,11 @@
       "importance_score": 88,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 23,
-      "score": 42.59,
-      "raw": 42.5926,
+      "score": 42.53,
+      "raw": 42.5265,
       "raw_unit": "score",
-      "d1": -0.07,
-      "d2": -0.99,
+      "d1": -0.13,
+      "d2": -1.06,
       "asof": "2026-09-22",
       "history": [
         {
@@ -15350,14 +15350,14 @@
         },
         {
           "date": "2026-09-22",
-          "score": 42.59
+          "score": 42.53
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": -0.165,
-      "daily_importance_score": 48.8,
+      "market_contribution_points": -0.166,
+      "daily_importance_score": 48.9,
       "attention_state": "normal",
-      "daily_importance_rank": 54
+      "daily_importance_rank": 52
     },
     {
       "id": "kondratiev_cycle",
@@ -15396,11 +15396,11 @@
       "importance_score": 82,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 32,
-      "score": 49.5,
-      "raw": 49.4985,
+      "score": 48.84,
+      "raw": 48.8371,
       "raw_unit": "score",
-      "d1": 1.44,
-      "d2": -3.13,
+      "d1": 0.78,
+      "d2": -3.79,
       "asof": "2026-09-22",
       "history": [
         {
@@ -16121,12 +16121,12 @@
         },
         {
           "date": "2026-09-22",
-          "score": 49.5
+          "score": 48.84
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.01,
-      "daily_importance_score": 43.17,
+      "market_contribution_points": 0.024,
+      "daily_importance_score": 43.38,
       "attention_state": "normal",
       "daily_importance_rank": 60
     },
@@ -16415,7 +16415,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.06
+          "score": 42.2
         },
         {
           "date": "2026-04-10",
@@ -16874,7 +16874,7 @@
       "market_contribution_points": 0.825,
       "daily_importance_score": 71.08,
       "attention_state": "high",
-      "daily_importance_rank": 19
+      "daily_importance_rank": 18
     },
     {
       "id": "us_loans_speed",
@@ -17161,7 +17161,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.06
+          "score": 42.2
         },
         {
           "date": "2026-04-10",
@@ -17620,7 +17620,7 @@
       "market_contribution_points": 0.843,
       "daily_importance_score": 72.08,
       "attention_state": "high",
-      "daily_importance_rank": 16
+      "daily_importance_rank": 14
     },
     {
       "id": "us_cn_retail_discussion",
@@ -18441,7 +18441,7 @@
       "market_contribution_points": -0.269,
       "daily_importance_score": 48.44,
       "attention_state": "normal",
-      "daily_importance_rank": 55
+      "daily_importance_rank": 54
     },
     {
       "id": "rate_cycle_sensitivity",
@@ -19187,7 +19187,7 @@
       "market_contribution_points": -0.792,
       "daily_importance_score": 69.81,
       "attention_state": "high",
-      "daily_importance_rank": 21
+      "daily_importance_rank": 19
     },
     {
       "id": "market_optimism",
@@ -19201,17 +19201,13 @@
       "importance_score": 82,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 37,
-      "score": 51.9,
-      "raw": 51.9033,
+      "score": 52.37,
+      "raw": 52.3663,
       "raw_unit": "score",
-      "d1": 8.3,
-      "d2": 5.5,
-      "asof": "2026-09-21",
+      "d1": 0.46,
+      "d2": -7.84,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 66.16
-        },
         {
           "date": "2026-01-07",
           "score": 61.0
@@ -19927,13 +19923,17 @@
         {
           "date": "2026-09-21",
           "score": 51.9
+        },
+        {
+          "date": "2026-09-22",
+          "score": 52.37
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.039,
-      "daily_importance_score": 48.88,
+      "market_contribution_points": 0.049,
+      "daily_importance_score": 45.21,
       "attention_state": "normal",
-      "daily_importance_rank": 53
+      "daily_importance_rank": 57
     },
     {
       "id": "market_pessimism",
@@ -19947,17 +19947,13 @@
       "importance_score": 82,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 34,
-      "score": 15.92,
-      "raw": 15.9245,
+      "score": 14.84,
+      "raw": 14.8442,
       "raw_unit": "score",
-      "d1": -5.78,
-      "d2": -1.46,
-      "asof": "2026-09-21",
+      "d1": -1.08,
+      "d2": 4.7,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 19.39
-        },
         {
           "date": "2026-01-07",
           "score": 26.05
@@ -20673,12 +20669,16 @@
         {
           "date": "2026-09-21",
           "score": 15.92
+        },
+        {
+          "date": "2026-09-22",
+          "score": 14.84
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.707,
-      "daily_importance_score": 65.38,
-      "attention_state": "high",
+      "market_contribution_points": 0.729,
+      "daily_importance_score": 64.25,
+      "attention_state": "watch",
       "daily_importance_rank": 28
     },
     {
@@ -21450,7 +21450,7 @@
       "market_contribution_points": 1.164,
       "daily_importance_score": 78.45,
       "attention_state": "high",
-      "daily_importance_rank": 4
+      "daily_importance_rank": 3
     },
     {
       "id": "mega_excess_cash",
@@ -22246,7 +22246,7 @@
       "market_contribution_points": 0.091,
       "daily_importance_score": 60.86,
       "attention_state": "watch",
-      "daily_importance_rank": 34
+      "daily_importance_rank": 35
     },
     {
       "id": "market_move_speed",
@@ -22393,7 +22393,7 @@
         },
         {
           "date": "2026-02-18",
-          "score": 37.17
+          "score": 37.04
         },
         {
           "date": "2026-02-19",
@@ -22992,7 +22992,7 @@
       "market_contribution_points": null,
       "daily_importance_score": 68.86,
       "attention_state": "high",
-      "daily_importance_rank": 22
+      "daily_importance_rank": 21
     },
     {
       "id": "bond_issuance_speed",
@@ -24559,7 +24559,7 @@
       "market_contribution_points": -0.859,
       "daily_importance_score": 66.95,
       "attention_state": "high",
-      "daily_importance_rank": 25
+      "daily_importance_rank": 24
     },
     {
       "id": "mega_liquidity_blowup",
@@ -24573,17 +24573,13 @@
       "importance_score": 92,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 12,
-      "score": 23.58,
-      "raw": 23.5796,
+      "score": 23.12,
+      "raw": 23.1167,
       "raw_unit": "score",
-      "d1": 2.26,
-      "d2": 4.25,
-      "asof": "2026-09-21",
+      "d1": -0.46,
+      "d2": -2.72,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 13.52
-        },
         {
           "date": "2026-01-07",
           "score": 15.79
@@ -25299,13 +25295,17 @@
         {
           "date": "2026-09-21",
           "score": 23.58
+        },
+        {
+          "date": "2026-09-22",
+          "score": 23.12
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.615,
-      "daily_importance_score": 64.57,
+      "market_contribution_points": 0.625,
+      "daily_importance_score": 63.27,
       "attention_state": "watch",
-      "daily_importance_rank": 29
+      "daily_importance_rank": 31
     },
     {
       "id": "market_bias",
@@ -25319,17 +25319,13 @@
       "importance_score": 86,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 27,
-      "score": 67.99,
-      "raw": 67.9894,
+      "score": 68.76,
+      "raw": 68.761,
       "raw_unit": "score",
-      "d1": 7.04,
-      "d2": 3.48,
-      "asof": "2026-09-21",
+      "d1": 0.77,
+      "d2": -6.27,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 73.38
-        },
         {
           "date": "2026-01-07",
           "score": 67.48
@@ -26045,13 +26041,17 @@
         {
           "date": "2026-09-21",
           "score": 67.99
+        },
+        {
+          "date": "2026-09-22",
+          "score": 68.76
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.391,
-      "daily_importance_score": 59.13,
+      "market_contribution_points": 0.408,
+      "daily_importance_score": 56.72,
       "attention_state": "watch",
-      "daily_importance_rank": 39
+      "daily_importance_rank": 41
     },
     {
       "id": "mag7_volume",
@@ -26797,7 +26797,7 @@
       "market_contribution_points": null,
       "daily_importance_score": 46.36,
       "attention_state": "normal",
-      "daily_importance_rank": 58
+      "daily_importance_rank": 56
     },
     {
       "id": "mag7_volatility",
@@ -27543,7 +27543,7 @@
       "market_contribution_points": -0.057,
       "daily_importance_score": 48.18,
       "attention_state": "normal",
-      "daily_importance_rank": 57
+      "daily_importance_rank": 55
     },
     {
       "id": "ai7_volume",
@@ -28289,7 +28289,7 @@
       "market_contribution_points": null,
       "daily_importance_score": 49.2,
       "attention_state": "normal",
-      "daily_importance_rank": 52
+      "daily_importance_rank": 51
     },
     {
       "id": "ai7_volatility",
@@ -29035,7 +29035,7 @@
       "market_contribution_points": -0.135,
       "daily_importance_score": 55.33,
       "attention_state": "watch",
-      "daily_importance_rank": 43
+      "daily_importance_rank": 42
     },
     {
       "id": "tech100_volatility",
@@ -29781,7 +29781,7 @@
       "market_contribution_points": 0.114,
       "daily_importance_score": 68.02,
       "attention_state": "high",
-      "daily_importance_rank": 24
+      "daily_importance_rank": 23
     },
     {
       "id": "sector_it_vol",
@@ -30527,7 +30527,7 @@
       "market_contribution_points": -0.316,
       "daily_importance_score": 60.49,
       "attention_state": "watch",
-      "daily_importance_rank": 36
+      "daily_importance_rank": 37
     },
     {
       "id": "sector_comm_vol",
@@ -31273,7 +31273,7 @@
       "market_contribution_points": -0.71,
       "daily_importance_score": 73.92,
       "attention_state": "high",
-      "daily_importance_rank": 13
+      "daily_importance_rank": 10
     },
     {
       "id": "sector_cons_disc_vol",
@@ -31916,7 +31916,7 @@
         },
         {
           "date": "2026-08-17",
-          "score": 86.77
+          "score": 86.64
         },
         {
           "date": "2026-08-18",
@@ -32019,7 +32019,7 @@
       "market_contribution_points": 0.409,
       "daily_importance_score": 54.02,
       "attention_state": "watch",
-      "daily_importance_rank": 46
+      "daily_importance_rank": 44
     },
     {
       "id": "sector_cons_staples_vol",
@@ -32134,7 +32134,7 @@
         },
         {
           "date": "2026-02-05",
-          "score": 84.39
+          "score": 84.52
         },
         {
           "date": "2026-02-06",
@@ -32765,7 +32765,7 @@
       "market_contribution_points": -0.115,
       "daily_importance_score": 40.72,
       "attention_state": "normal",
-      "daily_importance_rank": 63
+      "daily_importance_rank": 62
     },
     {
       "id": "sector_fin_vol",
@@ -33511,7 +33511,7 @@
       "market_contribution_points": 0.154,
       "daily_importance_score": 50.0,
       "attention_state": "watch",
-      "daily_importance_rank": 51
+      "daily_importance_rank": 50
     },
     {
       "id": "sector_health_vol",
@@ -34460,7 +34460,7 @@
         },
         {
           "date": "2026-03-10",
-          "score": 73.54
+          "score": 73.68
         },
         {
           "date": "2026-03-11",
@@ -35749,7 +35749,7 @@
       "market_contribution_points": -0.284,
       "daily_importance_score": 59.69,
       "attention_state": "watch",
-      "daily_importance_rank": 37
+      "daily_importance_rank": 38
     },
     {
       "id": "sector_materials_vol",
@@ -36495,7 +36495,7 @@
       "market_contribution_points": 0.564,
       "daily_importance_score": 73.68,
       "attention_state": "high",
-      "daily_importance_rank": 14
+      "daily_importance_rank": 11
     },
     {
       "id": "sector_utilities_vol",
@@ -36622,7 +36622,7 @@
         },
         {
           "date": "2026-02-10",
-          "score": 24.6
+          "score": 24.74
         },
         {
           "date": "2026-02-11",
@@ -37987,7 +37987,7 @@
       "market_contribution_points": 0.688,
       "daily_importance_score": 62.66,
       "attention_state": "watch",
-      "daily_importance_rank": 33
+      "daily_importance_rank": 32
     },
     {
       "id": "market_support",
@@ -38733,7 +38733,7 @@
       "market_contribution_points": -0.074,
       "daily_importance_score": 59.07,
       "attention_state": "watch",
-      "daily_importance_rank": 40
+      "daily_importance_rank": 39
     },
     {
       "id": "liquidity_risk",
@@ -39479,7 +39479,7 @@
       "market_contribution_points": 0.407,
       "daily_importance_score": 78.45,
       "attention_state": "high",
-      "daily_importance_rank": 3
+      "daily_importance_rank": 2
     },
     {
       "id": "treasury_rate_regime",
@@ -40225,7 +40225,7 @@
       "market_contribution_points": -0.402,
       "daily_importance_score": 76.3,
       "attention_state": "high",
-      "daily_importance_rank": 10
+      "daily_importance_rank": 8
     },
     {
       "id": "gold",
@@ -40985,11 +40985,11 @@
       "importance_reason": "原油影响通胀和增长，但对美股的方向并非单一。",
       "layer": "supplemental",
       "impact_polarity": 0,
-      "score": 90.15,
-      "raw": 93.39,
+      "score": 89.68,
+      "raw": 92.95,
       "raw_unit": "WTI future",
-      "d1": -1.12,
-      "d2": 2.65,
+      "d1": -1.59,
+      "d2": 2.18,
       "asof": "2026-09-22",
       "history": [
         {
@@ -41710,12 +41710,12 @@
         },
         {
           "date": "2026-09-22",
-          "score": 90.15
+          "score": 89.68
         }
       ],
       "quality": "direct",
       "market_contribution_points": null,
-      "daily_importance_score": 54.11,
+      "daily_importance_score": 53.96,
       "attention_state": "watch",
       "daily_importance_rank": 45
     },
@@ -42463,7 +42463,7 @@
       "market_contribution_points": 0.399,
       "daily_importance_score": 77.45,
       "attention_state": "high",
-      "daily_importance_rank": 7
+      "daily_importance_rank": 6
     },
     {
       "id": "inventory_cycle",
@@ -42477,11 +42477,11 @@
       "importance_reason": "库存周期影响制造业和盈利节奏，但更新频率较低。",
       "layer": "supplemental",
       "impact_polarity": 0,
-      "score": 42.59,
+      "score": 42.53,
       "raw": -13.9185,
       "raw_unit": "% XLI-SPY 120d",
-      "d1": -0.07,
-      "d2": -0.99,
+      "d1": -0.13,
+      "d2": -1.06,
       "asof": "2026-09-22",
       "history": [
         {
@@ -43202,12 +43202,12 @@
         },
         {
           "date": "2026-09-22",
-          "score": 42.59
+          "score": 42.53
         }
       ],
       "quality": "proxy",
       "market_contribution_points": null,
-      "daily_importance_score": 37.8,
+      "daily_importance_score": 37.9,
       "attention_state": "normal",
       "daily_importance_rank": 67
     },
@@ -43371,7 +43371,7 @@
       "market_contribution_points": -0.338,
       "daily_importance_score": 78.0,
       "attention_state": "high",
-      "daily_importance_rank": 5
+      "daily_importance_rank": 4
     },
     {
       "id": "employment",
@@ -43621,7 +43621,7 @@
       "market_contribution_points": -0.06,
       "daily_importance_score": 52.7,
       "attention_state": "watch",
-      "daily_importance_rank": 50
+      "daily_importance_rank": 48
     },
     {
       "id": "valuation_cycle",
@@ -44367,7 +44367,7 @@
       "market_contribution_points": -0.067,
       "daily_importance_score": 53.88,
       "attention_state": "watch",
-      "daily_importance_rank": 48
+      "daily_importance_rank": 46
     },
     {
       "id": "market_volume",
@@ -45113,7 +45113,7 @@
       "market_contribution_points": null,
       "daily_importance_score": 63.66,
       "attention_state": "watch",
-      "daily_importance_rank": 32
+      "daily_importance_rank": 30
     },
     {
       "id": "volume_speed",
@@ -45859,7 +45859,7 @@
       "market_contribution_points": null,
       "daily_importance_score": 58.48,
       "attention_state": "watch",
-      "daily_importance_rank": 41
+      "daily_importance_rank": 40
     },
     {
       "id": "concentration",
@@ -46605,7 +46605,7 @@
       "market_contribution_points": -0.283,
       "daily_importance_score": 77.98,
       "attention_state": "high",
-      "daily_importance_rank": 6
+      "daily_importance_rank": 5
     },
     {
       "id": "leverage_liquidity",
@@ -47351,7 +47351,7 @@
       "market_contribution_points": 0.374,
       "daily_importance_score": 74.45,
       "attention_state": "high",
-      "daily_importance_rank": 11
+      "daily_importance_rank": 9
     },
     {
       "id": "systemic_risk",
@@ -47365,17 +47365,13 @@
       "importance_reason": "直接反映跨资产、信用、波动与回撤的系统性风险，是总风险层。",
       "layer": "supplemental",
       "impact_polarity": -1,
-      "score": 19.93,
-      "raw": 19.9295,
+      "score": 19.0,
+      "raw": 19.0035,
       "raw_unit": "score",
-      "d1": -10.67,
-      "d2": -6.75,
-      "asof": "2026-09-21",
+      "d1": -0.93,
+      "d2": 9.74,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 17.55
-        },
         {
           "date": "2026-01-07",
           "score": 24.29
@@ -48091,13 +48087,17 @@
         {
           "date": "2026-09-21",
           "score": 19.93
+        },
+        {
+          "date": "2026-09-22",
+          "score": 19.0
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.266,
-      "daily_importance_score": 76.6,
+      "market_contribution_points": 0.274,
+      "daily_importance_score": 72.27,
       "attention_state": "high",
-      "daily_importance_rank": 9
+      "daily_importance_rank": 13
     },
     {
       "id": "risk_60d",
@@ -48111,17 +48111,13 @@
       "importance_reason": "用于识别系统风险是否在中期窗口持续积累。",
       "layer": "supplemental",
       "impact_polarity": -1,
-      "score": 6.83,
-      "raw": 19.9295,
+      "score": 7.98,
+      "raw": 19.0035,
       "raw_unit": "systemic score",
-      "d1": -18.33,
-      "d2": -8.02,
-      "asof": "2026-09-21",
+      "d1": 1.15,
+      "d2": 19.48,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 13.45
-        },
         {
           "date": "2026-01-07",
           "score": 13.13
@@ -48837,13 +48833,17 @@
         {
           "date": "2026-09-21",
           "score": 6.83
+        },
+        {
+          "date": "2026-09-22",
+          "score": 7.98
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.302,
-      "daily_importance_score": 78.97,
+      "market_contribution_points": 0.294,
+      "daily_importance_score": 71.64,
       "attention_state": "high",
-      "daily_importance_rank": 2
+      "daily_importance_rank": 15
     },
     {
       "id": "vol_60d_change",
@@ -49589,7 +49589,7 @@
       "market_contribution_points": 0.08,
       "daily_importance_score": 54.54,
       "attention_state": "watch",
-      "daily_importance_rank": 44
+      "daily_importance_rank": 43
     },
     {
       "id": "valuation_percentile",
@@ -50335,7 +50335,7 @@
       "market_contribution_points": -0.065,
       "daily_importance_score": 52.88,
       "attention_state": "watch",
-      "daily_importance_rank": 49
+      "daily_importance_rank": 47
     },
     {
       "id": "valuation_speed",
@@ -50638,7 +50638,7 @@
         },
         {
           "date": "2026-04-15",
-          "score": 87.96
+          "score": 88.1
         },
         {
           "date": "2026-04-16",
@@ -51368,7 +51368,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.06
+          "score": 42.2
         },
         {
           "date": "2026-04-10",
@@ -51827,7 +51827,7 @@
       "market_contribution_points": 0.302,
       "daily_importance_score": 73.08,
       "attention_state": "high",
-      "daily_importance_rank": 15
+      "daily_importance_rank": 12
     },
     {
       "id": "yield_curve",
@@ -52573,7 +52573,7 @@
       "market_contribution_points": -0.386,
       "daily_importance_score": 77.21,
       "attention_state": "high",
-      "daily_importance_rank": 8
+      "daily_importance_rank": 7
     }
   ]
 }
