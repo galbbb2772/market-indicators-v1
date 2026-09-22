@@ -7,6 +7,7 @@ on:
     paths:
       - update_data.py
       - indicator_config.json
+      - market_model_v2.json
       - manual_inputs.json
       - requirements.txt
       - .github/workflows/daily_update.yml

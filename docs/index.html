@@ -16,12 +16,12 @@
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{background:linear-gradient(180deg,rgba(19,36,61,.97),rgba(12,24,42,.97));border:1px solid var(--line);border-radius:16px;padding:14px}.top{display:flex;justify-content:space-between;gap:10px}.badges{display:flex;flex-direction:column;gap:5px;align-items:flex-end}.name{font-weight:760}.cat{font-size:11px;color:#95aed2;margin-top:3px}.score{font-size:31px;font-weight:850;margin:12px 0 2px}.score.na{font-size:18px;color:#8197b8;margin:20px 0}.bar{height:6px;background:#172a45;border-radius:99px;overflow:hidden;margin:8px 0 12px}.fill{height:100%;background:linear-gradient(90deg,#4d88ea,#ffc95c,#ff738b)}
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.metric{background:#0a1527;border:1px solid #1c304d;border-radius:10px;padding:8px;min-width:0}.metric small{display:block;color:var(--m);font-size:10px}.metric b{font-size:13px;overflow-wrap:anywhere}.pos{color:var(--g)}.neg{color:var(--r)}.flat{color:#d7e0ef}.desc{color:#aebed8;font-size:12px;line-height:1.5;margin-top:10px;min-height:42px}.reason{color:#86a4ce;font-size:11px;line-height:1.45;margin-top:7px;padding-top:7px;border-top:1px solid #1c304d}.foot{display:flex;justify-content:space-between;gap:8px;color:#728aaa;font-size:10px;margin-top:10px}canvas{width:100%;height:50px;display:block;margin-top:8px}.empty{grid-column:1/-1;padding:22px;border:1px solid var(--line);border-radius:16px;color:var(--m)}
 .tableWrap{overflow:auto;border:1px solid var(--line);border-radius:15px;background:#0d192b}.tbl{width:100%;border-collapse:collapse;min-width:940px}.tbl th,.tbl td{padding:11px;border-bottom:1px solid #1c304d;text-align:right;font-size:12px}.tbl th{color:#9fb5d6;position:sticky;top:0;background:#101f35}.tbl th:first-child,.tbl td:first-child,.tbl th:nth-child(2),.tbl td:nth-child(2){text-align:left}.pill{font-size:10px;padding:4px 7px;border-radius:999px;border:1px solid var(--line);color:#a9c2e7}
-.hidden{display:none}
-@media(max-width:1050px){.summary{grid-template-columns:repeat(3,1fr)}.signalRow,.regimeBox{grid-template-columns:1fr 1fr}}@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.summary{grid-template-columns:1fr 1fr}.contribWrap{grid-template-columns:1fr}}@media(max-width:580px){.grid{grid-template-columns:1fr}.head{display:block}.badge{display:inline-block;margin-top:12px}.wrap{padding:13px}.metrics{grid-template-columns:1fr 1fr}.heroScore{font-size:38px}.signalRow,.regimeBox{grid-template-columns:1fr}}
+.hidden{display:none}.weightGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}.boxGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.boxCard{background:#0d192b;border:1px solid var(--line);border-radius:14px;padding:12px}.boxCard h4{margin:0 0 8px}.boxLine{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #1c304d;padding:7px 0;font-size:12px}.boxLine:first-of-type{border-top:0}.historyWrap{background:#0d192b;border:1px solid var(--line);border-radius:15px;padding:12px;margin:12px 0}.historyWrap canvas{height:180px}.roleActive{color:var(--g)}.roleContext{color:var(--y)}.roleArchived{color:#778aa8}
+@media(max-width:1050px){.summary{grid-template-columns:repeat(3,1fr)}.signalRow,.regimeBox,.weightGrid{grid-template-columns:1fr 1fr}.boxGrid{grid-template-columns:1fr}}@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.summary{grid-template-columns:1fr 1fr}.contribWrap{grid-template-columns:1fr}}@media(max-width:580px){.grid{grid-template-columns:1fr}.head{display:block}.badge{display:inline-block;margin-top:12px}.wrap{padding:13px}.metrics{grid-template-columns:1fr 1fr}.heroScore{font-size:38px}.signalRow,.regimeBox{grid-template-columns:1fr}}
 </style>
 </head>
 <body><main class="wrap">
-<div class="head"><div><h1 class="title">Market Regime Lab</h1><div class="sub"><b>61 个核心指标 + 21 个补充观察指标</b>。每个指标统一显示当前值、D1 一级导、D2 二级导、基础重要性与今日重要度。</div></div><div class="badge" id="updated">读取中…</div></div>
+<div class="head"><div><h1 class="title">Market Regime Lab</h1><div class="sub"><b>Market Model V2</b>：从原 82 项指标中压缩为少量主动评分因子，其余降为 Context / Archive。系统偏向均值回归，因此短期市场结构与事件/情绪权重更高，宏观更低。</div></div><div class="badge" id="updated">读取中…</div></div>
 
 <div class="tabs">
 <button class="tab active" id="tabOverall" onclick="switchTab('overall')">模板 1 · 市场综合</button>
@@ -46,13 +46,36 @@
 <div class="regimeItem"><small>综合区域</small><b id="marketRegime">—</b></div>
 <div class="regimeItem"><small>执行区间</small><b id="executionRange">—</b></div>
 </div>
+<div class="panel">
+<h3>权重与观察周期</h3>
+<div class="weightGrid" id="weightGrid"></div>
+<div class="note" id="transitionPolicy"></div>
+</div>
+
+<div class="historyWrap">
+<h3 style="margin:0 0 8px">综合市场评分历史 · Phase 1 / Phase 2</h3>
+<canvas id="stateHistory"></canvas>
+<div class="note" id="historyPhaseNote"></div>
+</div>
+
+<div class="panel">
+<h3>灯号 / 市场结构周期</h3>
+<div class="regimeBox" id="cycleGrid"></div>
+<div class="note">这里的“周期”不是固定预测天数，而是历史上相同状态连续维持的交易日分布。单日跨色不等于结构已经完成转变。</div>
+</div>
+
+<div class="panel">
+<h3>三大指数箱体识别 · SPY / QQQ / DIA</h3>
+<div class="note">小箱体默认 20 个交易日，大箱体默认 60 个交易日。形成度综合趋势效率、上下边界稳定度、斜率、上下沿触碰次数与 ATR 宽度；用于均值回归环境识别，不用于追突破。</div>
+<div class="boxGrid" id="boxGrid"></div>
+</div>
 <div class="contribWrap" style="margin:12px 0">
 <div class="panel"><h3>当前灯号含义</h3><div id="executionPosture" class="note" style="margin:0"></div></div>
 <div class="panel"><h3>超跌 / 均值回归状态</h3><div id="meanReversionPosture" class="note" style="margin:0"></div></div>
 </div>
 <section class="summary">
-<div class="sum"><b id="working">—</b><small>已上线 / 总指标</small></div>
-<div class="sum"><b id="coreCount">61</b><small>核心指标</small></div>
+<div class="sum"><b id="working">—</b><small>Active 可用 / Active 总数</small></div>
+<div class="sum"><b id="coreCount">—</b><small>Active / Context / Archive</small></div>
 <div class="sum"><b id="high">—</b><small>Level ≥ 80</small></div>
 <div class="sum"><b id="rising">—</b><small>D1 上升</small></div>
 <div class="sum"><b id="accel">—</b><small>D2 加速</small></div>
@@ -66,7 +89,7 @@
 <div class="controls">
 <input id="q" placeholder="搜索指标…" oninput="renderCards()">
 <select id="sort" onchange="renderCards()"><option value="daily">按今日重要度</option><option value="base">按基础重要性</option><option value="contrib">按综合贡献绝对值</option><option value="level">按 Level</option></select>
-<select id="layer" onchange="renderCards()"><option value="">核心 + 补充</option><option value="core61">仅核心61</option><option value="supplemental">仅补充指标</option></select>
+<select id="role" onchange="renderCards()"><option value="active">仅 Active</option><option value="context">仅 Context</option><option value="archived">仅 Archive</option><option value="">全部指标</option></select>
 <select id="cat" onchange="renderCards()"><option value="">全部类别</option></select>
 </div>
 <div class="grid" id="grid"><div class="empty">正在读取数据…</div></div>
@@ -100,9 +123,52 @@ function renderContrib(){
  const add=(id,arr,klass)=>{const root=document.querySelector(id);root.innerHTML='';(arr||[]).forEach((x,i)=>{const d=document.createElement('div');d.className='contribItem';d.innerHTML='<span>'+(i+1)+'. '+x.name+'</span><b class="'+klass+'">'+(x.points>0?'+':'')+fmt(x.points)+'</b>';root.appendChild(d)});if(!root.children.length)root.innerHTML='<div class="empty">暂无</div>'};
  add('#posContrib',DATA.top_positive_contributors,'plus');add('#negContrib',DATA.top_negative_contributors,'minus');
 }
+function renderModelV2(){
+ const m=DATA.market_model_v2||{}, labels={short_market:'短期市场',sentiment_event:'事件/情绪',long_structure:'中长期结构',macro:'宏观'};
+ const root=document.querySelector('#weightGrid');root.innerHTML='';
+ Object.entries(m.bucket_weights||{}).forEach(([k,w])=>{
+   const b=(m.bucket_scores||{})[k]||{};const d=document.createElement('div');d.className='regimeItem';
+   d.innerHTML='<small>'+ (labels[k]||k) +' · 权重 '+Math.round(w*100)+'%</small><b>'+(b.score==null?'—':fmt(b.score))+'</b><div class="tiny">'+(m.horizon_definition?.[k]||'')+' · 可用 '+(b.available??0)+'/'+(b.configured??0)+'</div>';
+   root.appendChild(d);
+ });
+ document.querySelector('#transitionPolicy').textContent=(m.transition_policy?.note||'')+' '+(m.transition_policy?.traffic_confirmation||'');
+ const counts=[m.active_indicator_count??0,m.context_only_count??0,m.archived_count??0];
+ document.querySelector('#coreCount').textContent=counts.join(' / ');
+ document.querySelector('#working').textContent=(m.active_working_count??0)+'/'+(m.active_indicator_count??0);
+}
+function renderStateHistory(){
+ const h=DATA.regime_backtest?.history||[],c=document.querySelector('#stateHistory');if(!c||h.length<2)return;
+ const ctx=c.getContext('2d'),w=c.width=c.clientWidth*2,hh=c.height=360;ctx.clearRect(0,0,w,hh);
+ const vals=h.map(x=>Number(x.score));const n=vals.length;
+ const y=v=>hh-20-(v/100)*(hh-40),x=i=>20+i/(n-1)*(w-40);
+ [['#33151b',0,45],['#3b3115',45,55],['#152a43',55,65],['#123126',65,100]].forEach(z=>{ctx.fillStyle=z[0];ctx.fillRect(20,y(z[2]),w-40,y(z[1])-y(z[2]))});
+ ctx.strokeStyle='#d8e7ff';ctx.lineWidth=2.2;ctx.beginPath();vals.forEach((v,i)=>{i?ctx.lineTo(x(i),y(v)):ctx.moveTo(x(i),y(v))});ctx.stroke();
+ const p2=DATA.regime_backtest?.history_phase_2?.start;if(p2){const i=h.findIndex(r=>r.date>=p2);if(i>=0){ctx.strokeStyle='#ffc95c';ctx.setLineDash([8,8]);ctx.beginPath();ctx.moveTo(x(i),10);ctx.lineTo(x(i),hh-10);ctx.stroke();ctx.setLineDash([])}}
+ const p1=DATA.regime_backtest?.history_phase_1||{},p22=DATA.regime_backtest?.history_phase_2||{};
+ document.querySelector('#historyPhaseNote').textContent='Phase 1：'+(p1.start||'—')+' → '+(p1.end||'—')+'，历史重建；Phase 2：'+(p22.start||'—')+' 起，Live recorded / point-in-time。';
+}
+function renderCycles(){
+ const cs=DATA.regime_backtest?.cycle_stats||{},root=document.querySelector('#cycleGrid');root.innerHTML='';
+ ['green','blue','yellow','red'].forEach(z=>{const a=cs.by_color?.[z];const d=document.createElement('div');d.className='regimeItem';d.innerHTML='<small>'+lightMap[z]+'</small><b>'+(a?('中位 '+a.median_trading_days+' 天'):'—')+'</b><div class="tiny">'+(a?('均值 '+a.mean_trading_days+' · IQR '+a.p25+'–'+a.p75+' · '+a.episodes+' 段'):'暂无')+'</div>';root.appendChild(d)});
+ const tr=cs.blue_to_yellow_to_red; if(tr){const d=document.createElement('div');d.className='regimeItem';d.innerHTML='<small>蓝 → 黄 → 红</small><b>'+(tr.median_transition_days==null?'样本不足':'中位 '+tr.median_transition_days+' 天')+'</b><div class="tiny">'+(tr.episodes||0)+' 个完整历史路径'+(tr.mean_transition_days!=null?' · 均值 '+tr.mean_transition_days:'')+'</div>';root.appendChild(d)}
+}
+function renderBoxes(){
+ const r=DATA.range_box_analysis||{},root=document.querySelector('#boxGrid');root.innerHTML='';
+ ['SPY','QQQ','DIA'].forEach(sym=>{const v=r.indexes?.[sym]||{},d=document.createElement('div');d.className='boxCard';
+   const one=(label,b)=>{if(!b)return '<div class="boxLine"><span>'+label+'</span><b>无数据</b></div>';const dur=b.historical_duration;return '<div class="boxLine"><span>'+label+'</span><b>'+(b.formed?'形成中':'未形成')+' · '+fmt(b.formation_score)+'</b></div>'+
+   '<div class="boxLine"><span>区间</span><b>'+fmt(b.lower)+' – '+fmt(b.upper)+'</b></div>'+
+   '<div class="boxLine"><span>箱内位置</span><b>'+fmt(b.position_pct)+'%</b></div>'+
+   '<div class="boxLine"><span>支撑保持率</span><b>'+(b.support_hold_rate_pct==null?'—':fmt(b.support_hold_rate_pct)+'%')+'</b></div>'+
+   '<div class="boxLine"><span>当前估计年龄</span><b>'+(b.box_age_estimate_trading_days||0)+' 天</b></div>'+
+   '<div class="boxLine"><span>历史持续</span><b>'+(dur?('中位 '+dur.median_trading_days+' · '+dur.p25+'–'+dur.p75):'—')+'</b></div>'+
+   '<div class="boxLine"><span>估计剩余</span><b>'+(b.estimated_remaining_trading_days==null?'—':b.estimated_remaining_trading_days+' 天')+'</b></div>';};
+   d.innerHTML='<h4>'+sym+'</h4>'+one('小箱体 · 20D',v.small_box)+one('大箱体 · 60D',v.large_box);root.appendChild(d);
+ });
+}
+
 function filtered(){
- const q=document.querySelector('#q').value.toLowerCase(),cat=document.querySelector('#cat').value,layer=document.querySelector('#layer').value;
- return DATA.indicators.filter(x=>(!q||(x.name+' '+x.category+' '+x.definition+' '+(x.importance_reason||'')).toLowerCase().includes(q))&&(!cat||x.category===cat)&&(!layer||x.layer===layer));
+ const q=document.querySelector('#q').value.toLowerCase(),cat=document.querySelector('#cat').value,role=document.querySelector('#role').value;
+ return DATA.indicators.filter(x=>(!q||(x.name+' '+x.category+' '+x.definition+' '+(x.importance_reason||'')).toLowerCase().includes(q))&&(!cat||x.category===cat)&&(!role||x.model_v2_role===role));
 }
 function renderCards(){
  const root=document.querySelector('#grid'),sort=document.querySelector('#sort').value;let list=filtered();
@@ -114,7 +180,7 @@ function renderCards(){
  list.forEach(x=>{const c=document.createElement('article');c.className='card';const daily=x.daily_importance_score;
  const s=daily==null?'<div class="score na">等待数据源</div>':'<div class="cat" style="margin-top:12px">今日重要度</div><div class="score">'+fmt(daily)+'</div><div class="bar"><div class="fill" style="width:'+Math.max(0,Math.min(100,daily))+'%"></div></div>';
  const cp=x.market_contribution_points;
- c.innerHTML='<div class="top"><div><div class="name">'+x.name+'</div><div class="cat">'+x.category+' · '+x.cadence+'</div></div><div class="badges"><span class="badge">'+(x.layer==='core61'?'核心61':'补充')+'</span><span class="badge">今日 #'+(x.daily_importance_rank??'—')+'</span><span class="badge">基础 #'+(x.importance_rank??'—')+' · '+fmt(x.importance_score)+'</span></div></div>'+s+
+ c.innerHTML='<div class="top"><div><div class="name">'+x.name+'</div><div class="cat">'+x.category+' · '+x.cadence+'</div></div><div class="badges"><span class="badge">'+(x.model_v2_role||'archive')+(x.model_v2_bucket?' · '+x.model_v2_bucket:'')+'</span><span class="badge">今日 #'+(x.daily_importance_rank??'—')+'</span><span class="badge">基础 #'+(x.importance_rank??'—')+' · '+fmt(x.importance_score)+'</span></div></div>'+s+
  '<div class="metrics"><div class="metric"><small>Level</small><b>'+fmt(x.score)+'</b></div><div class="metric"><small>D1 一级导</small><b class="'+cls(x.d1)+'">'+fmt(x.d1)+'</b></div><div class="metric"><small>D2 二级导</small><b class="'+cls(x.d2)+'">'+fmt(x.d2)+'</b></div><div class="metric"><small>综合贡献</small><b class="'+cls(cp)+'">'+(cp>0?'+':'')+fmt(cp)+'</b></div></div>'+
  '<canvas></canvas><div class="desc">'+x.definition+'</div><div class="reason"><b>基础重要性：</b>'+x.importance_reason+'</div><div class="foot"><span>'+x.type+' · '+(x.quality||'—')+'</span><span>as of '+(x.asof||'—')+'</span></div>';
  root.appendChild(c);spark(c.querySelector('canvas'),x.history);
@@ -122,14 +188,14 @@ function renderCards(){
 }
 function renderVariableTable(){
  const body=document.querySelector('#varBody');const list=[...(DATA.indicators||[])].sort((a,b)=>Math.abs(b.market_contribution_points??0)-Math.abs(a.market_contribution_points??0)||(a.importance_rank??999)-(b.importance_rank??999));
- body.innerHTML='';list.forEach((x,i)=>{const cp=x.market_contribution_points;const tr=document.createElement('tr');tr.innerHTML='<td>'+(i+1)+'</td><td>'+x.name+'</td><td><span class="pill">'+(x.layer==='core61'?'核心61':'补充')+'</span></td><td>'+fmt(x.score)+'</td><td class="'+cls(x.d1)+'">'+fmt(x.d1)+'</td><td class="'+cls(x.d2)+'">'+fmt(x.d2)+'</td><td>'+fmt(x.importance_score)+'</td><td>'+fmt(x.daily_importance_score)+'</td><td class="'+cls(cp)+'">'+(cp>0?'+':'')+fmt(cp)+'</td>';body.appendChild(tr)});
+ body.innerHTML='';list.forEach((x,i)=>{const cp=x.market_contribution_points;const tr=document.createElement('tr');tr.innerHTML='<td>'+(i+1)+'</td><td>'+x.name+'</td><td><span class="pill">'+(x.model_v2_role||'archive')+(x.model_v2_bucket?' · '+x.model_v2_bucket:'')+'</span></td><td>'+fmt(x.score)+'</td><td class="'+cls(x.d1)+'">'+fmt(x.d1)+'</td><td class="'+cls(x.d2)+'">'+fmt(x.d2)+'</td><td>'+fmt(x.importance_score)+'</td><td>'+fmt(x.daily_importance_score)+'</td><td class="'+cls(cp)+'">'+(cp>0?'+':'')+fmt(cp)+'</td>';body.appendChild(tr)});
 }
 fetch('./data/current.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
  DATA=d;const inds=d.indicators||[];const cats=[...new Set(inds.map(x=>x.category))].sort();const sel=document.querySelector('#cat');cats.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;sel.appendChild(o)});
  document.querySelector('#marketState').textContent=fmt(d.market_state_score);document.querySelector('#stateD1').textContent=fmt(d.market_state_d1);document.querySelector('#stateD2').textContent=fmt(d.market_state_d2);document.querySelector('#stateLabel').textContent=labelMap[d.market_state_label]||d.market_state_label||'—';document.querySelector('#trafficLight').textContent=lightMap[d.traffic_light]||d.traffic_light||'—';
  document.querySelector('#marketStructure').textContent=d.market_structure||'—';document.querySelector('#volState').textContent=d.volatility_state||'—';document.querySelector('#marketRegime').textContent=d.market_regime||'—';document.querySelector('#executionRange').textContent=d.execution_range||'—';document.querySelector('#executionPosture').textContent=(d.execution_posture||'—')+' '+(d.execution_note||'');document.querySelector('#meanReversionPosture').textContent=d.mean_reversion_posture||'—';
  document.querySelector('#attention').textContent=fmt(d.market_attention_score);const good=inds.filter(x=>x.score!=null);document.querySelector('#working').textContent=good.length+'/'+inds.length;document.querySelector('#high').textContent=good.filter(x=>x.score>=80).length;document.querySelector('#rising').textContent=good.filter(x=>x.d1>0).length;document.querySelector('#accel').textContent=good.filter(x=>x.d2>0).length;
- document.querySelector('#updated').textContent=d.generated_at?'更新时间 '+new Date(d.generated_at).toLocaleString():'等待首次更新';renderContrib();renderCards();
+ document.querySelector('#updated').textContent=d.generated_at?'更新时间 '+new Date(d.generated_at).toLocaleString():'等待首次更新';renderContrib();renderModelV2();renderStateHistory();renderCycles();renderBoxes();renderCards();
 }).catch(e=>{document.querySelector('#grid').innerHTML='<div class="empty">读取数据失败：'+e+'</div>'});
 </script>
 </body></html>
