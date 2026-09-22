@@ -1,0 +1,292 @@
+{
+  "version": "MARKET-MODEL-V2-BOX-2026-09-22",
+  "intent": "Mean-reversion oriented market-state monitor. Short market structure and event/sentiment dominate; macro is a lower-weight state anchor.",
+  "bucket_weights": {
+    "short_market": 0.4,
+    "sentiment_event": 0.25,
+    "long_structure": 0.2,
+    "macro": 0.15
+  },
+  "horizon_definition": {
+    "short_market": "1–10 trading days",
+    "sentiment_event": "1–5 trading days with rapid decay unless price/credit reaction persists",
+    "long_structure": "20–120 trading days",
+    "macro": "1–4 quarters; daily market-price proxies may update faster"
+  },
+  "transition_policy": {
+    "note": "Low-frequency official releases can move the level/state, but are not allowed to create synthetic daily D1/D2 transition momentum while values are merely carried forward.",
+    "traffic_confirmation": "Use two consecutive closes beyond a boundary, or a single overshoot of >=3 score points, before treating a color change as structurally confirmed.",
+    "structural_transition_window": "Typical score-color episodes are measured empirically and reported daily; do not hard-code a fixed cycle length."
+  },
+  "active": [
+    {
+      "id": "market_support",
+      "bucket": "short_market",
+      "multiplier": 1.25,
+      "transition_driver": true
+    },
+    {
+      "id": "money_making_effect",
+      "bucket": "short_market",
+      "multiplier": 1.15,
+      "transition_driver": true
+    },
+    {
+      "id": "market_overextension",
+      "bucket": "short_market",
+      "multiplier": 1,
+      "transition_driver": true
+    },
+    {
+      "id": "market_move_speed",
+      "bucket": "short_market",
+      "multiplier": 0.9,
+      "transition_driver": true
+    },
+    {
+      "id": "breadth_concentration",
+      "bucket": "short_market",
+      "multiplier": 1.15,
+      "transition_driver": true
+    },
+    {
+      "id": "quant_crowding",
+      "bucket": "short_market",
+      "multiplier": 0.95,
+      "transition_driver": true
+    },
+    {
+      "id": "options_anomaly",
+      "bucket": "short_market",
+      "multiplier": 1,
+      "transition_driver": true
+    },
+    {
+      "id": "tech100_volatility",
+      "bucket": "short_market",
+      "multiplier": 0.9,
+      "transition_driver": true
+    },
+    {
+      "id": "volume_speed",
+      "bucket": "short_market",
+      "multiplier": 0.75,
+      "transition_driver": true
+    },
+    {
+      "id": "cross_asset_correlation",
+      "bucket": "short_market",
+      "multiplier": 0.85,
+      "transition_driver": true
+    },
+    {
+      "id": "market_bias",
+      "bucket": "sentiment_event",
+      "multiplier": 1.2,
+      "transition_driver": true
+    },
+    {
+      "id": "market_fear",
+      "bucket": "sentiment_event",
+      "multiplier": 1.25,
+      "transition_driver": true
+    },
+    {
+      "id": "largecap_panic",
+      "bucket": "sentiment_event",
+      "multiplier": 0.95,
+      "transition_driver": true
+    },
+    {
+      "id": "retail_participation",
+      "bucket": "sentiment_event",
+      "multiplier": 0.8,
+      "transition_driver": true
+    },
+    {
+      "id": "geopolitical_risk",
+      "bucket": "sentiment_event",
+      "multiplier": 1.15,
+      "transition_driver": true
+    },
+    {
+      "id": "ghost_story_density",
+      "bucket": "sentiment_event",
+      "multiplier": 1.1,
+      "transition_driver": true
+    },
+    {
+      "id": "valuation_percentile",
+      "bucket": "long_structure",
+      "multiplier": 0.85,
+      "transition_driver": false
+    },
+    {
+      "id": "business_cycle",
+      "bucket": "long_structure",
+      "multiplier": 0.95,
+      "transition_driver": false
+    },
+    {
+      "id": "inventory_cycle",
+      "bucket": "long_structure",
+      "multiplier": 0.75,
+      "transition_driver": false
+    },
+    {
+      "id": "sme_survival_growth",
+      "bucket": "long_structure",
+      "multiplier": 0.85,
+      "transition_driver": true
+    },
+    {
+      "id": "credit_cycle",
+      "bucket": "long_structure",
+      "multiplier": 1.15,
+      "transition_driver": true
+    },
+    {
+      "id": "yield_curve",
+      "bucket": "long_structure",
+      "multiplier": 1.1,
+      "transition_driver": true
+    },
+    {
+      "id": "rate_cycle_sensitivity",
+      "bucket": "long_structure",
+      "multiplier": 0.95,
+      "transition_driver": true
+    },
+    {
+      "id": "market_liquidity",
+      "bucket": "macro",
+      "multiplier": 1.25,
+      "transition_driver": true
+    },
+    {
+      "id": "high_yield",
+      "bucket": "macro",
+      "multiplier": 1.2,
+      "transition_driver": true
+    },
+    {
+      "id": "treasury_rate_regime",
+      "bucket": "macro",
+      "multiplier": 1,
+      "transition_driver": true
+    },
+    {
+      "id": "usd_credit",
+      "bucket": "macro",
+      "multiplier": 0.95,
+      "transition_driver": true
+    },
+    {
+      "id": "employment",
+      "bucket": "macro",
+      "multiplier": 0.85,
+      "transition_driver": false
+    },
+    {
+      "id": "global_cb_rhythm",
+      "bucket": "macro",
+      "multiplier": 0.85,
+      "transition_driver": false
+    },
+    {
+      "id": "us_loans_speed",
+      "bucket": "macro",
+      "multiplier": 0.8,
+      "transition_driver": false
+    },
+    {
+      "id": "fiscal_deficit",
+      "bucket": "macro",
+      "multiplier": 0.6,
+      "transition_driver": false
+    }
+  ],
+  "context_only": [
+    "systemic_risk",
+    "risk_60d",
+    "market_liquidity",
+    "gold",
+    "oil",
+    "mag7_volume",
+    "mag7_volatility",
+    "ai7_volume",
+    "ai7_volatility",
+    "leverage_liquidity",
+    "concentration"
+  ],
+  "archived": [
+    "market_topic_heat",
+    "global_cb_cycle_entry",
+    "retail_panic",
+    "institutional_panic",
+    "trump_activity",
+    "trump_market_topic",
+    "geo_news_impact",
+    "geo_lag_reaction",
+    "treasury_short_default",
+    "buffett_cash",
+    "kondratiev_cycle",
+    "us_loans_total",
+    "us_cn_retail_discussion",
+    "ib_holdings_concentration",
+    "retail_cash_reserve",
+    "retail_holdings_concentration",
+    "market_optimism",
+    "market_pessimism",
+    "mega_earnings_health",
+    "mega_excess_cash",
+    "mega_debt_capacity",
+    "bond_issuance_speed",
+    "bond_issuance_total",
+    "bond_issuance_sales",
+    "mega_liquidity_blowup",
+    "sector_it_vol",
+    "sector_comm_vol",
+    "sector_cons_disc_vol",
+    "sector_cons_staples_vol",
+    "sector_fin_vol",
+    "sector_health_vol",
+    "sector_industrial_vol",
+    "sector_energy_vol",
+    "sector_materials_vol",
+    "sector_utilities_vol",
+    "sector_realestate_vol",
+    "liquidity_risk",
+    "valuation_cycle",
+    "market_volume",
+    "vol_60d_change",
+    "valuation_speed"
+  ],
+  "planned_event_inputs": [
+    {
+      "id": "us_policy_event_sentiment",
+      "target_bucket": "sentiment_event",
+      "target_weight_note": "high",
+      "rule": "Only timestamped market-relevant policy/news reaction; no personality or political preference scoring."
+    },
+    {
+      "id": "negative_narrative_density",
+      "target_bucket": "sentiment_event",
+      "target_weight_note": "medium-high",
+      "rule": "Count tail-risk / crisis narratives and their market reaction; narrative alone never becomes a hard trade gate."
+    }
+  ],
+  "range_box": {
+    "indexes": [
+      "SPY",
+      "QQQ",
+      "DIA"
+    ],
+    "small_window": 20,
+    "large_window": 60,
+    "formation_threshold": 65,
+    "strong_threshold": 75,
+    "support_test_horizon_days": 3,
+    "description": "Detect nested small/large consolidation boxes; designed for mean-reversion context rather than breakout prediction."
+  }
+}
