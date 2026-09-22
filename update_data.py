@@ -725,22 +725,46 @@ def main():
         market_state_label="supportive"
         traffic_light="green"
         execution_range="70–100%"
-        execution_posture="积极/正常执行：允许策略按自身信号充分参与，但仍受原有风控约束。"
+        execution_posture="常规策略正常/积极执行：市场风险环境相对稳定，但仍执行原有止损、分仓与信号过滤。"
     elif market_state >= 55:
         market_state_label="mild_supportive"
         traffic_light="blue"
         execution_range="50–70%"
-        execution_posture="正常偏精选：保留主要机会，降低低质量和边缘信号的执行优先级。"
+        execution_posture="常规策略正常偏精选：保留高质量机会，降低边缘信号的执行优先级。"
     elif market_state >= 45:
         market_state_label="neutral"
         traffic_light="yellow"
         execution_range="25–50%"
-        execution_posture="谨慎执行：缩小执行强度、提高确认门槛，优先等待结构与D1/D2改善。"
+        execution_posture="常规策略谨慎执行：市场处于过渡/分化区，提高确认门槛，并重点观察综合D1/D2是否改善。"
     else:
         market_state_label="stress"
         traffic_light="red"
         execution_range="0–25%"
-        execution_posture="防守优先：尽量压低新增风险，以风险控制、流动性和对冲为主。"
+        execution_posture="常规策略防守优先：红灯代表风险环境高，不代表未来必跌；控制新增风险并观察超跌反转条件。"
+
+    # Mean-reversion / oversold framework: red is a high-risk opportunity
+    # observation zone, not an automatic no-trade zone. D1 and D2 are used as
+    # confirmation that the aggregate market condition is beginning to improve.
+    if traffic_light == "red":
+        if market_state_d1 > 0 and market_state_d2 > 0:
+            mean_reversion_state="reversal_confirming"
+            mean_reversion_posture="红灯反转确认：高风险环境仍在，但综合D1与D2同时改善；可进入小规模试错/分批确认阶段，并继续受个股信号和止损约束。"
+        elif market_state_d1 > 0:
+            mean_reversion_state="early_stabilizing"
+            mean_reversion_posture="红灯初步企稳：D1改善但D2尚未同步确认，继续观察，不把反弹直接视为反转。"
+        else:
+            mean_reversion_state="wait"
+            mean_reversion_posture="红灯等待：风险环境高且综合动能尚未改善，超跌类机会以观察为主。"
+    elif traffic_light == "yellow":
+        if market_state_d1 > 0 and market_state_d2 > 0:
+            mean_reversion_state="yellow_recovery"
+            mean_reversion_posture="黄灯修复：D1与D2同时改善，可提高超跌/均值回归候选的关注优先级，但仍需个股条件确认。"
+        else:
+            mean_reversion_state="yellow_caution"
+            mean_reversion_posture="黄灯谨慎：市场处于过渡区，超跌类信号需要更高确认度。"
+    else:
+        mean_reversion_state="normal"
+        mean_reversion_posture="非红黄高风险区：均值回归信号按原策略独立判断，不额外给予危机反转加权。"
 
     # Daily market structure: trend-vs-range plus volatility regime.
     market_structure="unknown"
@@ -951,14 +975,16 @@ def main():
         "market_state_label":market_state_label,
         "traffic_light":traffic_light,
         "traffic_framework":{
-            "green":{"range":"65–100","meaning":"支持环境","execution_range":"70–100%","description":"结构整体健康，风险与流动性条件相对支持。"},
-            "blue":{"range":"55–64.99","meaning":"中性偏支持","execution_range":"50–70%","description":"环境仍可执行，但更适合精选信号。"},
-            "yellow":{"range":"45–54.99","meaning":"谨慎/过渡区","execution_range":"25–50%","description":"结构分化或边际恶化，需提高确认门槛。"},
-            "red":{"range":"0–44.99","meaning":"压力区","execution_range":"0–25%","description":"系统压力占优，防守与风险控制优先。"}
+            "green":{"range":"65–100","meaning":"低风险/支持环境","execution_range":"70–100%","description":"风险环境相对稳定，常规策略可正常或积极执行。"},
+            "blue":{"range":"55–64.99","meaning":"中性偏支持","execution_range":"50–70%","description":"风险可控，但更适合精选高质量信号。"},
+            "yellow":{"range":"45–54.99","meaning":"过渡/谨慎区","execution_range":"25–50%","description":"内部结构分化或边际转弱，需提高确认门槛。"},
+            "red":{"range":"0–44.99","meaning":"高风险观察区","execution_range":"0–25%","description":"风险环境显著偏高；不是未来必跌，也可能进入超跌反弹/均值回归机会观察区。"}
         },
         "execution_range":execution_range,
         "execution_posture":execution_posture,
-        "execution_note":"执行区间代表研究框架中的执行强度/风险预算参考，不等同于账户仓位或买卖建议；需要后续用历史回测校准。",
+        "mean_reversion_state":mean_reversion_state,
+        "mean_reversion_posture":mean_reversion_posture,
+        "execution_note":"灯号描述风险环境，不预测下一阶段涨跌。执行区间是常规策略风险预算参考，不等同于账户实际仓位；超跌/均值回归策略在红灯下需结合D1/D2改善确认。",
         "market_structure":market_structure,
         "volatility_state":volatility_state,
         "market_regime":market_regime,
