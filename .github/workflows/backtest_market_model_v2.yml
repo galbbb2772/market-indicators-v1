@@ -1,0 +1,24 @@
+name: Backtest Market Model V2
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Run benchmark backtest
+        run: python research/backtest_market_model_v2.py
+      - name: Print summary
+        run: cat research/market_model_v2_backtest.md
