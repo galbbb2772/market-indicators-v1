@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-21T23:06:20.288448+00:00",
+  "generated_at": "2026-09-22T04:57:02.427531+00:00",
   "status": "ok",
   "working_count": 28,
   "total_count": 28,
-  "market_attention_score": 64.16,
+  "market_attention_score": 63.96,
   "importance_method": {
     "base": "长期基础重要性 0-100，由宏观传导、系统性、领先性和市场覆盖面排序",
     "daily": "每日重要度 = 50%基础重要性 + 30%Level极端度 + 12%D1冲击 + 8%D2加速度",
@@ -762,7 +762,7 @@
       "quality": "proxy",
       "daily_importance_score": 38.63,
       "attention_state": "normal",
-      "daily_importance_rank": 26
+      "daily_importance_rank": 25
     },
     {
       "id": "market_support",
@@ -774,11 +774,11 @@
       "importance_score": 75,
       "importance_rank": 17,
       "importance_reason": "广度、均线与等权表现能验证指数上涨是否健康。",
-      "score": 38.59,
+      "score": 38.92,
       "raw": 0.0849,
       "raw_unit": "SPY/MA200 - 1",
-      "d1": 15.91,
-      "d2": 15.84,
+      "d1": 16.24,
+      "d2": 16.17,
       "asof": "2026-09-21",
       "history": [
         {
@@ -835,7 +835,7 @@
         },
         {
           "date": "2026-01-22",
-          "score": 51.26
+          "score": 51.22
         },
         {
           "date": "2026-01-23",
@@ -931,7 +931,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 44.94
+          "score": 44.97
         },
         {
           "date": "2026-02-27",
@@ -1175,7 +1175,7 @@
         },
         {
           "date": "2026-05-26",
-          "score": 68.92
+          "score": 68.88
         },
         {
           "date": "2026-05-27",
@@ -1499,11 +1499,11 @@
         },
         {
           "date": "2026-09-21",
-          "score": 38.59
+          "score": 38.92
         }
       ],
       "quality": "direct",
-      "daily_importance_score": 58.96,
+      "daily_importance_score": 59.07,
       "attention_state": "watch",
       "daily_importance_rank": 16
     },
@@ -3152,7 +3152,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 51.52
+          "score": 51.46
         },
         {
           "date": "2026-02-27",
@@ -4646,7 +4646,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.38
+          "score": 27.25
         },
         {
           "date": "2026-02-27",
@@ -5220,7 +5220,7 @@
       "quality": "composite",
       "daily_importance_score": 78.45,
       "attention_state": "high",
-      "daily_importance_rank": 3
+      "daily_importance_rank": 2
     },
     {
       "id": "treasury_rate_regime",
@@ -5975,17 +5975,13 @@
       "importance_score": 84,
       "importance_rank": 12,
       "importance_reason": "美元融资环境与信用压力影响全球资产与跨境流动性。",
-      "score": 43.65,
-      "raw": 43.6508,
+      "score": 41.01,
+      "raw": 41.0053,
       "raw_unit": "score",
-      "d1": 3.57,
-      "d2": 5.16,
-      "asof": "2026-09-21",
+      "d1": -2.65,
+      "d2": -6.22,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-02",
-          "score": 27.78
-        },
         {
           "date": "2026-01-05",
           "score": 24.54
@@ -6132,7 +6128,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 52.78
+          "score": 52.71
         },
         {
           "date": "2026-02-27",
@@ -6701,11 +6697,15 @@
         {
           "date": "2026-09-21",
           "score": 43.65
+        },
+        {
+          "date": "2026-09-22",
+          "score": 41.01
         }
       ],
       "quality": "composite",
-      "daily_importance_score": 49.6,
-      "attention_state": "normal",
+      "daily_importance_score": 50.97,
+      "attention_state": "watch",
       "daily_importance_rank": 23
     },
     {
@@ -7461,17 +7461,13 @@
       "importance_score": 57,
       "importance_rank": 25,
       "importance_reason": "原油影响通胀和增长，但对美股的方向并非单一。",
-      "score": 84.79,
-      "raw": 92.18,
+      "score": 90.15,
+      "raw": 93.34,
       "raw_unit": "WTI future",
-      "d1": -10.25,
-      "d2": -9.13,
-      "asof": "2026-09-21",
+      "d1": -1.12,
+      "d2": 2.65,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-02",
-          "score": 20.57
-        },
         {
           "date": "2026-01-05",
           "score": 23.15
@@ -8186,13 +8182,17 @@
         },
         {
           "date": "2026-09-21",
-          "score": 84.79
+          "score": 91.27
+        },
+        {
+          "date": "2026-09-22",
+          "score": 90.15
         }
       ],
       "quality": "direct",
-      "daily_importance_score": 58.45,
+      "daily_importance_score": 54.11,
       "attention_state": "watch",
-      "daily_importance_rank": 17
+      "daily_importance_rank": 19
     },
     {
       "id": "buffett_cash",
@@ -8227,7 +8227,7 @@
       "quality": "manual",
       "daily_importance_score": 38.08,
       "attention_state": "normal",
-      "daily_importance_rank": 27
+      "daily_importance_rank": 26
     },
     {
       "id": "high_yield",
@@ -8396,7 +8396,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.38
+          "score": 27.25
         },
         {
           "date": "2026-02-27",
@@ -8982,17 +8982,13 @@
       "importance_score": 66,
       "importance_rank": 21,
       "importance_reason": "库存周期影响制造业和盈利节奏，但更新频率较低。",
-      "score": 44.25,
-      "raw": -14.2109,
+      "score": 42.72,
+      "raw": -13.9185,
       "raw_unit": "% XLI-SPY 120d",
-      "d1": 2.51,
-      "d2": 2.51,
-      "asof": "2026-09-21",
+      "d1": 0.07,
+      "d2": -0.86,
+      "asof": "2026-09-22",
       "history": [
-        {
-          "date": "2026-01-02",
-          "score": 29.3
-        },
         {
           "date": "2026-01-05",
           "score": 39.35
@@ -9707,13 +9703,17 @@
         },
         {
           "date": "2026-09-21",
-          "score": 44.25
+          "score": 42.66
+        },
+        {
+          "date": "2026-09-22",
+          "score": 42.72
         }
       ],
       "quality": "proxy",
-      "daily_importance_score": 38.76,
+      "daily_importance_score": 37.69,
       "attention_state": "normal",
-      "daily_importance_rank": 25
+      "daily_importance_rank": 27
     },
     {
       "id": "fiscal_deficit",
@@ -9872,7 +9872,7 @@
       "quality": "direct",
       "daily_importance_score": 78.0,
       "attention_state": "high",
-      "daily_importance_rank": 4
+      "daily_importance_rank": 3
     },
     {
       "id": "employment",
@@ -10532,7 +10532,7 @@
         },
         {
           "date": "2026-05-26",
-          "score": 78.89
+          "score": 78.81
         },
         {
           "date": "2026-05-27",
@@ -10874,11 +10874,11 @@
       "importance_score": 64,
       "importance_rank": 22,
       "importance_reason": "成交量验证价格变化质量，但通常属于二级确认。",
-      "score": 29.1,
-      "raw": 49311754.0,
+      "score": 30.56,
+      "raw": 50097900.0,
       "raw_unit": "shares",
-      "d1": -24.47,
-      "d2": -48.41,
+      "d1": -23.02,
+      "d2": -46.96,
       "asof": "2026-09-21",
       "history": [
         {
@@ -11599,11 +11599,11 @@
         },
         {
           "date": "2026-09-21",
-          "score": 29.1
+          "score": 30.56
         }
       ],
       "quality": "direct",
-      "daily_importance_score": 64.54,
+      "daily_importance_score": 63.66,
       "attention_state": "watch",
       "daily_importance_rank": 14
     },
@@ -11617,11 +11617,11 @@
       "importance_score": 61,
       "importance_rank": 23,
       "importance_reason": "成交量加速度能捕捉交易活跃度突变，但噪声更高。",
-      "score": 94.84,
-      "raw": 30.5217,
+      "score": 94.97,
+      "raw": 30.806,
       "raw_unit": "%",
-      "d1": 0.4,
-      "d2": -2.25,
+      "d1": 0.53,
+      "d2": -2.12,
       "asof": "2026-09-21",
       "history": [
         {
@@ -12342,13 +12342,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 94.84
+          "score": 94.97
         }
       ],
       "quality": "direct",
-      "daily_importance_score": 58.36,
+      "daily_importance_score": 58.48,
       "attention_state": "watch",
-      "daily_importance_rank": 18
+      "daily_importance_rank": 17
     },
     {
       "id": "concentration",
@@ -12360,11 +12360,11 @@
       "importance_score": 82,
       "importance_rank": 13,
       "importance_reason": "指数集中度过高时，少数权重股会放大整体脆弱性。",
-      "score": 91.4,
-      "raw": 5.1608,
+      "score": 89.02,
+      "raw": 4.7833,
       "raw_unit": "% SPY-RSP 60d",
-      "d1": 23.28,
-      "d2": 7.28,
+      "d1": 20.9,
+      "d2": 4.89,
       "asof": "2026-09-21",
       "history": [
         {
@@ -13085,13 +13085,13 @@
         },
         {
           "date": "2026-09-21",
-          "score": 91.4
+          "score": 89.02
         }
       ],
       "quality": "proxy",
-      "daily_importance_score": 80.17,
-      "attention_state": "critical",
-      "daily_importance_rank": 1
+      "daily_importance_score": 77.98,
+      "attention_state": "high",
+      "daily_importance_rank": 4
     },
     {
       "id": "leverage_liquidity",
@@ -13260,7 +13260,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.38
+          "score": 27.25
         },
         {
           "date": "2026-02-27",
@@ -13995,7 +13995,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 47.93
+          "score": 47.88
         },
         {
           "date": "2026-02-27",
@@ -15320,7 +15320,7 @@
       "quality": "composite",
       "daily_importance_score": 78.97,
       "attention_state": "high",
-      "daily_importance_rank": 2
+      "daily_importance_rank": 1
     },
     {
       "id": "vol_60d_change",
@@ -15565,7 +15565,7 @@
         },
         {
           "date": "2026-03-25",
-          "score": 57.41
+          "score": 57.34
         },
         {
           "date": "2026-03-26",
@@ -15749,7 +15749,7 @@
         },
         {
           "date": "2026-06-01",
-          "score": 43.32
+          "score": 43.39
         },
         {
           "date": "2026-06-02",
@@ -16063,7 +16063,7 @@
       "quality": "direct",
       "daily_importance_score": 54.54,
       "attention_state": "watch",
-      "daily_importance_rank": 19
+      "daily_importance_rank": 18
     },
     {
       "id": "valuation_percentile",
@@ -16476,7 +16476,7 @@
         },
         {
           "date": "2026-05-26",
-          "score": 78.89
+          "score": 78.81
         },
         {
           "date": "2026-05-27",
@@ -17834,7 +17834,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.2
+          "score": 42.06
         },
         {
           "date": "2026-04-10",
@@ -18266,7 +18266,7 @@
         },
         {
           "date": "2026-09-14",
-          "score": 86.9
+          "score": 86.77
         },
         {
           "date": "2026-09-15",
