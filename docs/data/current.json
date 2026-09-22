@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-22T05:01:07.859888+00:00",
+  "generated_at": "2026-09-22T05:11:19.622906+00:00",
   "status": "ok",
   "working_count": 28,
-  "total_count": 28,
-  "market_attention_score": 63.96,
+  "total_count": 82,
+  "market_attention_score": 64.43,
   "importance_method": {
     "base": "长期基础重要性 0-100，由宏观传导、系统性、领先性和市场覆盖面排序",
     "daily": "每日重要度 = 50%基础重要性 + 30%Level极端度 + 12%D1冲击 + 8%D2加速度",
@@ -27,10 +27,12 @@
       "category": "资金/参与者",
       "cadence": "日更",
       "type": "proxy",
-      "definition": "IWM 相对 SPY 的20日强弱 + IWM 成交量活跃度。当前为公开数据代理版，后续可替换成更纯的零售成交数据。",
-      "importance_score": 60,
-      "importance_rank": 24,
+      "definition": "IWM相对SPY强弱与成交量活跃度的日频代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 64,
       "importance_reason": "散户活跃度反映风险偏好，但结构性噪声较大。",
+      "importance_rank": 72,
       "score": 42.26,
       "raw": -5.8122,
       "raw_unit": "% relative 20d",
@@ -760,763 +762,70 @@
         }
       ],
       "quality": "proxy",
-      "daily_importance_score": 38.63,
+      "daily_importance_score": 40.63,
       "attention_state": "normal",
-      "daily_importance_rank": 25
+      "daily_importance_rank": 24
     },
     {
-      "id": "market_support",
-      "name": "市场支撑度指标",
-      "category": "市场结构",
+      "id": "market_topic_heat",
+      "name": "市场话题度指标",
+      "category": "情绪/话题",
       "cadence": "日更",
-      "type": "direct",
-      "definition": "SPY 相对20/50/200日均线的位置 + RSP相对SPY强弱。",
-      "importance_score": 75,
-      "importance_rank": 17,
-      "importance_reason": "广度、均线与等权表现能验证指数上涨是否健康。",
-      "score": 38.92,
-      "raw": 0.0849,
-      "raw_unit": "SPY/MA200 - 1",
-      "d1": 16.24,
-      "d2": 16.17,
-      "asof": "2026-09-21",
-      "history": [
-        {
-          "date": "2026-01-02",
-          "score": 49.24
-        },
-        {
-          "date": "2026-01-05",
-          "score": 55.72
-        },
-        {
-          "date": "2026-01-06",
-          "score": 64.32
-        },
-        {
-          "date": "2026-01-07",
-          "score": 57.24
-        },
-        {
-          "date": "2026-01-08",
-          "score": 58.63
-        },
-        {
-          "date": "2026-01-09",
-          "score": 65.71
-        },
-        {
-          "date": "2026-01-12",
-          "score": 65.28
-        },
-        {
-          "date": "2026-01-13",
-          "score": 59.59
-        },
-        {
-          "date": "2026-01-14",
-          "score": 54.46
-        },
-        {
-          "date": "2026-01-15",
-          "score": 58.23
-        },
-        {
-          "date": "2026-01-16",
-          "score": 52.98
-        },
-        {
-          "date": "2026-01-20",
-          "score": 40.81
-        },
-        {
-          "date": "2026-01-21",
-          "score": 48.31
-        },
-        {
-          "date": "2026-01-22",
-          "score": 51.26
-        },
-        {
-          "date": "2026-01-23",
-          "score": 51.19
-        },
-        {
-          "date": "2026-01-26",
-          "score": 55.13
-        },
-        {
-          "date": "2026-01-27",
-          "score": 58.83
-        },
-        {
-          "date": "2026-01-28",
-          "score": 56.15
-        },
-        {
-          "date": "2026-01-29",
-          "score": 53.87
-        },
-        {
-          "date": "2026-01-30",
-          "score": 50.0
-        },
-        {
-          "date": "2026-02-02",
-          "score": 53.21
-        },
-        {
-          "date": "2026-02-03",
-          "score": 45.5
-        },
-        {
-          "date": "2026-02-04",
-          "score": 43.19
-        },
-        {
-          "date": "2026-02-05",
-          "score": 37.53
-        },
-        {
-          "date": "2026-02-06",
-          "score": 46.96
-        },
-        {
-          "date": "2026-02-09",
-          "score": 50.79
-        },
-        {
-          "date": "2026-02-10",
-          "score": 48.41
-        },
-        {
-          "date": "2026-02-11",
-          "score": 48.05
-        },
-        {
-          "date": "2026-02-12",
-          "score": 38.0
-        },
-        {
-          "date": "2026-02-13",
-          "score": 39.09
-        },
-        {
-          "date": "2026-02-17",
-          "score": 39.42
-        },
-        {
-          "date": "2026-02-18",
-          "score": 41.2
-        },
-        {
-          "date": "2026-02-19",
-          "score": 39.42
-        },
-        {
-          "date": "2026-02-20",
-          "score": 43.49
-        },
-        {
-          "date": "2026-02-23",
-          "score": 38.23
-        },
-        {
-          "date": "2026-02-24",
-          "score": 42.56
-        },
-        {
-          "date": "2026-02-25",
-          "score": 48.88
-        },
-        {
-          "date": "2026-02-26",
-          "score": 44.94
-        },
-        {
-          "date": "2026-02-27",
-          "score": 42.03
-        },
-        {
-          "date": "2026-03-02",
-          "score": 42.23
-        },
-        {
-          "date": "2026-03-03",
-          "score": 37.33
-        },
-        {
-          "date": "2026-03-04",
-          "score": 40.21
-        },
-        {
-          "date": "2026-03-05",
-          "score": 32.84
-        },
-        {
-          "date": "2026-03-06",
-          "score": 25.99
-        },
-        {
-          "date": "2026-03-09",
-          "score": 27.71
-        },
-        {
-          "date": "2026-03-10",
-          "score": 26.26
-        },
-        {
-          "date": "2026-03-11",
-          "score": 21.99
-        },
-        {
-          "date": "2026-03-12",
-          "score": 16.01
-        },
-        {
-          "date": "2026-03-13",
-          "score": 16.8
-        },
-        {
-          "date": "2026-03-16",
-          "score": 12.7
-        },
-        {
-          "date": "2026-03-17",
-          "score": 16.77
-        },
-        {
-          "date": "2026-03-18",
-          "score": 13.59
-        },
-        {
-          "date": "2026-03-19",
-          "score": 13.86
-        },
-        {
-          "date": "2026-03-20",
-          "score": 13.23
-        },
-        {
-          "date": "2026-03-23",
-          "score": 15.71
-        },
-        {
-          "date": "2026-03-24",
-          "score": 17.33
-        },
-        {
-          "date": "2026-03-25",
-          "score": 22.69
-        },
-        {
-          "date": "2026-03-26",
-          "score": 17.92
-        },
-        {
-          "date": "2026-03-27",
-          "score": 15.64
-        },
-        {
-          "date": "2026-03-30",
-          "score": 17.26
-        },
-        {
-          "date": "2026-03-31",
-          "score": 19.61
-        },
-        {
-          "date": "2026-04-01",
-          "score": 22.09
-        },
-        {
-          "date": "2026-04-02",
-          "score": 26.82
-        },
-        {
-          "date": "2026-04-06",
-          "score": 28.24
-        },
-        {
-          "date": "2026-04-07",
-          "score": 30.85
-        },
-        {
-          "date": "2026-04-08",
-          "score": 51.49
-        },
-        {
-          "date": "2026-04-09",
-          "score": 52.84
-        },
-        {
-          "date": "2026-04-10",
-          "score": 49.67
-        },
-        {
-          "date": "2026-04-13",
-          "score": 52.02
-        },
-        {
-          "date": "2026-04-14",
-          "score": 54.79
-        },
-        {
-          "date": "2026-04-15",
-          "score": 52.91
-        },
-        {
-          "date": "2026-04-16",
-          "score": 54.5
-        },
-        {
-          "date": "2026-04-17",
-          "score": 59.92
-        },
-        {
-          "date": "2026-04-20",
-          "score": 60.58
-        },
-        {
-          "date": "2026-04-21",
-          "score": 56.91
-        },
-        {
-          "date": "2026-04-22",
-          "score": 57.44
-        },
-        {
-          "date": "2026-04-23",
-          "score": 55.09
-        },
-        {
-          "date": "2026-04-24",
-          "score": 57.08
-        },
-        {
-          "date": "2026-04-27",
-          "score": 57.01
-        },
-        {
-          "date": "2026-04-28",
-          "score": 53.34
-        },
-        {
-          "date": "2026-04-29",
-          "score": 51.95
-        },
-        {
-          "date": "2026-04-30",
-          "score": 58.0
-        },
-        {
-          "date": "2026-05-01",
-          "score": 57.94
-        },
-        {
-          "date": "2026-05-04",
-          "score": 53.41
-        },
-        {
-          "date": "2026-05-05",
-          "score": 57.87
-        },
-        {
-          "date": "2026-05-06",
-          "score": 63.79
-        },
-        {
-          "date": "2026-05-07",
-          "score": 61.51
-        },
-        {
-          "date": "2026-05-08",
-          "score": 64.78
-        },
-        {
-          "date": "2026-05-11",
-          "score": 64.58
-        },
-        {
-          "date": "2026-05-12",
-          "score": 63.76
-        },
-        {
-          "date": "2026-05-13",
-          "score": 65.87
-        },
-        {
-          "date": "2026-05-14",
-          "score": 68.82
-        },
-        {
-          "date": "2026-05-15",
-          "score": 59.66
-        },
-        {
-          "date": "2026-05-18",
-          "score": 57.24
-        },
-        {
-          "date": "2026-05-19",
-          "score": 48.02
-        },
-        {
-          "date": "2026-05-20",
-          "score": 58.5
-        },
-        {
-          "date": "2026-05-21",
-          "score": 58.33
-        },
-        {
-          "date": "2026-05-22",
-          "score": 63.86
-        },
-        {
-          "date": "2026-05-26",
-          "score": 68.88
-        },
-        {
-          "date": "2026-05-27",
-          "score": 66.93
-        },
-        {
-          "date": "2026-05-28",
-          "score": 69.68
-        },
-        {
-          "date": "2026-05-29",
-          "score": 68.58
-        },
-        {
-          "date": "2026-06-01",
-          "score": 70.54
-        },
-        {
-          "date": "2026-06-02",
-          "score": 72.69
-        },
-        {
-          "date": "2026-06-03",
-          "score": 64.45
-        },
-        {
-          "date": "2026-06-04",
-          "score": 72.39
-        },
-        {
-          "date": "2026-06-05",
-          "score": 50.13
-        },
-        {
-          "date": "2026-06-08",
-          "score": 51.59
-        },
-        {
-          "date": "2026-06-09",
-          "score": 50.93
-        },
-        {
-          "date": "2026-06-10",
-          "score": 38.96
-        },
-        {
-          "date": "2026-06-11",
-          "score": 50.83
-        },
-        {
-          "date": "2026-06-12",
-          "score": 54.43
-        },
-        {
-          "date": "2026-06-15",
-          "score": 71.33
-        },
-        {
-          "date": "2026-06-16",
-          "score": 61.34
-        },
-        {
-          "date": "2026-06-17",
-          "score": 48.21
-        },
-        {
-          "date": "2026-06-18",
-          "score": 55.16
-        },
-        {
-          "date": "2026-06-22",
-          "score": 52.22
-        },
-        {
-          "date": "2026-06-23",
-          "score": 40.97
-        },
-        {
-          "date": "2026-06-24",
-          "score": 41.6
-        },
-        {
-          "date": "2026-06-25",
-          "score": 42.63
-        },
-        {
-          "date": "2026-06-26",
-          "score": 38.62
-        },
-        {
-          "date": "2026-06-29",
-          "score": 49.31
-        },
-        {
-          "date": "2026-06-30",
-          "score": 56.22
-        },
-        {
-          "date": "2026-07-01",
-          "score": 54.83
-        },
-        {
-          "date": "2026-07-02",
-          "score": 53.87
-        },
-        {
-          "date": "2026-07-06",
-          "score": 62.57
-        },
-        {
-          "date": "2026-07-07",
-          "score": 54.23
-        },
-        {
-          "date": "2026-07-08",
-          "score": 48.94
-        },
-        {
-          "date": "2026-07-09",
-          "score": 52.98
-        },
-        {
-          "date": "2026-07-10",
-          "score": 55.16
-        },
-        {
-          "date": "2026-07-13",
-          "score": 48.41
-        },
-        {
-          "date": "2026-07-14",
-          "score": 46.3
-        },
-        {
-          "date": "2026-07-15",
-          "score": 53.57
-        },
-        {
-          "date": "2026-07-16",
-          "score": 50.89
-        },
-        {
-          "date": "2026-07-17",
-          "score": 42.06
-        },
-        {
-          "date": "2026-07-20",
-          "score": 41.2
-        },
-        {
-          "date": "2026-07-21",
-          "score": 44.71
-        },
-        {
-          "date": "2026-07-22",
-          "score": 39.05
-        },
-        {
-          "date": "2026-07-23",
-          "score": 30.89
-        },
-        {
-          "date": "2026-07-24",
-          "score": 31.98
-        },
-        {
-          "date": "2026-07-27",
-          "score": 34.49
-        },
-        {
-          "date": "2026-07-28",
-          "score": 39.32
-        },
-        {
-          "date": "2026-07-29",
-          "score": 34.66
-        },
-        {
-          "date": "2026-07-30",
-          "score": 38.43
-        },
-        {
-          "date": "2026-07-31",
-          "score": 37.07
-        },
-        {
-          "date": "2026-08-03",
-          "score": 55.36
-        },
-        {
-          "date": "2026-08-04",
-          "score": 69.68
-        },
-        {
-          "date": "2026-08-05",
-          "score": 71.43
-        },
-        {
-          "date": "2026-08-06",
-          "score": 68.85
-        },
-        {
-          "date": "2026-08-07",
-          "score": 74.27
-        },
-        {
-          "date": "2026-08-10",
-          "score": 69.94
-        },
-        {
-          "date": "2026-08-11",
-          "score": 70.87
-        },
-        {
-          "date": "2026-08-12",
-          "score": 74.4
-        },
-        {
-          "date": "2026-08-13",
-          "score": 75.2
-        },
-        {
-          "date": "2026-08-14",
-          "score": 71.99
-        },
-        {
-          "date": "2026-08-17",
-          "score": 64.32
-        },
-        {
-          "date": "2026-08-18",
-          "score": 57.64
-        },
-        {
-          "date": "2026-08-19",
-          "score": 61.44
-        },
-        {
-          "date": "2026-08-20",
-          "score": 46.73
-        },
-        {
-          "date": "2026-08-21",
-          "score": 48.45
-        },
-        {
-          "date": "2026-08-24",
-          "score": 42.23
-        },
-        {
-          "date": "2026-08-25",
-          "score": 37.6
-        },
-        {
-          "date": "2026-08-26",
-          "score": 33.73
-        },
-        {
-          "date": "2026-08-27",
-          "score": 43.98
-        },
-        {
-          "date": "2026-08-28",
-          "score": 44.68
-        },
-        {
-          "date": "2026-08-31",
-          "score": 41.47
-        },
-        {
-          "date": "2026-09-01",
-          "score": 37.04
-        },
-        {
-          "date": "2026-09-02",
-          "score": 40.41
-        },
-        {
-          "date": "2026-09-03",
-          "score": 50.43
-        },
-        {
-          "date": "2026-09-04",
-          "score": 44.51
-        },
-        {
-          "date": "2026-09-08",
-          "score": 35.52
-        },
-        {
-          "date": "2026-09-09",
-          "score": 26.92
-        },
-        {
-          "date": "2026-09-10",
-          "score": 22.75
-        },
-        {
-          "date": "2026-09-11",
-          "score": 27.91
-        },
-        {
-          "date": "2026-09-14",
-          "score": 25.96
-        },
-        {
-          "date": "2026-09-15",
-          "score": 25.17
-        },
-        {
-          "date": "2026-09-16",
-          "score": 20.34
-        },
-        {
-          "date": "2026-09-17",
-          "score": 22.62
-        },
-        {
-          "date": "2026-09-18",
-          "score": 22.69
-        },
-        {
-          "date": "2026-09-21",
-          "score": 38.92
-        }
-      ],
-      "quality": "direct",
-      "daily_importance_score": 59.07,
-      "attention_state": "watch",
-      "daily_importance_rank": 16
+      "type": "proxy",
+      "definition": "用成交量、波动率与市场活跃度代理每日市场话题热度。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 60,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 77,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "cross_asset_correlation",
+      "name": "市场关联度指标",
+      "category": "跨资产/相关性",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "三大指数与黄金、原油、债券等资产的滚动相关性/联动强度。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 82,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 36,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
     },
     {
       "id": "global_cb_rhythm",
-      "name": "世界央行加/降息节奏指标",
-      "category": "宏观/流动性",
+      "name": "世界央行加息指标",
+      "category": "宏观/央行",
       "cadence": "每日刷新/源数据按发布更新",
       "type": "composite",
-      "definition": "Fed有效利率 + ECB存款便利利率的方向变化。",
-      "importance_score": 88,
-      "importance_rank": 9,
+      "definition": "主要央行政策利率变化方向；V1以Fed/ECB及美债利率变化代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 94,
       "importance_reason": "主要央行政策方向决定全球流动性环境。",
+      "importance_rank": 7,
       "score": 20.11,
       "raw": 4.7488,
       "raw_unit": "% 10Y 20d",
@@ -2246,9 +1555,177 @@
         }
       ],
       "quality": "proxy",
-      "daily_importance_score": 68.47,
+      "daily_importance_score": 71.47,
       "attention_state": "high",
       "daily_importance_rank": 12
+    },
+    {
+      "id": "global_cb_cycle_entry",
+      "name": "世界央行加息周期进入指标",
+      "category": "宏观/央行",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "判断全球货币政策是否进入/强化加息阶段的日频状态代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 92,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 11,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "retail_panic",
+      "name": "散户恐慌指标",
+      "category": "情绪/散户",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "小盘股回撤、VIX与成交活跃度组合，代理散户恐慌。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 72,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 57,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "institutional_panic",
+      "name": "机构恐慌指标",
+      "category": "情绪/机构",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "信用、流动性与风险资产定价组合；未来接投行研报情绪文本。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 86,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 26,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "quant_crowding",
+      "name": "量化交易拥挤指标",
+      "category": "量化/拥挤",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "指数集中度、低波动拥挤与相关性上升的组合代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 84,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 28,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "money_making_effect",
+      "name": "市场赚钱效应指标",
+      "category": "市场结构",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "指数收益、市场支撑和中小盘相对强弱衡量赚钱效应。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 84,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 31,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "trump_activity",
+      "name": "Trump活跃指标",
+      "category": "事件/政策",
+      "cadence": "日更",
+      "type": "planned_news",
+      "definition": "跟踪公开发言/政策活动的市场相关活跃度；新闻层待接入。",
+      "layer": "core61",
+      "impact_polarity": 0,
+      "importance_score": 62,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 75,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "trump_market_topic",
+      "name": "Trump市场话题度指标",
+      "category": "事件/政策",
+      "cadence": "日更",
+      "type": "planned_news",
+      "definition": "跟踪与美股、利率、关税、产业政策相关的话题密度；新闻层待接入。",
+      "layer": "core61",
+      "impact_polarity": 0,
+      "importance_score": 68,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 67,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
     },
     {
       "id": "largecap_panic",
@@ -2256,10 +1733,12 @@
       "category": "风险/情绪",
       "cadence": "日更",
       "type": "composite",
-      "definition": "VIX水平 + SPY短期回撤。分数越高代表恐慌越强。",
-      "importance_score": 85,
-      "importance_rank": 11,
+      "definition": "VIX与大盘短期回撤组合。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 88,
       "importance_reason": "大盘波动和短期回撤是即时压力确认层。",
+      "importance_rank": 22,
       "score": 25.73,
       "raw": 14.87,
       "raw_unit": "VIX",
@@ -2989,9 +2468,33 @@
         }
       ],
       "quality": "composite",
-      "daily_importance_score": 72.8,
+      "daily_importance_score": 74.3,
       "attention_state": "high",
-      "daily_importance_rank": 11
+      "daily_importance_rank": 10
+    },
+    {
+      "id": "ghost_story_density",
+      "name": "鬼故事密集度指标",
+      "category": "事件/新闻",
+      "cadence": "日更",
+      "type": "planned_news",
+      "definition": "负面尾部风险叙事、危机叙事和极端风险新闻密度。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 67,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 68,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
     },
     {
       "id": "market_fear",
@@ -2999,10 +2502,12 @@
       "category": "风险/情绪",
       "cadence": "日更",
       "type": "composite",
-      "definition": "VIX + 美国高收益债OAS。分数越高代表风险厌恶越强。",
-      "importance_score": 87,
-      "importance_rank": 10,
+      "definition": "VIX与信用压力的综合恐慌状态。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 90,
       "importance_reason": "波动率与信用压力结合，可较直接观察风险厌恶。",
+      "importance_rank": 20,
       "score": 15.01,
       "raw": 14.87,
       "raw_unit": "VIX",
@@ -3152,7 +2657,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 51.46
+          "score": 51.52
         },
         {
           "date": "2026-02-27",
@@ -3732,20 +3237,22 @@
         }
       ],
       "quality": "composite",
-      "daily_importance_score": 66.81,
+      "daily_importance_score": 68.31,
       "attention_state": "high",
       "daily_importance_rank": 13
     },
     {
       "id": "options_anomaly",
-      "name": "期权市场异常指标",
+      "name": "期权市场异动/大单量指标",
       "category": "期权/波动",
       "cadence": "日更",
       "type": "proxy",
-      "definition": "VIX水平与VIX短期跳升幅度的组合。当前是波动率代理版。",
-      "importance_score": 73,
-      "importance_rank": 18,
+      "definition": "VIX跳升与波动异常代理；后续接真实期权大单/成交量数据。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 78,
       "importance_reason": "期权波动异常是短期风险与事件定价的重要确认项。",
+      "importance_rank": 42,
       "score": 20.5,
       "raw": -13.0409,
       "raw_unit": "% VIX 5d",
@@ -4475,9 +3982,2592 @@
         }
       ],
       "quality": "proxy",
-      "daily_importance_score": 61.87,
+      "daily_importance_score": 64.37,
       "attention_state": "watch",
-      "daily_importance_rank": 15
+      "daily_importance_rank": 14
+    },
+    {
+      "id": "geo_news_impact",
+      "name": "地缘政治消息冲击度指标",
+      "category": "事件/地缘政治",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "黄金、原油、VIX同步异动代理地缘政治消息冲击。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 76,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 47,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "geo_lag_reaction",
+      "name": "地缘政治消息迟滞反应指标",
+      "category": "事件/地缘政治",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "事件代理冲击后1-5个交易日风险资产的延迟反应强度。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 70,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 59,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "treasury_short_default",
+      "name": "美国国债短期违约可能性指标",
+      "category": "信用/主权",
+      "cadence": "日更",
+      "type": "planned_macro",
+      "definition": "债务上限、现金余额、短端利率与主权信用压力综合；数据层待补。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 98,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 3,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "usd_credit",
+      "name": "美元信用指标",
+      "category": "宏观/美元",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "美元强弱与信用利差综合。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 90,
+      "importance_reason": "美元融资环境与信用压力影响全球资产与跨境流动性。",
+      "importance_rank": 18,
+      "score": 40.87,
+      "raw": 40.873,
+      "raw_unit": "score",
+      "d1": -2.78,
+      "d2": -6.35,
+      "asof": "2026-09-22",
+      "history": [
+        {
+          "date": "2026-01-05",
+          "score": 24.54
+        },
+        {
+          "date": "2026-01-06",
+          "score": 28.04
+        },
+        {
+          "date": "2026-01-07",
+          "score": 29.23
+        },
+        {
+          "date": "2026-01-08",
+          "score": 27.98
+        },
+        {
+          "date": "2026-01-09",
+          "score": 33.07
+        },
+        {
+          "date": "2026-01-12",
+          "score": 34.06
+        },
+        {
+          "date": "2026-01-13",
+          "score": 37.1
+        },
+        {
+          "date": "2026-01-14",
+          "score": 41.93
+        },
+        {
+          "date": "2026-01-15",
+          "score": 42.13
+        },
+        {
+          "date": "2026-01-16",
+          "score": 38.29
+        },
+        {
+          "date": "2026-01-20",
+          "score": 28.9
+        },
+        {
+          "date": "2026-01-21",
+          "score": 30.56
+        },
+        {
+          "date": "2026-01-22",
+          "score": 30.56
+        },
+        {
+          "date": "2026-01-23",
+          "score": 28.84
+        },
+        {
+          "date": "2026-01-26",
+          "score": 22.09
+        },
+        {
+          "date": "2026-01-27",
+          "score": 11.44
+        },
+        {
+          "date": "2026-01-28",
+          "score": 13.69
+        },
+        {
+          "date": "2026-01-29",
+          "score": 11.04
+        },
+        {
+          "date": "2026-01-30",
+          "score": 15.81
+        },
+        {
+          "date": "2026-02-02",
+          "score": 21.1
+        },
+        {
+          "date": "2026-02-03",
+          "score": 21.43
+        },
+        {
+          "date": "2026-02-04",
+          "score": 19.51
+        },
+        {
+          "date": "2026-02-05",
+          "score": 26.19
+        },
+        {
+          "date": "2026-02-06",
+          "score": 17.59
+        },
+        {
+          "date": "2026-02-09",
+          "score": 8.33
+        },
+        {
+          "date": "2026-02-10",
+          "score": 13.16
+        },
+        {
+          "date": "2026-02-11",
+          "score": 11.38
+        },
+        {
+          "date": "2026-02-12",
+          "score": 15.48
+        },
+        {
+          "date": "2026-02-13",
+          "score": 16.6
+        },
+        {
+          "date": "2026-02-17",
+          "score": 18.45
+        },
+        {
+          "date": "2026-02-18",
+          "score": 29.23
+        },
+        {
+          "date": "2026-02-19",
+          "score": 31.15
+        },
+        {
+          "date": "2026-02-20",
+          "score": 33.53
+        },
+        {
+          "date": "2026-02-23",
+          "score": 41.01
+        },
+        {
+          "date": "2026-02-24",
+          "score": 47.49
+        },
+        {
+          "date": "2026-02-25",
+          "score": 52.45
+        },
+        {
+          "date": "2026-02-26",
+          "score": 52.78
+        },
+        {
+          "date": "2026-02-27",
+          "score": 53.9
+        },
+        {
+          "date": "2026-03-02",
+          "score": 51.52
+        },
+        {
+          "date": "2026-03-03",
+          "score": 53.7
+        },
+        {
+          "date": "2026-03-04",
+          "score": 50.0
+        },
+        {
+          "date": "2026-03-05",
+          "score": 53.17
+        },
+        {
+          "date": "2026-03-06",
+          "score": 49.93
+        },
+        {
+          "date": "2026-03-09",
+          "score": 54.03
+        },
+        {
+          "date": "2026-03-10",
+          "score": 52.98
+        },
+        {
+          "date": "2026-03-11",
+          "score": 50.53
+        },
+        {
+          "date": "2026-03-12",
+          "score": 52.84
+        },
+        {
+          "date": "2026-03-13",
+          "score": 52.65
+        },
+        {
+          "date": "2026-03-16",
+          "score": 52.51
+        },
+        {
+          "date": "2026-03-17",
+          "score": 51.46
+        },
+        {
+          "date": "2026-03-18",
+          "score": 50.93
+        },
+        {
+          "date": "2026-03-19",
+          "score": 44.58
+        },
+        {
+          "date": "2026-03-20",
+          "score": 45.97
+        },
+        {
+          "date": "2026-03-23",
+          "score": 40.87
+        },
+        {
+          "date": "2026-03-24",
+          "score": 44.91
+        },
+        {
+          "date": "2026-03-25",
+          "score": 47.62
+        },
+        {
+          "date": "2026-03-26",
+          "score": 48.28
+        },
+        {
+          "date": "2026-03-27",
+          "score": 51.19
+        },
+        {
+          "date": "2026-03-30",
+          "score": 53.9
+        },
+        {
+          "date": "2026-03-31",
+          "score": 40.15
+        },
+        {
+          "date": "2026-04-01",
+          "score": 37.76
+        },
+        {
+          "date": "2026-04-02",
+          "score": 38.43
+        },
+        {
+          "date": "2026-04-06",
+          "score": 37.57
+        },
+        {
+          "date": "2026-04-07",
+          "score": 33.8
+        },
+        {
+          "date": "2026-04-08",
+          "score": 29.83
+        },
+        {
+          "date": "2026-04-09",
+          "score": 24.8
+        },
+        {
+          "date": "2026-04-10",
+          "score": 17.53
+        },
+        {
+          "date": "2026-04-13",
+          "score": 8.86
+        },
+        {
+          "date": "2026-04-14",
+          "score": 11.9
+        },
+        {
+          "date": "2026-04-15",
+          "score": 12.9
+        },
+        {
+          "date": "2026-04-16",
+          "score": 7.41
+        },
+        {
+          "date": "2026-04-17",
+          "score": 16.2
+        },
+        {
+          "date": "2026-04-20",
+          "score": 11.44
+        },
+        {
+          "date": "2026-04-21",
+          "score": 23.35
+        },
+        {
+          "date": "2026-04-22",
+          "score": 19.71
+        },
+        {
+          "date": "2026-04-23",
+          "score": 19.51
+        },
+        {
+          "date": "2026-04-24",
+          "score": 11.77
+        },
+        {
+          "date": "2026-04-27",
+          "score": 8.47
+        },
+        {
+          "date": "2026-04-28",
+          "score": 7.14
+        },
+        {
+          "date": "2026-04-29",
+          "score": 15.74
+        },
+        {
+          "date": "2026-04-30",
+          "score": 9.52
+        },
+        {
+          "date": "2026-05-01",
+          "score": 7.21
+        },
+        {
+          "date": "2026-05-04",
+          "score": 10.38
+        },
+        {
+          "date": "2026-05-05",
+          "score": 14.55
+        },
+        {
+          "date": "2026-05-06",
+          "score": 16.01
+        },
+        {
+          "date": "2026-05-07",
+          "score": 22.69
+        },
+        {
+          "date": "2026-05-08",
+          "score": 19.97
+        },
+        {
+          "date": "2026-05-11",
+          "score": 24.21
+        },
+        {
+          "date": "2026-05-12",
+          "score": 27.58
+        },
+        {
+          "date": "2026-05-13",
+          "score": 29.83
+        },
+        {
+          "date": "2026-05-14",
+          "score": 31.61
+        },
+        {
+          "date": "2026-05-15",
+          "score": 36.31
+        },
+        {
+          "date": "2026-05-18",
+          "score": 34.06
+        },
+        {
+          "date": "2026-05-19",
+          "score": 33.8
+        },
+        {
+          "date": "2026-05-20",
+          "score": 30.16
+        },
+        {
+          "date": "2026-05-21",
+          "score": 29.17
+        },
+        {
+          "date": "2026-05-22",
+          "score": 33.0
+        },
+        {
+          "date": "2026-05-26",
+          "score": 32.01
+        },
+        {
+          "date": "2026-05-27",
+          "score": 31.75
+        },
+        {
+          "date": "2026-05-28",
+          "score": 28.31
+        },
+        {
+          "date": "2026-05-29",
+          "score": 34.59
+        },
+        {
+          "date": "2026-06-01",
+          "score": 37.24
+        },
+        {
+          "date": "2026-06-02",
+          "score": 33.4
+        },
+        {
+          "date": "2026-06-03",
+          "score": 37.24
+        },
+        {
+          "date": "2026-06-04",
+          "score": 41.01
+        },
+        {
+          "date": "2026-06-05",
+          "score": 43.92
+        },
+        {
+          "date": "2026-06-08",
+          "score": 46.1
+        },
+        {
+          "date": "2026-06-09",
+          "score": 44.91
+        },
+        {
+          "date": "2026-06-10",
+          "score": 42.33
+        },
+        {
+          "date": "2026-06-11",
+          "score": 41.93
+        },
+        {
+          "date": "2026-06-12",
+          "score": 35.98
+        },
+        {
+          "date": "2026-06-15",
+          "score": 30.09
+        },
+        {
+          "date": "2026-06-16",
+          "score": 32.61
+        },
+        {
+          "date": "2026-06-17",
+          "score": 35.12
+        },
+        {
+          "date": "2026-06-18",
+          "score": 43.92
+        },
+        {
+          "date": "2026-06-22",
+          "score": 43.52
+        },
+        {
+          "date": "2026-06-23",
+          "score": 47.09
+        },
+        {
+          "date": "2026-06-24",
+          "score": 52.91
+        },
+        {
+          "date": "2026-06-25",
+          "score": 52.45
+        },
+        {
+          "date": "2026-06-26",
+          "score": 53.57
+        },
+        {
+          "date": "2026-06-29",
+          "score": 52.38
+        },
+        {
+          "date": "2026-06-30",
+          "score": 45.97
+        },
+        {
+          "date": "2026-07-01",
+          "score": 46.43
+        },
+        {
+          "date": "2026-07-02",
+          "score": 39.35
+        },
+        {
+          "date": "2026-07-06",
+          "score": 39.88
+        },
+        {
+          "date": "2026-07-07",
+          "score": 35.32
+        },
+        {
+          "date": "2026-07-08",
+          "score": 34.33
+        },
+        {
+          "date": "2026-07-09",
+          "score": 34.66
+        },
+        {
+          "date": "2026-07-10",
+          "score": 34.59
+        },
+        {
+          "date": "2026-07-13",
+          "score": 38.82
+        },
+        {
+          "date": "2026-07-14",
+          "score": 36.04
+        },
+        {
+          "date": "2026-07-15",
+          "score": 32.67
+        },
+        {
+          "date": "2026-07-16",
+          "score": 36.11
+        },
+        {
+          "date": "2026-07-17",
+          "score": 30.22
+        },
+        {
+          "date": "2026-07-20",
+          "score": 25.46
+        },
+        {
+          "date": "2026-07-21",
+          "score": 25.53
+        },
+        {
+          "date": "2026-07-22",
+          "score": 23.41
+        },
+        {
+          "date": "2026-07-23",
+          "score": 23.74
+        },
+        {
+          "date": "2026-07-24",
+          "score": 24.93
+        },
+        {
+          "date": "2026-07-27",
+          "score": 25.73
+        },
+        {
+          "date": "2026-07-28",
+          "score": 26.65
+        },
+        {
+          "date": "2026-07-29",
+          "score": 22.09
+        },
+        {
+          "date": "2026-07-30",
+          "score": 10.91
+        },
+        {
+          "date": "2026-07-31",
+          "score": 14.29
+        },
+        {
+          "date": "2026-08-03",
+          "score": 16.34
+        },
+        {
+          "date": "2026-08-04",
+          "score": 12.43
+        },
+        {
+          "date": "2026-08-05",
+          "score": 11.57
+        },
+        {
+          "date": "2026-08-06",
+          "score": 15.54
+        },
+        {
+          "date": "2026-08-07",
+          "score": 11.04
+        },
+        {
+          "date": "2026-08-10",
+          "score": 10.12
+        },
+        {
+          "date": "2026-08-11",
+          "score": 14.22
+        },
+        {
+          "date": "2026-08-12",
+          "score": 21.16
+        },
+        {
+          "date": "2026-08-13",
+          "score": 18.45
+        },
+        {
+          "date": "2026-08-14",
+          "score": 14.55
+        },
+        {
+          "date": "2026-08-17",
+          "score": 11.24
+        },
+        {
+          "date": "2026-08-18",
+          "score": 9.59
+        },
+        {
+          "date": "2026-08-19",
+          "score": 4.7
+        },
+        {
+          "date": "2026-08-20",
+          "score": 3.7
+        },
+        {
+          "date": "2026-08-21",
+          "score": 3.37
+        },
+        {
+          "date": "2026-08-24",
+          "score": 3.84
+        },
+        {
+          "date": "2026-08-25",
+          "score": 4.56
+        },
+        {
+          "date": "2026-08-26",
+          "score": 9.46
+        },
+        {
+          "date": "2026-08-27",
+          "score": 18.25
+        },
+        {
+          "date": "2026-08-28",
+          "score": 25.46
+        },
+        {
+          "date": "2026-08-31",
+          "score": 21.63
+        },
+        {
+          "date": "2026-09-01",
+          "score": 24.47
+        },
+        {
+          "date": "2026-09-02",
+          "score": 25.0
+        },
+        {
+          "date": "2026-09-03",
+          "score": 16.2
+        },
+        {
+          "date": "2026-09-04",
+          "score": 22.82
+        },
+        {
+          "date": "2026-09-08",
+          "score": 16.6
+        },
+        {
+          "date": "2026-09-09",
+          "score": 15.87
+        },
+        {
+          "date": "2026-09-10",
+          "score": 17.0
+        },
+        {
+          "date": "2026-09-11",
+          "score": 18.19
+        },
+        {
+          "date": "2026-09-14",
+          "score": 25.07
+        },
+        {
+          "date": "2026-09-15",
+          "score": 26.52
+        },
+        {
+          "date": "2026-09-16",
+          "score": 32.14
+        },
+        {
+          "date": "2026-09-17",
+          "score": 41.67
+        },
+        {
+          "date": "2026-09-18",
+          "score": 40.08
+        },
+        {
+          "date": "2026-09-21",
+          "score": 43.65
+        },
+        {
+          "date": "2026-09-22",
+          "score": 40.87
+        }
+      ],
+      "quality": "composite",
+      "daily_importance_score": 54.18,
+      "attention_state": "watch",
+      "daily_importance_rank": 19
+    },
+    {
+      "id": "buffett_cash",
+      "name": "巴菲特现金持仓指标",
+      "category": "资金/机构",
+      "cadence": "每日刷新/季度源更新",
+      "type": "manual",
+      "definition": "Berkshire现金及短期国债占资产口径，季度更新、每日沿用最新值。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 50,
+      "importance_reason": "Berkshire现金仓位有参考价值，但低频且主体单一。",
+      "importance_rank": 82,
+      "score": 28.94,
+      "raw": 28.9385,
+      "raw_unit": "%",
+      "d1": -2.79,
+      "d2": -3.98,
+      "asof": "2026-06-30",
+      "history": [
+        {
+          "date": "2025-12-31",
+          "score": 30.54
+        },
+        {
+          "date": "2026-03-31",
+          "score": 31.73
+        },
+        {
+          "date": "2026-06-30",
+          "score": 28.94
+        }
+      ],
+      "quality": "manual",
+      "daily_importance_score": 40.58,
+      "attention_state": "normal",
+      "daily_importance_rank": 25
+    },
+    {
+      "id": "business_cycle",
+      "name": "商业周期指标",
+      "category": "宏观/周期",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "工业相对表现、铜价与库存周期的综合代理。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 88,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 23,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "kondratiev_cycle",
+      "name": "康波周期指标",
+      "category": "宏观/周期",
+      "cadence": "日更",
+      "type": "planned_macro",
+      "definition": "长期资本开支、商品、利率与生产率周期指标；先保留框架。",
+      "layer": "core61",
+      "impact_polarity": 0,
+      "importance_score": 62,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 74,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "geopolitical_risk",
+      "name": "地缘政治指标",
+      "category": "事件/地缘政治",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "黄金、原油、VIX和风险资产的跨资产风险组合。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 82,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 32,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "us_loans_total",
+      "name": "美国贷款总量指标",
+      "category": "信用/贷款",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "银行信贷余额；源数据可用时直接取值，否则用信用资产代理。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 90,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 16,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "us_loans_speed",
+      "name": "美国贷款速度增量指标",
+      "category": "信用/贷款",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "美国贷款同比增长及增长加速度。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 92,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 9,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "us_cn_retail_discussion",
+      "name": "美国/中国散户美股讨论度指标",
+      "category": "情绪/社交",
+      "cadence": "日更",
+      "type": "planned_social",
+      "definition": "美国与中文社区关于美股的讨论热度；社交数据层待接入。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 58,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 78,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "ib_holdings_concentration",
+      "name": "投行持仓集中度指标",
+      "category": "资金/机构",
+      "cadence": "日更",
+      "type": "planned_13f",
+      "definition": "主要投行/机构13F持仓集中度，低频更新、每日沿用。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 74,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 52,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "retail_cash_reserve",
+      "name": "美国散户现金预留度指标",
+      "category": "资金/散户",
+      "cadence": "日更",
+      "type": "planned_macro",
+      "definition": "货币基金、现金类资产及散户仓位代理；数据层待补。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 68,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 65,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "retail_holdings_concentration",
+      "name": "美国散户持仓集中度指标",
+      "category": "资金/散户",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "小盘/高贝塔与头部热门股的集中度代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 68,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 64,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "rate_cycle_sensitivity",
+      "name": "加息周期市场敏感度指标",
+      "category": "利率/敏感度",
+      "cadence": "日更",
+      "type": "direct",
+      "definition": "SPY收益对长端利率变化的滚动相关/敏感度。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 90,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 15,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "market_optimism",
+      "name": "市场乐观度指标",
+      "category": "情绪/市场",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "市场支撑、上涨动量与低恐慌的组合。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 82,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 37,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "market_pessimism",
+      "name": "市场悲观度指标",
+      "category": "情绪/市场",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "恐慌、回撤与信用压力的组合。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 82,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 34,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "mega_earnings_health",
+      "name": "头部企业财报健康度指标",
+      "category": "基本面/头部企业",
+      "cadence": "日更",
+      "type": "planned_fundamental",
+      "definition": "头部企业营收、利润、指引和盈利质量综合；财报层待接入。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 92,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 13,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "market_liquidity",
+      "name": "市场流动性指标",
+      "category": "流动性",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "信用ETF相对强弱、成交活跃与金融条件的综合流动性状态。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 98,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 4,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "mega_excess_cash",
+      "name": "头部企业剩余现金流动性指标",
+      "category": "基本面/头部企业",
+      "cadence": "日更",
+      "type": "planned_fundamental",
+      "definition": "头部企业自由现金流、现金余额与资本开支后的剩余流动性。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 88,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 24,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "mega_debt_capacity",
+      "name": "头部企业未来可偿还债务能力指标",
+      "category": "基本面/头部企业",
+      "cadence": "日更",
+      "type": "planned_fundamental",
+      "definition": "头部企业利息覆盖、净债务/现金流与到期结构。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 90,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 21,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "market_overextension",
+      "name": "大盘涨跌过度指标",
+      "category": "市场结构",
+      "cadence": "日更",
+      "type": "direct",
+      "definition": "SPY相对短中期均线及近期收益的历史极端度。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 76,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 46,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "market_move_speed",
+      "name": "大盘涨跌速度指标",
+      "category": "市场结构",
+      "cadence": "日更",
+      "type": "direct",
+      "definition": "SPY 5日/20日价格变化速度与历史位置。",
+      "layer": "core61",
+      "impact_polarity": 0,
+      "importance_score": 72,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 54,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "bond_issuance_speed",
+      "name": "债券发债规模速度指标",
+      "category": "信用/发行",
+      "cadence": "日更",
+      "type": "planned_macro",
+      "definition": "公司债/政府债发行规模的变化速度。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 78,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 44,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "bond_issuance_total",
+      "name": "债券发债总量指标",
+      "category": "信用/发行",
+      "cadence": "日更",
+      "type": "planned_macro",
+      "definition": "债券市场总发行量与历史位置。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 74,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 53,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "bond_issuance_sales",
+      "name": "债券发债销售量指标",
+      "category": "信用/发行",
+      "cadence": "日更",
+      "type": "planned_macro",
+      "definition": "新债认购/销售吸收能力与发行完成度。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 76,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 48,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "breadth_concentration",
+      "name": "市场涨跌集中度指标",
+      "category": "市场结构",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "市值加权指数与等权指数差异，衡量涨跌是否集中。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 84,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 30,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sme_survival_growth",
+      "name": "市场中小企业留存增长消亡指标",
+      "category": "基本面/中小企业",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "IWM相对SPY与周期资产表现代理中小企业生存/增长状态。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 80,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 39,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "mega_liquidity_blowup",
+      "name": "市场头部企业资金爆雷/充裕可能性指标",
+      "category": "风险/头部企业",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "头部科技股波动、回撤与信用环境组合，代理资金链脆弱度。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 92,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 12,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "market_bias",
+      "name": "市场倾向指标",
+      "category": "综合/方向",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "乐观与悲观、趋势与风险的净方向状态。",
+      "layer": "core61",
+      "impact_polarity": 1,
+      "importance_score": 86,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 27,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "mag7_volume",
+      "name": "七巨头市场成交量综合指标",
+      "category": "头部/七巨头",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "NVDA/AAPL/MSFT/AMZN/GOOGL/META/TSLA成交量异常综合。",
+      "layer": "core61",
+      "impact_polarity": 0,
+      "importance_score": 74,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 51,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "mag7_volatility",
+      "name": "七巨头波动率综合指标",
+      "category": "头部/七巨头",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "原版七巨头20日实现波动率综合。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 84,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 29,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "ai7_volume",
+      "name": "AI7市场成交量综合指标",
+      "category": "头部/AI",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "NVDA/MSFT/GOOGL/AMZN/META/AVGO/AMD成交量异常综合。",
+      "layer": "core61",
+      "impact_polarity": 0,
+      "importance_score": 76,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 49,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "ai7_volatility",
+      "name": "AI7市场波动率综合指标",
+      "category": "头部/AI",
+      "cadence": "日更",
+      "type": "composite",
+      "definition": "AI7 20日实现波动率综合。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 88,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 25,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "tech100_volatility",
+      "name": "美国科技公司Top100综合波动率指标",
+      "category": "行业/科技",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1以QQQ实现波动率作为日频代理；后续替换为纯科技Top100自由流通市值篮子。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 90,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 17,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_it_vol",
+      "name": "信息技术头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLK 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 78,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 43,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_comm_vol",
+      "name": "通信服务头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLC 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 72,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 58,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_cons_disc_vol",
+      "name": "非必需消费头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLY 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 72,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 55,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_cons_staples_vol",
+      "name": "必需消费头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLP 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 66,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 69,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_fin_vol",
+      "name": "金融头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLF 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 82,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 33,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_health_vol",
+      "name": "医疗保健头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLV 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 70,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 62,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_industrial_vol",
+      "name": "工业头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLI 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 78,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 41,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_energy_vol",
+      "name": "能源头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLE 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 72,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 56,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_materials_vol",
+      "name": "原材料头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLB 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 68,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 66,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_utilities_vol",
+      "name": "公用事业头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLU 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 64,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 71,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "sector_realestate_vol",
+      "name": "房地产头部企业波动率指标",
+      "category": "行业/波动",
+      "cadence": "日更",
+      "type": "proxy",
+      "definition": "V1用XLRE 20日实现波动率代理。",
+      "layer": "core61",
+      "impact_polarity": -1,
+      "importance_score": 70,
+      "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
+      "importance_rank": 60,
+      "score": null,
+      "raw": null,
+      "raw_unit": "",
+      "d1": null,
+      "d2": null,
+      "asof": null,
+      "history": [],
+      "quality": "source_error",
+      "daily_importance_score": null,
+      "daily_importance_rank": null,
+      "attention_state": "no_data"
+    },
+    {
+      "id": "market_support",
+      "name": "市场支撑度指标",
+      "category": "市场结构",
+      "cadence": "日更",
+      "type": "direct",
+      "definition": "SPY 相对20/50/200日均线的位置 + RSP相对SPY强弱。",
+      "importance_score": 75,
+      "importance_rank": 50,
+      "importance_reason": "广度、均线与等权表现能验证指数上涨是否健康。",
+      "layer": "supplemental",
+      "impact_polarity": 1,
+      "score": 38.92,
+      "raw": 0.0849,
+      "raw_unit": "SPY/MA200 - 1",
+      "d1": 16.24,
+      "d2": 16.17,
+      "asof": "2026-09-21",
+      "history": [
+        {
+          "date": "2026-01-02",
+          "score": 49.24
+        },
+        {
+          "date": "2026-01-05",
+          "score": 55.72
+        },
+        {
+          "date": "2026-01-06",
+          "score": 64.32
+        },
+        {
+          "date": "2026-01-07",
+          "score": 57.24
+        },
+        {
+          "date": "2026-01-08",
+          "score": 58.63
+        },
+        {
+          "date": "2026-01-09",
+          "score": 65.71
+        },
+        {
+          "date": "2026-01-12",
+          "score": 65.28
+        },
+        {
+          "date": "2026-01-13",
+          "score": 59.59
+        },
+        {
+          "date": "2026-01-14",
+          "score": 54.46
+        },
+        {
+          "date": "2026-01-15",
+          "score": 58.23
+        },
+        {
+          "date": "2026-01-16",
+          "score": 52.98
+        },
+        {
+          "date": "2026-01-20",
+          "score": 40.81
+        },
+        {
+          "date": "2026-01-21",
+          "score": 48.31
+        },
+        {
+          "date": "2026-01-22",
+          "score": 51.22
+        },
+        {
+          "date": "2026-01-23",
+          "score": 51.19
+        },
+        {
+          "date": "2026-01-26",
+          "score": 55.13
+        },
+        {
+          "date": "2026-01-27",
+          "score": 58.83
+        },
+        {
+          "date": "2026-01-28",
+          "score": 56.15
+        },
+        {
+          "date": "2026-01-29",
+          "score": 53.87
+        },
+        {
+          "date": "2026-01-30",
+          "score": 50.0
+        },
+        {
+          "date": "2026-02-02",
+          "score": 53.21
+        },
+        {
+          "date": "2026-02-03",
+          "score": 45.5
+        },
+        {
+          "date": "2026-02-04",
+          "score": 43.19
+        },
+        {
+          "date": "2026-02-05",
+          "score": 37.53
+        },
+        {
+          "date": "2026-02-06",
+          "score": 46.96
+        },
+        {
+          "date": "2026-02-09",
+          "score": 50.79
+        },
+        {
+          "date": "2026-02-10",
+          "score": 48.41
+        },
+        {
+          "date": "2026-02-11",
+          "score": 48.05
+        },
+        {
+          "date": "2026-02-12",
+          "score": 38.0
+        },
+        {
+          "date": "2026-02-13",
+          "score": 39.09
+        },
+        {
+          "date": "2026-02-17",
+          "score": 39.42
+        },
+        {
+          "date": "2026-02-18",
+          "score": 41.2
+        },
+        {
+          "date": "2026-02-19",
+          "score": 39.42
+        },
+        {
+          "date": "2026-02-20",
+          "score": 43.49
+        },
+        {
+          "date": "2026-02-23",
+          "score": 38.23
+        },
+        {
+          "date": "2026-02-24",
+          "score": 42.56
+        },
+        {
+          "date": "2026-02-25",
+          "score": 48.88
+        },
+        {
+          "date": "2026-02-26",
+          "score": 44.94
+        },
+        {
+          "date": "2026-02-27",
+          "score": 42.03
+        },
+        {
+          "date": "2026-03-02",
+          "score": 42.23
+        },
+        {
+          "date": "2026-03-03",
+          "score": 37.33
+        },
+        {
+          "date": "2026-03-04",
+          "score": 40.21
+        },
+        {
+          "date": "2026-03-05",
+          "score": 32.84
+        },
+        {
+          "date": "2026-03-06",
+          "score": 25.99
+        },
+        {
+          "date": "2026-03-09",
+          "score": 27.71
+        },
+        {
+          "date": "2026-03-10",
+          "score": 26.26
+        },
+        {
+          "date": "2026-03-11",
+          "score": 21.99
+        },
+        {
+          "date": "2026-03-12",
+          "score": 16.01
+        },
+        {
+          "date": "2026-03-13",
+          "score": 16.8
+        },
+        {
+          "date": "2026-03-16",
+          "score": 12.7
+        },
+        {
+          "date": "2026-03-17",
+          "score": 16.77
+        },
+        {
+          "date": "2026-03-18",
+          "score": 13.59
+        },
+        {
+          "date": "2026-03-19",
+          "score": 13.86
+        },
+        {
+          "date": "2026-03-20",
+          "score": 13.23
+        },
+        {
+          "date": "2026-03-23",
+          "score": 15.71
+        },
+        {
+          "date": "2026-03-24",
+          "score": 17.33
+        },
+        {
+          "date": "2026-03-25",
+          "score": 22.69
+        },
+        {
+          "date": "2026-03-26",
+          "score": 17.92
+        },
+        {
+          "date": "2026-03-27",
+          "score": 15.64
+        },
+        {
+          "date": "2026-03-30",
+          "score": 17.26
+        },
+        {
+          "date": "2026-03-31",
+          "score": 19.61
+        },
+        {
+          "date": "2026-04-01",
+          "score": 22.09
+        },
+        {
+          "date": "2026-04-02",
+          "score": 26.82
+        },
+        {
+          "date": "2026-04-06",
+          "score": 28.24
+        },
+        {
+          "date": "2026-04-07",
+          "score": 30.85
+        },
+        {
+          "date": "2026-04-08",
+          "score": 51.49
+        },
+        {
+          "date": "2026-04-09",
+          "score": 52.84
+        },
+        {
+          "date": "2026-04-10",
+          "score": 49.67
+        },
+        {
+          "date": "2026-04-13",
+          "score": 52.02
+        },
+        {
+          "date": "2026-04-14",
+          "score": 54.79
+        },
+        {
+          "date": "2026-04-15",
+          "score": 52.91
+        },
+        {
+          "date": "2026-04-16",
+          "score": 54.5
+        },
+        {
+          "date": "2026-04-17",
+          "score": 59.92
+        },
+        {
+          "date": "2026-04-20",
+          "score": 60.58
+        },
+        {
+          "date": "2026-04-21",
+          "score": 56.91
+        },
+        {
+          "date": "2026-04-22",
+          "score": 57.44
+        },
+        {
+          "date": "2026-04-23",
+          "score": 55.09
+        },
+        {
+          "date": "2026-04-24",
+          "score": 57.08
+        },
+        {
+          "date": "2026-04-27",
+          "score": 57.01
+        },
+        {
+          "date": "2026-04-28",
+          "score": 53.34
+        },
+        {
+          "date": "2026-04-29",
+          "score": 51.95
+        },
+        {
+          "date": "2026-04-30",
+          "score": 58.0
+        },
+        {
+          "date": "2026-05-01",
+          "score": 57.94
+        },
+        {
+          "date": "2026-05-04",
+          "score": 53.41
+        },
+        {
+          "date": "2026-05-05",
+          "score": 57.87
+        },
+        {
+          "date": "2026-05-06",
+          "score": 63.79
+        },
+        {
+          "date": "2026-05-07",
+          "score": 61.51
+        },
+        {
+          "date": "2026-05-08",
+          "score": 64.78
+        },
+        {
+          "date": "2026-05-11",
+          "score": 64.58
+        },
+        {
+          "date": "2026-05-12",
+          "score": 63.76
+        },
+        {
+          "date": "2026-05-13",
+          "score": 65.87
+        },
+        {
+          "date": "2026-05-14",
+          "score": 68.82
+        },
+        {
+          "date": "2026-05-15",
+          "score": 59.66
+        },
+        {
+          "date": "2026-05-18",
+          "score": 57.24
+        },
+        {
+          "date": "2026-05-19",
+          "score": 48.02
+        },
+        {
+          "date": "2026-05-20",
+          "score": 58.5
+        },
+        {
+          "date": "2026-05-21",
+          "score": 58.33
+        },
+        {
+          "date": "2026-05-22",
+          "score": 63.86
+        },
+        {
+          "date": "2026-05-26",
+          "score": 68.92
+        },
+        {
+          "date": "2026-05-27",
+          "score": 66.93
+        },
+        {
+          "date": "2026-05-28",
+          "score": 69.68
+        },
+        {
+          "date": "2026-05-29",
+          "score": 68.58
+        },
+        {
+          "date": "2026-06-01",
+          "score": 70.54
+        },
+        {
+          "date": "2026-06-02",
+          "score": 72.69
+        },
+        {
+          "date": "2026-06-03",
+          "score": 64.45
+        },
+        {
+          "date": "2026-06-04",
+          "score": 72.39
+        },
+        {
+          "date": "2026-06-05",
+          "score": 50.13
+        },
+        {
+          "date": "2026-06-08",
+          "score": 51.59
+        },
+        {
+          "date": "2026-06-09",
+          "score": 50.93
+        },
+        {
+          "date": "2026-06-10",
+          "score": 38.96
+        },
+        {
+          "date": "2026-06-11",
+          "score": 50.83
+        },
+        {
+          "date": "2026-06-12",
+          "score": 54.43
+        },
+        {
+          "date": "2026-06-15",
+          "score": 71.33
+        },
+        {
+          "date": "2026-06-16",
+          "score": 61.34
+        },
+        {
+          "date": "2026-06-17",
+          "score": 48.21
+        },
+        {
+          "date": "2026-06-18",
+          "score": 55.16
+        },
+        {
+          "date": "2026-06-22",
+          "score": 52.22
+        },
+        {
+          "date": "2026-06-23",
+          "score": 40.97
+        },
+        {
+          "date": "2026-06-24",
+          "score": 41.6
+        },
+        {
+          "date": "2026-06-25",
+          "score": 42.63
+        },
+        {
+          "date": "2026-06-26",
+          "score": 38.62
+        },
+        {
+          "date": "2026-06-29",
+          "score": 49.31
+        },
+        {
+          "date": "2026-06-30",
+          "score": 56.22
+        },
+        {
+          "date": "2026-07-01",
+          "score": 54.83
+        },
+        {
+          "date": "2026-07-02",
+          "score": 53.87
+        },
+        {
+          "date": "2026-07-06",
+          "score": 62.57
+        },
+        {
+          "date": "2026-07-07",
+          "score": 54.23
+        },
+        {
+          "date": "2026-07-08",
+          "score": 48.94
+        },
+        {
+          "date": "2026-07-09",
+          "score": 52.98
+        },
+        {
+          "date": "2026-07-10",
+          "score": 55.16
+        },
+        {
+          "date": "2026-07-13",
+          "score": 48.41
+        },
+        {
+          "date": "2026-07-14",
+          "score": 46.3
+        },
+        {
+          "date": "2026-07-15",
+          "score": 53.57
+        },
+        {
+          "date": "2026-07-16",
+          "score": 50.89
+        },
+        {
+          "date": "2026-07-17",
+          "score": 42.06
+        },
+        {
+          "date": "2026-07-20",
+          "score": 41.2
+        },
+        {
+          "date": "2026-07-21",
+          "score": 44.71
+        },
+        {
+          "date": "2026-07-22",
+          "score": 39.05
+        },
+        {
+          "date": "2026-07-23",
+          "score": 30.89
+        },
+        {
+          "date": "2026-07-24",
+          "score": 31.98
+        },
+        {
+          "date": "2026-07-27",
+          "score": 34.49
+        },
+        {
+          "date": "2026-07-28",
+          "score": 39.32
+        },
+        {
+          "date": "2026-07-29",
+          "score": 34.66
+        },
+        {
+          "date": "2026-07-30",
+          "score": 38.43
+        },
+        {
+          "date": "2026-07-31",
+          "score": 37.07
+        },
+        {
+          "date": "2026-08-03",
+          "score": 55.36
+        },
+        {
+          "date": "2026-08-04",
+          "score": 69.68
+        },
+        {
+          "date": "2026-08-05",
+          "score": 71.43
+        },
+        {
+          "date": "2026-08-06",
+          "score": 68.85
+        },
+        {
+          "date": "2026-08-07",
+          "score": 74.27
+        },
+        {
+          "date": "2026-08-10",
+          "score": 69.94
+        },
+        {
+          "date": "2026-08-11",
+          "score": 70.87
+        },
+        {
+          "date": "2026-08-12",
+          "score": 74.4
+        },
+        {
+          "date": "2026-08-13",
+          "score": 75.2
+        },
+        {
+          "date": "2026-08-14",
+          "score": 71.99
+        },
+        {
+          "date": "2026-08-17",
+          "score": 64.32
+        },
+        {
+          "date": "2026-08-18",
+          "score": 57.64
+        },
+        {
+          "date": "2026-08-19",
+          "score": 61.44
+        },
+        {
+          "date": "2026-08-20",
+          "score": 46.73
+        },
+        {
+          "date": "2026-08-21",
+          "score": 48.45
+        },
+        {
+          "date": "2026-08-24",
+          "score": 42.23
+        },
+        {
+          "date": "2026-08-25",
+          "score": 37.6
+        },
+        {
+          "date": "2026-08-26",
+          "score": 33.73
+        },
+        {
+          "date": "2026-08-27",
+          "score": 43.98
+        },
+        {
+          "date": "2026-08-28",
+          "score": 44.68
+        },
+        {
+          "date": "2026-08-31",
+          "score": 41.47
+        },
+        {
+          "date": "2026-09-01",
+          "score": 37.04
+        },
+        {
+          "date": "2026-09-02",
+          "score": 40.41
+        },
+        {
+          "date": "2026-09-03",
+          "score": 50.43
+        },
+        {
+          "date": "2026-09-04",
+          "score": 44.51
+        },
+        {
+          "date": "2026-09-08",
+          "score": 35.52
+        },
+        {
+          "date": "2026-09-09",
+          "score": 26.92
+        },
+        {
+          "date": "2026-09-10",
+          "score": 22.75
+        },
+        {
+          "date": "2026-09-11",
+          "score": 27.91
+        },
+        {
+          "date": "2026-09-14",
+          "score": 25.96
+        },
+        {
+          "date": "2026-09-15",
+          "score": 25.17
+        },
+        {
+          "date": "2026-09-16",
+          "score": 20.34
+        },
+        {
+          "date": "2026-09-17",
+          "score": 22.62
+        },
+        {
+          "date": "2026-09-18",
+          "score": 22.69
+        },
+        {
+          "date": "2026-09-21",
+          "score": 38.92
+        }
+      ],
+      "quality": "direct",
+      "daily_importance_score": 59.07,
+      "attention_state": "watch",
+      "daily_importance_rank": 16
     },
     {
       "id": "liquidity_risk",
@@ -4489,6 +6579,8 @@
       "importance_score": 98,
       "importance_rank": 2,
       "importance_reason": "流动性决定风险资产的边际定价和压力传导速度。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 3.04,
       "raw": 3.0423,
       "raw_unit": "score",
@@ -4646,7 +6738,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.25
+          "score": 27.38
         },
         {
           "date": "2026-02-27",
@@ -5230,8 +7322,10 @@
       "type": "composite",
       "definition": "2Y和10Y美债收益率的历史位置，用于描述利率环境。",
       "importance_score": 92,
-      "importance_rank": 6,
+      "importance_rank": 10,
       "importance_reason": "美债利率是全球风险资产的折现率核心。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 99.34,
       "raw": 4.963,
       "raw_unit": "10Y yield",
@@ -5966,749 +8060,6 @@
       "daily_importance_rank": 8
     },
     {
-      "id": "usd_credit",
-      "name": "美元信用指标",
-      "category": "宏观/美元",
-      "cadence": "日更",
-      "type": "composite",
-      "definition": "广义美元指数强弱 + Baa-10Y信用利差。",
-      "importance_score": 84,
-      "importance_rank": 12,
-      "importance_reason": "美元融资环境与信用压力影响全球资产与跨境流动性。",
-      "score": 41.01,
-      "raw": 41.0053,
-      "raw_unit": "score",
-      "d1": -2.65,
-      "d2": -6.22,
-      "asof": "2026-09-22",
-      "history": [
-        {
-          "date": "2026-01-05",
-          "score": 24.54
-        },
-        {
-          "date": "2026-01-06",
-          "score": 28.04
-        },
-        {
-          "date": "2026-01-07",
-          "score": 29.23
-        },
-        {
-          "date": "2026-01-08",
-          "score": 27.98
-        },
-        {
-          "date": "2026-01-09",
-          "score": 33.07
-        },
-        {
-          "date": "2026-01-12",
-          "score": 34.06
-        },
-        {
-          "date": "2026-01-13",
-          "score": 37.1
-        },
-        {
-          "date": "2026-01-14",
-          "score": 41.93
-        },
-        {
-          "date": "2026-01-15",
-          "score": 42.13
-        },
-        {
-          "date": "2026-01-16",
-          "score": 38.29
-        },
-        {
-          "date": "2026-01-20",
-          "score": 28.9
-        },
-        {
-          "date": "2026-01-21",
-          "score": 30.56
-        },
-        {
-          "date": "2026-01-22",
-          "score": 30.56
-        },
-        {
-          "date": "2026-01-23",
-          "score": 28.84
-        },
-        {
-          "date": "2026-01-26",
-          "score": 22.09
-        },
-        {
-          "date": "2026-01-27",
-          "score": 11.44
-        },
-        {
-          "date": "2026-01-28",
-          "score": 13.69
-        },
-        {
-          "date": "2026-01-29",
-          "score": 11.04
-        },
-        {
-          "date": "2026-01-30",
-          "score": 15.81
-        },
-        {
-          "date": "2026-02-02",
-          "score": 21.1
-        },
-        {
-          "date": "2026-02-03",
-          "score": 21.43
-        },
-        {
-          "date": "2026-02-04",
-          "score": 19.51
-        },
-        {
-          "date": "2026-02-05",
-          "score": 26.19
-        },
-        {
-          "date": "2026-02-06",
-          "score": 17.59
-        },
-        {
-          "date": "2026-02-09",
-          "score": 8.33
-        },
-        {
-          "date": "2026-02-10",
-          "score": 13.16
-        },
-        {
-          "date": "2026-02-11",
-          "score": 11.38
-        },
-        {
-          "date": "2026-02-12",
-          "score": 15.48
-        },
-        {
-          "date": "2026-02-13",
-          "score": 16.6
-        },
-        {
-          "date": "2026-02-17",
-          "score": 18.45
-        },
-        {
-          "date": "2026-02-18",
-          "score": 29.23
-        },
-        {
-          "date": "2026-02-19",
-          "score": 31.15
-        },
-        {
-          "date": "2026-02-20",
-          "score": 33.53
-        },
-        {
-          "date": "2026-02-23",
-          "score": 41.01
-        },
-        {
-          "date": "2026-02-24",
-          "score": 47.49
-        },
-        {
-          "date": "2026-02-25",
-          "score": 52.45
-        },
-        {
-          "date": "2026-02-26",
-          "score": 52.71
-        },
-        {
-          "date": "2026-02-27",
-          "score": 53.9
-        },
-        {
-          "date": "2026-03-02",
-          "score": 51.52
-        },
-        {
-          "date": "2026-03-03",
-          "score": 53.7
-        },
-        {
-          "date": "2026-03-04",
-          "score": 50.0
-        },
-        {
-          "date": "2026-03-05",
-          "score": 53.17
-        },
-        {
-          "date": "2026-03-06",
-          "score": 49.93
-        },
-        {
-          "date": "2026-03-09",
-          "score": 54.03
-        },
-        {
-          "date": "2026-03-10",
-          "score": 52.98
-        },
-        {
-          "date": "2026-03-11",
-          "score": 50.53
-        },
-        {
-          "date": "2026-03-12",
-          "score": 52.84
-        },
-        {
-          "date": "2026-03-13",
-          "score": 52.65
-        },
-        {
-          "date": "2026-03-16",
-          "score": 52.51
-        },
-        {
-          "date": "2026-03-17",
-          "score": 51.46
-        },
-        {
-          "date": "2026-03-18",
-          "score": 50.93
-        },
-        {
-          "date": "2026-03-19",
-          "score": 44.58
-        },
-        {
-          "date": "2026-03-20",
-          "score": 45.97
-        },
-        {
-          "date": "2026-03-23",
-          "score": 40.87
-        },
-        {
-          "date": "2026-03-24",
-          "score": 44.91
-        },
-        {
-          "date": "2026-03-25",
-          "score": 47.62
-        },
-        {
-          "date": "2026-03-26",
-          "score": 48.28
-        },
-        {
-          "date": "2026-03-27",
-          "score": 51.19
-        },
-        {
-          "date": "2026-03-30",
-          "score": 53.9
-        },
-        {
-          "date": "2026-03-31",
-          "score": 40.15
-        },
-        {
-          "date": "2026-04-01",
-          "score": 37.76
-        },
-        {
-          "date": "2026-04-02",
-          "score": 38.43
-        },
-        {
-          "date": "2026-04-06",
-          "score": 37.57
-        },
-        {
-          "date": "2026-04-07",
-          "score": 33.8
-        },
-        {
-          "date": "2026-04-08",
-          "score": 29.83
-        },
-        {
-          "date": "2026-04-09",
-          "score": 24.8
-        },
-        {
-          "date": "2026-04-10",
-          "score": 17.53
-        },
-        {
-          "date": "2026-04-13",
-          "score": 8.86
-        },
-        {
-          "date": "2026-04-14",
-          "score": 11.9
-        },
-        {
-          "date": "2026-04-15",
-          "score": 12.9
-        },
-        {
-          "date": "2026-04-16",
-          "score": 7.41
-        },
-        {
-          "date": "2026-04-17",
-          "score": 16.2
-        },
-        {
-          "date": "2026-04-20",
-          "score": 11.44
-        },
-        {
-          "date": "2026-04-21",
-          "score": 23.35
-        },
-        {
-          "date": "2026-04-22",
-          "score": 19.71
-        },
-        {
-          "date": "2026-04-23",
-          "score": 19.51
-        },
-        {
-          "date": "2026-04-24",
-          "score": 11.77
-        },
-        {
-          "date": "2026-04-27",
-          "score": 8.47
-        },
-        {
-          "date": "2026-04-28",
-          "score": 7.14
-        },
-        {
-          "date": "2026-04-29",
-          "score": 15.74
-        },
-        {
-          "date": "2026-04-30",
-          "score": 9.52
-        },
-        {
-          "date": "2026-05-01",
-          "score": 7.21
-        },
-        {
-          "date": "2026-05-04",
-          "score": 10.38
-        },
-        {
-          "date": "2026-05-05",
-          "score": 14.55
-        },
-        {
-          "date": "2026-05-06",
-          "score": 16.01
-        },
-        {
-          "date": "2026-05-07",
-          "score": 22.69
-        },
-        {
-          "date": "2026-05-08",
-          "score": 19.97
-        },
-        {
-          "date": "2026-05-11",
-          "score": 24.21
-        },
-        {
-          "date": "2026-05-12",
-          "score": 27.58
-        },
-        {
-          "date": "2026-05-13",
-          "score": 29.83
-        },
-        {
-          "date": "2026-05-14",
-          "score": 31.61
-        },
-        {
-          "date": "2026-05-15",
-          "score": 36.31
-        },
-        {
-          "date": "2026-05-18",
-          "score": 34.06
-        },
-        {
-          "date": "2026-05-19",
-          "score": 33.8
-        },
-        {
-          "date": "2026-05-20",
-          "score": 30.16
-        },
-        {
-          "date": "2026-05-21",
-          "score": 29.17
-        },
-        {
-          "date": "2026-05-22",
-          "score": 33.0
-        },
-        {
-          "date": "2026-05-26",
-          "score": 32.01
-        },
-        {
-          "date": "2026-05-27",
-          "score": 31.75
-        },
-        {
-          "date": "2026-05-28",
-          "score": 28.31
-        },
-        {
-          "date": "2026-05-29",
-          "score": 34.59
-        },
-        {
-          "date": "2026-06-01",
-          "score": 37.24
-        },
-        {
-          "date": "2026-06-02",
-          "score": 33.4
-        },
-        {
-          "date": "2026-06-03",
-          "score": 37.24
-        },
-        {
-          "date": "2026-06-04",
-          "score": 41.01
-        },
-        {
-          "date": "2026-06-05",
-          "score": 43.92
-        },
-        {
-          "date": "2026-06-08",
-          "score": 46.1
-        },
-        {
-          "date": "2026-06-09",
-          "score": 44.91
-        },
-        {
-          "date": "2026-06-10",
-          "score": 42.33
-        },
-        {
-          "date": "2026-06-11",
-          "score": 41.93
-        },
-        {
-          "date": "2026-06-12",
-          "score": 35.98
-        },
-        {
-          "date": "2026-06-15",
-          "score": 30.09
-        },
-        {
-          "date": "2026-06-16",
-          "score": 32.61
-        },
-        {
-          "date": "2026-06-17",
-          "score": 35.12
-        },
-        {
-          "date": "2026-06-18",
-          "score": 43.92
-        },
-        {
-          "date": "2026-06-22",
-          "score": 43.52
-        },
-        {
-          "date": "2026-06-23",
-          "score": 47.09
-        },
-        {
-          "date": "2026-06-24",
-          "score": 52.91
-        },
-        {
-          "date": "2026-06-25",
-          "score": 52.45
-        },
-        {
-          "date": "2026-06-26",
-          "score": 53.57
-        },
-        {
-          "date": "2026-06-29",
-          "score": 52.38
-        },
-        {
-          "date": "2026-06-30",
-          "score": 45.97
-        },
-        {
-          "date": "2026-07-01",
-          "score": 46.43
-        },
-        {
-          "date": "2026-07-02",
-          "score": 39.35
-        },
-        {
-          "date": "2026-07-06",
-          "score": 39.88
-        },
-        {
-          "date": "2026-07-07",
-          "score": 35.32
-        },
-        {
-          "date": "2026-07-08",
-          "score": 34.33
-        },
-        {
-          "date": "2026-07-09",
-          "score": 34.66
-        },
-        {
-          "date": "2026-07-10",
-          "score": 34.59
-        },
-        {
-          "date": "2026-07-13",
-          "score": 38.82
-        },
-        {
-          "date": "2026-07-14",
-          "score": 36.04
-        },
-        {
-          "date": "2026-07-15",
-          "score": 32.67
-        },
-        {
-          "date": "2026-07-16",
-          "score": 36.11
-        },
-        {
-          "date": "2026-07-17",
-          "score": 30.22
-        },
-        {
-          "date": "2026-07-20",
-          "score": 25.46
-        },
-        {
-          "date": "2026-07-21",
-          "score": 25.53
-        },
-        {
-          "date": "2026-07-22",
-          "score": 23.41
-        },
-        {
-          "date": "2026-07-23",
-          "score": 23.74
-        },
-        {
-          "date": "2026-07-24",
-          "score": 24.93
-        },
-        {
-          "date": "2026-07-27",
-          "score": 25.73
-        },
-        {
-          "date": "2026-07-28",
-          "score": 26.65
-        },
-        {
-          "date": "2026-07-29",
-          "score": 22.09
-        },
-        {
-          "date": "2026-07-30",
-          "score": 10.91
-        },
-        {
-          "date": "2026-07-31",
-          "score": 14.29
-        },
-        {
-          "date": "2026-08-03",
-          "score": 16.34
-        },
-        {
-          "date": "2026-08-04",
-          "score": 12.43
-        },
-        {
-          "date": "2026-08-05",
-          "score": 11.57
-        },
-        {
-          "date": "2026-08-06",
-          "score": 15.54
-        },
-        {
-          "date": "2026-08-07",
-          "score": 11.04
-        },
-        {
-          "date": "2026-08-10",
-          "score": 10.12
-        },
-        {
-          "date": "2026-08-11",
-          "score": 14.22
-        },
-        {
-          "date": "2026-08-12",
-          "score": 21.16
-        },
-        {
-          "date": "2026-08-13",
-          "score": 18.45
-        },
-        {
-          "date": "2026-08-14",
-          "score": 14.55
-        },
-        {
-          "date": "2026-08-17",
-          "score": 11.24
-        },
-        {
-          "date": "2026-08-18",
-          "score": 9.59
-        },
-        {
-          "date": "2026-08-19",
-          "score": 4.7
-        },
-        {
-          "date": "2026-08-20",
-          "score": 3.7
-        },
-        {
-          "date": "2026-08-21",
-          "score": 3.37
-        },
-        {
-          "date": "2026-08-24",
-          "score": 3.84
-        },
-        {
-          "date": "2026-08-25",
-          "score": 4.56
-        },
-        {
-          "date": "2026-08-26",
-          "score": 9.46
-        },
-        {
-          "date": "2026-08-27",
-          "score": 18.25
-        },
-        {
-          "date": "2026-08-28",
-          "score": 25.46
-        },
-        {
-          "date": "2026-08-31",
-          "score": 21.63
-        },
-        {
-          "date": "2026-09-01",
-          "score": 24.47
-        },
-        {
-          "date": "2026-09-02",
-          "score": 25.0
-        },
-        {
-          "date": "2026-09-03",
-          "score": 16.2
-        },
-        {
-          "date": "2026-09-04",
-          "score": 22.82
-        },
-        {
-          "date": "2026-09-08",
-          "score": 16.6
-        },
-        {
-          "date": "2026-09-09",
-          "score": 15.87
-        },
-        {
-          "date": "2026-09-10",
-          "score": 17.0
-        },
-        {
-          "date": "2026-09-11",
-          "score": 18.19
-        },
-        {
-          "date": "2026-09-14",
-          "score": 25.07
-        },
-        {
-          "date": "2026-09-15",
-          "score": 26.52
-        },
-        {
-          "date": "2026-09-16",
-          "score": 32.14
-        },
-        {
-          "date": "2026-09-17",
-          "score": 41.67
-        },
-        {
-          "date": "2026-09-18",
-          "score": 40.08
-        },
-        {
-          "date": "2026-09-21",
-          "score": 43.65
-        },
-        {
-          "date": "2026-09-22",
-          "score": 41.01
-        }
-      ],
-      "quality": "composite",
-      "daily_importance_score": 50.97,
-      "attention_state": "watch",
-      "daily_importance_rank": 23
-    },
-    {
       "id": "gold",
       "name": "黄金指标",
       "category": "跨资产",
@@ -6716,8 +8067,10 @@
       "type": "direct",
       "definition": "黄金价格的历史位置与20日动量。",
       "importance_score": 55,
-      "importance_rank": 26,
+      "importance_rank": 80,
       "importance_reason": "黄金更适合观察避险、实际利率与美元环境的交叉验证。",
+      "layer": "supplemental",
+      "impact_polarity": 0,
       "score": 43.32,
       "raw": 398.38,
       "raw_unit": "GLD",
@@ -7459,8 +8812,10 @@
       "type": "direct",
       "definition": "WTI价格的历史位置与20日动量。",
       "importance_score": 57,
-      "importance_rank": 25,
+      "importance_rank": 79,
       "importance_reason": "原油影响通胀和增长，但对美股的方向并非单一。",
+      "layer": "supplemental",
+      "impact_polarity": 0,
       "score": 90.15,
       "raw": 93.37,
       "raw_unit": "WTI future",
@@ -8192,42 +9547,7 @@
       "quality": "direct",
       "daily_importance_score": 54.11,
       "attention_state": "watch",
-      "daily_importance_rank": 19
-    },
-    {
-      "id": "buffett_cash",
-      "name": "巴菲特现金占比指标",
-      "category": "资金/机构",
-      "cadence": "每日刷新/季度源更新",
-      "type": "manual",
-      "definition": "Berkshire现金及短期国债占相关资产口径。V1保留自动延用最近值接口，季度数据后续接SEC/财报解析。",
-      "importance_score": 45,
-      "importance_rank": 28,
-      "importance_reason": "Berkshire现金仓位有参考价值，但低频且主体单一。",
-      "score": 28.94,
-      "raw": 28.9385,
-      "raw_unit": "%",
-      "d1": -2.79,
-      "d2": -3.98,
-      "asof": "2026-06-30",
-      "history": [
-        {
-          "date": "2025-12-31",
-          "score": 30.54
-        },
-        {
-          "date": "2026-03-31",
-          "score": 31.73
-        },
-        {
-          "date": "2026-06-30",
-          "score": 28.94
-        }
-      ],
-      "quality": "manual",
-      "daily_importance_score": 38.08,
-      "attention_state": "normal",
-      "daily_importance_rank": 26
+      "daily_importance_rank": 20
     },
     {
       "id": "high_yield",
@@ -8237,8 +9557,10 @@
       "type": "direct",
       "definition": "ICE BofA美国高收益债OAS历史位置。分数越高代表信用压力越大。",
       "importance_score": 96,
-      "importance_rank": 3,
+      "importance_rank": 5,
       "importance_reason": "高收益信用利差往往能较早反映融资压力与违约风险。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 3.04,
       "raw": 0.7487,
       "raw_unit": "HYG/LQD",
@@ -8396,7 +9718,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.25
+          "score": 27.38
         },
         {
           "date": "2026-02-27",
@@ -8980,13 +10302,15 @@
       "type": "composite",
       "definition": "库存销售比 + 总商业库存变化，用于跟踪库存周期。",
       "importance_score": 66,
-      "importance_rank": 21,
+      "importance_rank": 70,
       "importance_reason": "库存周期影响制造业和盈利节奏，但更新频率较低。",
-      "score": 42.66,
+      "layer": "supplemental",
+      "impact_polarity": 0,
+      "score": 42.72,
       "raw": -13.9185,
       "raw_unit": "% XLI-SPY 120d",
-      "d1": 0.0,
-      "d2": -0.93,
+      "d1": 0.07,
+      "d2": -0.86,
       "asof": "2026-09-22",
       "history": [
         {
@@ -9707,11 +11031,11 @@
         },
         {
           "date": "2026-09-22",
-          "score": 42.66
+          "score": 42.72
         }
       ],
       "quality": "proxy",
-      "daily_importance_score": 37.7,
+      "daily_importance_score": 37.69,
       "attention_state": "normal",
       "daily_importance_rank": 27
     },
@@ -9723,8 +11047,10 @@
       "type": "direct",
       "definition": "联邦月度盈余/赤字的滚动12个月总和。赤字越深，风险分越高。",
       "importance_score": 80,
-      "importance_rank": 14,
+      "importance_rank": 38,
       "importance_reason": "财政扩张影响利率供给、期限溢价与中期宏观环境。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 97.78,
       "raw": 432285727964.6,
       "raw_unit": "USD / month",
@@ -9882,8 +11208,10 @@
       "type": "composite",
       "definition": "失业率 + 初请失业金人数。分数越高代表劳动力市场压力越大。",
       "importance_score": 91,
-      "importance_rank": 7,
+      "importance_rank": 14,
       "importance_reason": "就业决定居民收入、消费韧性及货币政策反应。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 57.39,
       "raw": 4.1,
       "raw_unit": "% unemployment",
@@ -10119,7 +11447,7 @@
       "quality": "direct",
       "daily_importance_score": 52.7,
       "attention_state": "watch",
-      "daily_importance_rank": 22
+      "daily_importance_rank": 23
     },
     {
       "id": "valuation_cycle",
@@ -10129,8 +11457,10 @@
       "type": "proxy",
       "definition": "V1使用SPY相对200日均线及其长期百分位做代理；后续可替换为CAPE/ERP等基本面估值。",
       "importance_score": 70,
-      "importance_rank": 19,
+      "importance_rank": 61,
       "importance_reason": "估值影响中长期预期回报，但短期择时能力较弱。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 60.79,
       "raw": 1.0849,
       "raw_unit": "SPY/MA200",
@@ -10532,7 +11862,7 @@
         },
         {
           "date": "2026-05-26",
-          "score": 78.81
+          "score": 78.89
         },
         {
           "date": "2026-05-27",
@@ -10862,7 +12192,7 @@
       "quality": "proxy",
       "daily_importance_score": 53.88,
       "attention_state": "watch",
-      "daily_importance_rank": 20
+      "daily_importance_rank": 21
     },
     {
       "id": "market_volume",
@@ -10872,8 +12202,10 @@
       "type": "direct",
       "definition": "SPY成交量的历史百分位。",
       "importance_score": 64,
-      "importance_rank": 22,
+      "importance_rank": 73,
       "importance_reason": "成交量验证价格变化质量，但通常属于二级确认。",
+      "layer": "supplemental",
+      "impact_polarity": 0,
       "score": 30.56,
       "raw": 50097900.0,
       "raw_unit": "shares",
@@ -11605,7 +12937,7 @@
       "quality": "direct",
       "daily_importance_score": 63.66,
       "attention_state": "watch",
-      "daily_importance_rank": 14
+      "daily_importance_rank": 15
     },
     {
       "id": "volume_speed",
@@ -11615,8 +12947,10 @@
       "type": "direct",
       "definition": "SPY 5日平均成交量相对20日平均成交量的变化。",
       "importance_score": 61,
-      "importance_rank": 23,
+      "importance_rank": 76,
       "importance_reason": "成交量加速度能捕捉交易活跃度突变，但噪声更高。",
+      "layer": "supplemental",
+      "impact_polarity": 0,
       "score": 94.97,
       "raw": 30.806,
       "raw_unit": "%",
@@ -12358,8 +13692,10 @@
       "type": "proxy",
       "definition": "SPY相对等权RSP的60日超额表现；越高代表市值权重集中度越强。",
       "importance_score": 82,
-      "importance_rank": 13,
+      "importance_rank": 35,
       "importance_reason": "指数集中度过高时，少数权重股会放大整体脆弱性。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 89.02,
       "raw": 4.7833,
       "raw_unit": "% SPY-RSP 60d",
@@ -13101,8 +14437,10 @@
       "type": "proxy",
       "definition": "NFCI + HYG/LQD相对强弱 + 高收益利差。V1是公开代理版。",
       "importance_score": 90,
-      "importance_rank": 8,
+      "importance_rank": 19,
       "importance_reason": "杠杆与融资条件会放大市场波动和去杠杆冲击。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 3.04,
       "raw": 3.0423,
       "raw_unit": "score",
@@ -13260,7 +14598,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 27.25
+          "score": 27.38
         },
         {
           "date": "2026-02-27",
@@ -13846,6 +15184,8 @@
       "importance_score": 100,
       "importance_rank": 1,
       "importance_reason": "直接反映跨资产、信用、波动与回撤的系统性风险，是总风险层。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 19.93,
       "raw": 19.9295,
       "raw_unit": "score",
@@ -13995,7 +15335,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 47.88
+          "score": 47.93
         },
         {
           "date": "2026-02-27",
@@ -14587,8 +15927,10 @@
       "type": "composite",
       "definition": "系统性风险分数的60日位置 + 近60日恶化速度。",
       "importance_score": 79,
-      "importance_rank": 15,
+      "importance_rank": 40,
       "importance_reason": "用于识别系统风险是否在中期窗口持续积累。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 6.83,
       "raw": 19.9295,
       "raw_unit": "systemic score",
@@ -15330,8 +16672,10 @@
       "type": "direct",
       "definition": "SPY 20日实现波动率相对60日实现波动率，以及60日实现波动率本身的变化。",
       "importance_score": 77,
-      "importance_rank": 16,
+      "importance_rank": 45,
       "importance_reason": "波动率结构的变化有助于识别风险状态切换。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 38.29,
       "raw": 11.7094,
       "raw_unit": "% annualized",
@@ -16073,8 +17417,10 @@
       "type": "proxy",
       "definition": "V1使用SPY/200日均线比值在近5年历史中的百分位。",
       "importance_score": 68,
-      "importance_rank": 20,
+      "importance_rank": 63,
       "importance_reason": "历史估值位置是慢变量，适合做背景而非主触发器。",
+      "layer": "supplemental",
+      "impact_polarity": -1,
       "score": 60.79,
       "raw": 1.0849,
       "raw_unit": "SPY/MA200",
@@ -16476,7 +17822,7 @@
         },
         {
           "date": "2026-05-26",
-          "score": 78.81
+          "score": 78.89
         },
         {
           "date": "2026-05-27",
@@ -16806,7 +18152,7 @@
       "quality": "proxy",
       "daily_importance_score": 52.88,
       "attention_state": "watch",
-      "daily_importance_rank": 21
+      "daily_importance_rank": 22
     },
     {
       "id": "valuation_speed",
@@ -16816,8 +18162,10 @@
       "type": "proxy",
       "definition": "SPY/200日均线比值的20日变化速度。",
       "importance_score": 52,
-      "importance_rank": 27,
+      "importance_rank": 81,
       "importance_reason": "估值变化速度是衍生变量，主要用于辅助确认。",
+      "layer": "supplemental",
+      "impact_polarity": 0,
       "score": 45.11,
       "raw": -0.1172,
       "raw_unit": "% / 20d",
@@ -17107,7 +18455,7 @@
         },
         {
           "date": "2026-04-15",
-          "score": 88.1
+          "score": 87.96
         },
         {
           "date": "2026-04-16",
@@ -17549,7 +18897,7 @@
       "quality": "proxy",
       "daily_importance_score": 38.83,
       "attention_state": "normal",
-      "daily_importance_rank": 24
+      "daily_importance_rank": 26
     },
     {
       "id": "credit_cycle",
@@ -17559,8 +18907,10 @@
       "type": "direct",
       "definition": "美国商业银行信贷余额同比增速及其变化。",
       "importance_score": 94,
-      "importance_rank": 5,
+      "importance_rank": 8,
       "importance_reason": "信贷扩张/收缩对经济与资产定价具有核心传导作用。",
+      "layer": "supplemental",
+      "impact_polarity": 1,
       "score": 86.24,
       "raw": 2.9308,
       "raw_unit": "HYG/LQD 60d",
@@ -17834,7 +19184,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.2
+          "score": 42.06
         },
         {
           "date": "2026-04-10",
@@ -18292,7 +19642,7 @@
       "quality": "proxy",
       "daily_importance_score": 73.08,
       "attention_state": "high",
-      "daily_importance_rank": 10
+      "daily_importance_rank": 11
     },
     {
       "id": "yield_curve",
@@ -18302,8 +19652,10 @@
       "type": "direct",
       "definition": "10Y-2Y与10Y-3M期限利差组合。",
       "importance_score": 95,
-      "importance_rank": 4,
+      "importance_rank": 6,
       "importance_reason": "收益率曲线连接货币政策、增长预期和衰退风险。",
+      "layer": "supplemental",
+      "impact_polarity": 1,
       "score": 4.1,
       "raw": 0.981,
       "raw_unit": "10Y-13W",
