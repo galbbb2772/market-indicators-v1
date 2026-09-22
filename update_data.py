@@ -867,7 +867,7 @@ def main():
                 best=max(candidates,key=lambda z:z[0]) if candidates else None
 
                 corr_df=bt[["state","fwd_20d"]].dropna()
-                corr=float(corr_df["state"].corr(corr_df["fwd_20d"],method="spearman")) if len(corr_df)>10 else None
+                corr=float(corr_df["state"].rank().corr(corr_df["fwd_20d"].rank())) if len(corr_df)>10 else None
                 regime_backtest={
                     "status":"ok",
                     "sample_start":str(bt.index.min().date()),
