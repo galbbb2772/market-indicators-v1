@@ -127,6 +127,82 @@ def build_box_exposure(df: pd.DataFrame, mode: str) -> pd.Series:
     return exp
 
 
+def build_box_v2_exposure(df: pd.DataFrame, state: pd.Series, mode: str) -> pd.Series:
+    """
+    Box Strategy V2 agreed filter:
+      1) formation_score >= 75
+      2) >=2 lower-bound touches AND historical support-hold rate >=60%
+      3) prior-close position <=20% of the box
+      4) composite state D1 > 0 AND D2 > 0 (stabilization / reversal confirmation)
+
+    All decisions use information available through close t and exposure starts on t->t+1.
+    """
+    idx = df.index
+    exp = pd.Series(0.0, index=idx)
+    st = state.reindex(idx).ffill()
+    d1 = st.diff()
+    d2 = d1.diff()
+
+    holding = False
+    active = None
+    held = 0
+
+    for i in range(len(idx) - 1):
+        hist = df.iloc[: i + 1]
+        candidates = {}
+        if mode in ("small", "combined") and len(hist) >= 20:
+            candidates["small"] = _box_metrics(hist, 20)
+        if mode in ("large", "combined") and len(hist) >= 60:
+            candidates["large"] = _box_metrics(hist, 60)
+
+        if not holding:
+            eligible = []
+            for name, m in candidates.items():
+                if not m:
+                    continue
+                support_rate = m.get("support_hold_rate_pct")
+                if (
+                    float(m.get("formation_score", 0)) >= 75
+                    and int(m.get("lower_touches", 0)) >= 2
+                    and support_rate is not None
+                    and float(support_rate) >= 60
+                    and float(m.get("position_pct", 100)) <= 20
+                    and pd.notna(d1.iloc[i])
+                    and pd.notna(d2.iloc[i])
+                    and float(d1.iloc[i]) > 0
+                    and float(d2.iloc[i]) > 0
+                ):
+                    eligible.append((float(m.get("formation_score", 0)), name, m))
+            if eligible:
+                _, active, _ = max(eligible)
+                holding = True
+                held = 0
+        else:
+            m = candidates.get(active)
+            max_hold = 20 if active == "small" else 60
+            exit_now = False
+            if not m or float(m.get("formation_score", 0)) < 65:
+                exit_now = True
+            else:
+                width = float(m["upper"]) - float(m["lower"])
+                close = float(m["last_close"])
+                if float(m.get("position_pct", 0)) >= 70:
+                    exit_now = True
+                if close < float(m["lower"]) - 0.10 * width:
+                    exit_now = True
+                if held >= max_hold:
+                    exit_now = True
+            if exit_now:
+                holding = False
+                active = None
+                held = 0
+
+        exp.iloc[i + 1] = 1.0 if holding else 0.0
+        if holding:
+            held += 1
+
+    return exp
+
 def load_state() -> pd.Series:
     obj = json.loads((ROOT / "docs" / "data" / "current.json").read_text(encoding="utf-8"))
     rows = obj["regime_backtest"]["history"]
@@ -166,6 +242,15 @@ def main() -> int:
             "exit": "prior-close position >=70%, box invalid, 10%-of-box downside break, or max hold 20/60 trading days",
             "timing": "all box decisions lagged one trading interval",
         },
+        "box_v2_definition": {
+            "formation_score_min": 75,
+            "lower_touches_min": 2,
+            "support_hold_rate_min_pct": 60,
+            "entry_position_max_pct": 20,
+            "reversal_confirmation": "market composite D1 > 0 and D2 > 0",
+            "exit": "position >=70%, formation score <65, 10%-of-box downside break, or max hold 20/60 trading days",
+            "timing": "all decisions use close t information; exposure begins on t->t+1"
+        },
         "caveat": "Traffic composite is reconstructed research history and some macro observation dates may not equal true release timestamps. Box signals are price-only and mechanically point-in-time.",
         "symbols": {},
     }
@@ -193,6 +278,15 @@ def main() -> int:
         combo_exp = (box_exp * traffic_exp).clip(0, 1)
         combo_net, combo_trades = apply_exposure(ar, combo_exp)
 
+        v2_small_exp = build_box_v2_exposure(df, state, "small")
+        v2_small_net, v2_small_trades = apply_exposure(ar, v2_small_exp)
+
+        v2_large_exp = build_box_v2_exposure(df, state, "large")
+        v2_large_net, v2_large_trades = apply_exposure(ar, v2_large_exp)
+
+        v2_combo_exp = build_box_v2_exposure(df, state, "combined")
+        v2_combo_net, v2_combo_trades = apply_exposure(ar, v2_combo_exp)
+
         results["symbols"][sym] = {
             "BUY_HOLD": metrics(bh_net, benchmark_exp, bh_trades),
             "TRAFFIC_MID": metrics(traffic_net, traffic_exp, traffic_trades),
@@ -200,6 +294,9 @@ def main() -> int:
             "BOX_LARGE": metrics(large_net, large_exp, large_trades),
             "BOX_COMBINED": metrics(box_net, box_exp, box_trades),
             "BOX_X_TRAFFIC": metrics(combo_net, combo_exp, combo_trades),
+            "BOX_V2_SMALL": metrics(v2_small_net, v2_small_exp, v2_small_trades),
+            "BOX_V2_LARGE": metrics(v2_large_net, v2_large_exp, v2_large_trades),
+            "BOX_V2_COMBINED": metrics(v2_combo_net, v2_combo_exp, v2_combo_trades),
         }
         eq3_bh_rets.append(bh_net.rename(sym))
 
@@ -233,8 +330,9 @@ def main() -> int:
         "- BUY_HOLD is the primary benchmark for each index.",
         "- TRAFFIC_MID tests only the regime score as a risk-allocation overlay.",
         "- BOX_SMALL / BOX_LARGE / BOX_COMBINED test price-only range mean reversion.",
-        "- BOX_X_TRAFFIC tests the full idea: box entry context multiplied by the regime risk budget.",
-        "- Traffic history is exploratory rather than strict point-in-time because some macro series may have release-date mismatch.",
+        "- BOX_X_TRAFFIC tests the original box entry context multiplied by the regime risk budget.",
+        "- BOX_V2_* applies the stricter agreed filters: formation >=75, >=2 lower-bound tests, support hold >=60%, box position <=20%, and composite D1/D2 both positive.",
+        "- Traffic / D1 / D2 history is exploratory rather than strict point-in-time because some macro series may have release-date mismatch.",
     ]
     SUMMARY.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(json.dumps(results, ensure_ascii=False))
