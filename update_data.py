@@ -1061,28 +1061,8 @@ def main():
         try:
             spy_bt=C("SPY").dropna().sort_index()
             idx=spy_bt.index
-            weighted_edges=[]
-            weights=[]
-            cover=[]
-            for cfg in CONFIG:
-                key=cfg["id"]
-                pol=float(cfg.get("impact_polarity",0) or 0)
-                s=series_store.get(key)
-                if pol == 0 or s is None or s.empty:
-                    continue
-                layer_mult=1.0 if cfg.get("layer")=="core61" else 0.35
-                w=float(cfg.get("importance_score",50))*layer_mult
-                aligned=s.reindex(idx).ffill()
-                edge=pol*(aligned-50.0)
-                weighted_edges.append(edge*w)
-                weights.append(aligned.notna().astype(float)*w)
-                cover.append(aligned.notna().astype(int))
-            if weighted_edges:
-                num=pd.concat(weighted_edges,axis=1).sum(axis=1,min_count=1)
-                den=pd.concat(weights,axis=1).sum(axis=1,min_count=1)
-                cov=pd.concat(cover,axis=1).sum(axis=1)
-                hist_state=(50.0+num/den).clip(0,100)
-                hist_state=hist_state.where((den>0)&(cov>=20)).dropna()
+            _,_,_,_,hist_state = weighted_model_state(ordered,series_store,idx)
+            if hist_state is not None and not hist_state.empty:
                 bt=pd.DataFrame({"state":hist_state,"close":spy_bt.reindex(hist_state.index)})
                 bt["fwd_1d"]=(bt["close"].shift(-1)/bt["close"]-1)*100
                 bt["fwd_5d"]=(bt["close"].shift(-5)/bt["close"]-1)*100
@@ -1163,7 +1143,10 @@ def main():
                         "objective":round(float(best[0]),3),
                         "stats":best[4]
                     } if best else None),
-                    "history":[{"date":str(i.date()),"score":round(float(v),2)} for i,v in hist_state.tail(756).items()],
+                    "cycle_stats":traffic_cycle_stats(hist_state),
+                    "history_phase_1":{"label":"reconstructed_history","start":str(hist_state.index.min().date()),"end":str(hist_state.index.max().date()),"point_in_time":False},
+                    "history_phase_2":{"label":"live_recorded","start":"2026-09-22","point_in_time":True},
+                    "history":[{"date":str(i.date()),"score":round(float(v),2)} for i,v in hist_state.items()],
                     "note":"Exploratory only. Uses available reconstructed indicator histories and may contain observation-date/release-date mismatch for macro series. Do not treat the candidate thresholds as final until a point-in-time out-of-sample validation is done."
                 }
         except Exception as exc:
