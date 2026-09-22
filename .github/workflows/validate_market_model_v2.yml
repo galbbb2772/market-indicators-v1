@@ -1,0 +1,38 @@
+name: Validate Market Model V2
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Compile
+        run: python -m py_compile update_data.py
+      - name: Refresh V2 snapshot
+        run: python update_data.py
+      - name: Assert V2 outputs
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path("docs/data/current.json").read_text())
+          assert x["market_model_v2"]["active_indicator_count"] <= 35
+          assert abs(sum(x["market_model_v2"]["bucket_weights"].values())-1)<1e-9
+          assert set(x["range_box_analysis"]["indexes"]) >= {"SPY","QQQ","DIA"}
+          assert x["regime_backtest"]["status"]=="ok"
+          assert x["regime_backtest"]["cycle_stats"]["status"]=="ok"
+          assert len(x["regime_backtest"]["history"]) > 1000
+          print("MODEL V2 VALID", x["market_state_score"], x["traffic_light"])
+          PY
