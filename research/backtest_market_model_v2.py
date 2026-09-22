@@ -76,20 +76,32 @@ def build_traffic_exposure(state: pd.Series, idx: pd.DatetimeIndex) -> pd.Series
     return decision.shift(1).fillna(0.0)
 
 
-def build_box_exposure(df: pd.DataFrame, mode: str) -> pd.Series:
+def precompute_box_metrics(df: pd.DataFrame) -> dict[str, list[dict | None]]:
+    """Compute each rolling box once per date; all strategy variants reuse this cache."""
+    n = len(df)
+    cache = {"small": [None] * n, "large": [None] * n}
+    for i in range(n):
+        if i + 1 >= 20:
+            cache["small"][i] = _box_metrics(df.iloc[max(0, i - 119): i + 1], 20)
+        if i + 1 >= 60:
+            cache["large"][i] = _box_metrics(df.iloc[max(0, i - 179): i + 1], 60)
+    return cache
+
+
+def build_box_exposure(df: pd.DataFrame, mode: str, cache: dict | None = None) -> pd.Series:
     idx = df.index
     exp = pd.Series(0.0, index=idx)
     holding = False
     active = None
     held = 0
 
+    cache = cache or precompute_box_metrics(df)
     for i in range(len(idx) - 1):
-        hist = df.iloc[: i + 1]
         candidates = {}
-        if mode in ("small", "combined") and len(hist) >= 20:
-            candidates["small"] = _box_metrics(hist, 20)
-        if mode in ("large", "combined") and len(hist) >= 60:
-            candidates["large"] = _box_metrics(hist, 60)
+        if mode in ("small", "combined"):
+            candidates["small"] = cache["small"][i]
+        if mode in ("large", "combined"):
+            candidates["large"] = cache["large"][i]
 
         if not holding:
             eligible = []
@@ -127,7 +139,7 @@ def build_box_exposure(df: pd.DataFrame, mode: str) -> pd.Series:
     return exp
 
 
-def build_box_v2_exposure(df: pd.DataFrame, state: pd.Series, mode: str) -> pd.Series:
+def build_box_v2_exposure(df: pd.DataFrame, state: pd.Series, mode: str, cache: dict | None = None) -> pd.Series:
     """
     Box Strategy V2 agreed filter:
       1) formation_score >= 75
@@ -147,13 +159,13 @@ def build_box_v2_exposure(df: pd.DataFrame, state: pd.Series, mode: str) -> pd.S
     active = None
     held = 0
 
+    cache = cache or precompute_box_metrics(df)
     for i in range(len(idx) - 1):
-        hist = df.iloc[: i + 1]
         candidates = {}
-        if mode in ("small", "combined") and len(hist) >= 20:
-            candidates["small"] = _box_metrics(hist, 20)
-        if mode in ("large", "combined") and len(hist) >= 60:
-            candidates["large"] = _box_metrics(hist, 60)
+        if mode in ("small", "combined"):
+            candidates["small"] = cache["small"][i]
+        if mode in ("large", "combined"):
+            candidates["large"] = cache["large"][i]
 
         if not holding:
             eligible = []
@@ -266,25 +278,27 @@ def main() -> int:
         traffic_exp = build_traffic_exposure(state, common)
         traffic_net, traffic_trades = apply_exposure(ar, traffic_exp)
 
-        small_exp = build_box_exposure(df, "small")
+        box_cache = precompute_box_metrics(df)
+
+        small_exp = build_box_exposure(df, "small", box_cache)
         small_net, small_trades = apply_exposure(ar, small_exp)
 
-        large_exp = build_box_exposure(df, "large")
+        large_exp = build_box_exposure(df, "large", box_cache)
         large_net, large_trades = apply_exposure(ar, large_exp)
 
-        box_exp = build_box_exposure(df, "combined")
+        box_exp = build_box_exposure(df, "combined", box_cache)
         box_net, box_trades = apply_exposure(ar, box_exp)
 
         combo_exp = (box_exp * traffic_exp).clip(0, 1)
         combo_net, combo_trades = apply_exposure(ar, combo_exp)
 
-        v2_small_exp = build_box_v2_exposure(df, state, "small")
+        v2_small_exp = build_box_v2_exposure(df, state, "small", box_cache)
         v2_small_net, v2_small_trades = apply_exposure(ar, v2_small_exp)
 
-        v2_large_exp = build_box_v2_exposure(df, state, "large")
+        v2_large_exp = build_box_v2_exposure(df, state, "large", box_cache)
         v2_large_net, v2_large_trades = apply_exposure(ar, v2_large_exp)
 
-        v2_combo_exp = build_box_v2_exposure(df, state, "combined")
+        v2_combo_exp = build_box_v2_exposure(df, state, "combined", box_cache)
         v2_combo_net, v2_combo_trades = apply_exposure(ar, v2_combo_exp)
 
         results["symbols"][sym] = {
