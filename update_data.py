@@ -1199,6 +1199,9 @@ def main():
     ) / denom
 
     working=sum(x["score"] is not None for x in ordered)
+    box_analysis=range_box_analysis(mk)
+    active_ids=set(x["id"] for x in MODEL.get("active",[]))
+    active_working=sum(1 for x in ordered if x["id"] in active_ids and x.get("score") is not None)
     payload={
         "generated_at":datetime.now(timezone.utc).isoformat(),
         "status":"ok" if working>=20 else "partial",
@@ -1224,15 +1227,29 @@ def main():
         "market_structure":market_structure,
         "volatility_state":volatility_state,
         "market_regime":market_regime,
+        "market_model_v2":{
+            "version":MODEL.get("version"),
+            "active_indicator_count":len(MODEL.get("active",[])),
+            "active_working_count":active_working,
+            "context_only_count":len(MODEL.get("context_only",[])),
+            "archived_count":len(MODEL.get("archived",[])),
+            "bucket_weights":MODEL.get("bucket_weights",{}),
+            "bucket_scores":bucket_scores,
+            "horizon_definition":MODEL.get("horizon_definition",{}),
+            "transition_policy":MODEL.get("transition_policy",{}),
+            "planned_event_inputs":MODEL.get("planned_event_inputs",[])
+        },
+        "range_box_analysis":box_analysis,
         "regime_backtest":regime_backtest,
         "trend_efficiency":round(trend_efficiency,4) if trend_efficiency is not None else None,
         "volatility_percentile":round(vol_percentile,2) if vol_percentile is not None else None,
         "top_positive_contributors":[{"id":x["id"],"name":x["name"],"points":x["market_contribution_points"]} for x in positive[:8]],
         "top_negative_contributors":[{"id":x["id"],"name":x["name"],"points":x["market_contribution_points"]} for x in negative[:8]],
         "composite_method":{
-            "score":"50 + importance-weighted signed deviation from each factor's neutral level",
-            "core_weight":"core61 full weight",
-            "supplemental_weight":"legacy supplemental factors use 35% weight to reduce double-counting",
+            "score":"Market Model V2: fixed bucket weights, then within-bucket importance × multiplier weighting",
+            "bucket_weights":MODEL.get("bucket_weights",{}),
+            "active_indicators":len(MODEL.get("active",[])),
+            "official_data_rule":"low-frequency factual/official series may move state level but do not create synthetic daily D1/D2 transition momentum while carried forward",
             "direction":"higher composite score = more supportive/healthy market state; lower = more stressed/negative"
         },
         "importance_method":{
