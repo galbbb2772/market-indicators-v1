@@ -711,11 +711,59 @@ def main():
     market_state=float(np.clip(50.0+50.0*(state_edge/state_denom),0,100))
     market_state_d1=state_d1/state_denom
     market_state_d2=state_d2/state_denom
-    if market_state >= 65: market_state_label="supportive"
-    elif market_state >= 55: market_state_label="mild_supportive"
-    elif market_state > 45: market_state_label="neutral"
-    elif market_state > 35: market_state_label="mild_stress"
-    else: market_state_label="stress"
+    # Four-zone traffic-light framework.
+    # This is an operational research regime, not a buy/sell instruction.
+    if market_state >= 65:
+        market_state_label="supportive"
+        traffic_light="green"
+        execution_range="70–100%"
+        execution_posture="积极/正常执行：允许策略按自身信号充分参与，但仍受原有风控约束。"
+    elif market_state >= 55:
+        market_state_label="mild_supportive"
+        traffic_light="blue"
+        execution_range="50–70%"
+        execution_posture="正常偏精选：保留主要机会，降低低质量和边缘信号的执行优先级。"
+    elif market_state >= 45:
+        market_state_label="neutral"
+        traffic_light="yellow"
+        execution_range="25–50%"
+        execution_posture="谨慎执行：缩小执行强度、提高确认门槛，优先等待结构与D1/D2改善。"
+    else:
+        market_state_label="stress"
+        traffic_light="red"
+        execution_range="0–25%"
+        execution_posture="防守优先：尽量压低新增风险，以风险控制、流动性和对冲为主。"
+
+    # Daily market structure: trend-vs-range plus volatility regime.
+    market_structure="unknown"
+    volatility_state="unknown"
+    market_regime="unknown"
+    trend_efficiency=None
+    vol_percentile=None
+    if "SPY" in mk:
+        _spy=C("SPY").dropna()
+        _r=_spy.pct_change()
+        _eff=(_spy.pct_change(20).abs() / _r.abs().rolling(20).sum()).replace([np.inf,-np.inf],np.nan)
+        _rv20=rv(_spy,20)
+        _vp=rolling_percentile(_rv20,756)
+        if not _eff.dropna().empty:
+            trend_efficiency=float(_eff.dropna().iloc[-1])
+        if not _vp.dropna().empty:
+            vol_percentile=float(_vp.dropna().iloc[-1])
+        ret20=float(_spy.pct_change(20).dropna().iloc[-1]*100) if not _spy.pct_change(20).dropna().empty else 0.0
+        if trend_efficiency is not None and trend_efficiency >= 0.35:
+            market_structure="上行趋势" if ret20 >= 0 else "下行趋势"
+        else:
+            market_structure="区域震荡"
+        if vol_percentile is None:
+            volatility_state="常态波动"
+        elif vol_percentile >= 70:
+            volatility_state="高波动"
+        elif vol_percentile <= 30:
+            volatility_state="低波动"
+        else:
+            volatility_state="常态波动"
+        market_regime=f"{volatility_state} · {market_structure}"
 
     positive=sorted(
         [x for x in ordered if (x.get("market_contribution_points") or 0)>0],
@@ -774,6 +822,21 @@ def main():
         "market_state_d1":round(float(market_state_d1),2),
         "market_state_d2":round(float(market_state_d2),2),
         "market_state_label":market_state_label,
+        "traffic_light":traffic_light,
+        "traffic_framework":{
+            "green":{"range":"65–100","meaning":"支持环境","execution_range":"70–100%","description":"结构整体健康，风险与流动性条件相对支持。"},
+            "blue":{"range":"55–64.99","meaning":"中性偏支持","execution_range":"50–70%","description":"环境仍可执行，但更适合精选信号。"},
+            "yellow":{"range":"45–54.99","meaning":"谨慎/过渡区","execution_range":"25–50%","description":"结构分化或边际恶化，需提高确认门槛。"},
+            "red":{"range":"0–44.99","meaning":"压力区","execution_range":"0–25%","description":"系统压力占优，防守与风险控制优先。"}
+        },
+        "execution_range":execution_range,
+        "execution_posture":execution_posture,
+        "execution_note":"执行区间代表研究框架中的执行强度/风险预算参考，不等同于账户仓位或买卖建议；需要后续用历史回测校准。",
+        "market_structure":market_structure,
+        "volatility_state":volatility_state,
+        "market_regime":market_regime,
+        "trend_efficiency":round(trend_efficiency,4) if trend_efficiency is not None else None,
+        "volatility_percentile":round(vol_percentile,2) if vol_percentile is not None else None,
         "top_positive_contributors":[{"id":x["id"],"name":x["name"],"points":x["market_contribution_points"]} for x in positive[:8]],
         "top_negative_contributors":[{"id":x["id"],"name":x["name"],"points":x["market_contribution_points"]} for x in negative[:8]],
         "composite_method":{
