@@ -35,10 +35,10 @@
 <div class="heroMeta"><span id="stateLabel">—</span><span>当前灯号：<b id="trafficLight">—</b></span><span>综合 D1：<b id="stateD1">—</b></span><span>综合 D2：<b id="stateD2">—</b></span><span>今日市场关注度：<b id="attention">—</b></span></div>
 </div>
 <div class="signalRow">
-<div class="signal green"><b>🟢 绿灯 · 65–100</b><small>支持环境。系统执行强度参考 70–100%。结构整体健康，策略可按自身条件正常/积极执行。</small></div>
-<div class="signal blue"><b>🔵 蓝灯 · 55–64.99</b><small>中性偏支持。系统执行强度参考 50–70%。正常执行，但更偏精选高质量信号。</small></div>
-<div class="signal yellow"><b>🟡 黄灯 · 45–54.99</b><small>谨慎/过渡区。系统执行强度参考 25–50%。结构分化或边际转弱，提高确认门槛。</small></div>
-<div class="signal red"><b>🔴 红灯 · 0–44.99</b><small>压力区。系统执行强度参考 0–25%。以防守、流动性和风险控制为主。</small></div>
+<div class="signal green"><b>🟢 绿灯 · 65–100</b><small>低风险/支持环境。常规策略执行强度参考 70–100%。</small></div>
+<div class="signal blue"><b>🔵 蓝灯 · 55–64.99</b><small>中性偏支持。常规策略执行强度参考 50–70%，更偏精选。</small></div>
+<div class="signal yellow"><b>🟡 黄灯 · 45–54.99</b><small>过渡/谨慎区。常规策略执行强度参考 25–50%，提高确认门槛。</small></div>
+<div class="signal red"><b>🔴 红灯 · 0–44.99</b><small>高风险观察区。常规策略参考 0–25%；红灯不是未来必跌，也可能出现超跌反弹。</small></div>
 </div>
 <div class="regimeBox">
 <div class="regimeItem"><small>市场结构</small><b id="marketStructure">—</b></div>
@@ -46,7 +46,10 @@
 <div class="regimeItem"><small>综合区域</small><b id="marketRegime">—</b></div>
 <div class="regimeItem"><small>执行区间</small><b id="executionRange">—</b></div>
 </div>
-<div class="panel" style="margin:12px 0"><h3>当前灯号含义</h3><div id="executionPosture" class="note" style="margin:0"></div></div>
+<div class="contribWrap" style="margin:12px 0">
+<div class="panel"><h3>当前灯号含义</h3><div id="executionPosture" class="note" style="margin:0"></div></div>
+<div class="panel"><h3>超跌 / 均值回归状态</h3><div id="meanReversionPosture" class="note" style="margin:0"></div></div>
+</div>
 <section class="summary">
 <div class="sum"><b id="working">—</b><small>已上线 / 总指标</small></div>
 <div class="sum"><b id="coreCount">61</b><small>核心指标</small></div>
@@ -58,7 +61,7 @@
 <div class="panel"><h3>今日主要加分变量</h3><div id="posContrib"></div></div>
 <div class="panel"><h3>今日主要减分变量</h3><div id="negContrib"></div></div>
 </div>
-<div class="note">综合分以 50 为中性。四灯区间用于把市场环境转换成统一的风险/执行语言；“执行区间”表示研究框架中的执行强度或风险预算参考，不等同于账户实际仓位，也不是买卖建议。市场结构每天根据 SPY 20 日趋势效率判断“趋势/区域震荡”，波动状态按20日实现波动率历史百分位划分为低/常态/高波动。</div>
+<div class="note">综合分以 50 为中性。四灯首先描述的是<b>风险环境</b>，不是未来涨跌预测。历史探索验证里，红灯后的未来20日平均收益并不最低，但后续不利波动最大，因此红灯更应理解为“高风险 + 可能出现超跌反弹”的观察区。常规策略与超跌/均值回归策略分开显示执行逻辑。市场结构每天根据 SPY 20 日趋势效率判断“趋势/区域震荡”，波动状态按20日实现波动率历史百分位划分为低/常态/高波动。</div>
 
 <div class="controls">
 <input id="q" placeholder="搜索指标…" oninput="renderCards()">
@@ -124,7 +127,7 @@ function renderVariableTable(){
 fetch('./data/current.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
  DATA=d;const inds=d.indicators||[];const cats=[...new Set(inds.map(x=>x.category))].sort();const sel=document.querySelector('#cat');cats.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;sel.appendChild(o)});
  document.querySelector('#marketState').textContent=fmt(d.market_state_score);document.querySelector('#stateD1').textContent=fmt(d.market_state_d1);document.querySelector('#stateD2').textContent=fmt(d.market_state_d2);document.querySelector('#stateLabel').textContent=labelMap[d.market_state_label]||d.market_state_label||'—';document.querySelector('#trafficLight').textContent=lightMap[d.traffic_light]||d.traffic_light||'—';
- document.querySelector('#marketStructure').textContent=d.market_structure||'—';document.querySelector('#volState').textContent=d.volatility_state||'—';document.querySelector('#marketRegime').textContent=d.market_regime||'—';document.querySelector('#executionRange').textContent=d.execution_range||'—';document.querySelector('#executionPosture').textContent=(d.execution_posture||'—')+' '+(d.execution_note||'');
+ document.querySelector('#marketStructure').textContent=d.market_structure||'—';document.querySelector('#volState').textContent=d.volatility_state||'—';document.querySelector('#marketRegime').textContent=d.market_regime||'—';document.querySelector('#executionRange').textContent=d.execution_range||'—';document.querySelector('#executionPosture').textContent=(d.execution_posture||'—')+' '+(d.execution_note||'');document.querySelector('#meanReversionPosture').textContent=d.mean_reversion_posture||'—';
  document.querySelector('#attention').textContent=fmt(d.market_attention_score);const good=inds.filter(x=>x.score!=null);document.querySelector('#working').textContent=good.length+'/'+inds.length;document.querySelector('#high').textContent=good.filter(x=>x.score>=80).length;document.querySelector('#rising').textContent=good.filter(x=>x.d1>0).length;document.querySelector('#accel').textContent=good.filter(x=>x.d2>0).length;
  document.querySelector('#updated').textContent=d.generated_at?'更新时间 '+new Date(d.generated_at).toLocaleString():'等待首次更新';renderContrib();renderCards();
 }).catch(e=>{document.querySelector('#grid').innerHTML='<div class="empty">读取数据失败：'+e+'</div>'});
