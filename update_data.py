@@ -15,6 +15,7 @@ import requests
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "docs" / "data" / "current.json"
 CONFIG = json.loads((ROOT / "indicator_config.json").read_text(encoding="utf-8"))
+MODEL = json.loads((ROOT / "market_model_v2.json").read_text(encoding="utf-8"))
 MANUAL = ROOT / "manual_inputs.json"
 HTTP = requests.Session()
 HTTP.headers.update({"User-Agent": "Mozilla/5.0 MarketRegimeLab/1.1"})
@@ -62,10 +63,17 @@ def yahoo(symbol: str) -> pd.DataFrame:
     adj = ((obj.get("indicators") or {}).get("adjclose") or [{}])[0].get("adjclose")
     close = adj if adj and len(adj) == len(ts) else q.get("close")
     vol = q.get("volume") or [None] * len(ts)
+    high = q.get("high") or [None] * len(ts)
+    low = q.get("low") or [None] * len(ts)
     if not ts or not close:
         raise ValueError("no Yahoo history")
     idx = pd.to_datetime(ts, unit="s", utc=True).tz_convert(None).normalize()
-    df = pd.DataFrame({"Close": pd.to_numeric(close, errors="coerce"), "Volume": pd.to_numeric(vol, errors="coerce")}, index=idx)
+    df = pd.DataFrame({
+        "Close": pd.to_numeric(close, errors="coerce"),
+        "High": pd.to_numeric(high, errors="coerce"),
+        "Low": pd.to_numeric(low, errors="coerce"),
+        "Volume": pd.to_numeric(vol, errors="coerce"),
+    }, index=idx)
     return df.dropna(subset=["Close"]).sort_index()
 
 
@@ -244,6 +252,239 @@ def pack(meta: dict, s: pd.Series, raw: pd.Series | None = None, unit: str = "",
         "quality": quality or meta.get("type", "ok"),
     }
 
+
+
+def market_model_maps() -> tuple[dict, dict]:
+    active={x["id"]:x for x in MODEL.get("active",[])}
+    buckets=MODEL.get("bucket_weights",{})
+    return active,buckets
+
+
+def weighted_model_state(ordered: list[dict], series_store: dict[str,pd.Series] | None = None, index: pd.DatetimeIndex | None = None):
+    active,bucket_weights=market_model_maps()
+    item_by_id={x["id"]:x for x in ordered}
+    bucket_payload={}
+    current_edge=0.0
+    current_d1=0.0
+    current_d2=0.0
+    used_weight=0.0
+    hist_parts=[]
+    hist_weights=[]
+    hist_cover=[]
+
+    for bucket,bw in bucket_weights.items():
+        members=[m for m in MODEL.get("active",[]) if m.get("bucket")==bucket]
+        rows=[]
+        for m in members:
+            item=item_by_id.get(m["id"])
+            if not item or item.get("score") is None:
+                continue
+            pol=float(item.get("impact_polarity",0) or 0)
+            if pol==0:
+                continue
+            w=max(0.0,float(item.get("importance_score",50))*float(m.get("multiplier",1.0)))
+            rows.append((m,item,pol,w))
+        denom=sum(x[3] for x in rows)
+        if denom<=0:
+            bucket_payload[bucket]={"weight":bw,"score":None,"available":0,"configured":len(members)}
+            continue
+
+        edge=sum(w*pol*((float(item["score"])-50.0)/50.0) for m,item,pol,w in rows)/denom
+        bucket_score=float(np.clip(50.0+50.0*edge,0,100))
+        trans=[x for x in rows if bool(x[0].get("transition_driver",True))]
+        tden=sum(x[3] for x in trans)
+        bd1=(sum(w*pol*float(item.get("d1") or 0.0) for m,item,pol,w in trans)/tden) if tden else 0.0
+        bd2=(sum(w*pol*float(item.get("d2") or 0.0) for m,item,pol,w in trans)/tden) if tden else 0.0
+        bucket_payload[bucket]={
+            "weight":float(bw),"score":round(bucket_score,2),"d1":round(float(bd1),2),"d2":round(float(bd2),2),
+            "available":len(rows),"configured":len(members),
+            "horizon":MODEL.get("horizon_definition",{}).get(bucket,"")
+        }
+        current_edge += float(bw)*edge
+        current_d1 += float(bw)*bd1
+        current_d2 += float(bw)*bd2
+        used_weight += float(bw)
+
+        if series_store is not None and index is not None:
+            inner_num=[]; inner_den=[]; inner_cov=[]
+            for m,item,pol,w in rows:
+                ser=series_store.get(m["id"])
+                if ser is None or ser.empty:
+                    continue
+                a=ser.reindex(index).ffill()
+                inner_num.append(pol*(a-50.0)*w)
+                inner_den.append(a.notna().astype(float)*w)
+                inner_cov.append(a.notna().astype(int))
+            if inner_num:
+                n=pd.concat(inner_num,axis=1).sum(axis=1,min_count=1)
+                d=pd.concat(inner_den,axis=1).sum(axis=1,min_count=1)
+                bs=(50.0+n/d).where(d>0)
+                hist_parts.append((bs-50.0)*float(bw))
+                hist_weights.append(bs.notna().astype(float)*float(bw))
+                hist_cover.append(pd.concat(inner_cov,axis=1).sum(axis=1)>0)
+
+    state=float(np.clip(50.0+(current_edge/max(used_weight,1e-12))*50.0,0,100))
+    d1=float(current_d1/max(used_weight,1e-12))
+    d2=float(current_d2/max(used_weight,1e-12))
+    hist=None
+    if hist_parts:
+        num=pd.concat(hist_parts,axis=1).sum(axis=1,min_count=1)
+        den=pd.concat(hist_weights,axis=1).sum(axis=1,min_count=1)
+        hist=(50.0+num/den).clip(0,100).where(den>=0.70).dropna()
+    return state,d1,d2,bucket_payload,hist
+
+
+def traffic_cycle_stats(hist_state: pd.Series) -> dict:
+    if hist_state is None or hist_state.empty:
+        return {"status":"unavailable"}
+    def z(v):
+        return "red" if v<45 else "yellow" if v<55 else "blue" if v<65 else "green"
+    runs=[]
+    cur=None
+    for dt,v in hist_state.items():
+        zone=z(float(v))
+        if cur is None or cur["zone"]!=zone:
+            if cur is not None: runs.append(cur)
+            cur={"zone":zone,"start":dt,"end":dt,"trading_days":1}
+        else:
+            cur["end"]=dt;cur["trading_days"]+=1
+    if cur is not None:runs.append(cur)
+    out={"status":"ok","sample_start":str(hist_state.index.min().date()),"sample_end":str(hist_state.index.max().date()),"by_color":{}}
+    for zone in ("red","yellow","blue","green"):
+        a=sorted([r["trading_days"] for r in runs if r["zone"]==zone])
+        if not a:
+            out["by_color"][zone]=None;continue
+        q=lambda p:a[int((len(a)-1)*p)]
+        out["by_color"][zone]={
+            "episodes":len(a),"mean_trading_days":round(float(np.mean(a)),1),"median_trading_days":int(np.median(a)),
+            "p25":q(.25),"p75":q(.75),"max":max(a)
+        }
+    paths=[]
+    for i in range(len(runs)-2):
+        if runs[i]["zone"]=="blue" and runs[i+1]["zone"]=="yellow" and runs[i+2]["zone"]=="red":
+            paths.append(runs[i+1]["trading_days"])
+    if paths:
+        a=sorted(paths);q=lambda p:a[int((len(a)-1)*p)]
+        out["blue_to_yellow_to_red"]={"episodes":len(a),"mean_transition_days":round(float(np.mean(a)),1),"median_transition_days":int(np.median(a)),"p25":q(.25),"p75":q(.75)}
+    else:
+        out["blue_to_yellow_to_red"]={"episodes":0}
+    out["current_run"]=next(({
+        "zone":r["zone"],"start":str(r["start"].date()),"trading_days":r["trading_days"]
+    } for r in reversed(runs)),None)
+    return out
+
+
+def _true_range(df: pd.DataFrame) -> pd.Series:
+    h=pd.to_numeric(df["High"],errors="coerce")
+    l=pd.to_numeric(df["Low"],errors="coerce")
+    c=pd.to_numeric(df["Close"],errors="coerce")
+    pc=c.shift(1)
+    return pd.concat([(h-l).abs(),(h-pc).abs(),(l-pc).abs()],axis=1).max(axis=1)
+
+
+def _box_metrics(df: pd.DataFrame, window: int) -> dict | None:
+    x=df.dropna(subset=["Close"]).tail(window).copy()
+    if len(x)<window:
+        return None
+    if "High" not in x or x["High"].isna().all():x["High"]=x["Close"]
+    if "Low" not in x or x["Low"].isna().all():x["Low"]=x["Close"]
+    c=x["Close"].astype(float);h=x["High"].astype(float);l=x["Low"].astype(float)
+    upper=float(h.quantile(.90));lower=float(l.quantile(.10))
+    if not np.isfinite(upper) or not np.isfinite(lower) or upper<=lower:
+        return None
+    width=upper-lower;mid=(upper+lower)/2
+    width_pct=100*width/mid
+    changes=c.pct_change().abs().sum()
+    efficiency=float(abs(c.iloc[-1]/c.iloc[0]-1)/changes) if changes>0 else 0.0
+    xx=np.arange(len(c),dtype=float)
+    slope=float(np.polyfit(xx,c.to_numpy(),1)[0])
+    slope_move_pct=100*abs(slope*window)/mid
+    half=max(5,window//2)
+    u1=float(h.iloc[:half].quantile(.90));u2=float(h.iloc[-half:].quantile(.90))
+    l1=float(l.iloc[:half].quantile(.10));l2=float(l.iloc[-half:].quantile(.10))
+    boundary_shift=(abs(u2-u1)+abs(l2-l1))/(2*width)
+    lower_touches=int((l<=lower+0.18*width).sum())
+    upper_touches=int((h>=upper-0.18*width).sum())
+    tr=_true_range(x)
+    atr=float(tr.tail(min(20,len(tr))).mean())
+    range_atr=float(width/atr) if atr>0 else np.nan
+
+    eff_score=float(np.clip((.45-efficiency)/.35*100,0,100))
+    stability_score=float(np.clip((.50-boundary_shift)/.50*100,0,100))
+    slope_score=float(np.clip((1.0-slope_move_pct/max(width_pct,1e-9))*100,0,100))
+    touch_score=float(np.clip((min(lower_touches,2)+min(upper_touches,2))/4*100,0,100))
+    width_score=float(np.clip((12.0-range_atr)/8.0*100,0,100)) if np.isfinite(range_atr) else 50.0
+    formation=.30*eff_score+.25*stability_score+.20*slope_score+.15*touch_score+.10*width_score
+
+    touch_idx=np.where((l.to_numpy()<=lower+0.18*width))[0]
+    held=[]
+    for i in touch_idx:
+        if i+3>=len(c):continue
+        future=c.iloc[i+1:i+4]
+        held.append(bool(future.min()>=lower-0.10*width))
+    support_rate=float(np.mean(held)*100) if held else None
+    return {
+        "formation_score":round(float(formation),1),"formed":bool(formation>=float(MODEL["range_box"]["formation_threshold"])),
+        "strong":bool(formation>=float(MODEL["range_box"]["strong_threshold"])),
+        "lower":round(lower,4),"upper":round(upper,4),"mid":round(mid,4),"width_pct":round(width_pct,2),
+        "position_pct":round(float(np.clip((c.iloc[-1]-lower)/width*100,0,100)),1),
+        "trend_efficiency":round(efficiency,3),"boundary_shift_ratio":round(float(boundary_shift),3),
+        "lower_touches":lower_touches,"upper_touches":upper_touches,
+        "support_hold_rate_pct":round(support_rate,1) if support_rate is not None else None,
+        "range_atr":round(range_atr,2) if np.isfinite(range_atr) else None,
+        "last_close":round(float(c.iloc[-1]),4)
+    }
+
+
+def range_box_analysis(mk: dict[str,pd.DataFrame]) -> dict:
+    cfg=MODEL.get("range_box",{})
+    out={"method_version":MODEL.get("version"),"formation_threshold":cfg.get("formation_threshold",65),"indexes":{}}
+    for sym in cfg.get("indexes",["SPY","QQQ","DIA"]):
+        df=mk.get(sym)
+        if df is None or df.empty:
+            continue
+        symout={}
+        for label,window in (("small_box",int(cfg.get("small_window",20))),("large_box",int(cfg.get("large_window",60)))):
+            cur=_box_metrics(df,window)
+            if cur is None:
+                symout[label]=None;continue
+            formed_series=[]
+            dates=[]
+            # Historical scan is intentionally mechanical and uses only data available through each date.
+            for i in range(window-1,len(df)):
+                m=_box_metrics(df.iloc[:i+1],window)
+                if m is None:continue
+                dates.append(df.index[i]);formed_series.append(bool(m["formed"]))
+            runs=[];n=0
+            for flag in formed_series:
+                if flag:n+=1
+                elif n:runs.append(n);n=0
+            if n:runs.append(n)
+            totals=[window+r-1 for r in runs[:-1] if r>0] if len(runs)>1 else []
+            current_run=0
+            for flag in reversed(formed_series):
+                if flag:current_run+=1
+                else:break
+            cur["window_days"]=window
+            cur["box_age_estimate_trading_days"]=window+current_run-1 if cur["formed"] else 0
+            if totals:
+                cur["historical_duration"]={
+                    "episodes":len(totals),"median_trading_days":int(np.median(totals)),
+                    "p25":int(np.percentile(totals,25)),"p75":int(np.percentile(totals,75))
+                }
+                cur["estimated_remaining_trading_days"]=max(0,int(np.median(totals))-(window+current_run-1)) if cur["formed"] else None
+            else:
+                cur["historical_duration"]=None;cur["estimated_remaining_trading_days"]=None
+            symout[label]=cur
+        out["indexes"][sym]=symout
+    for label in ("small_box","large_box"):
+        formed=[sym for sym,v in out["indexes"].items() if v.get(label) and v[label].get("formed")]
+        strong=[sym for sym,v in out["indexes"].items() if v.get(label) and v[label].get("strong")]
+        out[label+"_consensus"]={
+            "formed_count":len(formed),"strong_count":len(strong),"formed_indexes":formed,
+            "state":"broad_box" if len(formed)>=2 else "partial_box" if len(formed)==1 else "no_box"
+        }
+    return out
 
 def main():
     errors = {}
