@@ -25,7 +25,12 @@ FRED_IDS = [
     "DTWEXBGS", "BAA10Y", "ISRATIO", "BUSINV", "MTSDS133FMS", "UNRATE",
     "ICSA", "DFF", "ECBDFR", "WALCL", "LOANINV"
 ]
-YAHOO = ["SPY", "RSP", "IWM", "HYG", "LQD", "GLD", "XLI", "HG=F", "^VIX", "CL=F", "DX-Y.NYB", "^TNX", "^IRX"]
+YAHOO = [
+    "SPY","RSP","IWM","QQQ","DIA","HYG","LQD","GLD","TLT","XLI","HG=F",
+    "^VIX","CL=F","DX-Y.NYB","^TNX","^IRX",
+    "NVDA","AAPL","MSFT","AMZN","GOOGL","META","TSLA","AVGO","AMD",
+    "XLK","XLC","XLY","XLP","XLF","XLV","XLE","XLB","XLU","XLRE"
+]
 
 
 def request(url: str, timeout: int = 30) -> requests.Response:
@@ -469,11 +474,257 @@ def main():
         spread=a-b
         put("yield_curve",score(spread,False),spread,"10Y-13W","proxy")
 
+
+    # ---------- Core 61 daily proxy layer ----------
+    # The master list contains conceptual indicators.  Where a dedicated
+    # text/fundamental/issuance feed is not connected yet, we intentionally
+    # leave the indicator empty instead of fabricating a value.
+
+    def hist_score(key):
+        obj = out.get(key) or {}
+        rows = obj.get("history") or []
+        if not rows:
+            return None
+        pts = {pd.Timestamp(x["date"]): float(x["score"]) for x in rows if x.get("score") is not None}
+        return pd.Series(pts, dtype=float).sort_index() if pts else None
+
+    def inv_score(s):
+        return 100.0 - s
+
+    def basket_volume_signal(symbols):
+        parts=[]
+        raws=[]
+        for sym in symbols:
+            if sym not in mk:
+                continue
+            v=V(sym)
+            vr=v.rolling(5).mean()/v.rolling(60).mean()
+            parts.append(score(vr))
+            raws.append(vr)
+        if not parts:
+            return None,None
+        return avg(*parts), avg(*raws)
+
+    def basket_vol_signal(symbols):
+        parts=[]
+        raws=[]
+        for sym in symbols:
+            if sym not in mk:
+                continue
+            x=rv(C(sym),20)
+            parts.append(score(x))
+            raws.append(x)
+        if not parts:
+            return None,None
+        return avg(*parts), avg(*raws)
+
+    def put_new(key, s, raw=None, unit="", quality="proxy"):
+        if key in meta and key not in out and s is not None:
+            put(key,s,raw if raw is not None else s,unit,quality)
+
+    # Market topic heat: activity + option-volatility attention proxy.
+    p=[]
+    for k in ("volume_speed","options_anomaly"):
+        h=hist_score(k)
+        if h is not None: p.append(h)
+    if "SPY" in mk:
+        p.append(score(abs(pct(C("SPY"),5))))
+    if p: put_new("market_topic_heat",avg(*p),avg(*p),"score","proxy")
+
+    # Cross-asset linkage: absolute rolling correlation between broad US equities
+    # and gold / Treasuries / oil.
+    if all(x in mk for x in ("SPY","QQQ","DIA")):
+        er=pd.concat([C("SPY").pct_change(),C("QQQ").pct_change(),C("DIA").pct_change()],axis=1).mean(axis=1)
+        cors=[]
+        for sym in ("GLD","TLT","CL=F"):
+            if sym in mk:
+                rr=C(sym).pct_change().reindex(er.index).ffill()
+                cors.append(er.rolling(60).corr(rr).abs())
+        if cors:
+            link=avg(*cors)
+            put_new("cross_asset_correlation",score(link),link,"|corr| 60d","composite")
+
+    # Hiking-cycle entry proxy: sustained rise in long rates.
+    if "^TNX" in mk:
+        y=C("^TNX")
+        tighten=avg(score(pct(y,20)),score(pct(y,60)))
+        put_new("global_cb_cycle_entry",tighten,pct(y,60),"% 10Y 60d","proxy")
+
+    if "IWM" in mk:
+        parts=[]
+        if vix is not None: parts.append(score(vix))
+        parts.append(score(-pct(C("IWM"),20)))
+        put_new("retail_panic",avg(*parts),pct(C("IWM"),20),"% IWM 20d","proxy")
+
+    p=[x for x in (hist_score("high_yield"),hist_score("liquidity_risk"),hist_score("market_fear")) if x is not None]
+    if p: put_new("institutional_panic",avg(*p),avg(*p),"score","proxy")
+
+    p=[x for x in (hist_score("concentration"),hist_score("cross_asset_correlation")) if x is not None]
+    if "SPY" in mk: p.append(score(rv(C("SPY"),20),False))
+    if p: put_new("quant_crowding",avg(*p),avg(*p),"score","proxy")
+
+    p=[x for x in (hist_score("market_support"),) if x is not None]
+    if "SPY" in mk: p.append(score(pct(C("SPY"),20)))
+    if "IWM" in mk: p.append(score(pct(C("IWM"),20)))
+    if p: put_new("money_making_effect",avg(*p),avg(*p),"score","composite")
+
+    # Geopolitical market proxies: only price reaction, not news classification.
+    gp=[]
+    if vix is not None: gp.append(score(pct(vix,5)))
+    if "GLD" in mk: gp.append(score(abs(pct(C("GLD"),5))))
+    if "CL=F" in mk: gp.append(score(abs(pct(C("CL=F"),5))))
+    if gp:
+        g=avg(*gp)
+        put_new("geo_news_impact",g,g,"score","proxy")
+        lag=[]
+        if "SPY" in mk: lag.append(score(abs(pct(C("SPY"),5))))
+        if "GLD" in mk: lag.append(score(abs(pct(C("GLD"),10))))
+        if "CL=F" in mk: lag.append(score(abs(pct(C("CL=F"),10))))
+        if lag: put_new("geo_lag_reaction",avg(*lag),avg(*lag),"score","proxy")
+
+    p=[x for x in (hist_score("inventory_cycle"),) if x is not None]
+    if "XLI" in mk and "SPY" in mk:
+        a,b=align(C("XLI"),C("SPY"))
+        p.append(score(pct(a,120)-pct(b,120)))
+    if "HG=F" in mk: p.append(score(pct(C("HG=F"),120)))
+    if p: put_new("business_cycle",avg(*p),avg(*p),"score","proxy")
+
+    p=[x for x in (hist_score("geo_news_impact"),hist_score("market_fear"),hist_score("gold"),hist_score("oil")) if x is not None]
+    if p: put_new("geopolitical_risk",avg(*p),avg(*p),"score","proxy")
+
+    if "LOANINV" in fs:
+        loans=F("LOANINV")
+        put_new("us_loans_total",score(loans),loans,"index","direct")
+        g=yoy(loans)
+        put_new("us_loans_speed",avg(score(g),score(g.diff())),g,"% YoY","direct")
+    else:
+        h=hist_score("credit_cycle")
+        if h is not None:
+            put_new("us_loans_total",h,h,"credit proxy","proxy")
+            put_new("us_loans_speed",h,h,"credit proxy","proxy")
+
+    p=[x for x in (hist_score("concentration"),hist_score("retail_participation")) if x is not None]
+    if p: put_new("retail_holdings_concentration",avg(*p),avg(*p),"score","proxy")
+
+    if "SPY" in mk and "^TNX" in mk:
+        sr=C("SPY").pct_change()
+        dy=C("^TNX").diff().reindex(sr.index).ffill()
+        sens=sr.rolling(60).corr(dy)
+        put_new("rate_cycle_sensitivity",score(sens.abs()),sens,"corr 60d","direct")
+
+    ps=[x for x in (hist_score("market_support"),hist_score("money_making_effect")) if x is not None]
+    mf=hist_score("market_fear")
+    if mf is not None: ps.append(inv_score(mf))
+    if ps: put_new("market_optimism",avg(*ps),avg(*ps),"score","composite")
+
+    ps=[x for x in (hist_score("market_fear"),hist_score("largecap_panic"),hist_score("institutional_panic")) if x is not None]
+    if ps: put_new("market_pessimism",avg(*ps),avg(*ps),"score","composite")
+
+    lr=hist_score("liquidity_risk")
+    if lr is not None:
+        put_new("market_liquidity",inv_score(lr),inv_score(lr),"score","composite")
+
+    if "SPY" in mk:
+        s=C("SPY")
+        dist=(s/s.rolling(20).mean()-1)*100
+        over=score(dist.abs())
+        put_new("market_overextension",over,dist,"% vs MA20","direct")
+        spd=abs(pct(s,5))
+        put_new("market_move_speed",score(spd),spd,"% abs 5d","direct")
+
+    h=hist_score("concentration")
+    if h is not None: put_new("breadth_concentration",h,h,"score","proxy")
+
+    if "IWM" in mk and "SPY" in mk:
+        a,b=align(C("IWM"),C("SPY"))
+        rel=pct(a,60)-pct(b,60)
+        sm=avg(score(pct(a,60)),score(rel))
+        put_new("sme_survival_growth",sm,rel,"% IWM-SPY 60d","proxy")
+
+    mag7=["NVDA","AAPL","MSFT","AMZN","GOOGL","META","TSLA"]
+    ai7=["NVDA","MSFT","GOOGL","AMZN","META","AVGO","AMD"]
+    ss,raw=basket_volume_signal(mag7)
+    put_new("mag7_volume",ss,raw,"5d/60d volume","composite")
+    ss,raw=basket_vol_signal(mag7)
+    put_new("mag7_volatility",ss,raw,"% RV20","composite")
+    ss,raw=basket_volume_signal(ai7)
+    put_new("ai7_volume",ss,raw,"5d/60d volume","composite")
+    ss,raw=basket_vol_signal(ai7)
+    put_new("ai7_volatility",ss,raw,"% RV20","composite")
+
+    # Mega-cap liquidity blow-up proxy combines basket volatility and broad fear.
+    p=[x for x in (hist_score("mag7_volatility"),hist_score("market_fear"),hist_score("liquidity_risk")) if x is not None]
+    if p: put_new("mega_liquidity_blowup",avg(*p),avg(*p),"score","proxy")
+
+    op=hist_score("market_optimism")
+    pe=hist_score("market_pessimism")
+    if op is not None and pe is not None:
+        a,b=align(op,pe)
+        bias=(a+(100-b))/2
+        put_new("market_bias",bias,bias,"score","composite")
+
+    if "QQQ" in mk:
+        qv=rv(C("QQQ"),20)
+        put_new("tech100_volatility",score(qv),qv,"% RV20","proxy")
+
+    sector_etfs={
+        "sector_it_vol":"XLK","sector_comm_vol":"XLC","sector_cons_disc_vol":"XLY",
+        "sector_cons_staples_vol":"XLP","sector_fin_vol":"XLF","sector_health_vol":"XLV",
+        "sector_industrial_vol":"XLI","sector_energy_vol":"XLE","sector_materials_vol":"XLB",
+        "sector_utilities_vol":"XLU","sector_realestate_vol":"XLRE"
+    }
+    for key,sym in sector_etfs.items():
+        if sym in mk:
+            vv=rv(C(sym),20)
+            put_new(key,score(vv),vv,"% RV20","proxy")
+
+
     for item in CONFIG:
         if item["id"] not in out:
             out[item["id"]]={**item,"score":None,"raw":None,"raw_unit":"","d1":None,"d2":None,"asof":None,"history":[],"quality":"source_error"}
 
     ordered=[out[x["id"]] for x in CONFIG]
+
+    # Market-state contribution model:
+    # 0-100 score where >50 means healthier/more supportive conditions and
+    # <50 means more stressed/negative conditions. Core61 gets full weight;
+    # legacy supplemental factors get 35% weight to reduce double-counting.
+    state_rows=[]
+    for item in ordered:
+        item["market_contribution_points"]=None
+        pol=float(item.get("impact_polarity",0) or 0)
+        if item.get("score") is None or pol == 0:
+            continue
+        layer_mult=1.0 if item.get("layer")=="core61" else 0.35
+        w=float(item.get("importance_score",50))*layer_mult
+        state_rows.append((item,w,pol))
+    state_denom=sum(w for _,w,_ in state_rows) or 1.0
+    state_edge=0.0
+    state_d1=0.0
+    state_d2=0.0
+    for item,w,pol in state_rows:
+        edge=pol*((float(item["score"])-50.0)/50.0)
+        state_edge += w*edge
+        state_d1 += w*pol*float(item.get("d1") or 0.0)
+        state_d2 += w*pol*float(item.get("d2") or 0.0)
+        item["market_contribution_points"]=round((w/state_denom)*pol*(float(item["score"])-50.0),3)
+    market_state=float(np.clip(50.0+50.0*(state_edge/state_denom),0,100))
+    market_state_d1=state_d1/state_denom
+    market_state_d2=state_d2/state_denom
+    if market_state >= 65: market_state_label="supportive"
+    elif market_state >= 55: market_state_label="mild_supportive"
+    elif market_state > 45: market_state_label="neutral"
+    elif market_state > 35: market_state_label="mild_stress"
+    else: market_state_label="stress"
+
+    positive=sorted(
+        [x for x in ordered if (x.get("market_contribution_points") or 0)>0],
+        key=lambda x:x["market_contribution_points"],reverse=True
+    )
+    negative=sorted(
+        [x for x in ordered if (x.get("market_contribution_points") or 0)<0],
+        key=lambda x:x["market_contribution_points"]
+    )
 
     # 每日重要度：把长期“市场重要性”与当天异常程度、D1、D2结合。
     # 这是“今天该优先看什么”的关注分，不是买卖信号，也不代表方向。
@@ -519,6 +770,18 @@ def main():
         "working_count":working,
         "total_count":len(ordered),
         "market_attention_score":round(float(market_attention),2),
+        "market_state_score":round(market_state,2),
+        "market_state_d1":round(float(market_state_d1),2),
+        "market_state_d2":round(float(market_state_d2),2),
+        "market_state_label":market_state_label,
+        "top_positive_contributors":[{"id":x["id"],"name":x["name"],"points":x["market_contribution_points"]} for x in positive[:8]],
+        "top_negative_contributors":[{"id":x["id"],"name":x["name"],"points":x["market_contribution_points"]} for x in negative[:8]],
+        "composite_method":{
+            "score":"50 + importance-weighted signed deviation from each factor's neutral level",
+            "core_weight":"core61 full weight",
+            "supplemental_weight":"legacy supplemental factors use 35% weight to reduce double-counting",
+            "direction":"higher composite score = more supportive/healthy market state; lower = more stressed/negative"
+        },
         "importance_method":{
             "base":"长期基础重要性 0-100，由宏观传导、系统性、领先性和市场覆盖面排序",
             "daily":"每日重要度 = 50%基础重要性 + 30%Level极端度 + 12%D1冲击 + 8%D2加速度",
