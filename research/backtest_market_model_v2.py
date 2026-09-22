@@ -2,14 +2,17 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
 from update_data import yahoo, _box_metrics
 
-ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "research" / "market_model_v2_backtest.json"
 SUMMARY = ROOT / "research" / "market_model_v2_backtest.md"
 
