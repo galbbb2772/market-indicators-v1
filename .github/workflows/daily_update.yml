@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - update_data.py
+      - history_builder.py
       - indicator_config.json
       - market_model_v2.json
       - manual_inputs.json
@@ -45,6 +46,9 @@ jobs:
 
       - name: Refresh all indicators
         run: python update_data.py
+
+      - name: Build three-index history
+        run: python history_builder.py
 
       - name: Commit refreshed JSON
         run: |
