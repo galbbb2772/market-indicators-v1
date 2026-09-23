@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - update_data.py
+      - ablation_runner.py
       - history_builder.py
       - patch_divergence_ui.py
       - indicator_config.json
@@ -46,8 +47,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Refresh all indicators
-        run: python update_data.py
+      - name: Refresh indicators and run ablation
+        run: python ablation_runner.py
 
       - name: Build three-index history
         run: python history_builder.py
@@ -63,7 +64,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
-            git commit -m "chore: refresh indicators and divergence dashboard"
+            git commit -m "chore: refresh indicators, ablation and divergence dashboard"
             git pull --rebase origin main
             git push
           fi
