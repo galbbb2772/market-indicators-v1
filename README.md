@@ -1,6 +1,6 @@
 # Market Regime Lab V2
 
-> **当前版本：Market Model V2。旧版“28 指标 V1”说明已经废弃。**
+> **当前版本：Market Model V2（Pruned）。旧版“28 指标 V1”说明已经废弃。**
 
 这是一个**独立于交易策略本身**的美股市场环境、风险状态与模型—价格背离研究面板。
 
@@ -8,8 +8,10 @@
 
 ## 当前系统
 
-- **82 个指标数据池**，并按 `Active / Context / Archive` 分层管理
-- **Market Model V2 当前核心执行层：31 个 Active 指标**
+- **82 个指标数据池**，不删除研究信息，只区分是否拥有“投票权”
+- **24 个 Active**：真正进入总市场评分的核心、相对独立指标
+- **15 个 Context**：用于解释、交叉确认和研究，但不重复进入总评分
+- **43 个 Archive**：低频、待接数据、重复代理或当前信息增量不足的指标
 - **Level**：指标当前状态 / 所处位置
 - **D1 一级导**：指标状态的变化动能
 - **D2 二级导**：变化动能的加速度
@@ -23,8 +25,15 @@
 - **2016 至今历史探索**：可按日 / 月 / 年及自定义日期区间查看评分与指数表现
 - **背离 / 领先性研究**：研究模型与价格的 5D / 10D / 20D 背离，以及 0 / 1 / 3 / 5 / 10 / 15 / 20 个交易日 Lead/Lag
 - **三大指数箱体识别**：SPY / QQQ / DIA 的短期与中期箱体状态
+- **Leave-One-Out Ablation Test**：每次刷新逐项拿掉 Active 指标，观察风险分层、噪声和重复性是否改善
 - **每日自动刷新 + 手动即时刷新**
 - 与原交易策略系统保持独立，可作为上层市场环境 / 风险过滤器使用
+
+## 为什么从 31 个 Active 压缩到 24 个
+
+V2 不追求“指标越多越好”。如果多个指标实际上在重复计算 VIX、科技波动、信用压力或同一个复合指标，它们同时进入总分会制造虚假的“多重证据”。因此当前版本优先保留独立信息量，把派生复合项、无明确方向项和较慢背景变量移到 Context / Archive。
+
+本轮从 Active 移出的项目包括：`market_move_speed`、`market_bias`、`largecap_panic`、`ghost_story_density`、`inventory_cycle`、`usd_credit`、`fiscal_deficit`。它们没有从数据池删除，只是不再重复参与总评分。
 
 ## 核心解释
 
@@ -50,17 +59,24 @@
 
 背离是风险 / 修复线索，不代表顶部或底部已经确认；领先性统计目前属于探索性研究，需要继续做 point-in-time 与 OOS 验证。
 
+### Ablation Test
+
+Ablation 的用途是发现“拿掉以后模型反而更干净”的指标。当前测试会逐项移除 Active 因子，再比较未来 20 日不利波动的风险分层、评分噪声、评分离散度，并检查同一 Bucket 内 5 日变化的重复相关性。
+
+**注意：Ablation 目前仍使用 reconstructed history，不是完整 point-in-time OOS。** 因此自动测试只提供 pruning evidence，不会机械地把所有样本内表现较差的核心宏观/信用因子删除；最终保留需要同时考虑统计结果、独立信息量和经济含义。
+
 ## 网站结构
 
 - `docs/index.html`：主仪表盘与交互界面
-- `docs/data/current.json`：网站当前数据与历史序列
+- `docs/data/current.json`：网站当前数据、历史序列与 ablation 结果
 - `update_data.py`：每日指标抓取、计算、市场状态与历史研究
+- `ablation_runner.py`：逐项 Leave-One-Out 消融测试与重复性诊断
 - `history_builder.py`：三大指数历史数据构建
-- `divergence_ui_patch.py`：背离 / 领先性页面构建逻辑
-- `indicator_config.json`：指标定义、重要性与角色配置
-- `market_model_v2.json`：Market Model V2 分层、权重与观察周期
+- `patch_divergence_ui.py`：背离 / 领先性页面构建逻辑
+- `indicator_config.json`：82 个指标定义、重要性与基础属性
+- `market_model_v2.json`：Market Model V2 Active / Context / Archive、权重与观察周期
 - `manual_inputs.json`：低频 / 暂时人工输入
-- `.github/workflows/daily_update.yml`：自动更新、历史构建与 GitHub Pages 部署
+- `.github/workflows/daily_update.yml`：自动更新、消融测试、历史构建与 GitHub Pages 部署
 
 ## 更新机制
 
@@ -69,7 +85,7 @@
 1. **自动更新**：按纽约时区每日定时运行。
 2. **手动更新**：GitHub Actions → `Daily Market Indicators` → `Run workflow`，可随时刷新最新市场数据并重新部署网站。
 
-低频、月频、季度数据会每日检查，但只有原始数据源出现新值时才更新；不会人为制造日度变化。
+每一次刷新都会重新执行 Ablation Test。低频、月频、季度数据会每日检查，但只有原始数据源出现新值时才更新；不会人为制造日度变化。
 
 ## 历史与验证说明
 
@@ -77,7 +93,7 @@
 - 综合评分历史：从可稳定重建的历史区间开始
 - 历史评分包含 reconstructed history 与之后的 live-recorded 数据
 - 部分宏观历史仍可能存在“观察日期 ≠ 实际发布时间”的 point-in-time 问题
-- Lead/Lag、背离、灯号阈值等仍属于研究框架，不能直接解释为未来收益保证
+- Lead/Lag、背离、灯号阈值、Ablation 排名等仍属于研究框架，不能直接解释为未来收益保证
 
 ## 数据源与代理
 
