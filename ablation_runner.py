@@ -9,6 +9,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "update_data.py"
 OUT = ROOT / "docs" / "data" / "current.json"
+OOS_START = pd.Timestamp("2022-01-01")
 
 
 def run_update_and_capture():
@@ -29,12 +30,10 @@ def run_update_and_capture():
 
 def historical_state(model: dict, active_members: list[dict], series_store: dict, ordered: list[dict], idx: pd.DatetimeIndex):
     item_by_id = {x["id"]: x for x in ordered}
-    parts = []
-    weights = []
+    parts, weights = [], []
     for bucket, bw in model.get("bucket_weights", {}).items():
         members = [m for m in active_members if m.get("bucket") == bucket]
-        num_parts = []
-        den_parts = []
+        num_parts, den_parts = [], []
         for m in members:
             item = item_by_id.get(m["id"])
             ser = series_store.get(m["id"])
@@ -61,35 +60,57 @@ def historical_state(model: dict, active_members: list[dict], series_store: dict
     return (50.0 + n / d).clip(0, 100).where(d >= 0.70).dropna()
 
 
-def metrics(state: pd.Series, close: pd.Series):
+def build_eval_frame(state: pd.Series, close: pd.Series):
     x = pd.DataFrame({"state": state, "close": close.reindex(state.index)}).dropna()
-    if len(x) < 120:
-        return None
     vals = x["close"].to_numpy(float)
     worst20 = []
     for i in range(len(x)):
         tail = vals[i + 1 : min(len(vals), i + 21)]
         worst20.append((np.nanmin(tail) / vals[i] - 1.0) * 100.0 if len(tail) else np.nan)
     x["worst20"] = worst20
-    v = x[["state", "worst20"]].dropna()
-    if len(v) < 100:
+    return x
+
+
+def metrics_from_frame(x: pd.DataFrame):
+    x = x.dropna(subset=["state", "worst20"]).copy()
+    if len(x) < 100:
         return None
-    corr = float(v["state"].rank().corr(v["worst20"].rank()))
-    q25, q75 = v["state"].quantile([0.25, 0.75])
-    low = v[v["state"] <= q25]["worst20"]
-    high = v[v["state"] >= q75]["worst20"]
-    separation = float(high.mean() - low.mean()) if len(low) and len(high) else np.nan
+    corr = float(x["state"].rank().corr(x["worst20"].rank()))
+    q25, q50, q75 = x["state"].quantile([0.25, 0.50, 0.75])
+    q1 = x[x["state"] <= q25]["worst20"]
+    q4 = x[x["state"] >= q75]["worst20"]
+    separation = float(q4.mean() - q1.mean()) if len(q1) and len(q4) else np.nan
+    tail_cut = -5.0
+    low_tail = float((q1 <= tail_cut).mean() * 100.0) if len(q1) else np.nan
+    high_tail = float((q4 <= tail_cut).mean() * 100.0) if len(q4) else np.nan
+    tail_gap = low_tail - high_tail
+    bins = [x["state"] <= q25, (x["state"] > q25) & (x["state"] <= q50), (x["state"] > q50) & (x["state"] < q75), x["state"] >= q75]
+    means = [float(x.loc[b, "worst20"].mean()) for b in bins]
+    monotonic_steps = sum(1 for a, b in zip(means, means[1:]) if b >= a)
     noise = float(x["state"].diff().std())
     span = float(x["state"].std())
-    objective = 100.0 * corr + 5.0 * separation - 0.30 * noise + 0.10 * span
+    noise_ratio = noise / span if span > 0 else np.nan
+    objective = 4.0 * separation + 0.08 * tail_gap + 0.75 * monotonic_steps + 8.0 * corr - 0.8 * noise_ratio
     return {
-        "n": int(len(v)),
+        "n": int(len(x)),
         "risk_rank_corr": round(corr, 4),
         "quartile_worst20_separation_pct": round(separation, 4),
+        "bottom_minus_top_5pct_tail_rate_pp": round(tail_gap, 2),
+        "quartile_monotonic_steps": int(monotonic_steps),
+        "quartile_worst20_means_pct": [round(v, 4) for v in means],
         "daily_score_change_std": round(noise, 4),
         "score_std": round(span, 4),
+        "noise_to_span": round(noise_ratio, 4) if np.isfinite(noise_ratio) else None,
         "objective": round(float(objective), 4),
     }
+
+
+def split_metrics(state: pd.Series, close: pd.Series):
+    x = build_eval_frame(state, close)
+    full = metrics_from_frame(x)
+    train = metrics_from_frame(x[x.index < OOS_START])
+    oos = metrics_from_frame(x[x.index >= OOS_START])
+    return {"full": full, "train_2016_2021": train, "oos_2022_present": oos}
 
 
 def max_peer_corr(active: list[dict], series_store: dict):
@@ -97,7 +118,7 @@ def max_peer_corr(active: list[dict], series_store: dict):
     by_bucket = {}
     for m in active:
         by_bucket.setdefault(m.get("bucket"), []).append(m["id"])
-    for bucket, ids in by_bucket.items():
+    for _, ids in by_bucket.items():
         changes = {}
         for k in ids:
             s = series_store.get(k)
@@ -122,6 +143,12 @@ def max_peer_corr(active: list[dict], series_store: dict):
     return out
 
 
+def delta(a, b, key):
+    if not a or not b or a.get(key) is None or b.get(key) is None:
+        return None
+    return float(a[key]) - float(b[key])
+
+
 def main():
     ns, cap = run_update_and_capture()
     if not cap:
@@ -136,56 +163,80 @@ def main():
     close = mk["SPY"]["Close"].dropna().sort_index()
     idx = close.index
     baseline_state = historical_state(model, active, series_store, ordered, idx)
-    baseline = metrics(baseline_state, close)
-    if baseline is None:
+    baseline = split_metrics(baseline_state, close)
+    if baseline["full"] is None or baseline["oos_2022_present"] is None:
         raise RuntimeError("Baseline metrics unavailable")
     redundancy = max_peer_corr(active, series_store)
     rows = []
     for member in active:
         reduced = [m for m in active if m["id"] != member["id"]]
         state = historical_state(model, reduced, series_store, ordered, idx)
-        met = metrics(state, close)
-        if met is None:
+        met = split_metrics(state, close)
+        if met["full"] is None or met["oos_2022_present"] is None:
             continue
-        delta = float(met["objective"] - baseline["objective"])
+        d_full_sep = delta(met["full"], baseline["full"], "quartile_worst20_separation_pct")
+        d_oos_sep = delta(met["oos_2022_present"], baseline["oos_2022_present"], "quartile_worst20_separation_pct")
+        d_full_obj = delta(met["full"], baseline["full"], "objective")
+        d_oos_obj = delta(met["oos_2022_present"], baseline["oos_2022_present"], "objective")
+        d_noise = delta(met["full"], baseline["full"], "noise_to_span")
         red = redundancy.get(member["id"], {})
         peer_corr = red.get("abs_corr_5d_change")
-        if delta >= 0.8 or (delta >= 0.25 and peer_corr is not None and peer_corr >= 0.75):
+
+        # Conservative recommendation: an automatic remove candidate must improve
+        # both full-history and OOS risk separation, or be extremely redundant
+        # without hurting OOS. This avoids deleting useful macro/credit anchors on
+        # the basis of one in-sample objective.
+        improves_both = (d_full_sep is not None and d_oos_sep is not None and d_full_sep >= 0.12 and d_oos_sep >= 0.10)
+        oos_not_hurt = d_oos_sep is not None and d_oos_sep >= -0.05
+        highly_redundant = peer_corr is not None and peer_corr >= 0.90
+        objective_support = d_full_obj is not None and d_oos_obj is not None and d_full_obj > 0 and d_oos_obj > 0
+        if improves_both and (objective_support or (d_noise is not None and d_noise <= 0.02)):
             rec = "remove"
-        elif delta >= 0.0 or (peer_corr is not None and peer_corr >= 0.90):
+        elif highly_redundant and oos_not_hurt:
+            rec = "remove"
+        elif (d_oos_sep is not None and d_oos_sep > 0.05) or (peer_corr is not None and peer_corr >= 0.80):
             rec = "review"
         else:
             rec = "keep"
+
         rows.append({
             "id": member["id"],
             "bucket": member.get("bucket"),
-            "objective_without": met["objective"],
-            "delta_if_removed": round(delta, 4),
-            "risk_rank_corr_without": met["risk_rank_corr"],
-            "quartile_separation_without_pct": met["quartile_worst20_separation_pct"],
-            "daily_noise_without": met["daily_score_change_std"],
+            "full_delta_objective_if_removed": round(d_full_obj, 4) if d_full_obj is not None else None,
+            "oos_delta_objective_if_removed": round(d_oos_obj, 4) if d_oos_obj is not None else None,
+            "full_delta_risk_separation_if_removed_pct": round(d_full_sep, 4) if d_full_sep is not None else None,
+            "oos_delta_risk_separation_if_removed_pct": round(d_oos_sep, 4) if d_oos_sep is not None else None,
+            "full_delta_noise_to_span_if_removed": round(d_noise, 4) if d_noise is not None else None,
             "max_peer": red.get("peer"),
             "max_peer_abs_corr_5d_change": peer_corr,
+            "without": met,
             "recommendation": rec,
         })
-    rows.sort(key=lambda x: x["delta_if_removed"], reverse=True)
+
+    rows.sort(key=lambda x: (x["recommendation"] == "remove", x["oos_delta_risk_separation_if_removed_pct"] or -999), reverse=True)
     report = {
         "status": "ok",
-        "method": "leave-one-out on Market Model V2 active indicators",
+        "version": "ABLATION-V2-OOS-2026-09-23",
+        "method": "leave-one-out on Market Model V2 active indicators with full-history and OOS checks",
         "sample_start": str(baseline_state.index.min().date()),
         "sample_end": str(baseline_state.index.max().date()),
+        "oos_start": str(OOS_START.date()),
         "baseline": baseline,
-        "interpretation": "Positive delta_if_removed means the historical risk-separation objective improved when that indicator was removed. Redundancy uses absolute correlation of 5-day score changes within the same bucket.",
-        "objective_definition": "100*risk-rank-correlation + 5*top-vs-bottom-quartile future worst-20d separation - 0.30*daily score noise + 0.10*score dispersion",
+        "interpretation": "Positive risk-separation delta means removing the factor improved the gap between high-score and low-score future worst-20d outcomes. Remove recommendations require cross-checking OOS and redundancy, not one in-sample objective.",
+        "objective_definition": "4*quartile future-worst20 separation + 0.08*tail-risk-rate gap + 0.75*monotonic quartile steps + 8*rank-correlation - 0.8*noise/span",
         "results": rows,
         "remove_candidates": [x["id"] for x in rows if x["recommendation"] == "remove"],
         "review_candidates": [x["id"] for x in rows if x["recommendation"] == "review"],
-        "note": "Exploratory reconstructed-history diagnostic, not point-in-time OOS. Use as a pruning aid, not as sole evidence."
+        "note": "Still exploratory because reconstructed history is not fully point-in-time. OOS here means a chronological holdout, not a perfect publication-time backtest."
     }
     payload = json.loads(OUT.read_text(encoding="utf-8"))
     payload["ablation_test"] = report
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({"baseline": baseline, "remove": report["remove_candidates"], "review": report["review_candidates"]}, ensure_ascii=False, indent=2))
+    print(json.dumps({
+        "baseline": baseline,
+        "remove": report["remove_candidates"],
+        "review": report["review_candidates"]
+    }, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
