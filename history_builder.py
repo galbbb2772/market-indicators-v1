@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# History explorer data builder v1.1: three major U.S. indexes from 2016 onward.
+
 import json
 import time
 from datetime import datetime, timezone
@@ -112,13 +114,16 @@ def main() -> None:
     latest = {}
     for key, s in series.items():
         start_value = float(s.iloc[0])
+        d1 = pct_from(s, 1)
+        d5 = pct_from(s, 5)
+        d20 = pct_from(s, 20)
         latest[key] = {
             **INDEXES[key],
             "asof": str(s.index[-1].date()),
             "close": round(float(s.iloc[-1]), 4),
-            "day_pct": round(pct_from(s, 1), 3) if pct_from(s, 1) is not None else None,
-            "week_pct": round(pct_from(s, 5), 3) if pct_from(s, 5) is not None else None,
-            "month_pct": round(pct_from(s, 20), 3) if pct_from(s, 20) is not None else None,
+            "day_pct": round(d1, 3) if d1 is not None else None,
+            "week_pct": round(d5, 3) if d5 is not None else None,
+            "month_pct": round(d20, 3) if d20 is not None else None,
             "since_2016_pct": round(float((s.iloc[-1] / start_value - 1.0) * 100.0), 2),
         }
 
