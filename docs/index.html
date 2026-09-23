@@ -15,15 +15,18 @@
 </head>
 <body><main class="wrap">
 <div class="head"><div><h1 class="title">Market Regime Lab</h1><div class="sub"><b>Market Model V2</b> · 现在加入 2016 至今的历史评分与三大指数联动观察。可按日期、月度、年度自由选择区间。</div></div><div class="badge" id="updated">读取中…</div></div>
-<div class="tabs"><button class="tab active" id="tabOverall" onclick="switchTab('overall')">市场综合</button><button class="tab" id="tabHistory" onclick="switchTab('history')">历史探索</button><button class="tab" id="tabVariables" onclick="switchTab('variables')">变量贡献</button></div>
+<div class="tabs"><button class="tab active" id="tabOverall" onclick="switchTab('overall')">市场综合</button><button class="tab" id="tabHistory" onclick="switchTab('history')">历史探索</button><button class="tab" id="tabVariables" onclick="switchTab('variables')">变量贡献</button><a class="tab" href="https://github.com/galbbb2772/market-indicators-v1/actions/workflows/daily_update.yml" target="_blank" rel="noopener" style="text-decoration:none;color:#eef5ff;border-color:#416ca8">↻ 立即更新数据</a></div>
 
 <section id="overallView">
 <div class="hero"><div class="cat">总市场综合状态 / 0–100</div><div class="heroScore" id="marketState">—</div><div class="heroMeta"><span id="stateLabel">—</span><span>当前灯号：<b id="trafficLight">—</b></span><span>综合 D1：<b id="stateD1">—</b></span><span>综合 D2：<b id="stateD2">—</b></span><span>今日关注度：<b id="attention">—</b></span></div></div>
 <div class="indexGrid" id="indexNow"><div class="empty">正在读取三大指数…</div></div>
-<div class="signalRow"><div class="signal green"><b>🟢 绿灯 · 65–100</b><small>低风险/支持环境。常规策略执行强度参考 70–100%。</small></div><div class="signal blue"><b>🔵 蓝灯 · 55–64.99</b><small>中性偏支持。常规策略执行强度参考 50–70%。</small></div><div class="signal yellow"><b>🟡 黄灯 · 45–54.99</b><small>过渡/谨慎区。常规策略执行强度参考 25–50%。</small></div><div class="signal red"><b>🔴 红灯 · 0–44.99</b><small>高风险观察区。不是未来必跌，也可能出现超跌反弹。</small></div></div>
+<div class="signalRow"><div class="signal green"><b>🟢 绿灯 · 65–100</b><small>低风险/支持环境。常规策略执行强度参考 70–100%。</small></div><div class="signal blue"><b>🔵 蓝灯 · 55–64.99</b><small>中性偏支持。常规策略执行强度参考 50–70%，更偏精选。</small></div><div class="signal yellow"><b>🟡 黄灯 · 45–54.99</b><small>过渡/谨慎区。常规策略执行强度参考 25–50%，提高确认门槛。</small></div><div class="signal red"><b>🔴 红灯 · 0–44.99</b><small>高风险观察区。常规策略参考 0–25%；红灯不是未来必跌，也可能出现超跌反弹。</small></div></div>
 <div class="regimeBox"><div class="regimeItem"><small>市场结构</small><b id="marketStructure">—</b></div><div class="regimeItem"><small>波动状态</small><b id="volState">—</b></div><div class="regimeItem"><small>综合区域</small><b id="marketRegime">—</b></div><div class="regimeItem"><small>执行区间</small><b id="executionRange">—</b></div></div>
 <div class="panel"><h3>权重与观察周期</h3><div class="weightGrid" id="weightGrid"></div><div class="note" id="transitionPolicy"></div></div>
-<div class="contribWrap"><div class="panel"><h3>当前灯号含义</h3><div id="executionPosture" class="note"></div></div><div class="panel"><h3>超跌 / 均值回归状态</h3><div id="meanReversionPosture" class="note"></div></div></div>
+<div class="contribWrap" style="margin:12px 0">
+<div class="panel"><h3>当前灯号含义</h3><div id="executionPosture" class="note" style="margin:0"></div></div>
+<div class="panel"><h3>超跌 / 均值回归状态</h3><div id="meanReversionPosture" class="note" style="margin:0"></div></div>
+</div>
 <div class="panel"><h3>灯号 / 市场结构周期</h3><div class="regimeBox" id="cycleGrid"></div><div class="note">周期表示历史上相同状态连续维持的交易日分布，不是固定预测天数。</div></div>
 <div class="panel"><h3>三大指数箱体识别 · SPY / QQQ / DIA</h3><div class="boxGrid" id="boxGrid"></div></div>
 <section class="summary"><div class="sum"><b id="working">—</b><small>Active 可用 / Active 总数</small></div><div class="sum"><b id="coreCount">—</b><small>Active / Context / Archive</small></div><div class="sum"><b id="high">—</b><small>Level ≥ 80</small></div><div class="sum"><b id="rising">—</b><small>D1 上升</small></div><div class="sum"><b id="accel">—</b><small>D2 加速</small></div></section>
