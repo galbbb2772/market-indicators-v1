@@ -1,6 +1,6 @@
 {
-  "version": "MARKET-MODEL-V2-BOX-2026-09-22",
-  "intent": "Mean-reversion oriented market-state monitor. Short market structure and event/sentiment dominate; macro is a lower-weight state anchor.",
+  "version": "MARKET-MODEL-V2-PRUNED-2026-09-23",
+  "intent": "Mean-reversion oriented market-state monitor. Keep the voting layer compact and independent; redundant composites and slow/context factors remain observable without double-counting in the score.",
   "bucket_weights": {
     "short_market": 0.4,
     "sentiment_event": 0.25,
@@ -18,6 +18,11 @@
     "traffic_confirmation": "Use two consecutive closes beyond a boundary, or a single overshoot of >=3 score points, before treating a color change as structurally confirmed.",
     "structural_transition_window": "Typical score-color episodes are measured empirically and reported daily; do not hard-code a fixed cycle length."
   },
+  "pruning_policy": {
+    "principle": "An indicator must add distinct information to keep a vote. Derived composites, duplicate volatility/fear chains, no-direction factors and slow background series are moved to Context or Archive rather than deleted from the data pool.",
+    "ablation": "Leave-one-out ablation runs on every refresh as an exploratory pruning diagnostic. It does not automatically delete factors because reconstructed history is not fully point-in-time.",
+    "last_structural_prune": "2026-09-23"
+  },
   "active": [
     {
       "id": "market_support",
@@ -34,13 +39,7 @@
     {
       "id": "market_overextension",
       "bucket": "short_market",
-      "multiplier": 1,
-      "transition_driver": true
-    },
-    {
-      "id": "market_move_speed",
-      "bucket": "short_market",
-      "multiplier": 0.9,
+      "multiplier": 1.0,
       "transition_driver": true
     },
     {
@@ -58,7 +57,7 @@
     {
       "id": "options_anomaly",
       "bucket": "short_market",
-      "multiplier": 1,
+      "multiplier": 1.0,
       "transition_driver": true
     },
     {
@@ -80,21 +79,9 @@
       "transition_driver": true
     },
     {
-      "id": "market_bias",
-      "bucket": "sentiment_event",
-      "multiplier": 1.2,
-      "transition_driver": true
-    },
-    {
       "id": "market_fear",
       "bucket": "sentiment_event",
       "multiplier": 1.25,
-      "transition_driver": true
-    },
-    {
-      "id": "largecap_panic",
-      "bucket": "sentiment_event",
-      "multiplier": 0.95,
       "transition_driver": true
     },
     {
@@ -110,12 +97,6 @@
       "transition_driver": true
     },
     {
-      "id": "ghost_story_density",
-      "bucket": "sentiment_event",
-      "multiplier": 1.1,
-      "transition_driver": true
-    },
-    {
       "id": "valuation_percentile",
       "bucket": "long_structure",
       "multiplier": 0.85,
@@ -125,12 +106,6 @@
       "id": "business_cycle",
       "bucket": "long_structure",
       "multiplier": 0.95,
-      "transition_driver": false
-    },
-    {
-      "id": "inventory_cycle",
-      "bucket": "long_structure",
-      "multiplier": 0.75,
       "transition_driver": false
     },
     {
@@ -172,13 +147,7 @@
     {
       "id": "treasury_rate_regime",
       "bucket": "macro",
-      "multiplier": 1,
-      "transition_driver": true
-    },
-    {
-      "id": "usd_credit",
-      "bucket": "macro",
-      "multiplier": 0.95,
+      "multiplier": 1.0,
       "transition_driver": true
     },
     {
@@ -198,18 +167,11 @@
       "bucket": "macro",
       "multiplier": 0.8,
       "transition_driver": false
-    },
-    {
-      "id": "fiscal_deficit",
-      "bucket": "macro",
-      "multiplier": 0.6,
-      "transition_driver": false
     }
   ],
   "context_only": [
     "systemic_risk",
     "risk_60d",
-    "market_liquidity",
     "gold",
     "oil",
     "mag7_volume",
@@ -217,15 +179,22 @@
     "ai7_volume",
     "ai7_volatility",
     "leverage_liquidity",
-    "concentration"
+    "concentration",
+    "market_move_speed",
+    "largecap_panic",
+    "inventory_cycle",
+    "usd_credit",
+    "fiscal_deficit"
   ],
   "archived": [
     "market_topic_heat",
     "global_cb_cycle_entry",
     "retail_panic",
     "institutional_panic",
+    "market_bias",
     "trump_activity",
     "trump_market_topic",
+    "ghost_story_density",
     "geo_news_impact",
     "geo_lag_reaction",
     "treasury_short_default",
