@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-23T05:42:46.294587+00:00",
+  "generated_at": "2026-09-23T06:10:10.624431+00:00",
   "status": "ok",
   "working_count": 68,
   "total_count": 82,
   "market_attention_score": 61.65,
   "market_state_score": 48.2,
-  "market_state_d1": -1.64,
-  "market_state_d2": -1.23,
+  "market_state_d1": -1.65,
+  "market_state_d2": -1.24,
   "market_state_label": "neutral",
   "traffic_light": "yellow",
   "traffic_framework": {
@@ -67,9 +67,9 @@
       },
       "sentiment_event": {
         "weight": 0.25,
-        "score": 68.72,
-        "d1": 5.67,
-        "d2": 2.95,
+        "score": 68.73,
+        "d1": 5.68,
+        "d2": 2.97,
         "available": 5,
         "configured": 6,
         "horizon": "1–5 trading days with rapid decay unless price/credit reaction persists"
@@ -85,9 +85,9 @@
       },
       "macro": {
         "weight": 0.15,
-        "score": 63.4,
-        "d1": -0.63,
-        "d2": -0.27,
+        "score": 63.37,
+        "d1": -0.68,
+        "d2": -0.32,
         "available": 8,
         "configured": 8,
         "horizon": "1–4 quarters; daily market-price proxies may update faster"
@@ -870,7 +870,7 @@
       },
       {
         "date": "2017-05-11",
-        "score": 54.62
+        "score": 54.63
       },
       {
         "date": "2017-05-12",
@@ -882,7 +882,7 @@
       },
       {
         "date": "2017-05-16",
-        "score": 53.58
+        "score": 53.61
       },
       {
         "date": "2017-05-17",
@@ -1026,7 +1026,7 @@
       },
       {
         "date": "2017-07-07",
-        "score": 47.13
+        "score": 47.07
       },
       {
         "date": "2017-07-10",
@@ -1322,7 +1322,7 @@
       },
       {
         "date": "2017-10-20",
-        "score": 57.41
+        "score": 57.42
       },
       {
         "date": "2017-10-23",
@@ -1410,7 +1410,7 @@
       },
       {
         "date": "2017-11-21",
-        "score": 54.19
+        "score": 54.18
       },
       {
         "date": "2017-11-22",
@@ -1546,7 +1546,7 @@
       },
       {
         "date": "2018-01-11",
-        "score": 63.05
+        "score": 63.02
       },
       {
         "date": "2018-01-12",
@@ -1562,7 +1562,7 @@
       },
       {
         "date": "2018-01-18",
-        "score": 51.41
+        "score": 51.38
       },
       {
         "date": "2018-01-19",
@@ -1602,7 +1602,7 @@
       },
       {
         "date": "2018-02-01",
-        "score": 56.54
+        "score": 56.53
       },
       {
         "date": "2018-02-02",
@@ -1702,7 +1702,7 @@
       },
       {
         "date": "2018-03-09",
-        "score": 52.9
+        "score": 52.89
       },
       {
         "date": "2018-03-12",
@@ -1954,7 +1954,7 @@
       },
       {
         "date": "2018-06-08",
-        "score": 63.96
+        "score": 63.95
       },
       {
         "date": "2018-06-11",
@@ -2030,7 +2030,7 @@
       },
       {
         "date": "2018-07-06",
-        "score": 56.41
+        "score": 56.42
       },
       {
         "date": "2018-07-09",
@@ -2102,7 +2102,7 @@
       },
       {
         "date": "2018-08-01",
-        "score": 50.34
+        "score": 50.33
       },
       {
         "date": "2018-08-02",
@@ -2114,7 +2114,7 @@
       },
       {
         "date": "2018-08-06",
-        "score": 56.03
+        "score": 56.0
       },
       {
         "date": "2018-08-07",
@@ -2122,7 +2122,7 @@
       },
       {
         "date": "2018-08-08",
-        "score": 58.06
+        "score": 58.07
       },
       {
         "date": "2018-08-09",
@@ -2154,7 +2154,7 @@
       },
       {
         "date": "2018-08-20",
-        "score": 51.26
+        "score": 51.24
       },
       {
         "date": "2018-08-21",
@@ -2198,7 +2198,7 @@
       },
       {
         "date": "2018-09-05",
-        "score": 48.87
+        "score": 48.88
       },
       {
         "date": "2018-09-06",
@@ -2502,7 +2502,7 @@
       },
       {
         "date": "2018-12-24",
-        "score": 26.39
+        "score": 26.4
       },
       {
         "date": "2018-12-26",
@@ -2810,7 +2810,7 @@
       },
       {
         "date": "2019-04-16",
-        "score": 59.04
+        "score": 59.05
       },
       {
         "date": "2019-04-17",
@@ -2826,7 +2826,7 @@
       },
       {
         "date": "2019-04-23",
-        "score": 56.91
+        "score": 56.93
       },
       {
         "date": "2019-04-24",
@@ -2894,7 +2894,7 @@
       },
       {
         "date": "2019-05-16",
-        "score": 37.08
+        "score": 37.07
       },
       {
         "date": "2019-05-17",
@@ -2974,7 +2974,7 @@
       },
       {
         "date": "2019-06-14",
-        "score": 39.75
+        "score": 39.74
       },
       {
         "date": "2019-06-17",
@@ -2986,7 +2986,7 @@
       },
       {
         "date": "2019-06-19",
-        "score": 41.09
+        "score": 41.1
       },
       {
         "date": "2019-06-20",
@@ -3110,7 +3110,7 @@
       },
       {
         "date": "2019-08-02",
-        "score": 27.21
+        "score": 27.2
       },
       {
         "date": "2019-08-05",
@@ -3154,7 +3154,7 @@
       },
       {
         "date": "2019-08-19",
-        "score": 27.28
+        "score": 27.29
       },
       {
         "date": "2019-08-20",
@@ -3270,7 +3270,7 @@
       },
       {
         "date": "2019-09-30",
-        "score": 39.26
+        "score": 39.25
       },
       {
         "date": "2019-10-01",
@@ -3286,11 +3286,11 @@
       },
       {
         "date": "2019-10-04",
-        "score": 32.52
+        "score": 32.53
       },
       {
         "date": "2019-10-07",
-        "score": 28.43
+        "score": 28.44
       },
       {
         "date": "2019-10-08",
@@ -3338,7 +3338,7 @@
       },
       {
         "date": "2019-10-23",
-        "score": 40.85
+        "score": 40.86
       },
       {
         "date": "2019-10-24",
@@ -4146,7 +4146,7 @@
       },
       {
         "date": "2020-08-12",
-        "score": 46.79
+        "score": 46.8
       },
       {
         "date": "2020-08-13",
@@ -4218,7 +4218,7 @@
       },
       {
         "date": "2020-09-08",
-        "score": 35.32
+        "score": 35.33
       },
       {
         "date": "2020-09-09",
@@ -4266,7 +4266,7 @@
       },
       {
         "date": "2020-09-24",
-        "score": 35.71
+        "score": 35.7
       },
       {
         "date": "2020-09-25",
@@ -4342,7 +4342,7 @@
       },
       {
         "date": "2020-10-21",
-        "score": 51.7
+        "score": 51.69
       },
       {
         "date": "2020-10-22",
@@ -4382,11 +4382,11 @@
       },
       {
         "date": "2020-11-04",
-        "score": 46.27
+        "score": 46.28
       },
       {
         "date": "2020-11-05",
-        "score": 48.57
+        "score": 48.56
       },
       {
         "date": "2020-11-06",
@@ -4570,7 +4570,7 @@
       },
       {
         "date": "2021-01-13",
-        "score": 61.33
+        "score": 61.34
       },
       {
         "date": "2021-01-14",
@@ -4626,7 +4626,7 @@
       },
       {
         "date": "2021-02-03",
-        "score": 59.14
+        "score": 59.13
       },
       {
         "date": "2021-02-04",
@@ -4638,7 +4638,7 @@
       },
       {
         "date": "2021-02-08",
-        "score": 57.9
+        "score": 57.89
       },
       {
         "date": "2021-02-09",
@@ -4830,7 +4830,7 @@
       },
       {
         "date": "2021-04-19",
-        "score": 57.6
+        "score": 57.62
       },
       {
         "date": "2021-04-20",
@@ -4866,7 +4866,7 @@
       },
       {
         "date": "2021-04-30",
-        "score": 60.26
+        "score": 60.24
       },
       {
         "date": "2021-05-03",
@@ -5158,7 +5158,7 @@
       },
       {
         "date": "2021-08-13",
-        "score": 48.62
+        "score": 48.61
       },
       {
         "date": "2021-08-16",
@@ -5206,7 +5206,7 @@
       },
       {
         "date": "2021-08-31",
-        "score": 45.34
+        "score": 45.33
       },
       {
         "date": "2021-09-01",
@@ -5370,7 +5370,7 @@
       },
       {
         "date": "2021-10-28",
-        "score": 56.06
+        "score": 56.05
       },
       {
         "date": "2021-10-29",
@@ -5438,7 +5438,7 @@
       },
       {
         "date": "2021-11-22",
-        "score": 50.44
+        "score": 50.46
       },
       {
         "date": "2021-11-23",
@@ -5514,7 +5514,7 @@
       },
       {
         "date": "2021-12-20",
-        "score": 40.44
+        "score": 40.45
       },
       {
         "date": "2021-12-21",
@@ -5738,7 +5738,7 @@
       },
       {
         "date": "2022-03-11",
-        "score": 48.67
+        "score": 48.68
       },
       {
         "date": "2022-03-14",
@@ -5798,7 +5798,7 @@
       },
       {
         "date": "2022-04-01",
-        "score": 58.4
+        "score": 58.41
       },
       {
         "date": "2022-04-04",
@@ -6106,7 +6106,7 @@
       },
       {
         "date": "2022-07-25",
-        "score": 57.46
+        "score": 57.47
       },
       {
         "date": "2022-07-26",
@@ -6598,7 +6598,7 @@
       },
       {
         "date": "2023-01-19",
-        "score": 59.37
+        "score": 59.36
       },
       {
         "date": "2023-01-20",
@@ -6670,7 +6670,7 @@
       },
       {
         "date": "2023-02-14",
-        "score": 61.43
+        "score": 61.44
       },
       {
         "date": "2023-02-15",
@@ -6726,7 +6726,7 @@
       },
       {
         "date": "2023-03-07",
-        "score": 60.44
+        "score": 60.45
       },
       {
         "date": "2023-03-08",
@@ -6854,7 +6854,7 @@
       },
       {
         "date": "2023-04-21",
-        "score": 62.97
+        "score": 62.98
       },
       {
         "date": "2023-04-24",
@@ -7102,7 +7102,7 @@
       },
       {
         "date": "2023-07-21",
-        "score": 65.71
+        "score": 65.7
       },
       {
         "date": "2023-07-24",
@@ -7130,7 +7130,7 @@
       },
       {
         "date": "2023-08-01",
-        "score": 66.72
+        "score": 66.73
       },
       {
         "date": "2023-08-02",
@@ -7186,7 +7186,7 @@
       },
       {
         "date": "2023-08-21",
-        "score": 56.87
+        "score": 56.88
       },
       {
         "date": "2023-08-22",
@@ -7270,7 +7270,7 @@
       },
       {
         "date": "2023-09-20",
-        "score": 54.16
+        "score": 54.15
       },
       {
         "date": "2023-09-21",
@@ -7278,7 +7278,7 @@
       },
       {
         "date": "2023-09-22",
-        "score": 47.76
+        "score": 47.77
       },
       {
         "date": "2023-09-25",
@@ -7402,7 +7402,7 @@
       },
       {
         "date": "2023-11-06",
-        "score": 58.01
+        "score": 58.0
       },
       {
         "date": "2023-11-07",
@@ -7438,7 +7438,7 @@
       },
       {
         "date": "2023-11-17",
-        "score": 57.89
+        "score": 57.9
       },
       {
         "date": "2023-11-20",
@@ -7802,7 +7802,7 @@
       },
       {
         "date": "2024-04-02",
-        "score": 61.25
+        "score": 61.24
       },
       {
         "date": "2024-04-03",
@@ -7910,7 +7910,7 @@
       },
       {
         "date": "2024-05-09",
-        "score": 67.16
+        "score": 67.15
       },
       {
         "date": "2024-05-10",
@@ -8018,7 +8018,7 @@
       },
       {
         "date": "2024-06-18",
-        "score": 55.92
+        "score": 55.91
       },
       {
         "date": "2024-06-20",
@@ -8106,7 +8106,7 @@
       },
       {
         "date": "2024-07-22",
-        "score": 52.96
+        "score": 52.97
       },
       {
         "date": "2024-07-23",
@@ -8126,7 +8126,7 @@
       },
       {
         "date": "2024-07-29",
-        "score": 51.77
+        "score": 51.78
       },
       {
         "date": "2024-07-30",
@@ -8294,7 +8294,7 @@
       },
       {
         "date": "2024-09-26",
-        "score": 59.78
+        "score": 59.79
       },
       {
         "date": "2024-09-27",
@@ -8806,7 +8806,7 @@
       },
       {
         "date": "2025-04-02",
-        "score": 52.46
+        "score": 52.45
       },
       {
         "date": "2025-04-03",
@@ -8974,7 +8974,7 @@
       },
       {
         "date": "2025-06-03",
-        "score": 54.58
+        "score": 54.57
       },
       {
         "date": "2025-06-04",
@@ -9710,7 +9710,7 @@
       },
       {
         "date": "2026-02-26",
-        "score": 57.78
+        "score": 57.79
       },
       {
         "date": "2026-02-27",
@@ -9782,7 +9782,7 @@
       },
       {
         "date": "2026-03-24",
-        "score": 41.15
+        "score": 41.14
       },
       {
         "date": "2026-03-25",
@@ -9826,7 +9826,7 @@
       },
       {
         "date": "2026-04-09",
-        "score": 50.1
+        "score": 50.09
       },
       {
         "date": "2026-04-10",
@@ -10258,7 +10258,7 @@
       },
       {
         "date": "2026-09-14",
-        "score": 48.7
+        "score": 48.69
       },
       {
         "date": "2026-09-15",
@@ -11488,7 +11488,7 @@
         },
         {
           "date": "2026-05-01",
-          "score": 32.45
+          "score": 32.41
         },
         {
           "date": "2026-05-04",
@@ -11720,7 +11720,7 @@
         },
         {
           "date": "2026-07-24",
-          "score": 38.69
+          "score": 38.73
         },
         {
           "date": "2026-07-27",
@@ -11796,7 +11796,7 @@
         },
         {
           "date": "2026-08-20",
-          "score": 49.96
+          "score": 50.0
         },
         {
           "date": "2026-08-21",
@@ -16206,7 +16206,7 @@
         },
         {
           "date": "2026-07-21",
-          "score": 58.29
+          "score": 58.25
         },
         {
           "date": "2026-07-22",
@@ -16495,7 +16495,7 @@
         },
         {
           "date": "2026-02-03",
-          "score": 47.05
+          "score": 47.0
         },
         {
           "date": "2026-02-04",
@@ -16559,7 +16559,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 38.08
+          "score": 38.1
         },
         {
           "date": "2026-02-27",
@@ -20231,11 +20231,11 @@
       "importance_score": 70,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 59,
-      "score": 64.02,
-      "raw": 64.0212,
+      "score": 64.2,
+      "raw": 64.1975,
       "raw_unit": "score",
-      "d1": 17.64,
-      "d2": 29.14,
+      "d1": 17.81,
+      "d2": 29.32,
       "asof": "2026-09-23",
       "history": [
         {
@@ -20560,7 +20560,7 @@
         },
         {
           "date": "2026-05-01",
-          "score": 74.25
+          "score": 74.21
         },
         {
           "date": "2026-05-04",
@@ -20788,7 +20788,7 @@
         },
         {
           "date": "2026-07-24",
-          "score": 52.47
+          "score": 52.51
         },
         {
           "date": "2026-07-27",
@@ -20864,7 +20864,7 @@
         },
         {
           "date": "2026-08-20",
-          "score": 85.41
+          "score": 85.45
         },
         {
           "date": "2026-08-21",
@@ -20956,7 +20956,7 @@
         },
         {
           "date": "2026-09-23",
-          "score": 64.02
+          "score": 64.2
         }
       ],
       "quality": "proxy",
@@ -20964,7 +20964,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 62.0,
+      "daily_importance_score": 62.21,
       "attention_state": "watch",
       "daily_importance_rank": 34
     },
@@ -21008,11 +21008,11 @@
       "importance_score": 90,
       "importance_reason": "美元融资环境与信用压力影响全球资产与跨境流动性。",
       "importance_rank": 18,
-      "score": 44.31,
-      "raw": 44.3122,
+      "score": 44.58,
+      "raw": 44.5767,
       "raw_unit": "score",
-      "d1": 0.66,
-      "d2": -2.91,
+      "d1": 0.93,
+      "d2": -2.65,
       "asof": "2026-09-23",
       "history": [
         {
@@ -21733,15 +21733,15 @@
         },
         {
           "date": "2026-09-23",
-          "score": 44.31
+          "score": 44.58
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 0.105,
+      "market_contribution_points": 0.1,
       "model_v2_role": "active",
       "model_v2_bucket": "macro",
       "transition_driver": true,
-      "daily_importance_score": 49.74,
+      "daily_importance_score": 49.66,
       "attention_state": "normal",
       "daily_importance_rank": 51
     },
@@ -22575,11 +22575,11 @@
       "importance_score": 82,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 32,
-      "score": 48.86,
-      "raw": 48.8591,
+      "score": 48.79,
+      "raw": 48.793,
       "raw_unit": "score",
-      "d1": -0.84,
-      "d2": -2.47,
+      "d1": -0.9,
+      "d2": -2.54,
       "asof": "2026-09-23",
       "history": [
         {
@@ -23300,15 +23300,15 @@
         },
         {
           "date": "2026-09-23",
-          "score": 48.86
+          "score": 48.79
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.06,
+      "market_contribution_points": 0.064,
       "model_v2_role": "active",
       "model_v2_bucket": "sentiment_event",
       "transition_driver": true,
-      "daily_importance_score": 42.98,
+      "daily_importance_score": 43.08,
       "attention_state": "normal",
       "daily_importance_rank": 60
     },
@@ -23553,7 +23553,7 @@
         },
         {
           "date": "2026-03-24",
-          "score": 46.43
+          "score": 46.3
         },
         {
           "date": "2026-03-25",
@@ -23597,7 +23597,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.2
+          "score": 42.06
         },
         {
           "date": "2026-04-10",
@@ -24029,7 +24029,7 @@
         },
         {
           "date": "2026-09-14",
-          "score": 86.9
+          "score": 86.77
         },
         {
           "date": "2026-09-15",
@@ -24302,7 +24302,7 @@
         },
         {
           "date": "2026-03-24",
-          "score": 46.43
+          "score": 46.3
         },
         {
           "date": "2026-03-25",
@@ -24346,7 +24346,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.2
+          "score": 42.06
         },
         {
           "date": "2026-04-10",
@@ -24778,7 +24778,7 @@
         },
         {
           "date": "2026-09-14",
-          "score": 86.9
+          "score": 86.77
         },
         {
           "date": "2026-09-15",
@@ -26489,7 +26489,7 @@
         },
         {
           "date": "2026-02-03",
-          "score": 51.48
+          "score": 51.47
         },
         {
           "date": "2026-02-04",
@@ -26553,7 +26553,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 43.86
+          "score": 43.87
         },
         {
           "date": "2026-02-27",
@@ -29821,7 +29821,7 @@
         },
         {
           "date": "2026-05-01",
-          "score": 40.08
+          "score": 39.95
         },
         {
           "date": "2026-05-04",
@@ -30049,7 +30049,7 @@
         },
         {
           "date": "2026-07-24",
-          "score": 25.66
+          "score": 25.79
         },
         {
           "date": "2026-07-27",
@@ -30125,7 +30125,7 @@
         },
         {
           "date": "2026-08-20",
-          "score": 72.35
+          "score": 72.49
         },
         {
           "date": "2026-08-21",
@@ -32649,7 +32649,7 @@
         },
         {
           "date": "2026-02-03",
-          "score": 55.96
+          "score": 55.95
         },
         {
           "date": "2026-02-04",
@@ -32713,7 +32713,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 46.28
+          "score": 46.29
         },
         {
           "date": "2026-02-27",
@@ -37103,7 +37103,7 @@
         },
         {
           "date": "2026-01-15",
-          "score": 29.63
+          "score": 29.5
         },
         {
           "date": "2026-01-16",
@@ -39185,7 +39185,7 @@
         },
         {
           "date": "2026-08-17",
-          "score": 86.64
+          "score": 86.77
         },
         {
           "date": "2026-08-18",
@@ -39562,7 +39562,7 @@
         },
         {
           "date": "2026-04-02",
-          "score": 70.5
+          "score": 70.63
         },
         {
           "date": "2026-04-06",
@@ -43912,7 +43912,7 @@
         },
         {
           "date": "2026-02-10",
-          "score": 24.6
+          "score": 24.74
         },
         {
           "date": "2026-02-11",
@@ -44551,8 +44551,8 @@
       "score": 11.11,
       "raw": 11.0727,
       "raw_unit": "% RV20",
-      "d1": 5.03,
-      "d2": 4.1,
+      "d1": 4.89,
+      "d2": 3.84,
       "asof": "2026-09-21",
       "history": [
         {
@@ -45269,7 +45269,7 @@
         },
         {
           "date": "2026-09-18",
-          "score": 6.08
+          "score": 6.22
         },
         {
           "date": "2026-09-21",
@@ -45281,7 +45281,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 62.66,
+      "daily_importance_score": 62.5,
       "attention_state": "watch",
       "daily_importance_rank": 33
     },
@@ -45454,7 +45454,7 @@
         },
         {
           "date": "2026-02-26",
-          "score": 44.94
+          "score": 44.97
         },
         {
           "date": "2026-02-27",
@@ -48293,11 +48293,11 @@
       "importance_reason": "原油影响通胀和增长，但对美股的方向并非单一。",
       "layer": "supplemental",
       "impact_polarity": 0,
-      "score": 87.24,
-      "raw": 89.45,
+      "score": 86.97,
+      "raw": 89.32,
       "raw_unit": "WTI future",
-      "d1": -4.23,
-      "d2": -4.43,
+      "d1": -4.5,
+      "d2": -4.7,
       "asof": "2026-09-23",
       "history": [
         {
@@ -49018,7 +49018,7 @@
         },
         {
           "date": "2026-09-23",
-          "score": 87.24
+          "score": 86.97
         }
       ],
       "quality": "direct",
@@ -49026,7 +49026,7 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 54.8,
+      "daily_importance_score": 54.89,
       "attention_state": "watch",
       "daily_importance_rank": 44
     },
@@ -56618,7 +56618,7 @@
         },
         {
           "date": "2026-06-01",
-          "score": 43.39
+          "score": 43.32
         },
         {
           "date": "2026-06-02",
@@ -58677,7 +58677,7 @@
         },
         {
           "date": "2026-03-24",
-          "score": 46.43
+          "score": 46.3
         },
         {
           "date": "2026-03-25",
@@ -58721,7 +58721,7 @@
         },
         {
           "date": "2026-04-09",
-          "score": 42.2
+          "score": 42.06
         },
         {
           "date": "2026-04-10",
@@ -59153,7 +59153,7 @@
         },
         {
           "date": "2026-09-14",
-          "score": 86.9
+          "score": 86.77
         },
         {
           "date": "2026-09-15",
@@ -59935,6 +59935,422 @@
       "daily_importance_rank": 8
     }
   ],
+  "ablation_test": {
+    "status": "ok",
+    "method": "leave-one-out on Market Model V2 active indicators",
+    "sample_start": "2016-12-16",
+    "sample_end": "2026-09-21",
+    "baseline": {
+      "n": 2451,
+      "risk_rank_corr": -0.0077,
+      "quartile_worst20_separation_pct": 0.8197,
+      "daily_score_change_std": 3.0249,
+      "score_std": 9.5116,
+      "objective": 3.3685
+    },
+    "interpretation": "Positive delta_if_removed means the historical risk-separation objective improved when that indicator was removed. Redundancy uses absolute correlation of 5-day score changes within the same bucket.",
+    "objective_definition": "100*risk-rank-correlation + 5*top-vs-bottom-quartile future worst-20d separation - 0.30*daily score noise + 0.10*score dispersion",
+    "results": [
+      {
+        "id": "cross_asset_correlation",
+        "bucket": "short_market",
+        "objective_without": 7.361,
+        "delta_if_removed": 3.9925,
+        "risk_rank_corr_without": 0.0241,
+        "quartile_separation_without_pct": 0.9887,
+        "daily_noise_without": 3.142,
+        "max_peer": "quant_crowding",
+        "max_peer_abs_corr_5d_change": 0.4621,
+        "recommendation": "remove"
+      },
+      {
+        "id": "credit_cycle",
+        "bucket": "long_structure",
+        "objective_without": 6.9007,
+        "delta_if_removed": 3.5322,
+        "risk_rank_corr_without": 0.0197,
+        "quartile_separation_without_pct": 0.9745,
+        "daily_noise_without": 2.8836,
+        "max_peer": "yield_curve",
+        "max_peer_abs_corr_5d_change": 0.3001,
+        "recommendation": "remove"
+      },
+      {
+        "id": "rate_cycle_sensitivity",
+        "bucket": "long_structure",
+        "objective_without": 6.8867,
+        "delta_if_removed": 3.5182,
+        "risk_rank_corr_without": 0.0203,
+        "quartile_separation_without_pct": 0.9639,
+        "daily_noise_without": 3.0407,
+        "max_peer": "credit_cycle",
+        "max_peer_abs_corr_5d_change": 0.1356,
+        "recommendation": "remove"
+      },
+      {
+        "id": "quant_crowding",
+        "bucket": "short_market",
+        "objective_without": 6.1749,
+        "delta_if_removed": 2.8064,
+        "risk_rank_corr_without": 0.0142,
+        "quartile_separation_without_pct": 0.9428,
+        "daily_noise_without": 3.1892,
+        "max_peer": "breadth_concentration",
+        "max_peer_abs_corr_5d_change": 0.7093,
+        "recommendation": "remove"
+      },
+      {
+        "id": "market_fear",
+        "bucket": "sentiment_event",
+        "objective_without": 4.5008,
+        "delta_if_removed": 1.1323,
+        "risk_rank_corr_without": 0.0021,
+        "quartile_separation_without_pct": 0.857,
+        "daily_noise_without": 3.0076,
+        "max_peer": "market_bias",
+        "max_peer_abs_corr_5d_change": 0.889,
+        "recommendation": "remove"
+      },
+      {
+        "id": "market_liquidity",
+        "bucket": "macro",
+        "objective_without": 4.4472,
+        "delta_if_removed": 1.0787,
+        "risk_rank_corr_without": 0.0012,
+        "quartile_separation_without_pct": 0.8611,
+        "daily_noise_without": 3.0074,
+        "max_peer": "high_yield",
+        "max_peer_abs_corr_5d_change": 1.0,
+        "recommendation": "remove"
+      },
+      {
+        "id": "high_yield",
+        "bucket": "macro",
+        "objective_without": 4.4278,
+        "delta_if_removed": 1.0593,
+        "risk_rank_corr_without": 0.0007,
+        "quartile_separation_without_pct": 0.8685,
+        "daily_noise_without": 3.0086,
+        "max_peer": "market_liquidity",
+        "max_peer_abs_corr_5d_change": 1.0,
+        "recommendation": "remove"
+      },
+      {
+        "id": "retail_participation",
+        "bucket": "sentiment_event",
+        "objective_without": 4.4181,
+        "delta_if_removed": 1.0496,
+        "risk_rank_corr_without": -0.0,
+        "quartile_separation_without_pct": 0.876,
+        "daily_noise_without": 3.1667,
+        "max_peer": "market_fear",
+        "max_peer_abs_corr_5d_change": 0.1589,
+        "recommendation": "remove"
+      },
+      {
+        "id": "valuation_percentile",
+        "bucket": "long_structure",
+        "objective_without": 4.1819,
+        "delta_if_removed": 0.8134,
+        "risk_rank_corr_without": -0.0034,
+        "quartile_separation_without_pct": 0.8938,
+        "daily_noise_without": 3.1298,
+        "max_peer": "sme_survival_growth",
+        "max_peer_abs_corr_5d_change": 0.3241,
+        "recommendation": "remove"
+      },
+      {
+        "id": "market_overextension",
+        "bucket": "short_market",
+        "objective_without": 3.8096,
+        "delta_if_removed": 0.4411,
+        "risk_rank_corr_without": -0.0036,
+        "quartile_separation_without_pct": 0.8274,
+        "daily_noise_without": 3.1657,
+        "max_peer": "market_move_speed",
+        "max_peer_abs_corr_5d_change": 0.4177,
+        "recommendation": "review"
+      },
+      {
+        "id": "geopolitical_risk",
+        "bucket": "sentiment_event",
+        "objective_without": 3.8058,
+        "delta_if_removed": 0.4373,
+        "risk_rank_corr_without": -0.0038,
+        "quartile_separation_without_pct": 0.8253,
+        "daily_noise_without": 3.1503,
+        "max_peer": "market_fear",
+        "max_peer_abs_corr_5d_change": 0.5776,
+        "recommendation": "review"
+      },
+      {
+        "id": "global_cb_rhythm",
+        "bucket": "macro",
+        "objective_without": 3.7461,
+        "delta_if_removed": 0.3776,
+        "risk_rank_corr_without": -0.0046,
+        "quartile_separation_without_pct": 0.8313,
+        "daily_noise_without": 3.0209,
+        "max_peer": "treasury_rate_regime",
+        "max_peer_abs_corr_5d_change": 0.5054,
+        "recommendation": "review"
+      },
+      {
+        "id": "us_loans_speed",
+        "bucket": "macro",
+        "objective_without": 3.6802,
+        "delta_if_removed": 0.3117,
+        "risk_rank_corr_without": -0.0034,
+        "quartile_separation_without_pct": 0.7941,
+        "daily_noise_without": 2.9809,
+        "max_peer": "market_liquidity",
+        "max_peer_abs_corr_5d_change": 0.4027,
+        "recommendation": "review"
+      },
+      {
+        "id": "fiscal_deficit",
+        "bucket": "macro",
+        "objective_without": 3.479,
+        "delta_if_removed": 0.1105,
+        "risk_rank_corr_without": -0.0068,
+        "quartile_separation_without_pct": 0.8231,
+        "daily_noise_without": 3.0265,
+        "max_peer": null,
+        "max_peer_abs_corr_5d_change": null,
+        "recommendation": "review"
+      },
+      {
+        "id": "market_move_speed",
+        "bucket": "short_market",
+        "objective_without": 3.3685,
+        "delta_if_removed": 0.0,
+        "risk_rank_corr_without": -0.0077,
+        "quartile_separation_without_pct": 0.8197,
+        "daily_noise_without": 3.0249,
+        "max_peer": "market_overextension",
+        "max_peer_abs_corr_5d_change": 0.4177,
+        "recommendation": "review"
+      },
+      {
+        "id": "volume_speed",
+        "bucket": "short_market",
+        "objective_without": 3.3685,
+        "delta_if_removed": 0.0,
+        "risk_rank_corr_without": -0.0077,
+        "quartile_separation_without_pct": 0.8197,
+        "daily_noise_without": 3.0249,
+        "max_peer": "options_anomaly",
+        "max_peer_abs_corr_5d_change": 0.3195,
+        "recommendation": "review"
+      },
+      {
+        "id": "ghost_story_density",
+        "bucket": "sentiment_event",
+        "objective_without": 3.3685,
+        "delta_if_removed": 0.0,
+        "risk_rank_corr_without": -0.0077,
+        "quartile_separation_without_pct": 0.8197,
+        "daily_noise_without": 3.0249,
+        "max_peer": null,
+        "max_peer_abs_corr_5d_change": null,
+        "recommendation": "review"
+      },
+      {
+        "id": "inventory_cycle",
+        "bucket": "long_structure",
+        "objective_without": 3.3685,
+        "delta_if_removed": 0.0,
+        "risk_rank_corr_without": -0.0077,
+        "quartile_separation_without_pct": 0.8197,
+        "daily_noise_without": 3.0249,
+        "max_peer": "business_cycle",
+        "max_peer_abs_corr_5d_change": 1.0,
+        "recommendation": "review"
+      },
+      {
+        "id": "employment",
+        "bucket": "macro",
+        "objective_without": 3.297,
+        "delta_if_removed": -0.0715,
+        "risk_rank_corr_without": -0.0078,
+        "quartile_separation_without_pct": 0.8055,
+        "daily_noise_without": 3.0317,
+        "max_peer": null,
+        "max_peer_abs_corr_5d_change": null,
+        "recommendation": "keep"
+      },
+      {
+        "id": "market_bias",
+        "bucket": "sentiment_event",
+        "objective_without": 3.1673,
+        "delta_if_removed": -0.2012,
+        "risk_rank_corr_without": -0.0075,
+        "quartile_separation_without_pct": 0.7763,
+        "daily_noise_without": 2.9766,
+        "max_peer": "largecap_panic",
+        "max_peer_abs_corr_5d_change": 0.9192,
+        "recommendation": "review"
+      },
+      {
+        "id": "breadth_concentration",
+        "bucket": "short_market",
+        "objective_without": 3.0746,
+        "delta_if_removed": -0.2939,
+        "risk_rank_corr_without": -0.0121,
+        "quartile_separation_without_pct": 0.8537,
+        "daily_noise_without": 3.1787,
+        "max_peer": "quant_crowding",
+        "max_peer_abs_corr_5d_change": 0.7093,
+        "recommendation": "keep"
+      },
+      {
+        "id": "usd_credit",
+        "bucket": "macro",
+        "objective_without": 2.8312,
+        "delta_if_removed": -0.5373,
+        "risk_rank_corr_without": -0.0113,
+        "quartile_separation_without_pct": 0.7848,
+        "daily_noise_without": 3.0364,
+        "max_peer": "market_liquidity",
+        "max_peer_abs_corr_5d_change": 0.368,
+        "recommendation": "keep"
+      },
+      {
+        "id": "business_cycle",
+        "bucket": "long_structure",
+        "objective_without": 2.7496,
+        "delta_if_removed": -0.6189,
+        "risk_rank_corr_without": -0.0153,
+        "quartile_separation_without_pct": 0.8487,
+        "daily_noise_without": 3.0378,
+        "max_peer": "inventory_cycle",
+        "max_peer_abs_corr_5d_change": 1.0,
+        "recommendation": "review"
+      },
+      {
+        "id": "market_support",
+        "bucket": "short_market",
+        "objective_without": 2.1748,
+        "delta_if_removed": -1.1937,
+        "risk_rank_corr_without": -0.0144,
+        "quartile_separation_without_pct": 0.7125,
+        "daily_noise_without": 2.991,
+        "max_peer": "money_making_effect",
+        "max_peer_abs_corr_5d_change": 0.7686,
+        "recommendation": "keep"
+      },
+      {
+        "id": "options_anomaly",
+        "bucket": "short_market",
+        "objective_without": 1.4421,
+        "delta_if_removed": -1.9264,
+        "risk_rank_corr_without": -0.0235,
+        "quartile_separation_without_pct": 0.735,
+        "daily_noise_without": 2.7035,
+        "max_peer": "market_support",
+        "max_peer_abs_corr_5d_change": 0.5505,
+        "recommendation": "keep"
+      },
+      {
+        "id": "money_making_effect",
+        "bucket": "short_market",
+        "objective_without": 1.2978,
+        "delta_if_removed": -2.0707,
+        "risk_rank_corr_without": -0.0192,
+        "quartile_separation_without_pct": 0.6301,
+        "daily_noise_without": 2.9429,
+        "max_peer": "market_support",
+        "max_peer_abs_corr_5d_change": 0.7686,
+        "recommendation": "keep"
+      },
+      {
+        "id": "treasury_rate_regime",
+        "bucket": "macro",
+        "objective_without": 0.6728,
+        "delta_if_removed": -2.6957,
+        "risk_rank_corr_without": -0.0269,
+        "quartile_separation_without_pct": 0.653,
+        "daily_noise_without": 3.1057,
+        "max_peer": "market_liquidity",
+        "max_peer_abs_corr_5d_change": 0.5736,
+        "recommendation": "keep"
+      },
+      {
+        "id": "sme_survival_growth",
+        "bucket": "long_structure",
+        "objective_without": 0.5001,
+        "delta_if_removed": -2.8684,
+        "risk_rank_corr_without": -0.0251,
+        "quartile_separation_without_pct": 0.5947,
+        "daily_noise_without": 2.9745,
+        "max_peer": "valuation_percentile",
+        "max_peer_abs_corr_5d_change": 0.3241,
+        "recommendation": "keep"
+      },
+      {
+        "id": "largecap_panic",
+        "bucket": "sentiment_event",
+        "objective_without": 0.1608,
+        "delta_if_removed": -3.2077,
+        "risk_rank_corr_without": -0.0303,
+        "quartile_separation_without_pct": 0.6237,
+        "daily_noise_without": 2.8547,
+        "max_peer": "market_bias",
+        "max_peer_abs_corr_5d_change": 0.9192,
+        "recommendation": "review"
+      },
+      {
+        "id": "yield_curve",
+        "bucket": "long_structure",
+        "objective_without": 0.0875,
+        "delta_if_removed": -3.281,
+        "risk_rank_corr_without": -0.0286,
+        "quartile_separation_without_pct": 0.572,
+        "daily_noise_without": 3.1814,
+        "max_peer": "credit_cycle",
+        "max_peer_abs_corr_5d_change": 0.3001,
+        "recommendation": "keep"
+      },
+      {
+        "id": "tech100_volatility",
+        "bucket": "short_market",
+        "objective_without": -0.6114,
+        "delta_if_removed": -3.9799,
+        "risk_rank_corr_without": -0.0329,
+        "quartile_separation_without_pct": 0.5365,
+        "daily_noise_without": 3.1627,
+        "max_peer": "quant_crowding",
+        "max_peer_abs_corr_5d_change": 0.4477,
+        "recommendation": "keep"
+      }
+    ],
+    "remove_candidates": [
+      "cross_asset_correlation",
+      "credit_cycle",
+      "rate_cycle_sensitivity",
+      "quant_crowding",
+      "market_fear",
+      "market_liquidity",
+      "high_yield",
+      "retail_participation",
+      "valuation_percentile"
+    ],
+    "review_candidates": [
+      "market_overextension",
+      "geopolitical_risk",
+      "global_cb_rhythm",
+      "us_loans_speed",
+      "fiscal_deficit",
+      "market_move_speed",
+      "volume_speed",
+      "ghost_story_density",
+      "inventory_cycle",
+      "market_bias",
+      "business_cycle",
+      "largecap_panic"
+    ],
+    "note": "Exploratory reconstructed-history diagnostic, not point-in-time OOS. Use as a pruning aid, not as sole evidence."
+  },
   "index_market_history": {
     "status": "ok",
     "start": "2016-01-04",
