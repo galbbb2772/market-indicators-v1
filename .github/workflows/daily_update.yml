@@ -11,6 +11,7 @@ on:
       - market_model_v2.json
       - manual_inputs.json
       - requirements.txt
+      - docs/index.html
       - .github/workflows/daily_update.yml
   schedule:
     - cron: '30 22 * * *'
