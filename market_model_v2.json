@@ -1,5 +1,5 @@
 {
-  "version": "MARKET-MODEL-V2-PRUNED-2026-09-23",
+  "version": "MARKET-MODEL-V2-PRUNED20-2026-09-23",
   "intent": "Mean-reversion oriented market-state monitor. Keep the voting layer compact and independent; redundant composites and slow/context factors remain observable without double-counting in the score.",
   "bucket_weights": {
     "short_market": 0.4,
@@ -20,154 +20,39 @@
   },
   "pruning_policy": {
     "principle": "An indicator must add distinct information to keep a vote. Derived composites, duplicate volatility/fear chains, no-direction factors and slow background series are moved to Context or Archive rather than deleted from the data pool.",
-    "ablation": "Leave-one-out ablation runs on every refresh as an exploratory pruning diagnostic. It does not automatically delete factors because reconstructed history is not fully point-in-time.",
-    "last_structural_prune": "2026-09-23"
+    "ablation": "Leave-one-out ablation uses both full-history and a 2022-present chronological holdout. Automatic removal requires OOS support or extreme same-bucket redundancy; results remain exploratory because reconstructed history is not fully point-in-time.",
+    "last_structural_prune": "2026-09-23",
+    "last_oos_prune": [
+      "quant_crowding",
+      "cross_asset_correlation",
+      "rate_cycle_sensitivity",
+      "credit_cycle"
+    ]
   },
   "active": [
-    {
-      "id": "market_support",
-      "bucket": "short_market",
-      "multiplier": 1.25,
-      "transition_driver": true
-    },
-    {
-      "id": "money_making_effect",
-      "bucket": "short_market",
-      "multiplier": 1.15,
-      "transition_driver": true
-    },
-    {
-      "id": "market_overextension",
-      "bucket": "short_market",
-      "multiplier": 1.0,
-      "transition_driver": true
-    },
-    {
-      "id": "breadth_concentration",
-      "bucket": "short_market",
-      "multiplier": 1.15,
-      "transition_driver": true
-    },
-    {
-      "id": "quant_crowding",
-      "bucket": "short_market",
-      "multiplier": 0.95,
-      "transition_driver": true
-    },
-    {
-      "id": "options_anomaly",
-      "bucket": "short_market",
-      "multiplier": 1.0,
-      "transition_driver": true
-    },
-    {
-      "id": "tech100_volatility",
-      "bucket": "short_market",
-      "multiplier": 0.9,
-      "transition_driver": true
-    },
-    {
-      "id": "volume_speed",
-      "bucket": "short_market",
-      "multiplier": 0.75,
-      "transition_driver": true
-    },
-    {
-      "id": "cross_asset_correlation",
-      "bucket": "short_market",
-      "multiplier": 0.85,
-      "transition_driver": true
-    },
-    {
-      "id": "market_fear",
-      "bucket": "sentiment_event",
-      "multiplier": 1.25,
-      "transition_driver": true
-    },
-    {
-      "id": "retail_participation",
-      "bucket": "sentiment_event",
-      "multiplier": 0.8,
-      "transition_driver": true
-    },
-    {
-      "id": "geopolitical_risk",
-      "bucket": "sentiment_event",
-      "multiplier": 1.15,
-      "transition_driver": true
-    },
-    {
-      "id": "valuation_percentile",
-      "bucket": "long_structure",
-      "multiplier": 0.85,
-      "transition_driver": false
-    },
-    {
-      "id": "business_cycle",
-      "bucket": "long_structure",
-      "multiplier": 0.95,
-      "transition_driver": false
-    },
-    {
-      "id": "sme_survival_growth",
-      "bucket": "long_structure",
-      "multiplier": 0.85,
-      "transition_driver": true
-    },
-    {
-      "id": "credit_cycle",
-      "bucket": "long_structure",
-      "multiplier": 1.15,
-      "transition_driver": true
-    },
-    {
-      "id": "yield_curve",
-      "bucket": "long_structure",
-      "multiplier": 1.1,
-      "transition_driver": true
-    },
-    {
-      "id": "rate_cycle_sensitivity",
-      "bucket": "long_structure",
-      "multiplier": 0.95,
-      "transition_driver": true
-    },
-    {
-      "id": "market_liquidity",
-      "bucket": "macro",
-      "multiplier": 1.25,
-      "transition_driver": true
-    },
-    {
-      "id": "high_yield",
-      "bucket": "macro",
-      "multiplier": 1.2,
-      "transition_driver": true
-    },
-    {
-      "id": "treasury_rate_regime",
-      "bucket": "macro",
-      "multiplier": 1.0,
-      "transition_driver": true
-    },
-    {
-      "id": "employment",
-      "bucket": "macro",
-      "multiplier": 0.85,
-      "transition_driver": false
-    },
-    {
-      "id": "global_cb_rhythm",
-      "bucket": "macro",
-      "multiplier": 0.85,
-      "transition_driver": false
-    },
-    {
-      "id": "us_loans_speed",
-      "bucket": "macro",
-      "multiplier": 0.8,
-      "transition_driver": false
-    }
+    {"id":"market_support","bucket":"short_market","multiplier":1.25,"transition_driver":true},
+    {"id":"money_making_effect","bucket":"short_market","multiplier":1.15,"transition_driver":true},
+    {"id":"market_overextension","bucket":"short_market","multiplier":1.0,"transition_driver":true},
+    {"id":"breadth_concentration","bucket":"short_market","multiplier":1.15,"transition_driver":true},
+    {"id":"options_anomaly","bucket":"short_market","multiplier":1.0,"transition_driver":true},
+    {"id":"tech100_volatility","bucket":"short_market","multiplier":0.9,"transition_driver":true},
+    {"id":"volume_speed","bucket":"short_market","multiplier":0.75,"transition_driver":true},
+
+    {"id":"market_fear","bucket":"sentiment_event","multiplier":1.25,"transition_driver":true},
+    {"id":"retail_participation","bucket":"sentiment_event","multiplier":0.8,"transition_driver":true},
+    {"id":"geopolitical_risk","bucket":"sentiment_event","multiplier":1.15,"transition_driver":true},
+
+    {"id":"valuation_percentile","bucket":"long_structure","multiplier":0.85,"transition_driver":false},
+    {"id":"business_cycle","bucket":"long_structure","multiplier":0.95,"transition_driver":false},
+    {"id":"sme_survival_growth","bucket":"long_structure","multiplier":0.85,"transition_driver":true},
+    {"id":"yield_curve","bucket":"long_structure","multiplier":1.1,"transition_driver":true},
+
+    {"id":"market_liquidity","bucket":"macro","multiplier":1.25,"transition_driver":true},
+    {"id":"high_yield","bucket":"macro","multiplier":1.2,"transition_driver":true},
+    {"id":"treasury_rate_regime","bucket":"macro","multiplier":1.0,"transition_driver":true},
+    {"id":"employment","bucket":"macro","multiplier":0.85,"transition_driver":false},
+    {"id":"global_cb_rhythm","bucket":"macro","multiplier":0.85,"transition_driver":false},
+    {"id":"us_loans_speed","bucket":"macro","multiplier":0.8,"transition_driver":false}
   ],
   "context_only": [
     "systemic_risk",
@@ -184,7 +69,11 @@
     "largecap_panic",
     "inventory_cycle",
     "usd_credit",
-    "fiscal_deficit"
+    "fiscal_deficit",
+    "quant_crowding",
+    "cross_asset_correlation",
+    "rate_cycle_sensitivity",
+    "credit_cycle"
   ],
   "archived": [
     "market_topic_heat",
@@ -246,11 +135,7 @@
     }
   ],
   "range_box": {
-    "indexes": [
-      "SPY",
-      "QQQ",
-      "DIA"
-    ],
+    "indexes": ["SPY", "QQQ", "DIA"],
     "small_window": 20,
     "large_window": 60,
     "formation_threshold": 65,
