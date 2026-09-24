@@ -10,6 +10,7 @@ on:
       - history_builder.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
+      - patch_divergence_v2_fix.py
       - indicator_config.json
       - market_model_v2.json
       - manual_inputs.json
@@ -59,6 +60,9 @@ jobs:
 
       - name: Patch divergence interval and analog model
         run: python patch_divergence_v2.py
+
+      - name: Apply analog current-level fix
+        run: python patch_divergence_v2_fix.py
 
       - name: Commit refreshed dashboard
         run: |
