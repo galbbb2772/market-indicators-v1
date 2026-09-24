@@ -9,6 +9,7 @@ on:
       - ablation_runner.py
       - history_builder.py
       - patch_divergence_ui.py
+      - patch_divergence_v2.py
       - indicator_config.json
       - market_model_v2.json
       - manual_inputs.json
@@ -55,6 +56,9 @@ jobs:
 
       - name: Patch divergence dashboard
         run: python patch_divergence_ui.py
+
+      - name: Patch divergence interval and analog model
+        run: python patch_divergence_v2.py
 
       - name: Commit refreshed dashboard
         run: |
