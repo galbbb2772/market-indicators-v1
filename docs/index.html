@@ -17,11 +17,23 @@
 @media(max-width:900px){.narrColumns{grid-template-columns:1fr}.narrHero{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.narrHero{grid-template-columns:1fr}}
 
+
+/* NEWS_SIGNAL_V1_UI */
+.newsHero{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:14px 0}
+.newsCard{background:#111a29;border:1px solid #273957;border-radius:14px;padding:14px;min-width:0}
+.newsCard small{color:#91a3bd}.newsCard .newsScore{font-size:30px;font-weight:800;margin:5px 0}.newsCard .newsMeta{font-size:12px;color:#9babc1;line-height:1.55}
+.newsBar{height:7px;background:#1b2a40;border-radius:999px;overflow:hidden;margin:8px 0 10px}.newsBar i{display:block;height:100%;background:linear-gradient(90deg,#6d9dff,#e0a45c);border-radius:999px}
+.newsEvents{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.newsEventPanel{background:#0e1725;border:1px solid #253752;border-radius:14px;padding:14px}
+.newsEventPanel h3{margin:0 0 9px}.newsEvent{padding:9px 0;border-top:1px solid #21314a}.newsEvent:first-of-type{border-top:0}.newsEvent a{color:#dbe8ff;text-decoration:none;font-weight:650}.newsEvent a:hover{text-decoration:underline}.newsEventMeta{font-size:11px;color:#8496af;margin-top:4px}
+.newsStatus{margin-top:12px;padding:12px 14px;border:1px solid #2a3c58;border-radius:12px;background:#0e1725;color:#9eb0c8;font-size:12px;line-height:1.65}
+@media(max-width:900px){.newsHero{grid-template-columns:repeat(2,minmax(0,1fr))}.newsEvents{grid-template-columns:1fr}}
+@media(max-width:560px){.newsHero{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body><main class="wrap">
 <div class="head"><div><h1 class="title">Market Regime Lab</h1><div class="sub"><b>Market Model V2</b> · 现在加入 2016 至今的历史评分与三大指数联动观察。可按日期、月度、年度自由选择区间。</div></div><div class="badge" id="updated">读取中…</div></div>
-<div class="tabs"><button class="tab active" id="tabOverall" onclick="switchTab('overall')">市场综合</button><button class="tab" id="tabHistory" onclick="switchTab('history')">历史探索</button><button class="tab" id="tabDivergence" onclick="switchTab('divergence')">背离 / 领先性</button><button class="tab" id="tabVariables" onclick="switchTab('variables')">变量贡献</button><button class="tab" id="tabNarrative" onclick="switchTab('narrative')">市场叙事</button><a class="tab" href="https://github.com/galbbb2772/market-indicators-v1/actions/workflows/daily_update.yml" target="_blank" rel="noopener" style="text-decoration:none;color:#eef5ff;border-color:#416ca8">↻ 立即更新数据</a></div>
+<div class="tabs"><button class="tab active" id="tabOverall" onclick="switchTab('overall')">市场综合</button><button class="tab" id="tabHistory" onclick="switchTab('history')">历史探索</button><button class="tab" id="tabDivergence" onclick="switchTab('divergence')">背离 / 领先性</button><button class="tab" id="tabVariables" onclick="switchTab('variables')">变量贡献</button><button class="tab" id="tabNarrative" onclick="switchTab('narrative')">市场叙事</button><button class="tab" id="tabNews" onclick="switchTab('news')">新闻信号</button><a class="tab" href="https://github.com/galbbb2772/market-indicators-v1/actions/workflows/daily_update.yml" target="_blank" rel="noopener" style="text-decoration:none;color:#eef5ff;border-color:#416ca8">↻ 立即更新数据</a></div>
 
 <section id="overallView">
 <div class="hero"><div class="cat">总市场综合状态 / 0–100</div><div class="heroScore" id="marketState">—</div><div class="heroMeta"><span id="stateLabel">—</span><span>当前灯号：<b id="trafficLight">—</b></span><span>综合 D1：<b id="stateD1">—</b></span><span>综合 D2：<b id="stateD2">—</b></span><span>今日关注度：<b id="attention">—</b></span></div></div>
@@ -99,12 +111,23 @@
 </section>
 
 <section id="variablesView" class="hidden"><div class="note">按绝对贡献排序。正贡献提高综合状态分，负贡献拖低综合状态分。</div><div class="tableWrap"><table class="tbl"><thead><tr><th>排名</th><th>指标</th><th>角色</th><th>Level</th><th>D1</th><th>D2</th><th>基础重要性</th><th>今日重要度</th><th>综合贡献</th></tr></thead><tbody id="varBody"></tbody></table></div></section>
+
+<section id="newsView" class="hidden">
+  <div class="hero">
+    <div class="cat">News Signal V1 · 新闻 / 事件层</div>
+    <div class="sub">自动抓取市场相关政策、地缘、系统性风险、AI 与负面叙事新闻。V1 只做解释与前瞻记录，<b>暂不参与 Market Model V2 总分</b>，避免未经 Forward 验证的文本信号污染现有 20 个 Active 指标。</div>
+  </div>
+  <div class="newsHero" id="newsSignalCards"><div class="empty">正在读取新闻信号…</div></div>
+  <div class="newsEvents" id="newsEventPanels"></div>
+  <div class="newsStatus" id="newsSourceStatus">等待新闻源状态…</div>
+</section>
+
 </main>
 <script>
 let DATA={indicators:[]}, HIST_POINTS=[];
 const fmt=n=>n==null||!Number.isFinite(Number(n))?'—':(Math.round(Number(n)*100)/100).toFixed(2),pct=n=>n==null||!Number.isFinite(Number(n))?'—':(n>0?'+':'')+fmt(n)+'%',cls=n=>n==null?'flat':n>0?'pos':n<0?'neg':'flat';
 const labelMap={supportive:'偏支持',mild_supportive:'中性偏支持',neutral:'谨慎/过渡',mild_stress:'压力',stress:'压力'},lightMap={green:'🟢 绿灯',blue:'🔵 蓝灯',yellow:'🟡 黄灯',red:'🔴 红灯'};
-function switchTab(which){['overall','history','divergence','variables','narrative'].forEach(x=>{document.querySelector('#'+x+'View').classList.toggle('hidden',x!==which);document.querySelector('#tab'+x[0].toUpperCase()+x.slice(1)).classList.toggle('active',x===which)});if(which==='history')renderHistoryExplorer();if(which==='divergence')renderDivergence();if(which==='variables')renderVariableTable();if(which==='narrative')renderNarratives()}
+function switchTab(which){['overall','history','divergence','variables','narrative','news'].forEach(x=>{document.querySelector('#'+x+'View').classList.toggle('hidden',x!==which);document.querySelector('#tab'+x[0].toUpperCase()+x.slice(1)).classList.toggle('active',x===which)});if(which==='history')renderHistoryExplorer();if(which==='divergence')renderDivergence();if(which==='variables')renderVariableTable();if(which==='narrative')renderNarratives();if(which==='news')renderNewsSignals()}
 function spark(canvas,hist){const ctx=canvas.getContext('2d'),w=canvas.width=canvas.clientWidth*2,h=canvas.height=100;ctx.clearRect(0,0,w,h);if(!hist||hist.length<2)return;const vals=hist.map(x=>Number(x.score)).filter(Number.isFinite);if(vals.length<2)return;const mn=Math.min(...vals),mx=Math.max(...vals),den=(mx-mn)||1;ctx.strokeStyle='#79a9ff';ctx.lineWidth=3;ctx.beginPath();vals.forEach((v,i)=>{const x=2+i/(vals.length-1)*(w-4),y=h-4-(v-mn)/den*(h-8);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()}
 function renderIndexesNow(){const latest=DATA.index_market_history?.latest||{},root=document.querySelector('#indexNow');root.innerHTML='';[['sp500','S&P 500'],['nasdaq','Nasdaq Composite'],['dow','Dow Jones']].forEach(([k,n])=>{const x=latest[k]||{},d=document.createElement('div');d.className='indexCard';d.innerHTML='<small>'+n+' · '+(x.asof||'—')+'</small><b>'+fmt(x.close)+'</b><div class="chg '+cls(x.day_pct)+'">'+pct(x.day_pct)+' 今日</div><div class="tiny">5D '+pct(x.week_pct)+' · 20D '+pct(x.month_pct)+' · 2016至今 '+pct(x.since_2016_pct)+'</div>';root.appendChild(d)});if(!root.children.length)root.innerHTML='<div class="empty">指数历史尚未生成。</div>'}
 function renderContrib(){const add=(id,arr,klass)=>{const root=document.querySelector(id);root.innerHTML='';(arr||[]).forEach((x,i)=>{const d=document.createElement('div');d.className='contribItem';d.innerHTML='<span>'+(i+1)+'. '+x.name+'</span><b class="'+klass+'">'+(x.points>0?'+':'')+fmt(x.points)+'</b>';root.appendChild(d)});if(!root.children.length)root.innerHTML='<div class="empty">暂无</div>'};add('#posContrib',DATA.top_positive_contributors,'pos');add('#negContrib',DATA.top_negative_contributors,'neg')}
@@ -197,6 +220,34 @@ function renderNarratives(){
   const paint=(id,rows,side)=>{const root=document.querySelector(id);root.innerHTML='';(rows||[]).forEach(x=>{const d=document.createElement('article');d.className='narrCard '+side;const trend=x.trend==='强化'?'↑ 强化':x.trend==='削弱'?'↓ 削弱':'→ 稳定';d.innerHTML='<div class="narrHead"><div><div class="narrTitle">'+x.title+'</div><div class="narrDesc">'+x.description+'</div></div><div class="narrStrength">'+fmt(x.strength)+'</div></div><div class="narrBar"><i style="width:'+Math.max(0,Math.min(100,Number(x.strength)||0))+'%"></i></div><div class="narrMeta"><span class="pill">'+x.strength_label+'</span><span class="pill">'+trend+'</span><span class="pill">证据一致 '+fmt(x.evidence_consistency_pct)+'%</span><span class="pill">覆盖 '+fmt(x.coverage_pct)+'%</span></div><div class="narrEvidence"><div class="tiny">主要支持证据</div>'+evidenceRows(x.supporting_evidence,false)+'<div class="tiny" style="margin-top:7px">主要反证 / 最弱证据</div>'+evidenceRows(x.counter_evidence,true)+'</div>';root.appendChild(d)});if(!root.children.length)root.innerHTML='<div class="empty">当前叙事数据不足。</div>'};
   paint('#bullNarratives',n.bull,'bull');paint('#bearNarratives',n.bear,'bear');
   const m=n.methodology||{};document.querySelector('#narrMethod').textContent=(m.warning||'')+' 证据一致度 = 已接入证据中，叙事方向评分≥60的权重占比。';
+}
+
+
+function renderNewsSignals(){
+  const n=DATA.news_signal_v1||{},signals=n.signals||{},root=document.querySelector('#newsSignalCards'),panels=document.querySelector('#newsEventPanels'),status=document.querySelector('#newsSourceStatus');
+  if(!root||!panels||!status)return;
+  const defs=[
+    ['us_policy_event_sentiment','🏛️','美国政策事件'],
+    ['geopolitical_news_risk','🌍','地缘政治'],
+    ['systemic_news_risk','🏦','系统性风险'],
+    ['ai_narrative_risk','🤖','AI 叙事风险'],
+    ['negative_narrative_density','👻','负面叙事密度']
+  ];
+  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  root.innerHTML='';panels.innerHTML='';
+  defs.forEach(([id,icon,label])=>{
+    const x=signals[id]||{},score=Number(x.score),safe=Number.isFinite(score)?Math.max(0,Math.min(100,score)):0;
+    const c=document.createElement('article');c.className='newsCard';
+    c.innerHTML='<small>'+icon+' '+label+'</small><div class="newsScore">'+fmt(x.score)+'</div><div class="newsBar"><i style="width:'+safe+'%"></i></div><div class="newsMeta">风险成分 '+fmt(x.risk_component)+' · 关注度 '+fmt(x.attention_component)+'<br>事件 '+(x.event_count??0)+' · 来源 '+(x.source_count??0)+'</div>';
+    root.appendChild(c);
+    const p=document.createElement('div');p.className='newsEventPanel';p.innerHTML='<h3>'+icon+' '+label+' · 重点事件</h3>';
+    const events=(x.top_events||[]).slice(0,5);
+    if(!events.length){p.innerHTML+='<div class="empty">当前没有通过金融语境过滤的重点事件。</div>'}
+    events.forEach(e=>{const row=document.createElement('div');row.className='newsEvent';const href=esc(e.url||'#');row.innerHTML='<a href="'+href+'" target="_blank" rel="noopener noreferrer">'+esc(e.title||'Untitled')+'</a><div class="newsEventMeta">'+esc((e.sources||[]).join(' · '))+' · '+fmt(e.age_hours)+'h 前 · severity '+fmt(e.severity)+'</div>';p.appendChild(row)});
+    panels.appendChild(p);
+  });
+  if(!root.children.length)root.innerHTML='<div class="empty">尚未生成 News Signal V1 数据。</div>';
+  const s=n.source_status||{},errs=s.errors||{};status.innerHTML='<b>数据状态：</b> '+esc(n.version||'—')+' · 模式 '+esc(s.query_mode||'—')+' · 去重事件 '+(s.events_after_dedupe??0)+' · 独立来源 '+(s.unique_sources_seen??0)+' · 错误 '+Object.keys(errs).length+'<br><b>说明：</b> '+esc(n.policy||'News layer is context-only.')+(Object.keys(errs).length?'<br><b>源错误：</b> '+esc(JSON.stringify(errs)):'');
 }
 
 function filtered(){const q=document.querySelector('#q').value.toLowerCase(),cat=document.querySelector('#cat').value,role=document.querySelector('#role').value;return DATA.indicators.filter(x=>(!q||(x.name+' '+x.category+' '+x.definition+' '+(x.importance_reason||'')).toLowerCase().includes(q))&&(!cat||x.category===cat)&&(!role||x.model_v2_role===role))}

@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-25T12:38:20.317211+00:00",
+  "generated_at": "2026-09-25T12:48:20.833279+00:00",
   "status": "ok",
   "working_count": 68,
   "total_count": 82,
-  "market_attention_score": 57.75,
-  "market_state_score": 49.52,
-  "market_state_d1": 0.23,
-  "market_state_d2": 0.56,
+  "market_attention_score": 57.53,
+  "market_state_score": 48.72,
+  "market_state_d1": 1.04,
+  "market_state_d2": 3.08,
   "market_state_label": "neutral",
   "traffic_light": "yellow",
   "traffic_framework": {
@@ -58,18 +58,18 @@
     "bucket_scores": {
       "short_market": {
         "weight": 0.4,
-        "score": 43.89,
-        "d1": -0.08,
-        "d2": -0.07,
+        "score": 42.61,
+        "d1": 1.66,
+        "d2": 5.11,
         "available": 6,
         "configured": 7,
         "horizon": "1–10 trading days"
       },
       "sentiment_event": {
         "weight": 0.25,
-        "score": 65.91,
-        "d1": 0.81,
-        "d2": 2.85,
+        "score": 65.13,
+        "d1": 1.29,
+        "d2": 4.73,
         "available": 3,
         "configured": 3,
         "horizon": "1–5 trading days with rapid decay unless price/credit reaction persists"
@@ -85,9 +85,9 @@
       },
       "macro": {
         "weight": 0.15,
-        "score": 74.34,
+        "score": 73.78,
         "d1": 0.48,
-        "d2": -1.24,
+        "d2": -1.33,
         "available": 6,
         "configured": 6,
         "horizon": "1–4 quarters; daily market-price proxies may update faster"
@@ -120,7 +120,7 @@
     ],
     "news_signal_status": {
       "connected": true,
-      "version": "NEWS-SIGNAL-V1.1",
+      "version": "NEWS-SIGNAL-V1.3",
       "feeds_market_model": false,
       "history_days": 1
     }
@@ -239,7 +239,7 @@
       },
       "DIA": {
         "small_box": {
-          "formation_score": 36.2,
+          "formation_score": 36.7,
           "formed": false,
           "strong": false,
           "lower": 513.784,
@@ -247,12 +247,12 @@
           "mid": 525.2565,
           "width_pct": 4.37,
           "position_pct": 0.0,
-          "trend_efficiency": 0.309,
-          "boundary_shift_ratio": 0.548,
-          "lower_touches": 6,
-          "upper_touches": 6,
+          "trend_efficiency": 0.328,
+          "boundary_shift_ratio": 0.47,
+          "lower_touches": 7,
+          "upper_touches": 5,
           "support_hold_rate_pct": 100.0,
-          "range_atr": 4.71,
+          "range_atr": 4.63,
           "last_close": 512.68,
           "window_days": 20,
           "box_age_estimate_trading_days": 0,
@@ -265,7 +265,7 @@
           "estimated_remaining_trading_days": null
         },
         "large_box": {
-          "formation_score": 91.6,
+          "formation_score": 92.2,
           "formed": true,
           "strong": true,
           "lower": 515.765,
@@ -274,21 +274,21 @@
           "width_pct": 4.59,
           "position_pct": 0.0,
           "trend_efficiency": 0.044,
-          "boundary_shift_ratio": 0.125,
+          "boundary_shift_ratio": 0.129,
           "lower_touches": 20,
           "upper_touches": 17,
           "support_hold_rate_pct": 94.1,
-          "range_atr": 4.97,
+          "range_atr": 4.89,
           "last_close": 512.68,
           "window_days": 60,
-          "box_age_estimate_trading_days": 66,
+          "box_age_estimate_trading_days": 67,
           "historical_duration": {
             "episodes": 44,
             "median_trading_days": 78,
             "p25": 62,
             "p75": 95
           },
-          "estimated_remaining_trading_days": 12
+          "estimated_remaining_trading_days": 11
         }
       }
     },
@@ -385,24 +385,24 @@
           "avg_worst_20d_pct": -3.226
         },
         "yellow": {
-          "n": 247,
-          "avg_state": 48.8,
-          "avg_fwd_1d_pct": 0.117,
+          "n": 245,
+          "avg_state": 48.79,
+          "avg_fwd_1d_pct": 0.121,
           "avg_fwd_5d_pct": 0.155,
           "avg_fwd_20d_pct": 0.934,
           "median_fwd_20d_pct": 1.712,
           "positive_20d_rate_pct": 67.1,
-          "avg_worst_20d_pct": -2.706
+          "avg_worst_20d_pct": -2.725
         },
         "blue": {
-          "n": 1413,
-          "avg_state": 56.81,
+          "n": 1415,
+          "avg_state": 56.8,
           "avg_fwd_1d_pct": 0.06,
           "avg_fwd_5d_pct": 0.278,
           "avg_fwd_20d_pct": 1.111,
           "median_fwd_20d_pct": 1.69,
           "positive_20d_rate_pct": 70.6,
-          "avg_worst_20d_pct": -1.924
+          "avg_worst_20d_pct": -1.922
         },
         "green": {
           "n": 64,
@@ -749,7 +749,7 @@
       },
       {
         "date": "2017-03-28",
-        "score": 51.25
+        "score": 51.27
       },
       {
         "date": "2017-03-29",
@@ -849,7 +849,7 @@
       },
       {
         "date": "2017-05-03",
-        "score": 57.79
+        "score": 57.69
       },
       {
         "date": "2017-05-04",
@@ -873,7 +873,7 @@
       },
       {
         "date": "2017-05-11",
-        "score": 58.87
+        "score": 58.91
       },
       {
         "date": "2017-05-12",
@@ -989,7 +989,7 @@
       },
       {
         "date": "2017-06-22",
-        "score": 52.32
+        "score": 52.31
       },
       {
         "date": "2017-06-23",
@@ -1325,7 +1325,7 @@
       },
       {
         "date": "2017-10-20",
-        "score": 62.92
+        "score": 62.9
       },
       {
         "date": "2017-10-23",
@@ -1445,7 +1445,7 @@
       },
       {
         "date": "2017-12-04",
-        "score": 49.49
+        "score": 49.5
       },
       {
         "date": "2017-12-05",
@@ -1493,7 +1493,7 @@
       },
       {
         "date": "2017-12-20",
-        "score": 53.54
+        "score": 53.53
       },
       {
         "date": "2017-12-21",
@@ -1917,7 +1917,7 @@
       },
       {
         "date": "2018-05-24",
-        "score": 61.47
+        "score": 61.49
       },
       {
         "date": "2018-05-25",
@@ -2105,7 +2105,7 @@
       },
       {
         "date": "2018-08-01",
-        "score": 54.03
+        "score": 54.04
       },
       {
         "date": "2018-08-02",
@@ -2125,7 +2125,7 @@
       },
       {
         "date": "2018-08-08",
-        "score": 60.7
+        "score": 60.73
       },
       {
         "date": "2018-08-09",
@@ -2173,7 +2173,7 @@
       },
       {
         "date": "2018-08-24",
-        "score": 57.36
+        "score": 57.35
       },
       {
         "date": "2018-08-27",
@@ -2257,7 +2257,7 @@
       },
       {
         "date": "2018-09-25",
-        "score": 52.15
+        "score": 52.16
       },
       {
         "date": "2018-09-26",
@@ -2793,7 +2793,7 @@
       },
       {
         "date": "2019-04-09",
-        "score": 54.45
+        "score": 54.46
       },
       {
         "date": "2019-04-10",
@@ -2813,7 +2813,7 @@
       },
       {
         "date": "2019-04-16",
-        "score": 63.59
+        "score": 63.58
       },
       {
         "date": "2019-04-17",
@@ -2853,7 +2853,7 @@
       },
       {
         "date": "2019-05-01",
-        "score": 53.33
+        "score": 53.34
       },
       {
         "date": "2019-05-02",
@@ -2901,7 +2901,7 @@
       },
       {
         "date": "2019-05-17",
-        "score": 38.89
+        "score": 38.88
       },
       {
         "date": "2019-05-20",
@@ -2977,7 +2977,7 @@
       },
       {
         "date": "2019-06-14",
-        "score": 45.67
+        "score": 45.68
       },
       {
         "date": "2019-06-17",
@@ -2989,7 +2989,7 @@
       },
       {
         "date": "2019-06-19",
-        "score": 45.29
+        "score": 45.28
       },
       {
         "date": "2019-06-20",
@@ -3213,7 +3213,7 @@
       },
       {
         "date": "2019-09-09",
-        "score": 38.93
+        "score": 38.94
       },
       {
         "date": "2019-09-10",
@@ -3293,7 +3293,7 @@
       },
       {
         "date": "2019-10-07",
-        "score": 33.88
+        "score": 33.87
       },
       {
         "date": "2019-10-08",
@@ -3505,7 +3505,7 @@
       },
       {
         "date": "2019-12-20",
-        "score": 50.2
+        "score": 50.19
       },
       {
         "date": "2019-12-23",
@@ -4833,7 +4833,7 @@
       },
       {
         "date": "2021-04-19",
-        "score": 51.56
+        "score": 51.54
       },
       {
         "date": "2021-04-20",
@@ -5013,7 +5013,7 @@
       },
       {
         "date": "2021-06-22",
-        "score": 44.4
+        "score": 44.39
       },
       {
         "date": "2021-06-23",
@@ -5257,7 +5257,7 @@
       },
       {
         "date": "2021-09-17",
-        "score": 41.13
+        "score": 41.12
       },
       {
         "date": "2021-09-20",
@@ -5325,7 +5325,7 @@
       },
       {
         "date": "2021-10-12",
-        "score": 52.14
+        "score": 52.13
       },
       {
         "date": "2021-10-13",
@@ -5957,7 +5957,7 @@
       },
       {
         "date": "2022-05-27",
-        "score": 49.84
+        "score": 49.85
       },
       {
         "date": "2022-05-31",
@@ -6309,7 +6309,7 @@
       },
       {
         "date": "2022-10-04",
-        "score": 54.95
+        "score": 54.96
       },
       {
         "date": "2022-10-05",
@@ -6397,7 +6397,7 @@
       },
       {
         "date": "2022-11-03",
-        "score": 61.99
+        "score": 61.98
       },
       {
         "date": "2022-11-04",
@@ -6673,7 +6673,7 @@
       },
       {
         "date": "2023-02-14",
-        "score": 63.77
+        "score": 63.78
       },
       {
         "date": "2023-02-15",
@@ -6737,7 +6737,7 @@
       },
       {
         "date": "2023-03-09",
-        "score": 56.92
+        "score": 56.93
       },
       {
         "date": "2023-03-10",
@@ -6849,7 +6849,7 @@
       },
       {
         "date": "2023-04-19",
-        "score": 61.92
+        "score": 61.91
       },
       {
         "date": "2023-04-20",
@@ -7189,7 +7189,7 @@
       },
       {
         "date": "2023-08-21",
-        "score": 55.51
+        "score": 55.52
       },
       {
         "date": "2023-08-22",
@@ -7205,7 +7205,7 @@
       },
       {
         "date": "2023-08-25",
-        "score": 62.23
+        "score": 62.24
       },
       {
         "date": "2023-08-28",
@@ -7981,7 +7981,7 @@
       },
       {
         "date": "2024-06-04",
-        "score": 61.11
+        "score": 61.1
       },
       {
         "date": "2024-06-05",
@@ -8033,7 +8033,7 @@
       },
       {
         "date": "2024-06-24",
-        "score": 56.32
+        "score": 56.33
       },
       {
         "date": "2024-06-25",
@@ -8129,7 +8129,7 @@
       },
       {
         "date": "2024-07-29",
-        "score": 54.77
+        "score": 54.76
       },
       {
         "date": "2024-07-30",
@@ -8137,7 +8137,7 @@
       },
       {
         "date": "2024-07-31",
-        "score": 59.22
+        "score": 59.2
       },
       {
         "date": "2024-08-01",
@@ -8261,7 +8261,7 @@
       },
       {
         "date": "2024-09-13",
-        "score": 63.71
+        "score": 63.72
       },
       {
         "date": "2024-09-16",
@@ -9169,7 +9169,7 @@
       },
       {
         "date": "2025-08-12",
-        "score": 56.91
+        "score": 56.92
       },
       {
         "date": "2025-08-13",
@@ -9265,7 +9265,7 @@
       },
       {
         "date": "2025-09-16",
-        "score": 47.8
+        "score": 47.79
       },
       {
         "date": "2025-09-17",
@@ -10285,15 +10285,15 @@
       },
       {
         "date": "2026-09-22",
-        "score": 49.18
+        "score": 50.25
       },
       {
         "date": "2026-09-23",
-        "score": 49.85
+        "score": 50.09
       },
       {
         "date": "2026-09-24",
-        "score": 49.88
+        "score": 48.24
       }
     ],
     "note": "Exploratory only. Uses available reconstructed indicator histories and may contain observation-date/release-date mismatch for macro series. Do not treat the candidate thresholds as final until a point-in-time out-of-sample validation is done."
@@ -10304,7 +10304,7 @@
     {
       "id": "market_fear",
       "name": "市场恐慌指标",
-      "points": 3.785
+      "points": 3.727
     },
     {
       "id": "market_overextension",
@@ -10324,22 +10324,22 @@
     {
       "id": "global_cb_rhythm",
       "name": "世界央行加息指标",
-      "points": 0.984
+      "points": 0.987
     },
     {
       "id": "us_loans_speed",
       "name": "美国贷款速度增量指标",
-      "points": 0.87
-    },
-    {
-      "id": "options_anomaly",
-      "name": "期权市场异动/大单量指标",
-      "points": 0.72
+      "points": 0.784
     },
     {
       "id": "retail_participation",
       "name": "散户参与度指标",
       "points": 0.344
+    },
+    {
+      "id": "tech100_volatility",
+      "name": "美国科技公司Top100综合波动率指标",
+      "points": 0.32
     }
   ],
   "top_negative_contributors": [
@@ -10379,9 +10379,9 @@
       "points": -0.433
     },
     {
-      "id": "employment",
-      "name": "美国就业/劳动力指标",
-      "points": -0.153
+      "id": "geopolitical_risk",
+      "name": "地缘政治指标",
+      "points": -0.29
     }
   ],
   "composite_method": {
@@ -11160,7 +11160,7 @@
       "transition_driver": true,
       "daily_importance_score": 38.76,
       "attention_state": "normal",
-      "daily_importance_rank": 64
+      "daily_importance_rank": 63
     },
     {
       "id": "market_topic_heat",
@@ -11174,11 +11174,11 @@
       "importance_score": 60,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 77,
-      "score": 51.94,
-      "raw": 51.94,
+      "score": 54.81,
+      "raw": 54.806,
       "raw_unit": "score",
-      "d1": 3.62,
-      "d2": 17.33,
+      "d1": -0.26,
+      "d2": 5.95,
       "asof": "2026-09-25",
       "history": [
         {
@@ -11487,7 +11487,7 @@
         },
         {
           "date": "2026-05-01",
-          "score": 32.45
+          "score": 32.41
         },
         {
           "date": "2026-05-04",
@@ -11719,7 +11719,7 @@
         },
         {
           "date": "2026-07-24",
-          "score": 38.69
+          "score": 38.73
         },
         {
           "date": "2026-07-27",
@@ -11795,7 +11795,7 @@
         },
         {
           "date": "2026-08-20",
-          "score": 50.0
+          "score": 49.96
         },
         {
           "date": "2026-08-21",
@@ -11887,19 +11887,19 @@
         },
         {
           "date": "2026-09-22",
-          "score": 64.33
+          "score": 62.15
         },
         {
           "date": "2026-09-23",
-          "score": 62.04
+          "score": 61.29
         },
         {
           "date": "2026-09-24",
-          "score": 48.32
+          "score": 55.07
         },
         {
           "date": "2026-09-25",
-          "score": 51.94
+          "score": 54.81
         }
       ],
       "quality": "proxy",
@@ -11907,9 +11907,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 38.88,
+      "daily_importance_score": 34.95,
       "attention_state": "normal",
-      "daily_importance_rank": 63
+      "daily_importance_rank": 67
     },
     {
       "id": "cross_asset_correlation",
@@ -11923,11 +11923,11 @@
       "importance_score": 82,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 36,
-      "score": 93.39,
-      "raw": 0.4838,
+      "score": 93.25,
+      "raw": 0.4822,
       "raw_unit": "|corr| 60d",
-      "d1": 0.93,
-      "d2": -0.26,
+      "d1": 0.79,
+      "d2": -0.4,
       "asof": "2026-09-24",
       "history": [
         {
@@ -12648,7 +12648,7 @@
         },
         {
           "date": "2026-09-24",
-          "score": 93.39
+          "score": 93.25
         }
       ],
       "quality": "composite",
@@ -12656,7 +12656,7 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 67.68,
+      "daily_importance_score": 67.55,
       "attention_state": "high",
       "daily_importance_rank": 17
     },
@@ -12672,17 +12672,13 @@
       "importance_score": 94,
       "importance_reason": "主要央行政策方向决定全球流动性环境。",
       "importance_rank": 7,
-      "score": 3.97,
-      "raw": 10.9563,
+      "score": 3.84,
+      "raw": 11.0017,
       "raw_unit": "% 10Y 20d",
-      "d1": 0.53,
-      "d2": 5.42,
+      "d1": -0.79,
+      "d2": -0.4,
       "asof": "2026-09-25",
       "history": [
-        {
-          "date": "2026-01-07",
-          "score": 57.8
-        },
         {
           "date": "2026-01-08",
           "score": 52.12
@@ -13388,26 +13384,30 @@
           "score": 20.11
         },
         {
+          "date": "2026-09-22",
+          "score": 16.93
+        },
+        {
           "date": "2026-09-23",
-          "score": 8.33
+          "score": 5.03
         },
         {
           "date": "2026-09-24",
-          "score": 3.44
+          "score": 4.63
         },
         {
           "date": "2026-09-25",
-          "score": 3.97
+          "score": 3.84
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.984,
+      "market_contribution_points": 0.987,
       "model_v2_role": "active",
       "model_v2_bucket": "macro",
       "transition_driver": false,
-      "daily_importance_score": 76.67,
+      "daily_importance_score": 75.3,
       "attention_state": "high",
-      "daily_importance_rank": 6
+      "daily_importance_rank": 8
     },
     {
       "id": "global_cb_cycle_entry",
@@ -13421,17 +13421,13 @@
       "importance_score": 92,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 11,
-      "score": 95.11,
-      "raw": 17.1344,
+      "score": 94.51,
+      "raw": 15.8883,
       "raw_unit": "% 10Y 60d",
-      "d1": -0.79,
-      "d2": -3.7,
+      "d1": -0.13,
+      "d2": -0.26,
       "asof": "2026-09-25",
       "history": [
-        {
-          "date": "2026-01-07",
-          "score": 49.8
-        },
         {
           "date": "2026-01-08",
           "score": 54.76
@@ -14137,16 +14133,20 @@
           "score": 84.06
         },
         {
+          "date": "2026-09-22",
+          "score": 86.44
+        },
+        {
           "date": "2026-09-23",
-          "score": 92.99
+          "score": 94.51
         },
         {
           "date": "2026-09-24",
-          "score": 95.9
+          "score": 94.64
         },
         {
           "date": "2026-09-25",
-          "score": 95.11
+          "score": 94.51
         }
       ],
       "quality": "proxy",
@@ -14154,9 +14154,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 74.72,
+      "daily_importance_score": 72.87,
       "attention_state": "high",
-      "daily_importance_rank": 11
+      "daily_importance_rank": 9
     },
     {
       "id": "retail_panic",
@@ -14170,11 +14170,11 @@
       "importance_score": 72,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 57,
-      "score": 59.99,
+      "score": 60.52,
       "raw": -5.5312,
       "raw_unit": "% IWM 20d",
-      "d1": -3.44,
-      "d2": -6.48,
+      "d1": -2.98,
+      "d2": -6.08,
       "asof": "2026-09-25",
       "history": [
         {
@@ -14883,7 +14883,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 53.44
+          "score": 49.6
         },
         {
           "date": "2026-09-23",
@@ -14891,11 +14891,11 @@
         },
         {
           "date": "2026-09-24",
-          "score": 63.43
+          "score": 63.49
         },
         {
           "date": "2026-09-25",
-          "score": 59.99
+          "score": 60.52
         }
       ],
       "quality": "proxy",
@@ -14903,7 +14903,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 46.13,
+      "daily_importance_score": 46.05,
       "attention_state": "normal",
       "daily_importance_rank": 51
     },
@@ -14919,17 +14919,13 @@
       "importance_score": 86,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 26,
-      "score": 5.09,
-      "raw": 5.0926,
+      "score": 5.27,
+      "raw": 5.269,
       "raw_unit": "score",
-      "d1": -1.15,
-      "d2": -1.63,
+      "d1": -0.99,
+      "d2": -1.5,
       "asof": "2026-09-25",
       "history": [
-        {
-          "date": "2026-01-09",
-          "score": 11.42
-        },
         {
           "date": "2026-01-12",
           "score": 11.35
@@ -15635,16 +15631,20 @@
           "score": 7.03
         },
         {
+          "date": "2026-09-22",
+          "score": 5.86
+        },
+        {
           "date": "2026-09-23",
           "score": 5.75
         },
         {
           "date": "2026-09-24",
-          "score": 6.24
+          "score": 6.26
         },
         {
           "date": "2026-09-25",
-          "score": 5.09
+          "score": 5.27
         }
       ],
       "quality": "proxy",
@@ -15652,9 +15652,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 71.16,
+      "daily_importance_score": 70.91,
       "attention_state": "high",
-      "daily_importance_rank": 14
+      "daily_importance_rank": 13
     },
     {
       "id": "quant_crowding",
@@ -15668,11 +15668,11 @@
       "importance_score": 84,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 28,
-      "score": 77.43,
-      "raw": 77.425,
+      "score": 77.38,
+      "raw": 77.381,
       "raw_unit": "score",
-      "d1": -2.73,
-      "d2": 0.26,
+      "d1": -2.78,
+      "d2": 0.09,
       "asof": "2026-09-24",
       "history": [
         {
@@ -16069,7 +16069,7 @@
         },
         {
           "date": "2026-05-29",
-          "score": 91.27
+          "score": 91.23
         },
         {
           "date": "2026-06-01",
@@ -16385,7 +16385,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 83.16
+          "score": 83.02
         },
         {
           "date": "2026-09-23",
@@ -16393,7 +16393,7 @@
         },
         {
           "date": "2026-09-24",
-          "score": 77.43
+          "score": 77.38
         }
       ],
       "quality": "proxy",
@@ -16401,7 +16401,7 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 60.18,
+      "daily_importance_score": 60.12,
       "attention_state": "watch",
       "daily_importance_rank": 28
     },
@@ -17152,7 +17152,7 @@
       "transition_driver": true,
       "daily_importance_score": 61.84,
       "attention_state": "watch",
-      "daily_importance_rank": 26
+      "daily_importance_rank": 25
     },
     {
       "id": "trump_activity",
@@ -17222,11 +17222,11 @@
       "importance_score": 88,
       "importance_reason": "大盘波动和短期回撤是即时压力确认层。",
       "importance_rank": 22,
-      "score": 42.92,
-      "raw": 15.12,
+      "score": 43.45,
+      "raw": 15.19,
       "raw_unit": "VIX",
-      "d1": -3.44,
-      "d2": -8.0,
+      "d1": -2.98,
+      "d2": -7.61,
       "asof": "2026-09-25",
       "history": [
         {
@@ -17935,7 +17935,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 26.32
+          "score": 22.49
         },
         {
           "date": "2026-09-23",
@@ -17943,11 +17943,11 @@
         },
         {
           "date": "2026-09-24",
-          "score": 46.36
+          "score": 46.43
         },
         {
           "date": "2026-09-25",
-          "score": 42.92
+          "score": 43.45
         }
       ],
       "quality": "composite",
@@ -17955,9 +17955,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 52.87,
+      "daily_importance_score": 52.15,
       "attention_state": "watch",
-      "daily_importance_rank": 35
+      "daily_importance_rank": 36
     },
     {
       "id": "ghost_story_density",
@@ -17971,8 +17971,8 @@
       "importance_score": 67,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 68,
-      "score": 0.0,
-      "raw": 0,
+      "score": 19.57,
+      "raw": 13,
       "raw_unit": "deduped news events / 24h",
       "d1": null,
       "d2": null,
@@ -17980,7 +17980,7 @@
       "history": [
         {
           "date": "2026-09-25",
-          "score": 0.0
+          "score": 19.57
         }
       ],
       "quality": "direct_news_text_context",
@@ -18005,17 +18005,13 @@
       "importance_score": 90,
       "importance_reason": "波动率与信用压力结合，可较直接观察风险厌恶。",
       "importance_rank": 20,
-      "score": 15.28,
-      "raw": 15.12,
+      "score": 15.81,
+      "raw": 15.19,
       "raw_unit": "VIX",
-      "d1": -3.44,
-      "d2": -6.22,
+      "d1": -2.98,
+      "d2": -5.82,
       "asof": "2026-09-25",
       "history": [
-        {
-          "date": "2026-01-09",
-          "score": 18.12
-        },
         {
           "date": "2026-01-12",
           "score": 21.36
@@ -18721,24 +18717,28 @@
           "score": 15.01
         },
         {
+          "date": "2026-09-22",
+          "score": 11.24
+        },
+        {
           "date": "2026-09-23",
           "score": 15.94
         },
         {
           "date": "2026-09-24",
-          "score": 18.72
+          "score": 18.78
         },
         {
           "date": "2026-09-25",
-          "score": 15.28
+          "score": 15.81
         }
       ],
       "quality": "composite",
-      "market_contribution_points": 3.785,
+      "market_contribution_points": 3.727,
       "model_v2_role": "active",
       "model_v2_bucket": "sentiment_event",
       "transition_driver": true,
-      "daily_importance_score": 69.89,
+      "daily_importance_score": 69.16,
       "attention_state": "high",
       "daily_importance_rank": 15
     },
@@ -18754,17 +18754,13 @@
       "importance_score": 78,
       "importance_reason": "期权波动异常是短期风险与事件定价的重要确认项。",
       "importance_rank": 42,
-      "score": 37.96,
-      "raw": -2.0725,
+      "score": 46.56,
+      "raw": 2.5658,
       "raw_unit": "% VIX 5d",
-      "d1": 10.85,
-      "d2": 7.54,
+      "d1": -0.79,
+      "d2": -26.59,
       "asof": "2026-09-25",
       "history": [
-        {
-          "date": "2026-01-09",
-          "score": 40.81
-        },
         {
           "date": "2026-01-12",
           "score": 47.75
@@ -19470,26 +19466,30 @@
           "score": 20.5
         },
         {
+          "date": "2026-09-22",
+          "score": 13.96
+        },
+        {
           "date": "2026-09-23",
-          "score": 23.81
+          "score": 21.56
         },
         {
           "date": "2026-09-24",
-          "score": 27.12
+          "score": 47.35
         },
         {
           "date": "2026-09-25",
-          "score": 37.96
+          "score": 46.56
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.72,
+      "market_contribution_points": 0.206,
       "model_v2_role": "active",
       "model_v2_bucket": "short_market",
       "transition_driver": true,
-      "daily_importance_score": 55.15,
-      "attention_state": "watch",
-      "daily_importance_rank": 32
+      "daily_importance_score": 49.54,
+      "attention_state": "normal",
+      "daily_importance_rank": 45
     },
     {
       "id": "geo_news_impact",
@@ -19503,11 +19503,11 @@
       "importance_score": 76,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 47,
-      "score": 58.86,
-      "raw": 58.8624,
+      "score": 64.46,
+      "raw": 64.4621,
       "raw_unit": "score",
-      "d1": 9.79,
-      "d2": 0.22,
+      "d1": 1.94,
+      "d2": -22.57,
       "asof": "2026-09-25",
       "history": [
         {
@@ -20216,19 +20216,19 @@
         },
         {
           "date": "2026-09-22",
-          "score": 49.74
+          "score": 47.93
         },
         {
           "date": "2026-09-23",
-          "score": 39.51
+          "score": 38.01
         },
         {
           "date": "2026-09-24",
-          "score": 49.07
+          "score": 62.52
         },
         {
           "date": "2026-09-25",
-          "score": 58.86
+          "score": 64.46
         }
       ],
       "quality": "proxy",
@@ -20236,9 +20236,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 49.26,
-      "attention_state": "normal",
-      "daily_importance_rank": 44
+      "daily_importance_score": 55.06,
+      "attention_state": "watch",
+      "daily_importance_rank": 33
     },
     {
       "id": "geo_lag_reaction",
@@ -20252,11 +20252,11 @@
       "importance_score": 70,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 59,
-      "score": 47.27,
-      "raw": 47.2663,
+      "score": 47.35,
+      "raw": 47.3545,
       "raw_unit": "score",
-      "d1": -0.57,
-      "d2": 11.73,
+      "d1": -0.49,
+      "d2": 11.82,
       "asof": "2026-09-25",
       "history": [
         {
@@ -20573,7 +20573,7 @@
         },
         {
           "date": "2026-05-01",
-          "score": 74.25
+          "score": 74.21
         },
         {
           "date": "2026-05-04",
@@ -20801,7 +20801,7 @@
         },
         {
           "date": "2026-07-24",
-          "score": 52.47
+          "score": 52.51
         },
         {
           "date": "2026-07-27",
@@ -20877,7 +20877,7 @@
         },
         {
           "date": "2026-08-20",
-          "score": 85.45
+          "score": 85.41
         },
         {
           "date": "2026-08-21",
@@ -20977,7 +20977,7 @@
         },
         {
           "date": "2026-09-25",
-          "score": 47.27
+          "score": 47.35
         }
       ],
       "quality": "proxy",
@@ -20985,7 +20985,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 40.73,
+      "daily_importance_score": 40.67,
       "attention_state": "normal",
       "daily_importance_rank": 59
     },
@@ -21029,17 +21029,13 @@
       "importance_score": 90,
       "importance_reason": "美元融资环境与信用压力影响全球资产与跨境流动性。",
       "importance_rank": 18,
-      "score": 43.19,
-      "raw": 43.1878,
+      "score": 43.45,
+      "raw": 43.4524,
       "raw_unit": "score",
-      "d1": -3.57,
-      "d2": -4.5,
+      "d1": -2.12,
+      "d2": -1.26,
       "asof": "2026-09-25",
       "history": [
-        {
-          "date": "2026-01-07",
-          "score": 29.23
-        },
         {
           "date": "2026-01-08",
           "score": 27.98
@@ -21745,16 +21741,20 @@
           "score": 43.65
         },
         {
+          "date": "2026-09-22",
+          "score": 43.65
+        },
+        {
           "date": "2026-09-23",
-          "score": 45.83
+          "score": 46.43
         },
         {
           "date": "2026-09-24",
-          "score": 46.76
+          "score": 45.57
         },
         {
           "date": "2026-09-25",
-          "score": 43.19
+          "score": 43.45
         }
       ],
       "quality": "composite",
@@ -21762,9 +21762,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 52.67,
+      "daily_importance_score": 50.61,
       "attention_state": "watch",
-      "daily_importance_rank": 37
+      "daily_importance_rank": 41
     },
     {
       "id": "buffett_cash",
@@ -21823,7 +21823,7 @@
       "raw": 41.8651,
       "raw_unit": "score",
       "d1": 0.4,
-      "d2": -1.39,
+      "d2": -1.46,
       "asof": "2026-09-25",
       "history": [
         {
@@ -22532,11 +22532,11 @@
         },
         {
           "date": "2026-09-22",
-          "score": 41.67
+          "score": 41.73
         },
         {
           "date": "2026-09-23",
-          "score": 39.68
+          "score": 39.62
         },
         {
           "date": "2026-09-24",
@@ -22552,9 +22552,9 @@
       "model_v2_role": "active",
       "model_v2_bucket": "long_structure",
       "transition_driver": false,
-      "daily_importance_score": 49.56,
+      "daily_importance_score": 49.59,
       "attention_state": "normal",
-      "daily_importance_rank": 41
+      "daily_importance_rank": 44
     },
     {
       "id": "kondratiev_cycle",
@@ -22596,11 +22596,11 @@
       "importance_score": 82,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 32,
-      "score": 51.65,
-      "raw": 51.6534,
+      "score": 53.17,
+      "raw": 53.1691,
       "raw_unit": "score",
-      "d1": 0.91,
-      "d2": -2.95,
+      "d1": -0.95,
+      "d2": -8.57,
       "asof": "2026-09-25",
       "history": [
         {
@@ -23309,29 +23309,29 @@
         },
         {
           "date": "2026-09-22",
-          "score": 50.03
+          "score": 48.64
         },
         {
           "date": "2026-09-23",
-          "score": 46.88
+          "score": 46.51
         },
         {
           "date": "2026-09-24",
-          "score": 50.74
+          "score": 54.12
         },
         {
           "date": "2026-09-25",
-          "score": 51.65
+          "score": 53.17
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": -0.151,
+      "market_contribution_points": -0.29,
       "model_v2_role": "active",
       "model_v2_bucket": "sentiment_event",
       "transition_driver": true,
-      "daily_importance_score": 43.48,
+      "daily_importance_score": 46.21,
       "attention_state": "normal",
-      "daily_importance_rank": 54
+      "daily_importance_rank": 50
     },
     {
       "id": "us_loans_total",
@@ -23345,17 +23345,13 @@
       "importance_score": 90,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 16,
-      "score": 94.18,
-      "raw": 94.1799,
+      "score": 89.81,
+      "raw": 89.8148,
       "raw_unit": "credit proxy",
-      "d1": 3.7,
-      "d2": -0.53,
+      "d1": -0.66,
+      "d2": -4.5,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 62.7
-        },
         {
           "date": "2026-01-07",
           "score": 73.28
@@ -23690,7 +23686,7 @@
         },
         {
           "date": "2026-05-07",
-          "score": 54.63
+          "score": 54.5
         },
         {
           "date": "2026-05-08",
@@ -24065,12 +24061,16 @@
           "score": 86.24
         },
         {
+          "date": "2026-09-22",
+          "score": 86.64
+        },
+        {
           "date": "2026-09-23",
           "score": 90.48
         },
         {
           "date": "2026-09-24",
-          "score": 94.18
+          "score": 89.81
         }
       ],
       "quality": "proxy",
@@ -24078,9 +24078,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 73.9,
+      "daily_importance_score": 70.72,
       "attention_state": "high",
-      "daily_importance_rank": 12
+      "daily_importance_rank": 14
     },
     {
       "id": "us_loans_speed",
@@ -24094,17 +24094,13 @@
       "importance_score": 92,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 9,
-      "score": 94.18,
-      "raw": 94.1799,
+      "score": 89.81,
+      "raw": 89.8148,
       "raw_unit": "credit proxy",
-      "d1": 3.7,
-      "d2": -0.53,
+      "d1": -0.66,
+      "d2": -4.5,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 62.7
-        },
         {
           "date": "2026-01-07",
           "score": 73.28
@@ -24439,7 +24435,7 @@
         },
         {
           "date": "2026-05-07",
-          "score": 54.63
+          "score": 54.5
         },
         {
           "date": "2026-05-08",
@@ -24814,22 +24810,26 @@
           "score": 86.24
         },
         {
+          "date": "2026-09-22",
+          "score": 86.64
+        },
+        {
           "date": "2026-09-23",
           "score": 90.48
         },
         {
           "date": "2026-09-24",
-          "score": 94.18
+          "score": 89.81
         }
       ],
       "quality": "proxy",
-      "market_contribution_points": 0.87,
+      "market_contribution_points": 0.784,
       "model_v2_role": "active",
       "model_v2_bucket": "macro",
       "transition_driver": false,
-      "daily_importance_score": 74.9,
+      "daily_importance_score": 71.72,
       "attention_state": "high",
-      "daily_importance_rank": 10
+      "daily_importance_rank": 12
     },
     {
       "id": "us_cn_retail_discussion",
@@ -24931,7 +24931,7 @@
       "raw": 59.2923,
       "raw_unit": "score",
       "d1": -3.6,
-      "d2": 0.4,
+      "d2": 0.2,
       "asof": "2026-09-24",
       "history": [
         {
@@ -25644,7 +25644,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 66.9
+          "score": 66.7
         },
         {
           "date": "2026-09-23",
@@ -25660,7 +25660,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 41.86,
+      "daily_importance_score": 41.8,
       "attention_state": "normal",
       "daily_importance_rank": 58
     },
@@ -25676,11 +25676,11 @@
       "importance_score": 90,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 15,
-      "score": 92.46,
-      "raw": -0.4273,
+      "score": 92.59,
+      "raw": -0.4336,
       "raw_unit": "corr 60d",
-      "d1": 1.85,
-      "d2": -2.38,
+      "d1": 1.19,
+      "d2": -2.91,
       "asof": "2026-09-24",
       "history": [
         {
@@ -26393,15 +26393,15 @@
         },
         {
           "date": "2026-09-22",
-          "score": 86.38
+          "score": 87.3
         },
         {
           "date": "2026-09-23",
-          "score": 90.61
+          "score": 91.4
         },
         {
           "date": "2026-09-24",
-          "score": 92.46
+          "score": 92.59
         }
       ],
       "quality": "direct",
@@ -26409,9 +26409,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 72.35,
+      "daily_importance_score": 72.2,
       "attention_state": "high",
-      "daily_importance_rank": 13
+      "daily_importance_rank": 11
     },
     {
       "id": "market_optimism",
@@ -26425,11 +26425,11 @@
       "importance_score": 82,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 37,
-      "score": 44.55,
-      "raw": 44.5547,
+      "score": 44.38,
+      "raw": 44.3783,
       "raw_unit": "score",
-      "d1": 1.15,
-      "d2": 2.85,
+      "d1": 0.99,
+      "d2": 2.72,
       "asof": "2026-09-25",
       "history": [
         {
@@ -27138,7 +27138,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 51.98
+          "score": 53.23
         },
         {
           "date": "2026-09-23",
@@ -27146,11 +27146,11 @@
         },
         {
           "date": "2026-09-24",
-          "score": 43.41
+          "score": 43.39
         },
         {
           "date": "2026-09-25",
-          "score": 44.55
+          "score": 44.38
         }
       ],
       "quality": "composite",
@@ -27158,7 +27158,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 45.87,
+      "daily_importance_score": 45.84,
       "attention_state": "normal",
       "daily_importance_rank": 52
     },
@@ -27174,11 +27174,11 @@
       "importance_score": 82,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 34,
-      "score": 21.1,
-      "raw": 21.0979,
+      "score": 21.51,
+      "raw": 21.5094,
       "raw_unit": "score",
-      "d1": -2.67,
-      "d2": -5.28,
+      "d1": -2.31,
+      "d2": -4.98,
       "asof": "2026-09-25",
       "history": [
         {
@@ -27887,7 +27887,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 16.12
+          "score": 13.2
         },
         {
           "date": "2026-09-23",
@@ -27895,11 +27895,11 @@
         },
         {
           "date": "2026-09-24",
-          "score": 23.77
+          "score": 23.82
         },
         {
           "date": "2026-09-25",
-          "score": 21.1
+          "score": 21.51
         }
       ],
       "quality": "composite",
@@ -27907,7 +27907,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 61.63,
+      "daily_importance_score": 61.07,
       "attention_state": "watch",
       "daily_importance_rank": 27
     },
@@ -27955,13 +27955,9 @@
       "raw": 100.0,
       "raw_unit": "score",
       "d1": 0.66,
-      "d2": -1.72,
+      "d2": -1.85,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 92.86
-        },
         {
           "date": "2026-01-07",
           "score": 90.48
@@ -28671,6 +28667,10 @@
           "score": 96.96
         },
         {
+          "date": "2026-09-22",
+          "score": 96.83
+        },
+        {
           "date": "2026-09-23",
           "score": 99.34
         },
@@ -28684,7 +28684,7 @@
       "model_v2_role": "active",
       "model_v2_bucket": "macro",
       "transition_driver": true,
-      "daily_importance_score": 79.95,
+      "daily_importance_score": 79.99,
       "attention_state": "high",
       "daily_importance_rank": 2
     },
@@ -29830,7 +29830,7 @@
         },
         {
           "date": "2026-05-01",
-          "score": 40.08
+          "score": 39.95
         },
         {
           "date": "2026-05-04",
@@ -30058,7 +30058,7 @@
         },
         {
           "date": "2026-07-24",
-          "score": 25.66
+          "score": 25.79
         },
         {
           "date": "2026-07-27",
@@ -30134,7 +30134,7 @@
         },
         {
           "date": "2026-08-20",
-          "score": 72.49
+          "score": 72.35
         },
         {
           "date": "2026-08-21",
@@ -30342,7 +30342,7 @@
       "raw": 75.5291,
       "raw_unit": "score",
       "d1": -8.99,
-      "d2": -3.97,
+      "d2": -4.37,
       "asof": "2026-09-24",
       "history": [
         {
@@ -31055,7 +31055,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 89.55
+          "score": 89.15
         },
         {
           "date": "2026-09-23",
@@ -31071,7 +31071,7 @@
       "model_v2_role": "active",
       "model_v2_bucket": "short_market",
       "transition_driver": true,
-      "daily_importance_score": 63.98,
+      "daily_importance_score": 64.11,
       "attention_state": "watch",
       "daily_importance_rank": 22
     },
@@ -31822,7 +31822,7 @@
       "transition_driver": true,
       "daily_importance_score": 65.99,
       "attention_state": "high",
-      "daily_importance_rank": 20
+      "daily_importance_rank": 19
     },
     {
       "id": "mega_liquidity_blowup",
@@ -31836,11 +31836,11 @@
       "importance_score": 92,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 12,
-      "score": 23.45,
-      "raw": 23.4536,
+      "score": 23.63,
+      "raw": 23.63,
       "raw_unit": "score",
-      "d1": -1.15,
-      "d2": -1.75,
+      "d1": -0.99,
+      "d2": -1.62,
       "asof": "2026-09-25",
       "history": [
         {
@@ -32549,7 +32549,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 23.14
+          "score": 21.93
         },
         {
           "date": "2026-09-23",
@@ -32557,11 +32557,11 @@
         },
         {
           "date": "2026-09-24",
-          "score": 24.6
+          "score": 24.62
         },
         {
           "date": "2026-09-25",
-          "score": 23.45
+          "score": 23.63
         }
       ],
       "quality": "proxy",
@@ -32569,9 +32569,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 63.18,
+      "daily_importance_score": 62.93,
       "attention_state": "watch",
-      "daily_importance_rank": 23
+      "daily_importance_rank": 24
     },
     {
       "id": "market_bias",
@@ -32585,11 +32585,11 @@
       "importance_score": 86,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 27,
-      "score": 61.73,
-      "raw": 61.7284,
+      "score": 61.43,
+      "raw": 61.4345,
       "raw_unit": "score",
-      "d1": 1.91,
-      "d2": 4.07,
+      "d1": 1.65,
+      "d2": 3.85,
       "asof": "2026-09-25",
       "history": [
         {
@@ -33298,7 +33298,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 67.93
+          "score": 70.02
         },
         {
           "date": "2026-09-23",
@@ -33306,11 +33306,11 @@
         },
         {
           "date": "2026-09-24",
-          "score": 59.82
+          "score": 59.78
         },
         {
           "date": "2026-09-25",
-          "score": 61.73
+          "score": 61.43
         }
       ],
       "quality": "composite",
@@ -33318,9 +33318,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 52.49,
+      "daily_importance_score": 52.08,
       "attention_state": "watch",
-      "daily_importance_rank": 38
+      "daily_importance_rank": 37
     },
     {
       "id": "mag7_volume",
@@ -34069,7 +34069,7 @@
       "transition_driver": false,
       "daily_importance_score": 46.71,
       "attention_state": "normal",
-      "daily_importance_rank": 49
+      "daily_importance_rank": 48
     },
     {
       "id": "mag7_volatility",
@@ -34818,7 +34818,7 @@
       "transition_driver": false,
       "daily_importance_score": 46.61,
       "attention_state": "normal",
-      "daily_importance_rank": 50
+      "daily_importance_rank": 49
     },
     {
       "id": "ai7_volume",
@@ -37065,7 +37065,7 @@
       "transition_driver": true,
       "daily_importance_score": 49.35,
       "attention_state": "normal",
-      "daily_importance_rank": 43
+      "daily_importance_rank": 46
     },
     {
       "id": "sector_it_vol",
@@ -37079,17 +37079,13 @@
       "importance_score": 78,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 43,
-      "score": 57.67,
-      "raw": 21.929,
+      "score": 58.86,
+      "raw": 22.152,
       "raw_unit": "% RV20",
-      "d1": 0.4,
-      "d2": 9.13,
+      "d1": 0.93,
+      "d2": 0.26,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 45.77
-        },
         {
           "date": "2026-01-07",
           "score": 44.71
@@ -37799,12 +37795,16 @@
           "score": 66.01
         },
         {
-          "date": "2026-09-23",
+          "date": "2026-09-22",
           "score": 57.28
         },
         {
+          "date": "2026-09-23",
+          "score": 57.94
+        },
+        {
           "date": "2026-09-24",
-          "score": 57.67
+          "score": 58.86
         }
       ],
       "quality": "proxy",
@@ -37812,9 +37812,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 46.76,
+      "daily_importance_score": 44.96,
       "attention_state": "normal",
-      "daily_importance_rank": 48
+      "daily_importance_rank": 53
     },
     {
       "id": "sector_comm_vol",
@@ -37828,17 +37828,13 @@
       "importance_score": 72,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 58,
-      "score": 92.46,
-      "raw": 23.185,
+      "score": 91.01,
+      "raw": 22.5736,
       "raw_unit": "% RV20",
-      "d1": 0.4,
-      "d2": -2.65,
+      "d1": 0.79,
+      "d2": 0.66,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 0.26
-        },
         {
           "date": "2026-01-07",
           "score": 0.13
@@ -38065,7 +38061,7 @@
         },
         {
           "date": "2026-03-30",
-          "score": 54.5
+          "score": 54.63
         },
         {
           "date": "2026-03-31",
@@ -38548,12 +38544,16 @@
           "score": 89.02
         },
         {
+          "date": "2026-09-22",
+          "score": 90.08
+        },
+        {
           "date": "2026-09-23",
-          "score": 92.06
+          "score": 90.21
         },
         {
           "date": "2026-09-24",
-          "score": 92.46
+          "score": 91.01
         }
       ],
       "quality": "proxy",
@@ -38561,9 +38561,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 62.56,
+      "daily_importance_score": 61.29,
       "attention_state": "watch",
-      "daily_importance_rank": 25
+      "daily_importance_rank": 26
     },
     {
       "id": "sector_cons_disc_vol",
@@ -38577,17 +38577,13 @@
       "importance_score": 72,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 55,
-      "score": 31.08,
-      "raw": 16.247,
+      "score": 32.8,
+      "raw": 16.3359,
       "raw_unit": "% RV20",
-      "d1": 0.0,
-      "d2": -3.57,
+      "d1": -1.19,
+      "d2": -8.73,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 14.68
-        },
         {
           "date": "2026-01-07",
           "score": 8.47
@@ -39297,12 +39293,16 @@
           "score": 27.51
         },
         {
+          "date": "2026-09-22",
+          "score": 26.46
+        },
+        {
           "date": "2026-09-23",
-          "score": 31.08
+          "score": 33.99
         },
         {
           "date": "2026-09-24",
-          "score": 31.08
+          "score": 32.8
         }
       ],
       "quality": "proxy",
@@ -39310,9 +39310,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 48.49,
+      "daily_importance_score": 49.83,
       "attention_state": "normal",
-      "daily_importance_rank": 45
+      "daily_importance_rank": 42
     },
     {
       "id": "sector_cons_staples_vol",
@@ -39326,17 +39326,13 @@
       "importance_score": 66,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 69,
-      "score": 37.17,
-      "raw": 10.6599,
+      "score": 43.25,
+      "raw": 11.1351,
       "raw_unit": "% RV20",
-      "d1": -1.72,
-      "d2": 16.27,
+      "d1": 3.7,
+      "d2": 9.13,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 3.84
-        },
         {
           "date": "2026-01-07",
           "score": 6.75
@@ -40046,12 +40042,16 @@
           "score": 56.88
         },
         {
+          "date": "2026-09-22",
+          "score": 44.97
+        },
+        {
           "date": "2026-09-23",
-          "score": 38.89
+          "score": 39.55
         },
         {
           "date": "2026-09-24",
-          "score": 37.17
+          "score": 43.25
         }
       ],
       "quality": "proxy",
@@ -40059,9 +40059,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 46.94,
+      "daily_importance_score": 42.19,
       "attention_state": "normal",
-      "daily_importance_rank": 47
+      "daily_importance_rank": 57
     },
     {
       "id": "sector_fin_vol",
@@ -40824,17 +40824,13 @@
       "importance_score": 70,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 62,
-      "score": 57.28,
-      "raw": 13.888,
+      "score": 57.01,
+      "raw": 13.835,
       "raw_unit": "% RV20",
-      "d1": 0.79,
-      "d2": 1.06,
+      "d1": -0.66,
+      "d2": -0.79,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 73.54
-        },
         {
           "date": "2026-01-07",
           "score": 66.14
@@ -41544,12 +41540,16 @@
           "score": 56.75
         },
         {
+          "date": "2026-09-22",
+          "score": 57.54
+        },
+        {
           "date": "2026-09-23",
-          "score": 56.48
+          "score": 57.67
         },
         {
           "date": "2026-09-24",
-          "score": 57.28
+          "score": 57.01
         }
       ],
       "quality": "proxy",
@@ -41557,9 +41557,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 40.18,
+      "daily_importance_score": 39.85,
       "attention_state": "normal",
-      "daily_importance_rank": 61
+      "daily_importance_rank": 62
     },
     {
       "id": "sector_industrial_vol",
@@ -41573,17 +41573,13 @@
       "importance_score": 78,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 41,
-      "score": 44.84,
-      "raw": 13.3127,
+      "score": 35.32,
+      "raw": 12.3998,
       "raw_unit": "% RV20",
-      "d1": 0.79,
-      "d2": 1.32,
+      "d1": -9.13,
+      "d2": -9.13,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 65.87
-        },
         {
           "date": "2026-01-07",
           "score": 77.51
@@ -42293,12 +42289,16 @@
           "score": 44.58
         },
         {
+          "date": "2026-09-22",
+          "score": 44.44
+        },
+        {
           "date": "2026-09-23",
-          "score": 44.05
+          "score": 44.44
         },
         {
           "date": "2026-09-24",
-          "score": 44.84
+          "score": 35.32
         }
       ],
       "quality": "proxy",
@@ -42306,9 +42306,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 42.99,
-      "attention_state": "normal",
-      "daily_importance_rank": 55
+      "daily_importance_score": 56.21,
+      "attention_state": "watch",
+      "daily_importance_rank": 30
     },
     {
       "id": "sector_energy_vol",
@@ -43057,7 +43057,7 @@
       "transition_driver": false,
       "daily_importance_score": 44.3,
       "attention_state": "normal",
-      "daily_importance_rank": 53
+      "daily_importance_rank": 54
     },
     {
       "id": "sector_materials_vol",
@@ -43071,17 +43071,13 @@
       "importance_score": 68,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 66,
-      "score": 31.48,
-      "raw": 13.7907,
+      "score": 39.55,
+      "raw": 14.4984,
       "raw_unit": "% RV20",
-      "d1": 4.37,
-      "d2": -5.56,
+      "d1": 3.97,
+      "d2": 4.1,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 54.1
-        },
         {
           "date": "2026-01-07",
           "score": 61.24
@@ -43791,12 +43787,16 @@
           "score": 17.2
         },
         {
+          "date": "2026-09-22",
+          "score": 35.71
+        },
+        {
           "date": "2026-09-23",
-          "score": 27.12
+          "score": 35.58
         },
         {
           "date": "2026-09-24",
-          "score": 31.48
+          "score": 39.55
         }
       ],
       "quality": "proxy",
@@ -43804,9 +43804,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 49.51,
+      "daily_importance_score": 43.96,
       "attention_state": "normal",
-      "daily_importance_rank": 42
+      "daily_importance_rank": 55
     },
     {
       "id": "sector_utilities_vol",
@@ -43820,17 +43820,13 @@
       "importance_score": 64,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 71,
-      "score": 40.21,
-      "raw": 14.6277,
+      "score": 27.38,
+      "raw": 13.7704,
       "raw_unit": "% RV20",
-      "d1": -0.26,
-      "d2": -13.49,
+      "d1": -3.04,
+      "d2": -14.02,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 8.6
-        },
         {
           "date": "2026-01-07",
           "score": 30.16
@@ -43925,7 +43921,7 @@
         },
         {
           "date": "2026-02-10",
-          "score": 24.6
+          "score": 24.74
         },
         {
           "date": "2026-02-11",
@@ -44233,7 +44229,7 @@
         },
         {
           "date": "2026-06-02",
-          "score": 86.51
+          "score": 86.64
         },
         {
           "date": "2026-06-03",
@@ -44540,12 +44536,16 @@
           "score": 27.25
         },
         {
+          "date": "2026-09-22",
+          "score": 19.44
+        },
+        {
           "date": "2026-09-23",
-          "score": 40.48
+          "score": 30.42
         },
         {
           "date": "2026-09-24",
-          "score": 40.21
+          "score": 27.38
         }
       ],
       "quality": "proxy",
@@ -44553,9 +44553,9 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 42.35,
-      "attention_state": "normal",
-      "daily_importance_rank": 57
+      "daily_importance_score": 51.88,
+      "attention_state": "watch",
+      "daily_importance_rank": 38
     },
     {
       "id": "sector_realestate_vol",
@@ -44569,17 +44569,13 @@
       "importance_score": 70,
       "importance_reason": "纳入核心61指标，用于每日市场状态、重要度和贡献分解。",
       "importance_rank": 60,
-      "score": 16.01,
-      "raw": 11.7888,
+      "score": 14.02,
+      "raw": 11.4666,
       "raw_unit": "% RV20",
-      "d1": -1.06,
-      "d2": -7.01,
+      "d1": -0.13,
+      "d2": -4.63,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 0.66
-        },
         {
           "date": "2026-01-07",
           "score": 2.12
@@ -44906,7 +44902,7 @@
         },
         {
           "date": "2026-05-05",
-          "score": 44.58
+          "score": 44.44
         },
         {
           "date": "2026-05-06",
@@ -45289,12 +45285,16 @@
           "score": 11.11
         },
         {
+          "date": "2026-09-22",
+          "score": 9.66
+        },
+        {
           "date": "2026-09-23",
-          "score": 17.06
+          "score": 14.15
         },
         {
           "date": "2026-09-24",
-          "score": 16.01
+          "score": 14.02
         }
       ],
       "quality": "proxy",
@@ -45302,7 +45302,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 58.27,
+      "daily_importance_score": 58.15,
       "attention_state": "watch",
       "daily_importance_rank": 29
     },
@@ -46053,7 +46053,7 @@
       "transition_driver": true,
       "daily_importance_score": 55.23,
       "attention_state": "watch",
-      "daily_importance_rank": 31
+      "daily_importance_rank": 32
     },
     {
       "id": "liquidity_risk",
@@ -46071,13 +46071,9 @@
       "raw": 0.0,
       "raw_unit": "score",
       "d1": -0.66,
-      "d2": 1.72,
+      "d2": 1.85,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 7.14
-        },
         {
           "date": "2026-01-07",
           "score": 9.52
@@ -46787,6 +46783,10 @@
           "score": 3.04
         },
         {
+          "date": "2026-09-22",
+          "score": 3.17
+        },
+        {
           "date": "2026-09-23",
           "score": 0.66
         },
@@ -46800,7 +46800,7 @@
       "model_v2_role": "archived",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 79.95,
+      "daily_importance_score": 79.99,
       "attention_state": "high",
       "daily_importance_rank": 1
     },
@@ -46817,16 +46817,12 @@
       "layer": "supplemental",
       "impact_polarity": -1,
       "score": 100.0,
-      "raw": 5.175,
+      "raw": 5.186,
       "raw_unit": "10Y yield",
       "d1": 0.0,
       "d2": 0.0,
       "asof": "2026-09-25",
       "history": [
-        {
-          "date": "2026-01-07",
-          "score": 41.14
-        },
         {
           "date": "2026-01-08",
           "score": 47.88
@@ -47532,6 +47528,10 @@
           "score": 99.34
         },
         {
+          "date": "2026-09-22",
+          "score": 99.34
+        },
+        {
           "date": "2026-09-23",
           "score": 100.0
         },
@@ -47551,7 +47551,7 @@
       "transition_driver": true,
       "daily_importance_score": 76.0,
       "attention_state": "high",
-      "daily_importance_rank": 7
+      "daily_importance_rank": 6
     },
     {
       "id": "gold",
@@ -48314,11 +48314,11 @@
       "importance_reason": "原油影响通胀和增长，但对美股的方向并非单一。",
       "layer": "supplemental",
       "impact_polarity": 0,
-      "score": 90.61,
-      "raw": 92.84,
+      "score": 90.54,
+      "raw": 92.71,
       "raw_unit": "WTI future",
-      "d1": -2.71,
-      "d2": -5.16,
+      "d1": -2.78,
+      "d2": -5.22,
       "asof": "2026-09-25",
       "history": [
         {
@@ -49039,7 +49039,7 @@
         },
         {
           "date": "2026-09-25",
-          "score": 90.61
+          "score": 90.54
         }
       ],
       "quality": "direct",
@@ -49047,9 +49047,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 56.14,
+      "daily_importance_score": 56.16,
       "attention_state": "watch",
-      "daily_importance_rank": 30
+      "daily_importance_rank": 31
     },
     {
       "id": "high_yield",
@@ -49067,13 +49067,9 @@
       "raw": 0.7551,
       "raw_unit": "HYG/LQD",
       "d1": -0.66,
-      "d2": 1.72,
+      "d2": 1.85,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 7.14
-        },
         {
           "date": "2026-01-07",
           "score": 9.52
@@ -49783,6 +49779,10 @@
           "score": 3.04
         },
         {
+          "date": "2026-09-22",
+          "score": 3.17
+        },
+        {
           "date": "2026-09-23",
           "score": 0.66
         },
@@ -49796,7 +49796,7 @@
       "model_v2_role": "active",
       "model_v2_bucket": "macro",
       "transition_driver": true,
-      "daily_importance_score": 78.95,
+      "daily_importance_score": 78.99,
       "attention_state": "high",
       "daily_importance_rank": 3
     },
@@ -49816,7 +49816,7 @@
       "raw": -13.95,
       "raw_unit": "% XLI-SPY 120d",
       "d1": 0.4,
-      "d2": -1.39,
+      "d2": -1.46,
       "asof": "2026-09-25",
       "history": [
         {
@@ -50525,11 +50525,11 @@
         },
         {
           "date": "2026-09-22",
-          "score": 41.67
+          "score": 41.73
         },
         {
           "date": "2026-09-23",
-          "score": 39.68
+          "score": 39.62
         },
         {
           "date": "2026-09-24",
@@ -50545,9 +50545,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 38.56,
+      "daily_importance_score": 38.59,
       "attention_state": "normal",
-      "daily_importance_rank": 65
+      "daily_importance_rank": 64
     },
     {
       "id": "fiscal_deficit",
@@ -50965,7 +50965,7 @@
       "transition_driver": false,
       "daily_importance_score": 52.7,
       "attention_state": "watch",
-      "daily_importance_rank": 36
+      "daily_importance_rank": 35
     },
     {
       "id": "valuation_cycle",
@@ -51714,7 +51714,7 @@
       "transition_driver": false,
       "daily_importance_score": 38.41,
       "attention_state": "normal",
-      "daily_importance_rank": 66
+      "daily_importance_rank": 65
     },
     {
       "id": "market_volume",
@@ -53230,7 +53230,7 @@
       "raw": 3.7964,
       "raw_unit": "% SPY-RSP 60d",
       "d1": -8.99,
-      "d2": -3.97,
+      "d2": -4.37,
       "asof": "2026-09-24",
       "history": [
         {
@@ -53943,7 +53943,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 89.55
+          "score": 89.15
         },
         {
           "date": "2026-09-23",
@@ -53959,9 +53959,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 62.98,
+      "daily_importance_score": 63.11,
       "attention_state": "watch",
-      "daily_importance_rank": 24
+      "daily_importance_rank": 23
     },
     {
       "id": "leverage_liquidity",
@@ -53979,13 +53979,9 @@
       "raw": 0.0,
       "raw_unit": "score",
       "d1": -0.66,
-      "d2": 1.72,
+      "d2": 1.85,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 7.14
-        },
         {
           "date": "2026-01-07",
           "score": 9.52
@@ -54695,6 +54691,10 @@
           "score": 3.04
         },
         {
+          "date": "2026-09-22",
+          "score": 3.17
+        },
+        {
           "date": "2026-09-23",
           "score": 0.66
         },
@@ -54708,9 +54708,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 75.95,
+      "daily_importance_score": 75.99,
       "attention_state": "high",
-      "daily_importance_rank": 8
+      "daily_importance_rank": 7
     },
     {
       "id": "systemic_risk",
@@ -54724,11 +54724,11 @@
       "importance_reason": "直接反映跨资产、信用、波动与回撤的系统性风险，是总风险层。",
       "layer": "supplemental",
       "impact_polarity": -1,
-      "score": 27.82,
-      "raw": 27.8219,
+      "score": 28.17,
+      "raw": 28.1746,
       "raw_unit": "score",
-      "d1": -2.29,
-      "d2": -4.63,
+      "d1": -1.98,
+      "d2": -4.37,
       "asof": "2026-09-25",
       "history": [
         {
@@ -55437,7 +55437,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 20.11
+          "score": 17.59
         },
         {
           "date": "2026-09-23",
@@ -55445,11 +55445,11 @@
         },
         {
           "date": "2026-09-24",
-          "score": 30.11
+          "score": 30.16
         },
         {
           "date": "2026-09-25",
-          "score": 27.82
+          "score": 28.17
         }
       ],
       "quality": "composite",
@@ -55457,9 +55457,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 66.16,
+      "daily_importance_score": 65.68,
       "attention_state": "high",
-      "daily_importance_rank": 19
+      "daily_importance_rank": 20
     },
     {
       "id": "risk_60d",
@@ -55473,11 +55473,11 @@
       "importance_reason": "用于识别系统风险是否在中期窗口持续积累。",
       "layer": "supplemental",
       "impact_polarity": -1,
-      "score": 36.63,
-      "raw": 27.8219,
+      "score": 39.29,
+      "raw": 28.1746,
       "raw_unit": "systemic score",
-      "d1": -3.89,
-      "d2": -11.83,
+      "d1": -1.23,
+      "d2": -9.17,
       "asof": "2026-09-25",
       "history": [
         {
@@ -56186,7 +56186,7 @@
         },
         {
           "date": "2026-09-22",
-          "score": 10.24
+          "score": 6.94
         },
         {
           "date": "2026-09-23",
@@ -56198,7 +56198,7 @@
         },
         {
           "date": "2026-09-25",
-          "score": 36.63
+          "score": 39.29
         }
       ],
       "quality": "composite",
@@ -56206,9 +56206,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 53.64,
-      "attention_state": "watch",
-      "daily_importance_rank": 33
+      "daily_importance_score": 49.6,
+      "attention_state": "normal",
+      "daily_importance_rank": 43
     },
     {
       "id": "vol_60d_change",
@@ -56443,7 +56443,7 @@
         },
         {
           "date": "2026-03-25",
-          "score": 57.41
+          "score": 57.34
         },
         {
           "date": "2026-03-26",
@@ -56627,7 +56627,7 @@
         },
         {
           "date": "2026-06-01",
-          "score": 43.39
+          "score": 43.32
         },
         {
           "date": "2026-06-02",
@@ -56957,7 +56957,7 @@
       "transition_driver": false,
       "daily_importance_score": 47.12,
       "attention_state": "normal",
-      "daily_importance_rank": 46
+      "daily_importance_rank": 47
     },
     {
       "id": "valuation_percentile",
@@ -57706,7 +57706,7 @@
       "transition_driver": false,
       "daily_importance_score": 37.41,
       "attention_state": "normal",
-      "daily_importance_rank": 67
+      "daily_importance_rank": 66
     },
     {
       "id": "valuation_speed",
@@ -58455,7 +58455,7 @@
       "transition_driver": false,
       "daily_importance_score": 40.03,
       "attention_state": "normal",
-      "daily_importance_rank": 62
+      "daily_importance_rank": 61
     },
     {
       "id": "credit_cycle",
@@ -58469,17 +58469,13 @@
       "importance_reason": "信贷扩张/收缩对经济与资产定价具有核心传导作用。",
       "layer": "supplemental",
       "impact_polarity": 1,
-      "score": 94.18,
-      "raw": 3.8344,
+      "score": 89.81,
+      "raw": 3.2897,
       "raw_unit": "HYG/LQD 60d",
-      "d1": 3.7,
-      "d2": -0.53,
+      "d1": -0.66,
+      "d2": -4.5,
       "asof": "2026-09-24",
       "history": [
-        {
-          "date": "2026-01-06",
-          "score": 62.7
-        },
         {
           "date": "2026-01-07",
           "score": 73.28
@@ -58814,7 +58810,7 @@
         },
         {
           "date": "2026-05-07",
-          "score": 54.63
+          "score": 54.5
         },
         {
           "date": "2026-05-08",
@@ -59189,12 +59185,16 @@
           "score": 86.24
         },
         {
+          "date": "2026-09-22",
+          "score": 86.64
+        },
+        {
           "date": "2026-09-23",
           "score": 90.48
         },
         {
           "date": "2026-09-24",
-          "score": 94.18
+          "score": 89.81
         }
       ],
       "quality": "proxy",
@@ -59202,9 +59202,9 @@
       "model_v2_role": "context",
       "model_v2_bucket": null,
       "transition_driver": false,
-      "daily_importance_score": 75.9,
+      "daily_importance_score": 72.72,
       "attention_state": "high",
-      "daily_importance_rank": 9
+      "daily_importance_rank": 10
     },
     {
       "id": "yield_curve",
@@ -59219,16 +59219,12 @@
       "layer": "supplemental",
       "impact_polarity": 1,
       "score": 0.0,
-      "raw": 1.11,
+      "raw": 1.121,
       "raw_unit": "10Y-13W",
       "d1": -0.13,
       "d2": 0.0,
       "asof": "2026-09-25",
       "history": [
-        {
-          "date": "2026-01-07",
-          "score": 0.93
-        },
         {
           "date": "2026-01-08",
           "score": 0.0
@@ -59934,6 +59930,10 @@
           "score": 4.1
         },
         {
+          "date": "2026-09-22",
+          "score": 4.76
+        },
+        {
           "date": "2026-09-23",
           "score": 0.26
         },
@@ -59967,19 +59967,19 @@
       "full": {
         "n": 2453,
         "risk_rank_corr": 0.0964,
-        "quartile_worst20_separation_pct": 1.511,
+        "quartile_worst20_separation_pct": 1.5137,
         "bottom_minus_top_5pct_tail_rate_pp": 11.89,
         "quartile_monotonic_steps": 3,
         "quartile_worst20_means_pct": [
           -3.24,
           -2.5983,
-          -1.9494,
-          -1.729
+          -1.9522,
+          -1.7263
         ],
         "daily_score_change_std": 2.9561,
         "score_std": 9.1912,
         "noise_to_span": 0.3216,
-        "objective": 9.7585
+        "objective": 9.7695
       },
       "train_2016_2021": {
         "n": 1268,
@@ -59993,27 +59993,27 @@
           -1.6993,
           -1.0944
         ],
-        "daily_score_change_std": 3.2891,
-        "score_std": 9.8175,
+        "daily_score_change_std": 3.289,
+        "score_std": 9.8174,
         "noise_to_span": 0.335,
         "objective": 15.195
       },
       "oos_2022_present": {
         "n": 1185,
-        "risk_rank_corr": 0.1328,
-        "quartile_worst20_separation_pct": 1.5793,
+        "risk_rank_corr": 0.1329,
+        "quartile_worst20_separation_pct": 1.5818,
         "bottom_minus_top_5pct_tail_rate_pp": 21.55,
         "quartile_monotonic_steps": 3,
         "quartile_worst20_means_pct": [
-          -3.3874,
-          -2.539,
+          -3.3899,
+          -2.5366,
           -2.3876,
           -1.8081
         ],
-        "daily_score_change_std": 2.5539,
-        "score_std": 7.002,
-        "noise_to_span": 0.3647,
-        "objective": 11.0619
+        "daily_score_change_std": 2.5541,
+        "score_std": 7.0012,
+        "noise_to_span": 0.3648,
+        "objective": 11.0724
       }
     },
     "interpretation": "Positive risk-separation delta means removing the factor improved the gap between high-score and low-score future worst-20d outcomes. Remove recommendations require cross-checking OOS and redundancy, not one in-sample objective.",
@@ -60022,10 +60022,10 @@
       {
         "id": "employment",
         "bucket": "macro",
-        "full_delta_objective_if_removed": -0.018,
-        "oos_delta_objective_if_removed": 0.3082,
-        "full_delta_risk_separation_if_removed_pct": -0.0115,
-        "oos_delta_risk_separation_if_removed_pct": 0.1942,
+        "full_delta_objective_if_removed": -0.0288,
+        "oos_delta_objective_if_removed": 0.2817,
+        "full_delta_risk_separation_if_removed_pct": -0.0142,
+        "oos_delta_risk_separation_if_removed_pct": 0.1875,
         "full_delta_noise_to_span_if_removed": -0.0003,
         "max_peer": null,
         "max_peer_abs_corr_5d_change": null,
@@ -60045,7 +60045,7 @@
             "daily_score_change_std": 2.9628,
             "score_std": 9.2216,
             "noise_to_span": 0.3213,
-            "objective": 9.7405
+            "objective": 9.7407
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60059,27 +60059,27 @@
               -1.6993,
               -1.0944
             ],
-            "daily_score_change_std": 3.2905,
-            "score_std": 9.8216,
+            "daily_score_change_std": 3.2904,
+            "score_std": 9.8215,
             "noise_to_span": 0.335,
             "objective": 15.2115
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1383,
-            "quartile_worst20_separation_pct": 1.7735,
+            "risk_rank_corr": 0.1384,
+            "quartile_worst20_separation_pct": 1.7693,
             "bottom_minus_top_5pct_tail_rate_pp": 24.58,
             "quartile_monotonic_steps": 2,
             "quartile_worst20_means_pct": [
-              -3.4998,
-              -2.3409,
+              -3.4956,
+              -2.3451,
               -2.5556,
               -1.7263
             ],
-            "daily_score_change_std": 2.5678,
-            "score_std": 6.9332,
+            "daily_score_change_std": 2.5679,
+            "score_std": 6.9325,
             "noise_to_span": 0.3704,
-            "objective": 11.3701
+            "objective": 11.3541
           }
         },
         "recommendation": "review"
@@ -60087,11 +60087,11 @@
       {
         "id": "breadth_concentration",
         "bucket": "short_market",
-        "full_delta_objective_if_removed": -1.3166,
-        "oos_delta_objective_if_removed": 1.1428,
-        "full_delta_risk_separation_if_removed_pct": -0.1163,
-        "oos_delta_risk_separation_if_removed_pct": 0.1765,
-        "full_delta_noise_to_span_if_removed": 0.0111,
+        "full_delta_objective_if_removed": -1.3275,
+        "oos_delta_objective_if_removed": 1.1331,
+        "full_delta_risk_separation_if_removed_pct": -0.119,
+        "oos_delta_risk_separation_if_removed_pct": 0.174,
+        "full_delta_noise_to_span_if_removed": 0.0112,
         "max_peer": "market_support",
         "max_peer_abs_corr_5d_change": 0.09,
         "without": {
@@ -60107,10 +60107,10 @@
               -1.6552,
               -1.8955
             ],
-            "daily_score_change_std": 3.2702,
+            "daily_score_change_std": 3.2703,
             "score_std": 9.8281,
-            "noise_to_span": 0.3327,
-            "objective": 8.4419
+            "noise_to_span": 0.3328,
+            "objective": 8.442
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60124,14 +60124,14 @@
               -1.7179,
               -1.3418
             ],
-            "daily_score_change_std": 3.5253,
+            "daily_score_change_std": 3.5252,
             "score_std": 9.613,
             "noise_to_span": 0.3667,
-            "objective": 11.5832
+            "objective": 11.5831
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1584,
+            "risk_rank_corr": 0.1585,
             "quartile_worst20_separation_pct": 1.7558,
             "bottom_minus_top_5pct_tail_rate_pp": 24.24,
             "quartile_monotonic_steps": 3,
@@ -60141,10 +60141,10 @@
               -2.0945,
               -1.8955
             ],
-            "daily_score_change_std": 2.9748,
-            "score_std": 8.6502,
-            "noise_to_span": 0.3439,
-            "objective": 12.2047
+            "daily_score_change_std": 2.9752,
+            "score_std": 8.6499,
+            "noise_to_span": 0.344,
+            "objective": 12.2055
           }
         },
         "recommendation": "review"
@@ -60152,10 +60152,10 @@
       {
         "id": "valuation_percentile",
         "bucket": "long_structure",
-        "full_delta_objective_if_removed": 0.5062,
-        "oos_delta_objective_if_removed": 0.7348,
-        "full_delta_risk_separation_if_removed_pct": 0.0756,
-        "oos_delta_risk_separation_if_removed_pct": 0.1235,
+        "full_delta_objective_if_removed": 0.4954,
+        "oos_delta_objective_if_removed": 0.7322,
+        "full_delta_risk_separation_if_removed_pct": 0.073,
+        "oos_delta_risk_separation_if_removed_pct": 0.1229,
         "full_delta_noise_to_span_if_removed": -0.0063,
         "max_peer": "sme_survival_growth",
         "max_peer_abs_corr_5d_change": 0.3234,
@@ -60163,7 +60163,7 @@
           "full": {
             "n": 2453,
             "risk_rank_corr": 0.1049,
-            "quartile_worst20_separation_pct": 1.5866,
+            "quartile_worst20_separation_pct": 1.5867,
             "bottom_minus_top_5pct_tail_rate_pp": 13.52,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
@@ -60172,10 +60172,10 @@
               -1.7947,
               -1.7773
             ],
-            "daily_score_change_std": 3.0942,
-            "score_std": 9.8144,
+            "daily_score_change_std": 3.0943,
+            "score_std": 9.8143,
             "noise_to_span": 0.3153,
-            "objective": 10.2647
+            "objective": 10.2649
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60189,7 +60189,7 @@
               -1.6317,
               -1.1772
             ],
-            "daily_score_change_std": 3.4281,
+            "daily_score_change_std": 3.428,
             "score_std": 10.4391,
             "noise_to_span": 0.3284,
             "objective": 13.7732
@@ -60197,19 +60197,19 @@
           "oos_2022_present": {
             "n": 1185,
             "risk_rank_corr": 0.1435,
-            "quartile_worst20_separation_pct": 1.7028,
+            "quartile_worst20_separation_pct": 1.7047,
             "bottom_minus_top_5pct_tail_rate_pp": 23.23,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.4626,
-              -2.4939,
+              -3.4645,
+              -2.492,
               -2.4058,
               -1.7598
             ],
-            "daily_score_change_std": 2.6935,
-            "score_std": 7.954,
-            "noise_to_span": 0.3386,
-            "objective": 11.7967
+            "daily_score_change_std": 2.6937,
+            "score_std": 7.9533,
+            "noise_to_span": 0.3387,
+            "objective": 11.8046
           }
         },
         "recommendation": "review"
@@ -60217,10 +60217,10 @@
       {
         "id": "options_anomaly",
         "bucket": "short_market",
-        "full_delta_objective_if_removed": 0.3984,
-        "oos_delta_objective_if_removed": 0.6518,
-        "full_delta_risk_separation_if_removed_pct": 0.059,
-        "oos_delta_risk_separation_if_removed_pct": 0.1197,
+        "full_delta_objective_if_removed": 0.3876,
+        "oos_delta_objective_if_removed": 0.6419,
+        "full_delta_risk_separation_if_removed_pct": 0.0563,
+        "oos_delta_risk_separation_if_removed_pct": 0.1172,
         "full_delta_noise_to_span_if_removed": -0.0288,
         "max_peer": "market_support",
         "max_peer_abs_corr_5d_change": 0.5517,
@@ -60234,13 +60234,13 @@
             "quartile_worst20_means_pct": [
               -3.2798,
               -2.647,
-              -1.9406,
+              -1.9405,
               -1.7099
             ],
             "daily_score_change_std": 2.6211,
-            "score_std": 8.952,
+            "score_std": 8.9519,
             "noise_to_span": 0.2928,
-            "objective": 10.1569
+            "objective": 10.1571
           },
           "train_2016_2021": {
             "n": 1249,
@@ -60254,27 +60254,27 @@
               -1.7633,
               -1.277
             ],
-            "daily_score_change_std": 2.9285,
+            "daily_score_change_std": 2.9284,
             "score_std": 9.6803,
             "noise_to_span": 0.3025,
-            "objective": 14.4672
+            "objective": 14.4671
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1315,
+            "risk_rank_corr": 0.1316,
             "quartile_worst20_separation_pct": 1.699,
             "bottom_minus_top_5pct_tail_rate_pp": 23.57,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
               -3.4629,
-              -2.4804,
-              -2.4148,
+              -2.4635,
+              -2.4318,
               -1.764
             ],
             "daily_score_change_std": 2.2539,
-            "score_std": 6.6779,
-            "noise_to_span": 0.3375,
-            "objective": 11.7137
+            "score_std": 6.6772,
+            "noise_to_span": 0.3376,
+            "objective": 11.7143
           }
         },
         "recommendation": "review"
@@ -60282,10 +60282,10 @@
       {
         "id": "us_loans_speed",
         "bucket": "macro",
-        "full_delta_objective_if_removed": 0.1821,
-        "oos_delta_objective_if_removed": 0.2708,
-        "full_delta_risk_separation_if_removed_pct": 0.026,
-        "oos_delta_risk_separation_if_removed_pct": 0.0294,
+        "full_delta_objective_if_removed": 0.1714,
+        "oos_delta_objective_if_removed": 0.2614,
+        "full_delta_risk_separation_if_removed_pct": 0.0233,
+        "oos_delta_risk_separation_if_removed_pct": 0.0269,
         "full_delta_noise_to_span_if_removed": -0.0038,
         "max_peer": "market_liquidity",
         "max_peer_abs_corr_5d_change": 0.4051,
@@ -60303,14 +60303,14 @@
               -1.7347
             ],
             "daily_score_change_std": 2.9262,
-            "score_std": 9.2076,
+            "score_std": 9.2075,
             "noise_to_span": 0.3178,
-            "objective": 9.9406
+            "objective": 9.9409
           },
           "train_2016_2021": {
             "n": 1268,
             "risk_rank_corr": 0.1617,
-            "quartile_worst20_separation_pct": 2.7052,
+            "quartile_worst20_separation_pct": 2.7053,
             "bottom_minus_top_5pct_tail_rate_pp": 16.72,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
@@ -60326,7 +60326,7 @@
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1446,
+            "risk_rank_corr": 0.1448,
             "quartile_worst20_separation_pct": 1.6087,
             "bottom_minus_top_5pct_tail_rate_pp": 22.22,
             "quartile_monotonic_steps": 3,
@@ -60336,75 +60336,10 @@
               -2.3977,
               -1.7986
             ],
-            "daily_score_change_std": 2.533,
-            "score_std": 7.0565,
+            "daily_score_change_std": 2.5331,
+            "score_std": 7.0556,
             "noise_to_span": 0.359,
-            "objective": 11.3327
-          }
-        },
-        "recommendation": "keep"
-      },
-      {
-        "id": "global_cb_rhythm",
-        "bucket": "macro",
-        "full_delta_objective_if_removed": 0.3575,
-        "oos_delta_objective_if_removed": 0.0154,
-        "full_delta_risk_separation_if_removed_pct": 0.0726,
-        "oos_delta_risk_separation_if_removed_pct": -0.0054,
-        "full_delta_noise_to_span_if_removed": -0.0046,
-        "max_peer": "treasury_rate_regime",
-        "max_peer_abs_corr_5d_change": 0.5043,
-        "without": {
-          "full": {
-            "n": 2453,
-            "risk_rank_corr": 0.0977,
-            "quartile_worst20_separation_pct": 1.5836,
-            "bottom_minus_top_5pct_tail_rate_pp": 12.54,
-            "quartile_monotonic_steps": 3,
-            "quartile_worst20_means_pct": [
-              -3.3002,
-              -2.558,
-              -1.9418,
-              -1.7166
-            ],
-            "daily_score_change_std": 2.9533,
-            "score_std": 9.316,
-            "noise_to_span": 0.317,
-            "objective": 10.116
-          },
-          "train_2016_2021": {
-            "n": 1268,
-            "risk_rank_corr": 0.162,
-            "quartile_worst20_separation_pct": 2.789,
-            "bottom_minus_top_5pct_tail_rate_pp": 17.98,
-            "quartile_monotonic_steps": 3,
-            "quartile_worst20_means_pct": [
-              -3.8517,
-              -2.2223,
-              -1.8156,
-              -1.0627
-            ],
-            "daily_score_change_std": 3.2805,
-            "score_std": 9.8434,
-            "noise_to_span": 0.3333,
-            "objective": 15.874
-          },
-          "oos_2022_present": {
-            "n": 1185,
-            "risk_rank_corr": 0.1367,
-            "quartile_worst20_separation_pct": 1.5739,
-            "bottom_minus_top_5pct_tail_rate_pp": 21.55,
-            "quartile_monotonic_steps": 3,
-            "quartile_worst20_means_pct": [
-              -3.427,
-              -2.5001,
-              -2.3415,
-              -1.8531
-            ],
-            "daily_score_change_std": 2.5592,
-            "score_std": 7.156,
-            "noise_to_span": 0.3576,
-            "objective": 11.0773
+            "objective": 11.3338
           }
         },
         "recommendation": "keep"
@@ -60412,17 +60347,17 @@
       {
         "id": "retail_participation",
         "bucket": "sentiment_event",
-        "full_delta_objective_if_removed": -0.058,
-        "oos_delta_objective_if_removed": 0.0556,
-        "full_delta_risk_separation_if_removed_pct": -0.016,
-        "oos_delta_risk_separation_if_removed_pct": -0.0058,
-        "full_delta_noise_to_span_if_removed": -0.0014,
+        "full_delta_objective_if_removed": -0.0688,
+        "oos_delta_objective_if_removed": 0.0579,
+        "full_delta_risk_separation_if_removed_pct": -0.0187,
+        "oos_delta_risk_separation_if_removed_pct": -0.0052,
+        "full_delta_noise_to_span_if_removed": -0.0013,
         "max_peer": "market_fear",
-        "max_peer_abs_corr_5d_change": 0.164,
+        "max_peer_abs_corr_5d_change": 0.1639,
         "without": {
           "full": {
             "n": 2453,
-            "risk_rank_corr": 0.0953,
+            "risk_rank_corr": 0.0954,
             "quartile_worst20_separation_pct": 1.495,
             "bottom_minus_top_5pct_tail_rate_pp": 12.05,
             "quartile_monotonic_steps": 3,
@@ -60432,10 +60367,10 @@
               -1.875,
               -1.7451
             ],
-            "daily_score_change_std": 3.1339,
+            "daily_score_change_std": 3.134,
             "score_std": 9.7858,
-            "noise_to_span": 0.3202,
-            "objective": 9.7005
+            "noise_to_span": 0.3203,
+            "objective": 9.7007
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60449,27 +60384,92 @@
               -1.8726,
               -1.0221
             ],
-            "daily_score_change_std": 3.475,
-            "score_std": 10.3346,
+            "daily_score_change_std": 3.4749,
+            "score_std": 10.3345,
             "noise_to_span": 0.3362,
             "objective": 15.6291
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1465,
-            "quartile_worst20_separation_pct": 1.5735,
+            "risk_rank_corr": 0.1466,
+            "quartile_worst20_separation_pct": 1.5766,
             "bottom_minus_top_5pct_tail_rate_pp": 21.21,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.3975,
-              -2.5627,
+              -3.4005,
+              -2.5596,
               -2.3377,
               -1.824
             ],
-            "daily_score_change_std": 2.723,
-            "score_std": 7.3709,
-            "noise_to_span": 0.3694,
-            "objective": 11.1175
+            "daily_score_change_std": 2.7232,
+            "score_std": 7.3701,
+            "noise_to_span": 0.3695,
+            "objective": 11.1303
+          }
+        },
+        "recommendation": "keep"
+      },
+      {
+        "id": "global_cb_rhythm",
+        "bucket": "macro",
+        "full_delta_objective_if_removed": 0.3466,
+        "oos_delta_objective_if_removed": 0.0057,
+        "full_delta_risk_separation_if_removed_pct": 0.0699,
+        "oos_delta_risk_separation_if_removed_pct": -0.0078,
+        "full_delta_noise_to_span_if_removed": -0.0046,
+        "max_peer": "treasury_rate_regime",
+        "max_peer_abs_corr_5d_change": 0.5044,
+        "without": {
+          "full": {
+            "n": 2453,
+            "risk_rank_corr": 0.0978,
+            "quartile_worst20_separation_pct": 1.5836,
+            "bottom_minus_top_5pct_tail_rate_pp": 12.54,
+            "quartile_monotonic_steps": 3,
+            "quartile_worst20_means_pct": [
+              -3.3002,
+              -2.5565,
+              -1.9434,
+              -1.7166
+            ],
+            "daily_score_change_std": 2.9533,
+            "score_std": 9.3159,
+            "noise_to_span": 0.317,
+            "objective": 10.1161
+          },
+          "train_2016_2021": {
+            "n": 1268,
+            "risk_rank_corr": 0.162,
+            "quartile_worst20_separation_pct": 2.789,
+            "bottom_minus_top_5pct_tail_rate_pp": 17.98,
+            "quartile_monotonic_steps": 3,
+            "quartile_worst20_means_pct": [
+              -3.8517,
+              -2.2223,
+              -1.8156,
+              -1.0627
+            ],
+            "daily_score_change_std": 3.2804,
+            "score_std": 9.8434,
+            "noise_to_span": 0.3333,
+            "objective": 15.874
+          },
+          "oos_2022_present": {
+            "n": 1185,
+            "risk_rank_corr": 0.1368,
+            "quartile_worst20_separation_pct": 1.574,
+            "bottom_minus_top_5pct_tail_rate_pp": 21.55,
+            "quartile_monotonic_steps": 3,
+            "quartile_worst20_means_pct": [
+              -3.427,
+              -2.5001,
+              -2.3415,
+              -1.8531
+            ],
+            "daily_score_change_std": 2.5594,
+            "score_std": 7.1552,
+            "noise_to_span": 0.3577,
+            "objective": 11.0781
           }
         },
         "recommendation": "keep"
@@ -60477,17 +60477,17 @@
       {
         "id": "geopolitical_risk",
         "bucket": "sentiment_event",
-        "full_delta_objective_if_removed": -1.6969,
-        "oos_delta_objective_if_removed": -0.3135,
-        "full_delta_risk_separation_if_removed_pct": -0.1759,
-        "oos_delta_risk_separation_if_removed_pct": -0.0464,
+        "full_delta_objective_if_removed": -1.7077,
+        "oos_delta_objective_if_removed": -0.3233,
+        "full_delta_risk_separation_if_removed_pct": -0.1786,
+        "oos_delta_risk_separation_if_removed_pct": -0.0489,
         "full_delta_noise_to_span_if_removed": -0.0198,
         "max_peer": "market_fear",
-        "max_peer_abs_corr_5d_change": 0.5789,
+        "max_peer_abs_corr_5d_change": 0.5802,
         "without": {
           "full": {
             "n": 2453,
-            "risk_rank_corr": 0.0802,
+            "risk_rank_corr": 0.0803,
             "quartile_worst20_separation_pct": 1.3351,
             "bottom_minus_top_5pct_tail_rate_pp": 10.26,
             "quartile_monotonic_steps": 2,
@@ -60500,7 +60500,7 @@
             "daily_score_change_std": 3.0221,
             "score_std": 10.0121,
             "noise_to_span": 0.3018,
-            "objective": 8.0616
+            "objective": 8.0618
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60514,10 +60514,10 @@
               -1.8289,
               -1.1395
             ],
-            "daily_score_change_std": 3.3946,
+            "daily_score_change_std": 3.3945,
             "score_std": 10.5751,
             "noise_to_span": 0.321,
-            "objective": 14.9779
+            "objective": 14.978
           },
           "oos_2022_present": {
             "n": 1185,
@@ -60531,10 +60531,10 @@
               -2.3436,
               -1.8912
             ],
-            "daily_score_change_std": 2.5665,
-            "score_std": 7.436,
-            "noise_to_span": 0.3451,
-            "objective": 10.7484
+            "daily_score_change_std": 2.5668,
+            "score_std": 7.4354,
+            "noise_to_span": 0.3452,
+            "objective": 10.7491
           }
         },
         "recommendation": "keep"
@@ -60542,10 +60542,10 @@
       {
         "id": "high_yield",
         "bucket": "macro",
-        "full_delta_objective_if_removed": 0.9048,
-        "oos_delta_objective_if_removed": -0.345,
-        "full_delta_risk_separation_if_removed_pct": 0.1502,
-        "oos_delta_risk_separation_if_removed_pct": -0.0637,
+        "full_delta_objective_if_removed": 0.8941,
+        "oos_delta_objective_if_removed": -0.3435,
+        "full_delta_risk_separation_if_removed_pct": 0.1475,
+        "oos_delta_risk_separation_if_removed_pct": -0.0634,
         "full_delta_noise_to_span_if_removed": 0.0142,
         "max_peer": "market_liquidity",
         "max_peer_abs_corr_5d_change": 1.0,
@@ -60562,10 +60562,10 @@
               -1.9506,
               -1.6728
             ],
-            "daily_score_change_std": 2.9456,
-            "score_std": 8.7714,
+            "daily_score_change_std": 2.9457,
+            "score_std": 8.7713,
             "noise_to_span": 0.3358,
-            "objective": 10.6633
+            "objective": 10.6636
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60579,27 +60579,27 @@
               -1.7301,
               -1.0054
             ],
-            "daily_score_change_std": 3.2755,
+            "daily_score_change_std": 3.2754,
             "score_std": 9.4887,
             "noise_to_span": 0.3452,
             "objective": 16.3029
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1287,
-            "quartile_worst20_separation_pct": 1.5156,
+            "risk_rank_corr": 0.1288,
+            "quartile_worst20_separation_pct": 1.5184,
             "bottom_minus_top_5pct_tail_rate_pp": 20.88,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.3193,
-              -2.6036,
+              -3.3222,
+              -2.6008,
               -2.3957,
               -1.8037
             ],
-            "daily_score_change_std": 2.5477,
-            "score_std": 6.9142,
+            "daily_score_change_std": 2.5479,
+            "score_std": 6.9134,
             "noise_to_span": 0.3685,
-            "objective": 10.7169
+            "objective": 10.7289
           }
         },
         "recommendation": "review"
@@ -60607,11 +60607,11 @@
       {
         "id": "market_liquidity",
         "bucket": "macro",
-        "full_delta_objective_if_removed": 0.9634,
-        "oos_delta_objective_if_removed": -0.4267,
-        "full_delta_risk_separation_if_removed_pct": 0.1602,
-        "oos_delta_risk_separation_if_removed_pct": -0.0831,
-        "full_delta_noise_to_span_if_removed": 0.0153,
+        "full_delta_objective_if_removed": 0.9527,
+        "oos_delta_objective_if_removed": -0.437,
+        "full_delta_risk_separation_if_removed_pct": 0.1575,
+        "oos_delta_risk_separation_if_removed_pct": -0.0858,
+        "full_delta_noise_to_span_if_removed": 0.0154,
         "max_peer": "high_yield",
         "max_peer_abs_corr_5d_change": 1.0,
         "without": {
@@ -60628,9 +60628,9 @@
               -1.6749
             ],
             "daily_score_change_std": 2.9451,
-            "score_std": 8.7406,
-            "noise_to_span": 0.3369,
-            "objective": 10.7219
+            "score_std": 8.7405,
+            "noise_to_span": 0.337,
+            "objective": 10.7222
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60644,27 +60644,27 @@
               -1.7118,
               -1.0235
             ],
-            "daily_score_change_std": 3.2749,
+            "daily_score_change_std": 3.2748,
             "score_std": 9.4653,
             "noise_to_span": 0.346,
-            "objective": 16.0683
+            "objective": 16.0684
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1282,
-            "quartile_worst20_separation_pct": 1.4962,
+            "risk_rank_corr": 0.1283,
+            "quartile_worst20_separation_pct": 1.496,
             "bottom_minus_top_5pct_tail_rate_pp": 20.88,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.3223,
-              -2.6149,
+              -3.3222,
+              -2.6151,
               -2.3588,
               -1.8261
             ],
-            "daily_score_change_std": 2.5472,
-            "score_std": 6.9074,
+            "daily_score_change_std": 2.5474,
+            "score_std": 6.9066,
             "noise_to_span": 0.3688,
-            "objective": 10.6352
+            "objective": 10.6354
           }
         },
         "recommendation": "review"
@@ -60672,13 +60672,13 @@
       {
         "id": "treasury_rate_regime",
         "bucket": "macro",
-        "full_delta_objective_if_removed": -0.8858,
-        "oos_delta_objective_if_removed": -0.7148,
-        "full_delta_risk_separation_if_removed_pct": -0.1412,
-        "oos_delta_risk_separation_if_removed_pct": -0.1229,
+        "full_delta_objective_if_removed": -0.8965,
+        "oos_delta_objective_if_removed": -0.744,
+        "full_delta_risk_separation_if_removed_pct": -0.1439,
+        "oos_delta_risk_separation_if_removed_pct": -0.1304,
         "full_delta_noise_to_span_if_removed": -0.0199,
         "max_peer": "market_liquidity",
-        "max_peer_abs_corr_5d_change": 0.5741,
+        "max_peer_abs_corr_5d_change": 0.5742,
         "without": {
           "full": {
             "n": 2453,
@@ -60695,7 +60695,7 @@
             "daily_score_change_std": 3.0331,
             "score_std": 10.0517,
             "noise_to_span": 0.3017,
-            "objective": 8.8727
+            "objective": 8.873
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60709,27 +60709,27 @@
               -1.8584,
               -1.2887
             ],
-            "daily_score_change_std": 3.4028,
+            "daily_score_change_std": 3.4027,
             "score_std": 10.7556,
             "noise_to_span": 0.3164,
             "objective": 13.2237
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1182,
-            "quartile_worst20_separation_pct": 1.4564,
+            "risk_rank_corr": 0.1183,
+            "quartile_worst20_separation_pct": 1.4514,
             "bottom_minus_top_5pct_tail_rate_pp": 20.2,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.3995,
-              -2.4325,
+              -3.3945,
+              -2.4375,
               -2.3464,
               -1.9431
             ],
-            "daily_score_change_std": 2.5807,
-            "score_std": 7.1194,
+            "daily_score_change_std": 2.5809,
+            "score_std": 7.1187,
             "noise_to_span": 0.3625,
-            "objective": 10.3471
+            "objective": 10.3284
           }
         },
         "recommendation": "keep"
@@ -60737,10 +60737,10 @@
       {
         "id": "market_support",
         "bucket": "short_market",
-        "full_delta_objective_if_removed": 0.3288,
-        "oos_delta_objective_if_removed": -0.6911,
-        "full_delta_risk_separation_if_removed_pct": 0.0554,
-        "oos_delta_risk_separation_if_removed_pct": -0.1474,
+        "full_delta_objective_if_removed": 0.3181,
+        "oos_delta_objective_if_removed": -0.6455,
+        "full_delta_risk_separation_if_removed_pct": 0.0527,
+        "oos_delta_risk_separation_if_removed_pct": -0.136,
         "full_delta_noise_to_span_if_removed": 0.0078,
         "max_peer": "money_making_effect",
         "max_peer_abs_corr_5d_change": 0.7684,
@@ -60760,7 +60760,7 @@
             "daily_score_change_std": 3.0716,
             "score_std": 9.3251,
             "noise_to_span": 0.3294,
-            "objective": 10.0873
+            "objective": 10.0876
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60781,20 +60781,20 @@
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1361,
-            "quartile_worst20_separation_pct": 1.4319,
+            "risk_rank_corr": 0.1362,
+            "quartile_worst20_separation_pct": 1.4458,
             "bottom_minus_top_5pct_tail_rate_pp": 20.2,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.3425,
-              -2.5537,
+              -3.3564,
+              -2.5399,
               -2.3148,
               -1.9106
             ],
             "daily_score_change_std": 2.6981,
-            "score_std": 6.9171,
+            "score_std": 6.9164,
             "noise_to_span": 0.3901,
-            "objective": 10.3708
+            "objective": 10.4269
           }
         },
         "recommendation": "keep"
@@ -60802,10 +60802,10 @@
       {
         "id": "sme_survival_growth",
         "bucket": "long_structure",
-        "full_delta_objective_if_removed": -0.2034,
-        "oos_delta_objective_if_removed": -1.0327,
-        "full_delta_risk_separation_if_removed_pct": -0.0345,
-        "oos_delta_risk_separation_if_removed_pct": -0.2169,
+        "full_delta_objective_if_removed": -0.2142,
+        "oos_delta_objective_if_removed": -1.042,
+        "full_delta_risk_separation_if_removed_pct": -0.0372,
+        "oos_delta_risk_separation_if_removed_pct": -0.2194,
         "full_delta_noise_to_span_if_removed": -0.0037,
         "max_peer": "valuation_percentile",
         "max_peer_abs_corr_5d_change": 0.3234,
@@ -60823,9 +60823,9 @@
               -1.7361
             ],
             "daily_score_change_std": 2.8196,
-            "score_std": 8.8686,
+            "score_std": 8.8685,
             "noise_to_span": 0.3179,
-            "objective": 9.5551
+            "objective": 9.5553
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60835,18 +60835,18 @@
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
               -3.7241,
-              -2.2724,
+              -2.2725,
               -1.6161,
               -1.3395
             ],
             "daily_score_change_std": 3.1345,
-            "score_std": 9.4039,
+            "score_std": 9.4038,
             "noise_to_span": 0.3333,
             "objective": 13.835
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1343,
+            "risk_rank_corr": 0.1344,
             "quartile_worst20_separation_pct": 1.3624,
             "bottom_minus_top_5pct_tail_rate_pp": 19.19,
             "quartile_monotonic_steps": 3,
@@ -60856,10 +60856,10 @@
               -2.3808,
               -1.8406
             ],
-            "daily_score_change_std": 2.4396,
-            "score_std": 6.9718,
-            "noise_to_span": 0.3499,
-            "objective": 10.0292
+            "daily_score_change_std": 2.4398,
+            "score_std": 6.9712,
+            "noise_to_span": 0.35,
+            "objective": 10.0304
           }
         },
         "recommendation": "keep"
@@ -60867,30 +60867,30 @@
       {
         "id": "market_fear",
         "bucket": "sentiment_event",
-        "full_delta_objective_if_removed": 1.1066,
-        "oos_delta_objective_if_removed": -1.2152,
-        "full_delta_risk_separation_if_removed_pct": 0.199,
-        "oos_delta_risk_separation_if_removed_pct": -0.2357,
+        "full_delta_objective_if_removed": 1.0876,
+        "oos_delta_objective_if_removed": -1.2252,
+        "full_delta_risk_separation_if_removed_pct": 0.1942,
+        "oos_delta_risk_separation_if_removed_pct": -0.2382,
         "full_delta_noise_to_span_if_removed": 0.0347,
         "max_peer": "geopolitical_risk",
-        "max_peer_abs_corr_5d_change": 0.5789,
+        "max_peer_abs_corr_5d_change": 0.5802,
         "without": {
           "full": {
             "n": 2453,
-            "risk_rank_corr": 0.1158,
-            "quartile_worst20_separation_pct": 1.71,
+            "risk_rank_corr": 0.1159,
+            "quartile_worst20_separation_pct": 1.7079,
             "bottom_minus_top_5pct_tail_rate_pp": 14.17,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.3876,
-              -2.5232,
-              -1.9283,
+              -3.3855,
+              -2.5253,
+              -1.9282,
               -1.6776
             ],
             "daily_score_change_std": 2.7642,
-            "score_std": 7.7587,
+            "score_std": 7.7585,
             "noise_to_span": 0.3563,
-            "objective": 10.8651
+            "objective": 10.8571
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60902,29 +60902,29 @@
               -3.5339,
               -2.5234,
               -1.7401,
-              -1.1549
+              -1.1548
             ],
-            "daily_score_change_std": 3.0398,
+            "daily_score_change_std": 3.0397,
             "score_std": 8.5136,
-            "noise_to_span": 0.3571,
+            "noise_to_span": 0.357,
             "objective": 13.9715
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1246,
+            "risk_rank_corr": 0.1247,
             "quartile_worst20_separation_pct": 1.3436,
             "bottom_minus_top_5pct_tail_rate_pp": 19.19,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
               -3.3301,
-              -2.5296,
+              -2.5295,
               -2.2752,
               -1.9865
             ],
             "daily_score_change_std": 2.437,
-            "score_std": 6.2845,
+            "score_std": 6.2837,
             "noise_to_span": 0.3878,
-            "objective": 9.8467
+            "objective": 9.8472
           }
         },
         "recommendation": "keep"
@@ -60932,17 +60932,17 @@
       {
         "id": "yield_curve",
         "bucket": "long_structure",
-        "full_delta_objective_if_removed": -0.2934,
-        "oos_delta_objective_if_removed": -1.3321,
-        "full_delta_risk_separation_if_removed_pct": -0.062,
-        "oos_delta_risk_separation_if_removed_pct": -0.251,
+        "full_delta_objective_if_removed": -0.3042,
+        "oos_delta_objective_if_removed": -1.3313,
+        "full_delta_risk_separation_if_removed_pct": -0.0647,
+        "oos_delta_risk_separation_if_removed_pct": -0.2509,
         "full_delta_noise_to_span_if_removed": -0.0104,
         "max_peer": "business_cycle",
-        "max_peer_abs_corr_5d_change": 0.0979,
+        "max_peer_abs_corr_5d_change": 0.0977,
         "without": {
           "full": {
             "n": 2453,
-            "risk_rank_corr": 0.0749,
+            "risk_rank_corr": 0.075,
             "quartile_worst20_separation_pct": 1.449,
             "bottom_minus_top_5pct_tail_rate_pp": 13.36,
             "quartile_monotonic_steps": 3,
@@ -60955,7 +60955,7 @@
             "daily_score_change_std": 3.076,
             "score_std": 9.8853,
             "noise_to_span": 0.3112,
-            "objective": 9.4651
+            "objective": 9.4653
           },
           "train_2016_2021": {
             "n": 1268,
@@ -60969,27 +60969,27 @@
               -1.6159,
               -1.1384
             ],
-            "daily_score_change_std": 3.4745,
+            "daily_score_change_std": 3.4744,
             "score_std": 11.0348,
             "noise_to_span": 0.3149,
-            "objective": 16.2161
+            "objective": 16.2162
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1112,
-            "quartile_worst20_separation_pct": 1.3283,
+            "risk_rank_corr": 0.1113,
+            "quartile_worst20_separation_pct": 1.3309,
             "bottom_minus_top_5pct_tail_rate_pp": 20.2,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.1255,
-              -2.617,
+              -3.1281,
+              -2.6144,
               -2.5841,
               -1.7971
             ],
-            "daily_score_change_std": 2.5839,
-            "score_std": 6.0957,
+            "daily_score_change_std": 2.584,
+            "score_std": 6.0951,
             "noise_to_span": 0.4239,
-            "objective": 9.7298
+            "objective": 9.7411
           }
         },
         "recommendation": "keep"
@@ -60997,11 +60997,11 @@
       {
         "id": "market_overextension",
         "bucket": "short_market",
-        "full_delta_objective_if_removed": 0.91,
-        "oos_delta_objective_if_removed": -1.4145,
-        "full_delta_risk_separation_if_removed_pct": 0.1805,
-        "oos_delta_risk_separation_if_removed_pct": -0.3047,
-        "full_delta_noise_to_span_if_removed": -0.0027,
+        "full_delta_objective_if_removed": 0.8992,
+        "oos_delta_objective_if_removed": -1.3977,
+        "full_delta_risk_separation_if_removed_pct": 0.1778,
+        "oos_delta_risk_separation_if_removed_pct": -0.3006,
+        "full_delta_noise_to_span_if_removed": -0.0026,
         "max_peer": "market_support",
         "max_peer_abs_corr_5d_change": 0.286,
         "without": {
@@ -61017,10 +61017,10 @@
               -1.8961,
               -1.6648
             ],
-            "daily_score_change_std": 3.0764,
-            "score_std": 9.6456,
-            "noise_to_span": 0.3189,
-            "objective": 10.6685
+            "daily_score_change_std": 3.0766,
+            "score_std": 9.6455,
+            "noise_to_span": 0.319,
+            "objective": 10.6687
           },
           "train_2016_2021": {
             "n": 1268,
@@ -61029,7 +61029,7 @@
             "bottom_minus_top_5pct_tail_rate_pp": 14.83,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.5655,
+              -3.5656,
               -2.2599,
               -1.9597,
               -1.1671
@@ -61041,20 +61041,20 @@
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1397,
-            "quartile_worst20_separation_pct": 1.2746,
+            "risk_rank_corr": 0.1398,
+            "quartile_worst20_separation_pct": 1.2812,
             "bottom_minus_top_5pct_tail_rate_pp": 18.18,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.1457,
-              -2.9327,
+              -3.1524,
+              -2.9261,
               -2.1724,
               -1.8712
             ],
-            "daily_score_change_std": 2.5298,
-            "score_std": 7.4135,
-            "noise_to_span": 0.3412,
-            "objective": 9.6474
+            "daily_score_change_std": 2.5305,
+            "score_std": 7.4126,
+            "noise_to_span": 0.3414,
+            "objective": 9.6747
           }
         },
         "recommendation": "keep"
@@ -61062,30 +61062,30 @@
       {
         "id": "money_making_effect",
         "bucket": "short_market",
-        "full_delta_objective_if_removed": 0.3644,
-        "oos_delta_objective_if_removed": -1.9677,
-        "full_delta_risk_separation_if_removed_pct": 0.0549,
-        "oos_delta_risk_separation_if_removed_pct": -0.3883,
+        "full_delta_objective_if_removed": 0.3482,
+        "oos_delta_objective_if_removed": -1.8516,
+        "full_delta_risk_separation_if_removed_pct": 0.0508,
+        "oos_delta_risk_separation_if_removed_pct": -0.3663,
         "full_delta_noise_to_span_if_removed": 0.0056,
         "max_peer": "market_support",
         "max_peer_abs_corr_5d_change": 0.7684,
         "without": {
           "full": {
             "n": 2453,
-            "risk_rank_corr": 0.1003,
-            "quartile_worst20_separation_pct": 1.5659,
+            "risk_rank_corr": 0.1004,
+            "quartile_worst20_separation_pct": 1.5645,
             "bottom_minus_top_5pct_tail_rate_pp": 13.36,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
               -3.2861,
               -2.5194,
-              -1.991,
-              -1.7202
+              -1.9896,
+              -1.7217
             ],
-            "daily_score_change_std": 3.0101,
+            "daily_score_change_std": 3.01,
             "score_std": 9.1982,
             "noise_to_span": 0.3272,
-            "objective": 10.1229
+            "objective": 10.1177
           },
           "train_2016_2021": {
             "n": 1268,
@@ -61099,27 +61099,27 @@
               -1.7567,
               -1.0122
             ],
-            "daily_score_change_std": 3.308,
+            "daily_score_change_std": 3.3078,
             "score_std": 9.8871,
             "noise_to_span": 0.3346,
-            "objective": 16.2646
+            "objective": 16.2647
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1212,
-            "quartile_worst20_separation_pct": 1.191,
-            "bottom_minus_top_5pct_tail_rate_pp": 17.85,
+            "risk_rank_corr": 0.1214,
+            "quartile_worst20_separation_pct": 1.2155,
+            "bottom_minus_top_5pct_tail_rate_pp": 18.18,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.153,
-              -2.8535,
+              -3.1776,
+              -2.8289,
               -2.153,
               -1.9621
             ],
-            "daily_score_change_std": 2.657,
-            "score_std": 6.6991,
+            "daily_score_change_std": 2.6569,
+            "score_std": 6.6984,
             "noise_to_span": 0.3966,
-            "objective": 9.0942
+            "objective": 9.2208
           }
         },
         "recommendation": "keep"
@@ -61127,17 +61127,17 @@
       {
         "id": "business_cycle",
         "bucket": "long_structure",
-        "full_delta_objective_if_removed": 0.1738,
-        "oos_delta_objective_if_removed": -2.7555,
-        "full_delta_risk_separation_if_removed_pct": 0.0246,
-        "oos_delta_risk_separation_if_removed_pct": -0.3971,
+        "full_delta_objective_if_removed": 0.1631,
+        "oos_delta_objective_if_removed": -2.7655,
+        "full_delta_risk_separation_if_removed_pct": 0.0219,
+        "oos_delta_risk_separation_if_removed_pct": -0.3996,
         "full_delta_noise_to_span_if_removed": -0.0061,
         "max_peer": "sme_survival_growth",
         "max_peer_abs_corr_5d_change": 0.1572,
         "without": {
           "full": {
             "n": 2453,
-            "risk_rank_corr": 0.1002,
+            "risk_rank_corr": 0.1003,
             "quartile_worst20_separation_pct": 1.5356,
             "bottom_minus_top_5pct_tail_rate_pp": 12.38,
             "quartile_monotonic_steps": 3,
@@ -61148,9 +61148,9 @@
               -1.7341
             ],
             "daily_score_change_std": 2.9223,
-            "score_std": 9.2621,
+            "score_std": 9.262,
             "noise_to_span": 0.3155,
-            "objective": 9.9323
+            "objective": 9.9326
           },
           "train_2016_2021": {
             "n": 1268,
@@ -61164,14 +61164,14 @@
               -1.7967,
               -1.1175
             ],
-            "daily_score_change_std": 3.2454,
+            "daily_score_change_std": 3.2453,
             "score_std": 9.7008,
             "noise_to_span": 0.3345,
-            "objective": 14.8967
+            "objective": 14.8968
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1246,
+            "risk_rank_corr": 0.1247,
             "quartile_worst20_separation_pct": 1.1822,
             "bottom_minus_top_5pct_tail_rate_pp": 16.84,
             "quartile_monotonic_steps": 2,
@@ -61181,10 +61181,10 @@
               -1.9999,
               -2.0551
             ],
-            "daily_score_change_std": 2.533,
-            "score_std": 7.6158,
-            "noise_to_span": 0.3326,
-            "objective": 8.3064
+            "daily_score_change_std": 2.5332,
+            "score_std": 7.6149,
+            "noise_to_span": 0.3327,
+            "objective": 8.3069
           }
         },
         "recommendation": "keep"
@@ -61192,17 +61192,17 @@
       {
         "id": "tech100_volatility",
         "bucket": "short_market",
-        "full_delta_objective_if_removed": -0.1981,
-        "oos_delta_objective_if_removed": -3.8427,
-        "full_delta_risk_separation_if_removed_pct": -0.0224,
-        "oos_delta_risk_separation_if_removed_pct": -0.6958,
+        "full_delta_objective_if_removed": -0.2087,
+        "oos_delta_objective_if_removed": -3.8522,
+        "full_delta_risk_separation_if_removed_pct": -0.0251,
+        "oos_delta_risk_separation_if_removed_pct": -0.6983,
         "full_delta_noise_to_span_if_removed": 0.0289,
         "max_peer": "money_making_effect",
         "max_peer_abs_corr_5d_change": 0.216,
         "without": {
           "full": {
             "n": 2453,
-            "risk_rank_corr": 0.084,
+            "risk_rank_corr": 0.0841,
             "quartile_worst20_separation_pct": 1.4886,
             "bottom_minus_top_5pct_tail_rate_pp": 12.05,
             "quartile_monotonic_steps": 3,
@@ -61212,10 +61212,10 @@
               -2.1124,
               -1.7453
             ],
-            "daily_score_change_std": 3.2012,
-            "score_std": 9.1341,
+            "daily_score_change_std": 3.2011,
+            "score_std": 9.1339,
             "noise_to_span": 0.3505,
-            "objective": 9.5604
+            "objective": 9.5608
           },
           "train_2016_2021": {
             "n": 1268,
@@ -61229,14 +61229,14 @@
               -1.9413,
               -1.0304
             ],
-            "daily_score_change_std": 3.5301,
-            "score_std": 9.97,
+            "daily_score_change_std": 3.53,
+            "score_std": 9.9699,
             "noise_to_span": 0.3541,
             "objective": 15.3919
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.0789,
+            "risk_rank_corr": 0.079,
             "quartile_worst20_separation_pct": 0.8835,
             "bottom_minus_top_5pct_tail_rate_pp": 14.14,
             "quartile_monotonic_steps": 3,
@@ -61247,9 +61247,9 @@
               -2.1272
             ],
             "daily_score_change_std": 2.809,
-            "score_std": 6.8681,
-            "noise_to_span": 0.409,
-            "objective": 7.2192
+            "score_std": 6.8671,
+            "noise_to_span": 0.4091,
+            "objective": 7.2202
           }
         },
         "recommendation": "keep"
@@ -61263,24 +61263,24 @@
         "oos_delta_risk_separation_if_removed_pct": 0.0,
         "full_delta_noise_to_span_if_removed": 0.0,
         "max_peer": "options_anomaly",
-        "max_peer_abs_corr_5d_change": 0.3195,
+        "max_peer_abs_corr_5d_change": 0.3187,
         "without": {
           "full": {
             "n": 2453,
             "risk_rank_corr": 0.0964,
-            "quartile_worst20_separation_pct": 1.511,
+            "quartile_worst20_separation_pct": 1.5137,
             "bottom_minus_top_5pct_tail_rate_pp": 11.89,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
               -3.24,
               -2.5983,
-              -1.9494,
-              -1.729
+              -1.9522,
+              -1.7263
             ],
             "daily_score_change_std": 2.9561,
             "score_std": 9.1912,
             "noise_to_span": 0.3216,
-            "objective": 9.7585
+            "objective": 9.7695
           },
           "train_2016_2021": {
             "n": 1268,
@@ -61294,27 +61294,27 @@
               -1.6993,
               -1.0944
             ],
-            "daily_score_change_std": 3.2891,
-            "score_std": 9.8175,
+            "daily_score_change_std": 3.289,
+            "score_std": 9.8174,
             "noise_to_span": 0.335,
             "objective": 15.195
           },
           "oos_2022_present": {
             "n": 1185,
-            "risk_rank_corr": 0.1328,
-            "quartile_worst20_separation_pct": 1.5793,
+            "risk_rank_corr": 0.1329,
+            "quartile_worst20_separation_pct": 1.5818,
             "bottom_minus_top_5pct_tail_rate_pp": 21.55,
             "quartile_monotonic_steps": 3,
             "quartile_worst20_means_pct": [
-              -3.3874,
-              -2.539,
+              -3.3899,
+              -2.5366,
               -2.3876,
               -1.8081
             ],
-            "daily_score_change_std": 2.5539,
-            "score_std": 7.002,
-            "noise_to_span": 0.3647,
-            "objective": 11.0619
+            "daily_score_change_std": 2.5541,
+            "score_std": 7.0012,
+            "noise_to_span": 0.3648,
+            "objective": 11.0724
           }
         },
         "recommendation": "keep"
@@ -77515,6 +77515,12 @@
         "dow": 52048.8281
       },
       {
+        "date": "2026-09-22",
+        "sp500": 7764.6401,
+        "nasdaq": 27244.2793,
+        "dow": 51863.6914
+      },
+      {
         "date": "2026-09-23",
         "sp500": 7706.0298,
         "nasdaq": 26936.0391,
@@ -77534,8 +77540,8 @@
         "asof": "2026-09-24",
         "close": 7704.1299,
         "day_pct": -0.025,
-        "week_pct": 2.017,
-        "month_pct": 0.35,
+        "week_pct": 0.869,
+        "month_pct": 0.37,
         "since_2016_pct": 282.78
       },
       "nasdaq": {
@@ -77544,8 +77550,8 @@
         "asof": "2026-09-24",
         "close": 26939.3691,
         "day_pct": 0.012,
-        "week_pct": 3.699,
-        "month_pct": 3.013,
+        "week_pct": 1.972,
+        "month_pct": 3.097,
         "since_2016_pct": 449.44
       },
       "dow": {
@@ -77554,8 +77560,8 @@
         "asof": "2026-09-24",
         "close": 51349.9805,
         "day_pct": -0.314,
-        "week_pct": -0.217,
-        "month_pct": -4.157,
+        "week_pct": -0.827,
+        "month_pct": -3.954,
         "since_2016_pct": 199.44
       }
     },
@@ -77570,9 +77576,9 @@
     "feeds_market_model": false,
     "news_nlp_connected": true,
     "summary": {
-      "bull_strength": 50.94,
-      "bear_strength": 49.16,
-      "net_balance": 1.78,
+      "bull_strength": 50.85,
+      "bear_strength": 49.57,
+      "net_balance": 1.29,
       "balance_label": "多空叙事接近平衡"
     },
     "bull": [
@@ -77581,9 +77587,9 @@
         "side": "bull",
         "title": "信用稳定 / 流动性健康",
         "description": "观察市场流动性是否充足，同时信用、系统性和杠杆风险是否保持低位。",
-        "strength": 93.95,
+        "strength": 93.88,
         "strength_label": "强",
-        "trend_score": 1.01,
+        "trend_score": 0.95,
         "trend": "稳定",
         "evidence_consistency_pct": 100.0,
         "coverage_pct": 100.0,
@@ -77623,9 +77629,9 @@
           {
             "id": "systemic_risk",
             "name": "市场系统性风险指标",
-            "score": 27.82,
-            "oriented_score": 72.18,
-            "d1_oriented": 2.29,
+            "score": 28.17,
+            "oriented_score": 71.83,
+            "d1_oriented": 1.98,
             "quality": "composite",
             "asof": "2026-09-25",
             "weight": 1.25
@@ -77649,9 +77655,9 @@
         "side": "bull",
         "title": "风险偏好 / 乐观情绪",
         "description": "观察乐观、市场偏向和恐慌类指标是否共同指向更健康的风险承受环境。",
-        "strength": 65.5,
+        "strength": 65.12,
         "strength_label": "中等偏强",
-        "trend_score": 2.47,
+        "trend_score": 2.14,
         "trend": "强化",
         "evidence_consistency_pct": 61.5,
         "coverage_pct": 100.0,
@@ -77659,9 +77665,9 @@
           {
             "id": "market_fear",
             "name": "市场恐慌指标",
-            "score": 15.28,
-            "oriented_score": 84.72,
-            "d1_oriented": 3.44,
+            "score": 15.81,
+            "oriented_score": 84.19,
+            "d1_oriented": 2.98,
             "quality": "composite",
             "asof": "2026-09-25",
             "weight": 1.15
@@ -77669,9 +77675,9 @@
           {
             "id": "market_pessimism",
             "name": "市场悲观度指标",
-            "score": 21.1,
-            "oriented_score": 78.9,
-            "d1_oriented": 2.67,
+            "score": 21.51,
+            "oriented_score": 78.49,
+            "d1_oriented": 2.31,
             "quality": "composite",
             "asof": "2026-09-25",
             "weight": 1.1
@@ -77679,9 +77685,9 @@
           {
             "id": "market_bias",
             "name": "市场倾向指标",
-            "score": 61.73,
-            "oriented_score": 61.73,
-            "d1_oriented": 1.91,
+            "score": 61.43,
+            "oriented_score": 61.43,
+            "d1_oriented": 1.65,
             "quality": "composite",
             "asof": "2026-09-25",
             "weight": 1.1
@@ -77691,9 +77697,9 @@
           {
             "id": "market_optimism",
             "name": "市场乐观度指标",
-            "score": 44.55,
-            "oriented_score": 44.55,
-            "d1_oriented": 1.15,
+            "score": 44.38,
+            "oriented_score": 44.38,
+            "d1_oriented": 0.99,
             "quality": "composite",
             "asof": "2026-09-25",
             "weight": 1.2
@@ -77701,9 +77707,9 @@
           {
             "id": "largecap_panic",
             "name": "大盘恐慌指标",
-            "score": 42.92,
-            "oriented_score": 57.08,
-            "d1_oriented": 3.44,
+            "score": 43.45,
+            "oriented_score": 56.55,
+            "d1_oriented": 2.98,
             "quality": "composite",
             "asof": "2026-09-25",
             "weight": 0.9
@@ -77717,9 +77723,9 @@
         "side": "bull",
         "title": "AI / 大型科技风险暂未扩散",
         "description": "不是“AI 盈利兑现”判断；这里只观察 AI / 大型科技波动、集中度和流动性风险是否仍受控。",
-        "strength": 49.2,
+        "strength": 49.16,
         "strength_label": "混合",
-        "trend_score": 1.95,
+        "trend_score": 1.91,
         "trend": "强化",
         "evidence_consistency_pct": 22.6,
         "coverage_pct": 100.0,
@@ -77727,9 +77733,9 @@
           {
             "id": "mega_liquidity_blowup",
             "name": "市场头部企业资金爆雷/充裕可能性指标",
-            "score": 23.45,
-            "oriented_score": 76.55,
-            "d1_oriented": 1.15,
+            "score": 23.63,
+            "oriented_score": 76.37,
+            "d1_oriented": 0.99,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 1.2
@@ -77853,9 +77859,9 @@
         "side": "bull",
         "title": "利率 / 金融条件缓和",
         "description": "观察央行节奏、国债利率与收益率曲线压力是否在缓解，从而降低估值和融资约束。",
-        "strength": 21.66,
+        "strength": 21.73,
         "strength_label": "弱",
-        "trend_score": 0.01,
+        "trend_score": -0.32,
         "trend": "稳定",
         "evidence_consistency_pct": 18.6,
         "coverage_pct": 100.0,
@@ -77873,9 +77879,9 @@
           {
             "id": "rate_cycle_sensitivity",
             "name": "加息周期市场敏感度指标",
-            "score": 92.46,
-            "oriented_score": 7.54,
-            "d1_oriented": -1.85,
+            "score": 92.59,
+            "oriented_score": 7.41,
+            "d1_oriented": -1.19,
             "quality": "direct",
             "asof": "2026-09-24",
             "weight": 0.8
@@ -77883,9 +77889,9 @@
           {
             "id": "global_cb_cycle_entry",
             "name": "世界央行加息周期进入指标",
-            "score": 95.11,
-            "oriented_score": 4.89,
-            "d1_oriented": 0.79,
+            "score": 94.51,
+            "oriented_score": 5.49,
+            "d1_oriented": 0.13,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 1.0
@@ -77905,9 +77911,9 @@
           {
             "id": "global_cb_rhythm",
             "name": "世界央行加息指标",
-            "score": 3.97,
-            "oriented_score": 3.97,
-            "d1_oriented": 0.53,
+            "score": 3.84,
+            "oriented_score": 3.84,
+            "d1_oriented": -0.79,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 1.15
@@ -77991,9 +77997,9 @@
         "side": "bear",
         "title": "高利率 / 再定价压力",
         "description": "观察长端利率、紧缩周期、收益率曲线与股市利率敏感度是否共同构成估值和融资压力。",
-        "strength": 72.76,
+        "strength": 72.64,
         "strength_label": "强",
-        "trend_score": 0.18,
+        "trend_score": 0.2,
         "trend": "稳定",
         "evidence_consistency_pct": 75.6,
         "coverage_pct": 100.0,
@@ -78011,9 +78017,9 @@
           {
             "id": "global_cb_cycle_entry",
             "name": "世界央行加息周期进入指标",
-            "score": 95.11,
-            "oriented_score": 95.11,
-            "d1_oriented": -0.79,
+            "score": 94.51,
+            "oriented_score": 94.51,
+            "d1_oriented": -0.13,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 1.0
@@ -78021,9 +78027,9 @@
           {
             "id": "rate_cycle_sensitivity",
             "name": "加息周期市场敏感度指标",
-            "score": 92.46,
-            "oriented_score": 92.46,
-            "d1_oriented": 1.85,
+            "score": 92.59,
+            "oriented_score": 92.59,
+            "d1_oriented": 1.19,
             "quality": "direct",
             "asof": "2026-09-24",
             "weight": 0.9
@@ -78043,9 +78049,9 @@
           {
             "id": "rate_cycle_sensitivity",
             "name": "加息周期市场敏感度指标",
-            "score": 92.46,
-            "oriented_score": 92.46,
-            "d1_oriented": 1.85,
+            "score": 92.59,
+            "oriented_score": 92.59,
+            "d1_oriented": 1.19,
             "quality": "direct",
             "asof": "2026-09-24",
             "weight": 0.9
@@ -78059,9 +78065,9 @@
         "side": "bear",
         "title": "AI / 大型科技拥挤与估值风险",
         "description": "观察 AI / 大型科技波动、集中度、估值和流动性风险是否共同升温。这里衡量的是市场风险映射，不等同于判断 AI 产业本身是否存在泡沫。",
-        "strength": 47.61,
+        "strength": 47.64,
         "strength_label": "混合",
-        "trend_score": -2.42,
+        "trend_score": -2.39,
         "trend": "削弱",
         "evidence_consistency_pct": 18.3,
         "coverage_pct": 100.0,
@@ -78111,9 +78117,9 @@
           {
             "id": "mega_liquidity_blowup",
             "name": "市场头部企业资金爆雷/充裕可能性指标",
-            "score": 23.45,
-            "oriented_score": 23.45,
-            "d1_oriented": -1.15,
+            "score": 23.63,
+            "oriented_score": 23.63,
+            "d1_oriented": -0.99,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 1.2
@@ -78127,19 +78133,19 @@
         "side": "bear",
         "title": "地缘政治 / 事件冲击",
         "description": "观察地缘风险代理、跨资产事件冲击和恐慌是否在市场价格里留下持续痕迹。V1 不使用新闻文本分类。",
-        "strength": 44.03,
-        "strength_label": "弱",
-        "trend_score": 1.87,
-        "trend": "强化",
-        "evidence_consistency_pct": 0.0,
+        "strength": 46.07,
+        "strength_label": "混合",
+        "trend_score": -0.58,
+        "trend": "稳定",
+        "evidence_consistency_pct": 25.9,
         "coverage_pct": 100.0,
         "supporting_evidence": [
           {
             "id": "geo_news_impact",
             "name": "地缘政治消息冲击度指标",
-            "score": 58.86,
-            "oriented_score": 58.86,
-            "d1_oriented": 9.79,
+            "score": 64.46,
+            "oriented_score": 64.46,
+            "d1_oriented": 1.94,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 1.1
@@ -78147,9 +78153,9 @@
           {
             "id": "geopolitical_risk",
             "name": "地缘政治指标",
-            "score": 51.65,
-            "oriented_score": 51.65,
-            "d1_oriented": 0.91,
+            "score": 53.17,
+            "oriented_score": 53.17,
+            "d1_oriented": -0.95,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 1.25
@@ -78157,9 +78163,9 @@
           {
             "id": "geo_lag_reaction",
             "name": "地缘政治消息迟滞反应指标",
-            "score": 47.27,
-            "oriented_score": 47.27,
-            "d1_oriented": -0.57,
+            "score": 47.35,
+            "oriented_score": 47.35,
+            "d1_oriented": -0.49,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 0.9
@@ -78169,9 +78175,9 @@
           {
             "id": "market_fear",
             "name": "市场恐慌指标",
-            "score": 15.28,
-            "oriented_score": 15.28,
-            "d1_oriented": -3.44,
+            "score": 15.81,
+            "oriented_score": 15.81,
+            "d1_oriented": -2.98,
             "quality": "composite",
             "asof": "2026-09-25",
             "weight": 1.0
@@ -78179,9 +78185,9 @@
           {
             "id": "geo_lag_reaction",
             "name": "地缘政治消息迟滞反应指标",
-            "score": 47.27,
-            "oriented_score": 47.27,
-            "d1_oriented": -0.57,
+            "score": 47.35,
+            "oriented_score": 47.35,
+            "d1_oriented": -0.49,
             "quality": "proxy",
             "asof": "2026-09-25",
             "weight": 0.9
@@ -78195,9 +78201,9 @@
         "side": "bear",
         "title": "信用 / 流动性收缩",
         "description": "观察信用利差、系统性风险、杠杆与市场流动性是否出现一致恶化。",
-        "strength": 6.1,
+        "strength": 6.18,
         "strength_label": "弱",
-        "trend_score": -1.02,
+        "trend_score": -0.95,
         "trend": "稳定",
         "evidence_consistency_pct": 0.0,
         "coverage_pct": 100.0,
@@ -78205,9 +78211,9 @@
           {
             "id": "systemic_risk",
             "name": "市场系统性风险指标",
-            "score": 27.82,
-            "oriented_score": 27.82,
-            "d1_oriented": -2.29,
+            "score": 28.17,
+            "oriented_score": 28.17,
+            "d1_oriented": -1.98,
             "quality": "composite",
             "asof": "2026-09-25",
             "weight": 1.25
@@ -78268,104 +78274,405 @@
     },
     "news_feeds_market_model": false,
     "news_context": {
-      "us_policy_event_sentiment": 4.46,
-      "geopolitical_news_risk": 0.0,
-      "systemic_news_risk": 0.0,
-      "ai_narrative_risk": 0.0,
-      "negative_narrative_density": 0.0
+      "us_policy_event_sentiment": 1.47,
+      "geopolitical_news_risk": 31.83,
+      "systemic_news_risk": 4.44,
+      "ai_narrative_risk": 3.88,
+      "negative_narrative_density": 19.57
     },
     "news_note": "News Signal V1 is context-only. Narrative scores remain quantitative-proxy based; news does not vote in Market Model V2 until forward validation."
   },
   "news_signal_v1": {
-    "version": "NEWS-SIGNAL-V1.1",
-    "generated_at": "2026-09-25T12:38:46.176031+00:00",
+    "version": "NEWS-SIGNAL-V1.3",
+    "generated_at": "2026-09-25T12:48:25.749236+00:00",
     "feeds_market_model": false,
     "policy": "News is an explanatory/context layer in V1. It does not vote in Market Model V2 until forward validation is available.",
     "source_status": {
       "configured": [
-        "fed_all",
         "fed_monetary",
         "gdelt",
+        "google_news",
         "sec_press"
       ],
-      "unique_sources_seen": 1,
-      "article_rows_before_classification": 6,
-      "classified_rows": 3,
-      "events_after_dedupe": 3,
-      "errors": {
-        "gdelt": "HTTPError('429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22Federal+Reserve%22+OR+FOMC+OR+%22interest+rates%22+OR+tariff+OR+%22trade+policy%22+OR+Treasury+OR+war+OR+conflict+OR+sanctions+OR+missile+OR+ceasefire+OR+geopolitical+OR+%22bank+failure%22+OR+%22liquidity+crisis%22+OR+%22credit+stress%22+OR+default+OR+%22debt+ceiling%22+OR+%22funding+stress%22+OR+%22artificial+intelligence%22+OR+%22AI+spending%22+OR+%22AI+capex%22+OR+%22AI+bubble%22+OR+%22data+center+debt%22+OR+%22AI+regulation%22+OR+recession+OR+crash+OR+crisis+OR+panic+OR+bubble+OR+contagion%29+sourcelang%3AEnglish&mode=ArtList&maxrecords=250&format=json&sort=HybridRel&timespan=24h')"
-      }
+      "query_mode": "market_context_headline_confirmed",
+      "unique_sources_seen": 50,
+      "article_rows_before_classification": 60,
+      "classified_rows": 57,
+      "events_after_dedupe": 55,
+      "errors": {}
     },
     "signals": {
       "us_policy_event_sentiment": {
-        "score": 4.46,
+        "score": 1.47,
         "note": "Market-relevant U.S. policy/monetary/regulatory event risk and attention; not a score of any political person or party.",
         "risk_component": 0.0,
-        "attention_component": 12.75,
+        "attention_component": 4.21,
         "event_count": 3,
-        "source_count": 1,
+        "source_count": 3,
         "top_events": [
           {
-            "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
-            "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+            "title": "Reducing the $2T federal deficit could lower inflation, interest rates for Americans: CRFB - Fox Business",
+            "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNLTdmNW51ejZ0dTh4a2NEWm92cnVwbFlzQU1MbURwZmpCU0g2WkZuREkxX0tCLTltNDI5VlRkUVJJM0s1TjZmZFNLcE1Fb3ZxTk1qN2lhN3l0Z0xJc3YwUXR2RWI2XzlPVTRILWlVb1pQUHNRTHkxM1BnQnBIdllneXlpOEdXdUl0UDdSUUQ1T0ZYZ0k0dXlMbVRMVjduQTE4enN4VVdrdTRpMnM5MDE1ZWFXQjVEQdIBuwFBVV95cUxOSmNTV3BYVUhJREZQQ0lyWERCMDFocUFRZjlycmE3V29KZGd2R0FFckVNbTJHZWZlSGJkbS1rUkRzT1ZWWG85MmJyQm94bm5LamJfckhUWTBEN1ZCVzd6dy02cnQtWHUxdGRUWW9oaWRaNnRXMTRsS19za3U2bGdDdzMzM2FGZUJnVmdlR2RaMEJKMVlxTEFXaFVBZVYyZXJEY1BnZTc2MG0xaS0yd3ZwUEZQVXJraVN2QktB?oc=5",
             "sources": [
-              "fed_all"
+              "Fox Business"
             ],
             "origins": [
-              "official"
+              "google_news"
             ],
-            "age_hours": 18.1,
+            "age_hours": 14.5,
             "severity": 0.0
           },
           {
-            "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
-            "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+            "title": "Chinese could take 11% of US market by 2038 if tariffs go - Automotive World",
+            "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQUUJ2Z1JJTDdFQzByWktHRnVUaTFRTkhDVmFnVTBOTXp2NE1Qc055NU5WcnM2bVV6bFNrYVR1WWlhblBYYVlEZGhQVHQtbk1iS2ZVT0NqQU1tYTJRaUZTd3RwZmJzNE10SVVSM1JKTE03SzJ0ekVJdHJQZ0poZDgtMkhEbTZsUy1pbmFWNXlpV3pKOFVtVW9fbEVFSlQzVTA?oc=5",
             "sources": [
-              "fed_all"
+              "Automotive World"
             ],
             "origins": [
-              "official"
+              "google_news"
             ],
-            "age_hours": 21.6,
+            "age_hours": 24.8,
             "severity": 0.0
           },
           {
-            "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
-            "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+            "title": "Fed holds interest rates steady as inflation hits 3-year high - ABC News - Breaking News, Latest News and Videos",
+            "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxObE9meWdub2FOS2dVY0pKYUxReEZrZGJhMnIyNG9JTEJpZlhISXFXMlZGZk1kSjRPWlRPejV6aTdXSHZnWWFkeHBvZVEydk9Sa1dLallzVGtIenB2OV9yR2daTDNrb2psQW5uZ2JSYnlOMUxmYzExZ1NBT1V3OGVlaERaZ1pPaVYwTDUyNVJCR1lJUkpoRFhhMzJha09TOVXSAaQBQVVfeXFMUGc0WHV5TzVaUnlTZjZ2Y1h3RHdSSnc0LWZoTzF3Uzk4WFkyQVByY1kxNkNoeDREX3Z6TDRSOUsyMmFvbHBGUWNlWUlXZGxJZFN6RFB5NWREWWtlRXUyMXJyUUlMTXo0cmh4NlpfT1pMUklyOGJLb1F5SDdteTItMzl5NVQybXk5U2ZQWkRGYmhnU0dJZ2hoTEFjb3FLaktRcjZNbDc?oc=5",
             "sources": [
-              "fed_all"
+              "ABC News - Breaking News, Latest News and Videos"
             ],
             "origins": [
-              "official"
+              "google_news"
             ],
-            "age_hours": 64.1,
+            "age_hours": 32.9,
             "severity": 0.0
           }
         ]
       },
       "geopolitical_news_risk": {
-        "score": 0.0,
-        "event_count": 0,
-        "source_count": 0,
-        "top_events": []
+        "score": 31.83,
+        "risk_component": 21.95,
+        "attention_component": 50.17,
+        "event_count": 32,
+        "source_count": 31,
+        "top_events": [
+          {
+            "title": "Oil prices back up as U.S. and Iran trade fresh threats to expand 7-month war - CBS News",
+            "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPSWU4WXp4UDJYb25pa3BRYTNqSW1rcFhDdF9vMXdoekszMG1JbEttak9SWDhnWnotU21ucFhVYlByOGQwaFdoRE1DeU04WXVjTVN2a0dmSzJoR3VsNGozZi0zQ0tNbkdMRkVRd0Z3MzE3QnFNWkNpYTgycTBqLUJ3QUNYN1hWVFA5NGdnS2JycV9KUTE1VnBQcQ?oc=5",
+            "sources": [
+              "CBS News"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 1.5,
+            "severity": 0.409
+          },
+          {
+            "title": "Russia’s Novoshakhtinsk oil refinery suspends operations after drone attack, governor says - KSLM Radio",
+            "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOeFBld1E1SF9Bd0wzdXpJSnJ6b1QyX3ZTZGxydWtfSF9ZTnFfSTFGWEtFREJDTGg5S0JOZ0ExYVJsLVhNbVJ2ai1nTVBNaHhxWkZjM0xlaUJMNFowLVZZc0l6c0dzVGFwM05WNzVNamlmX1lrOTBvbWxhSTRqZVpXRWNLdkZwZjU0Y1pUNDhDeXJpNkNuam1NTGY2bmNxc1FFdERMWjBQdjhvaTRuU3NURlRZZWtEVk9kNWxtUXpJU3NPUXFDRm9mMlR3?oc=5",
+            "sources": [
+              "Internazionale",
+              "KSLM Radio"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 3.2,
+            "severity": 0.364
+          },
+          {
+            "title": "Drone attack damages Russia’s Novoshakhtinsk oil refinery, operations suspended - The Statesman",
+            "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPUl8yVGRMdnhpYV9GY2hvTkp0T2NTQ3dhVnpsTEd2WmVGZTkyU2RrdjhZVmhOWGZQYzgzTHFNb1R4VWs2ZTVLdzZodTYtMXJKZTh0UkZfaVZnU0VsZHE3RFhSMWZDLXFnQW9DOVJOYUtjTFUzb0tIMFpYQXg0SExrMi04bUtTb0MtaUtFV2plSDZRZXZIbjRBZURBa0E3YnpGMWhfcVE0dGp3cFdBZDlzUWVJN2NCcG9kVEZCTlJ4bGhMUVhnY3lB0gHMAUFVX3lxTE9jd0swVG0tMWlOMk5FUFlsbmZoTE1XTnlpdGVBYTJvTmtJbEZpeXViZjBNeXFydl9WSzdkTHZTMmNIeTUtcHdsbEZOaHNjclhwbXRzSlE4RmRIWTV0NHFjSTJ4d0tPQVFxQUhWYllsc20zMk04NW9YTjBDQzhabW1QZ0g5WlNWOTBWRjhpemlHa1VSUzlxUXdra1d6Q2hNUTRlWEhlT09KWWJQZzZaaDY0RE91TGZhWFJJZDBGc3paNXRuOUlVMnhTQ2ZpUw?oc=5",
+            "sources": [
+              "The Statesman"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 2.5,
+            "severity": 0.364
+          },
+          {
+            "title": "Oil prices waver in face of Iran war truce and Houthi attacks - thenationalnews.com",
+            "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPUGc1d3JnMG5pTDJSZmxwZlg5R3ozTDlUYnliM3MwVTdHVlItMU0tWDZ5UUtyalJETEx4UW1WNnZhU3pucjBqYmh1SWsybENqVWNPeGw0TXJSZzVtRXJEaDBSbEJxdk4yMnBDQ2QtYnFuZ3YwdnY4djVtZHBIaHlSa2Z1cWk1cEtjZ0JOeUg1UWR2NlhVNkUxdEM2Q2FhOFlNQkhGWlk3MjhUdEJtQlRFUmRzYzRKRGV3LTNnMXB3?oc=5",
+            "sources": [
+              "thenationalnews.com"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 4.7,
+            "severity": 0.409
+          },
+          {
+            "title": "Gift Nifty Flat as Iran War, Oil Prices Weigh on Markets - HDFC Sky",
+            "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPMndFeHJpV2t4cHgydHdFSXJlb0dmbF9xckgxdEIxdTNIaU45QVVlbmVjbjN0T2I0Ynhramh6bUdyWVdNMmZiZVdmbVpscGkxM2FJRDNHTFFDeC1pRV9CLTRzekpxdG4tWVJMUU03SWFrWTByWGJCX1JKUTQ5a211WS1vN0FFOTlaRDhqOGhqUWRvdmI5V2xwQmlaMU1OWWJUSDlEd29idWhEa1JkYUJRTWdscGY5Z2R5RlJYUVFaRE8tdkdncm8wMXBNLXFQMVRmNkJMbw?oc=5",
+            "sources": [
+              "HDFC Sky"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 9.4,
+            "severity": 0.409
+          },
+          {
+            "title": "5 Energy Stocks Positioned for a Prolonged Iran War - oilprice.com",
+            "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQRXFTZTVYOHkyVFlNZTZORlhsNkVfaE9SZXdOZE1ZQy1FVk1tdDJYNDI3a3JRZzZFaTRleUZpREoxUVgwT3RQMGJmd1kxNGlIVXNIMHFQSjBXV2FrM2M3cm5NdEM4YXV5akY3ZEpVU0dFUEkyOEFJOVU1UUJXRzE2c2JYNHlWTm12WWNXUnMtdEY1UEl4T1A1SWdB0gGfAUFVX3lxTE91S0NQSjBPT3ZnYzBoa3hoV2F2UFAxcjA2eDdOWnEtN01kMnVERW85X3g0TU1peTlSTDF0Und2R2otTTVLOGlmOWVYNm1odEhNaUdoWEVHRzc2cThmREdyTE9zdHVuaFRHNUJvZWpWT25rRjdWaHZOUlNpZ2Zzc0dwbEpxSVNOV21RNHJQZUJjcHR2RUJqWlhxVnR2bXR3NA?oc=5",
+            "sources": [
+              "oilprice.com"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 12.8,
+            "severity": 0.409
+          },
+          {
+            "title": "The Kuibyshev Oil Refinery in Russia has halted operations following a drone attack – Reuters - UA.NEWS",
+            "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQMnMxWEhFczdxZWUxNFRCTFlBNVJodmVRRHJoTDJyNldfTm8tTjJNb3dUTWd6UTJvaFhvRktUS29EaTlSYlB4RGY5eHB6ZC1JdDNhZ3JBMXJucTVaZThFSVN3V3cwOXRWamtUejliUDlHWkZ5UVZfenVEVlVqbGMxY1QzZF8xQnpYTnBzbklQY1ozSU1qVVZlbUl3?oc=5",
+            "sources": [
+              "UA.NEWS"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 17.1,
+            "severity": 0.364
+          },
+          {
+            "title": "Ukrainian drones attack Russia's Rostov Oblast, Krasnodar Krai, allegedly targeting oil depots - kyivindependent.com",
+            "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQaTJ3SFpVSEIxRHVuZ0ZOMDhGR2JOa1pvdkFxbnk0bzZ0UDVmeDdEbGY1clpPcFB0eVgzbFJndVVHN0ZpRlVqY0lMcDJvWVowS05DMFNtaGxlSkZ6ejN6YUpOaHc3T0J1US14cjZWc0p0NHU4SWVwMkExaXlUM0lseEptLW04czQzWmNsa0xfUUI3NFA3ejdZZTVsdl9Ldlg4TVJ2WWo2UHJzZXdyNkVaOFlJb1g4SjVzOF9Xb2pBTWNkcVowb2JET3pRZ0ZNRm8?oc=5",
+            "sources": [
+              "kyivindependent.com"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 20.0,
+            "severity": 0.364
+          }
+        ]
       },
       "systemic_news_risk": {
-        "score": 0.0,
-        "event_count": 0,
-        "source_count": 0,
-        "top_events": []
+        "score": 4.44,
+        "risk_component": 4.15,
+        "attention_component": 4.97,
+        "event_count": 2,
+        "source_count": 2,
+        "top_events": [
+          {
+            "title": "Consumer Credit Stress: What The Data Really Shows - Real Investment Advice",
+            "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNUkZXUXJ2YzJSTGdtX1NjVlo3T0c3djhNVTZsb1hTVjhiUlU2WnA0RF9GOFc3cTZxVzRVZTFOaG9DZm9pV3RqOFYyemZNM2xaUVhVSXZxQUJZSTlGVnhvSlE2UXBRVW1hTDJFakxmN2xOWGVxSDlYWWVVS1JKY21jbXNYTVBnRGlRVzlOcUtMQ1RfY3VfWkRNQ2U2MG1UMm8?oc=5",
+            "sources": [
+              "Real Investment Advice"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 2.7,
+            "severity": 0.409
+          },
+          {
+            "title": "Can sovereign default be a good thing? - Livewire Markets",
+            "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNeWI4TWJLOGZySS1OLWRodUpkLVNId29uMmxqdUFPLThSWkpLZV84eXg2MGwzdTd6dFkwRWo1aEtlbGp0blNQY0xvQjRTcDZPUFBZSm44ZXhEYzdqODFfVGhpMllYMlRBX3RhLVg4UHJ0M044YkpBcU1uTWNwVFpKTA?oc=5",
+            "sources": [
+              "Livewire Markets"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 33.2,
+            "severity": 0.455
+          }
+        ]
       },
       "ai_narrative_risk": {
-        "score": 0.0,
-        "event_count": 0,
-        "source_count": 0,
-        "top_events": []
+        "score": 3.88,
+        "risk_component": 0.0,
+        "attention_component": 11.09,
+        "event_count": 6,
+        "source_count": 5,
+        "top_events": [
+          {
+            "title": "AM Markets Need to Know: Burry flags AI capex, Musk's xAI expands, and more (SP500:) - Seeking Alpha",
+            "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNYWM3aDdHcEpORFNSNl9McWxudy1NSXk3N0lldHpQWjR1OGxNdVpGdkt3bVpXYjU5QTk2eHhJQjlkSEZWbWJBeFluUllHTWFlamRSV3dkWnRUemhha0xKaTVxNnFnSzVRTTQzcUV3VHlYNGg5MDFaMzRZellES0dNZW5hUVJkNWI4bnF2c3drY0ZqUC1pbURwWHdwalcwU1B3MUNfcFQyaFZvUWRaTlE?oc=5",
+            "sources": [
+              "Seeking Alpha"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 2.7,
+            "severity": 0.0
+          },
+          {
+            "title": "Artificial Intelligence Based Surgical Robots Market Forecast to 2035: Demand Accelerates on Precision Surgery Push - IndexBox",
+            "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQckJVSG5vTXBOLUJ4Q1VSdlRsUzdPSGVKRGFPM3RxbzVFWFV2RmpjSjV1aEItLUQ2UWZIaXhUMktKanlXN3NpNjRPa0xoVHp1UllqeUtlSEVEbTh5M0pMa25nTnl0M0R2NVFJLW83aFJ0VGQtUTRBTVZ2RG5IQlhGMnhRYXJJcjRRd0NjZGhocWJzOFpqSjdyMWJHR1BfeGVqMXpMa2lNdUtUazU3TktkSVhZamhrd0lsbTdxSkdvRnlhMXdzY2w1OVJXZ19nUUppcUVXejB1T2NaYkEy?oc=5",
+            "sources": [
+              "IndexBox"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 15.3,
+            "severity": 0.0
+          },
+          {
+            "title": "Nvidia Stock Drops as CEO Huang Suggests Drastic Alternative to AI Regulation - Barron's",
+            "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPQjd6OU5hSXN5TW9nRnB0OGhIWG1jNU9FNk5iQ2RhNkhRbl9nSVc3RXBxcnJWZGhpUzU2Um8ta0NzOU5XV2lGNUZ3STBncXpBNlk2QnRhbDVXYXRzNGs1Sl9RRnNmSlpMb3FoVWNxMDV6VUt2VklXbFN3ZVl5SzF4eTRLRXpXbmJEaVpXNUFKNUtUbmRfSEE?oc=5",
+            "sources": [
+              "Barron's"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 18.3,
+            "severity": 0.0
+          },
+          {
+            "title": "Meta Platforms stock rises 1.75 percent as AI spending stays high - AD HOC NEWS",
+            "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPLS1ZR2pWbmh2cDB0STRhQnlaX2VFbHVJYkJxYTNzVDlrY29GZ1FucWszWkc1dU96U3I4SC10anJCS1d5UDJ5TEhKMGxrZXpHQVo3ZHlQRUVMLUZnTU10cEtwV2luQ25xdUp2NGg3bk0tczA0RGM5Ri04RDJTRk1YMkVtUklaaUdHcTBWaUJHOFI4MDk1bzdWb21XYlBQTm5CYktIRmJ0Njgwb1B2aVFzWlRYdzE0ak5XWUY2VFVvTmJrT2hUZGNR?oc=5",
+            "sources": [
+              "AD HOC NEWS"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 22.9,
+            "severity": 0.0
+          },
+          {
+            "title": "AMD vs. Intel: Which Artificial Intelligence (AI) Chip Stock Has More Room to Run? - The Motley Fool",
+            "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQc1ctM2dtTkJYeUpMTC1jZjY1VkxMMFNuU1ZCcGtDeDFMTEVOR3kwdFlodmN1RGpDMzRjYXpENTZya2RJSVNLYlFTOXY1Nk85OEltd01Idmhsc0dLd0pkUnVaTlA2b1BkMFN4eU0weUJXT2NYZnE5R1A2VnZfRlhrcUNDVWpuUjMzU3gzY2s2bWhJT2hPa3FsSUZ1T2lPR1lDLXItUXRXU3JiTFAzNmlCMi1POUhNTmhPdGRlNg?oc=5",
+            "sources": [
+              "The Motley Fool"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 24.8,
+            "severity": 0.0
+          },
+          {
+            "title": "This Artificial Intelligence (AI) Stock Could Soar by 63%, According to Wall Street - The Motley Fool",
+            "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQZnd6cVRPS29hS2x4R0tVelktajJTVHkxSzZTQmk4Vm1Kd0tsYVptdjl4NVRlci1iVEc2UHp1Z0ZuV1pfQ0gwbjk1eXluM3ZGR25TVFprQkNRZWczOEw3Z01tRlpSV3NNcUNfaEJZRE5faURKblZRWEV3ZFFjVjVGSU1wRjRCb0syWERoc2I2ZHFuMmxJSTFUYjFLOC1vTS1sbThnMkQ1NHRtV0pRaWp2Q2VHNVRvQXBjMHlvdkQzWQ?oc=5",
+            "sources": [
+              "The Motley Fool"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 25.9,
+            "severity": 0.0
+          }
+        ]
       },
       "negative_narrative_density": {
-        "score": 0.0,
-        "event_count": 0,
-        "source_count": 0,
-        "top_events": []
+        "score": 19.57,
+        "risk_component": 19.81,
+        "attention_component": 19.13,
+        "event_count": 13,
+        "source_count": 11,
+        "top_events": [
+          {
+            "title": "Opinion | Is The World Staring At A Big Stock Market Crash - And Recession? 5 Uneasy Signs - ndtv.com",
+            "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQMzdHUlVzbk10WE51SjNMcDlRTlhUQk9oMkg5dF9CNWx4WUJobURWRWhsU3h1Ynh1LTdKTWtFcFRUYm1LNHVOYlJpZjhfS2FfaHpEc1lmZGtncEN0VUptVVdjYWx6emNUY1EzYnhHU3k4djB1dEFjVy1aU3lSMTFvS1FVdHAxUDdZVlBCZlNIczJSaE5VTHBfeUhib29za1BIMnc?oc=5",
+            "sources": [
+              "ndtv.com"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 1.9,
+            "severity": 0.818
+          },
+          {
+            "title": "Does History Suggest Buying SpaceX Stock in a Market Crash? The Answer Might Surprise You - Yahoo Finance",
+            "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQdGNGd1B2Ty01Y2FuREIzT29LYnlBUmYtMDQxVlEzbXRrZTVzc1ZRT2NwUi1xU21XOFNWR2lXVTZXMlpoQVdxXy1tLUw3WExNT1FXa19qTVNPMS1HbEhTOFBaYTRJNGoySjdjWDhwUmx0elpOM2ViODVkRHJ6T1dseTJVcjFqS19zZEFXTjRrZFFZQUZLbTNyb1dKaXlkWGVo?oc=5",
+            "sources": [
+              "The Motley Fool",
+              "Yahoo Finance"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 2.2,
+            "severity": 0.455
+          },
+          {
+            "title": "The magic number helping Solomon Lew beat the retail recession - afr.com",
+            "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQSXFzcGxPcHhJdmd1MTNwdm80bXpnMFRlWklIX0tuYWNseTF1S2pwZEdnVW8zbWROcVc1YldHS28wbEk4S2RZR1NMalZiVVlySlBFaDB0QVYtcjVoak1lVW1md0RQWmI5VkVleUtqTWd6M2hxZkFqUzVhalRrNWhuMUxDVnk1bE15b2NFY3MxcENfbXV0N1hjUzF5V3pRRjNEc2tBTjVlMVhfWFg1bElR?oc=5",
+            "sources": [
+              "afr.com"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 17.8,
+            "severity": 0.364
+          },
+          {
+            "title": "If There's a Stock Market Crash Ahead, History Highlights the Best Strategy for Investors - aol.com",
+            "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxObDRyTS13c3JCdDU5NmNhU3g3NnlUNkpoamlFR1Fic09CTzltRV9zcS1fUUwzdG45dExiY3k3N2c2VnItZ2twWnBZNktPXzItSmRMRVBveS1GdWljRDFpTmtxN3c1OG41a1dhTzFwNU44WkpGTm5oNjMtdzVtaURxVQ?oc=5",
+            "sources": [
+              "aol.com"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 22.0,
+            "severity": 0.455
+          },
+          {
+            "title": "What Would A Real Market Crash Do To Netflix Stock After This Fall? - Trefis",
+            "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQZGNiUE1fRng4a1ZiSGJXb3dkU2lhTEdpLVpXNGQzM204OEhMYXZSLTBsUmpUQXBEdno3RS1fVUVfeUVtWFJhVVdEZmVXdXg4Qzl3TEl2d2lKZENJT01FSUNVUnJvQTQ3VmNEV2ppVGdNanItdWpsZnNacnJ5S3ZjUHgzNDA1UVc1U3RDWWVYbWZnbE1uTjU4UHptSDg1cXpVcjMyV1JUdzZTdE42WlRnOFJHOEZ5RVlrWERTeVBKdnprbUJLRlE?oc=5",
+            "sources": [
+              "Trefis"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 25.0,
+            "severity": 0.455
+          },
+          {
+            "title": "Stock Market Crash: Five reasons why Nifty fell 400 points, Sensex tanked 1,200 points on Thursday - CNBC TV18",
+            "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxQZ3RITnlWRlVoLVRXRW9Pc1NnU042UFB5V1BVM0s0QkFvcnRjbElBRVd1ejJZQjdSTmNfM19uazFjYnZFbm9EMmhxVU0xYWtsd1dZNldfbEFJOE45dEVDMWw4TUVwSW5LdkVfSHZPVnZsRVI4eWhyVFpaQW1mRFM0UFUzZDhXaTB6anpwWDlSSk0yWjlpZ1Z4WEsxd3M3YklFREtEbi1TNXhEUmsxYUVyWXlPTHNxUXJVYUxpbV9ENkEtNURlYnlPcU5lTnBEbjRMVGE0SXdGRTd2VWvSAeABQVVfeXFMTVVqV1N6TXB3TXJhak1kUURlODRETFpFX1NBa1RRb1oyUlVNd0xRcXBHU2ozWVN4dlQ2N1Y2WUhpdTdZQk1NWWNYcDB4U2ZneFRVblBSajlpRmlzLXZWMTNCeHdIZG44a0ZMandxanFjTW5qTHpGM05QQ1Vxbnlsck51UjJhMkloS3dPaWstcTFoS3Q2NEQyRi0zQVhITkp3NzdWRnBkWG1vaVdWSll0SGlsdXRiaUxWc2FUVk9wMW1ZZ09tRlRCa3RoQjNONFhvQmdyN25tVWhBVTBEZmpuMnQ?oc=5",
+            "sources": [
+              "CNBC TV18"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 27.7,
+            "severity": 0.455
+          },
+          {
+            "title": "Stock market crash today: Sensex ends over 1,200 points, Nifty goes below 23,100 - top reasons for fall - The Times of India",
+            "url": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxNT1lNOEhqOHFBM0dUS21nbjEzUDVTOVY0YnkweVp1T1pQdy0zTG9LUmppQkhYTGtIZXBSTEtiVHdDNjZxWm5FM1VXYUl5Mk9WcklBS1p0NWlKY1FUWDNqUnlYcDRrTzI2dms1NVNjenlmQkJZdlIyQllHaEF5VVU5OWE1OFgzeE5jaVdSR0ZfNklZOGpsMGRyc3NXcEdsdFVGRl80QXRsZUhkSDVWbXN0TlRKNjJXSkRSc05IQnczMlpyYXJwYnV3NERXY3BQRjdJN0h6REx4LVo3S1dLQjNRQlpNOU9zX0RLaUlxNXUzRzFmTEdGakNJTHotX2cwX0hyb3lMVEZmR0PSAY4CQVVfeXFMTWdFZHhRbFpBMnQtazZaZUpQVk9Ramd2ajI4M296WDFaazhGZG1OV1RmeGRqcDJkeTNsWC1TYXNTbWtJa1RGRktmREpwbkpqNFYzUlFIYkR3ODg3RllZQTNWZ2h1ZzBLUlU0WXpYV2ZlQnN5WE9pN2JCV2sxbEZMdjcwQXcxRGE2c0lLSWdLVHJVYTRuX2gyYnV6MFlPZDhMUmpzVHpUUWk4WmJYNWtsMnRZSTdmNzBzdnhGRzNRUnN4aTdrakZ5QlJ0aHJsaGRGQlk5NFllakp1bHByRFpMbU05S2tqWFExY3lQYkVlUjlyX3hTUXpmRFQtVmdocWFJMG1aQ29LTHNvb200Rlh3?oc=5",
+            "sources": [
+              "The Times of India"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 27.9,
+            "severity": 0.455
+          },
+          {
+            "title": "Stock Market Crash: Investors Lose Rs 3.93 Lakh Crore As Sensex, Nifty Hit Three-Month Low - NDTV Profit",
+            "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxQNjFHX2Q3c08xMDdGUlpra0RVekh4Zy0waWJXT2cxdDIwOG1TYmJnSjAzMy1tVHowODJaQ2VRZTcxWmg3bjhLa3hrRHBEMktIc3VmNmFWSkVvLUhoM041UkM3WlNpV0NfM3pqT25YVzlvZjZDcE1FY2IxeXpscDBJVWVuUzNobzFPMktQbVFqdVhQdXlwY19DbUpnbUFweUFsZzdfZmxZemUyTUlZSkNLekJfT21oMW8yNjhuMzlTM1BLQ3RsWDlyWmxrQVlxc2stSTFSaG1DRU_SAeABQVVfeXFMTmlwcURVb0RtR0lWNC1MT1pvbUdtUDNMd3hHM25oUUpvNmNWcmdxNEpLR3VMYnVRU1dkSDg4ajN2a3NJMFppWVdkZ1R1LW1SVWxYa0ZWUnZkb05NeGNoZHZ4cFpVWmpwNGlLaWxxM2tFQnpvRXhaMWxIb0VkR2QxWjdTUkNOQTBqVG50Y0Nqb25ycWNTVEgyQkRHeG9hUkpPTUdPTjNLTWtiV2VlNFA5RUpWWllaY1dldUNWeGUxSmx1Y19Mbk1CeHhRNHpUYmZjaTlhR2VrS1RsbnZJS09pNDU?oc=5",
+            "sources": [
+              "NDTV Profit"
+            ],
+            "origins": [
+              "google_news"
+            ],
+            "age_hours": 28.0,
+            "severity": 0.455
+          }
+        ]
       }
     }
   }

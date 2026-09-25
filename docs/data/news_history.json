@@ -3,28 +3,27 @@
   "history": [
     {
       "date": "2026-09-25",
-      "generated_at": "2026-09-25T12:38:46.176031+00:00",
+      "generated_at": "2026-09-25T12:48:25.749236+00:00",
       "signals": {
-        "us_policy_event_sentiment": 4.46,
-        "geopolitical_news_risk": 0.0,
-        "systemic_news_risk": 0.0,
-        "ai_narrative_risk": 0.0,
-        "negative_narrative_density": 0.0
+        "us_policy_event_sentiment": 1.47,
+        "geopolitical_news_risk": 31.83,
+        "systemic_news_risk": 4.44,
+        "ai_narrative_risk": 3.88,
+        "negative_narrative_density": 19.57
       },
       "source_status": {
         "configured": [
-          "fed_all",
           "fed_monetary",
           "gdelt",
+          "google_news",
           "sec_press"
         ],
-        "unique_sources_seen": 1,
-        "article_rows_before_classification": 6,
-        "classified_rows": 3,
-        "events_after_dedupe": 3,
-        "errors": {
-          "gdelt": "HTTPError('429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22Federal+Reserve%22+OR+FOMC+OR+%22interest+rates%22+OR+tariff+OR+%22trade+policy%22+OR+Treasury+OR+war+OR+conflict+OR+sanctions+OR+missile+OR+ceasefire+OR+geopolitical+OR+%22bank+failure%22+OR+%22liquidity+crisis%22+OR+%22credit+stress%22+OR+default+OR+%22debt+ceiling%22+OR+%22funding+stress%22+OR+%22artificial+intelligence%22+OR+%22AI+spending%22+OR+%22AI+capex%22+OR+%22AI+bubble%22+OR+%22data+center+debt%22+OR+%22AI+regulation%22+OR+recession+OR+crash+OR+crisis+OR+panic+OR+bubble+OR+contagion%29+sourcelang%3AEnglish&mode=ArtList&maxrecords=250&format=json&sort=HybridRel&timespan=24h')"
-        }
+        "query_mode": "market_context_headline_confirmed",
+        "unique_sources_seen": 50,
+        "article_rows_before_classification": 60,
+        "classified_rows": 57,
+        "events_after_dedupe": 55,
+        "errors": {}
       }
     }
   ]
