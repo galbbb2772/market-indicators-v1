@@ -1,3 +1,25 @@
 {
-  "sources": []
+  "sources": {
+    "gdelt": {
+      "enabled": true,
+      "endpoint": "https://api.gdeltproject.org/api/v2/doc/doc",
+      "timespan": "24h",
+      "maxrecords": 75
+    },
+    "fed_all": {
+      "enabled": true,
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "kind": "official_rss"
+    },
+    "fed_monetary": {
+      "enabled": true,
+      "url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+      "kind": "official_rss"
+    },
+    "sec_press": {
+      "enabled": true,
+      "url": "https://www.sec.gov/news/pressreleases.rss",
+      "kind": "official_rss"
+    }
+  }
 }
