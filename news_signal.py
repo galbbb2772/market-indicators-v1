@@ -5,6 +5,7 @@ import html
 import json
 import math
 import re
+import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
@@ -19,7 +20,7 @@ SOURCES_PATH = ROOT / "news_sources.json"
 
 HTTP = requests.Session()
 HTTP.headers.update({
-    "User-Agent": "MarketRegimeLab-News/1.0 (+https://github.com/galbbb2772/market-indicators-v1)"
+    "User-Agent": "MarketRegimeLab-News/1.1 (+https://github.com/galbbb2772/market-indicators-v1)"
 })
 
 RISK_TERMS = {
@@ -39,23 +40,26 @@ DEFAULT_SOURCES = {
         "enabled": True,
         "endpoint": "https://api.gdeltproject.org/api/v2/doc/doc",
         "timespan": "24h",
-        "maxrecords": 75
+        "maxrecords": 250,
     },
     "fed_all": {
         "enabled": True,
         "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-        "kind": "official_rss"
+        "kind": "official_rss",
+        "max_age_hours": 72,
     },
     "fed_monetary": {
         "enabled": True,
         "url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
-        "kind": "official_rss"
+        "kind": "official_rss",
+        "max_age_hours": 72,
     },
     "sec_press": {
         "enabled": True,
         "url": "https://www.sec.gov/news/pressreleases.rss",
-        "kind": "official_rss"
-    }
+        "kind": "official_rss",
+        "max_age_hours": 72,
+    },
 }
 
 DEFAULT_KEYWORDS = {
@@ -63,7 +67,7 @@ DEFAULT_KEYWORDS = {
     "geopolitical": ["war", "conflict", "sanctions", "missile", "ceasefire", "geopolitical"],
     "systemic": ["bank failure", "liquidity crisis", "credit stress", "default", "debt ceiling", "funding stress"],
     "ai": ["artificial intelligence", "AI spending", "AI capex", "AI bubble", "data center debt", "AI regulation"],
-    "negative_narrative": ["recession", "crash", "crisis", "panic", "default", "bubble", "contagion"]
+    "negative_narrative": ["recession", "crash", "crisis", "panic", "default", "bubble", "contagion"],
 }
 
 
@@ -91,8 +95,7 @@ def _norm_title(title: str) -> str:
 
 def _event_key(title: str) -> str:
     norm = _norm_title(title)
-    words = norm.split()
-    core = " ".join(words[:12])
+    core = " ".join(norm.split()[:12])
     return hashlib.sha1(core.encode("utf-8")).hexdigest()[:14]
 
 
@@ -120,56 +123,89 @@ def _age_hours(dt: datetime | None) -> float:
     return max(0.0, (datetime.now(timezone.utc) - dt).total_seconds() / 3600.0)
 
 
+def _contains_term(text: str, term: str) -> bool:
+    """Match complete words/phrases so short tokens such as AI/war do not hit inside other words."""
+    t = re.sub(r"\s+", " ", (term or "").strip().lower())
+    if not t:
+        return False
+    pattern = re.escape(t).replace(r"\ ", r"\s+")
+    return re.search(r"(?<![a-z0-9])" + pattern + r"(?![a-z0-9])", text.lower()) is not None
+
+
 def _token_match(text: str, terms: list[str]) -> list[str]:
-    lo = text.lower()
-    return [t for t in terms if t.lower() in lo]
+    return [t for t in terms if _contains_term(text, t)]
 
 
 def _severity(text: str) -> float:
-    lo = text.lower()
-    risk = sum(w for term, w in RISK_TERMS.items() if term in lo)
-    relief = sum(w for term, w in RELIEF_TERMS.items() if term in lo)
+    risk = sum(w for term, w in RISK_TERMS.items() if _contains_term(text, term))
+    relief = sum(w for term, w in RELIEF_TERMS.items() if _contains_term(text, term))
     return max(-1.0, min(1.0, (risk - relief) / 2.2))
 
 
-def _fetch_gdelt(category: str, terms: list[str], cfg: dict, errors: dict) -> list[dict]:
-    terms = [t.strip() for t in terms if t.strip()]
+def _gdelt_query_terms(keywords: dict[str, list[str]]) -> list[str]:
+    out: list[str] = []
+    seen = set()
+    for terms in keywords.values():
+        for term in terms:
+            key = term.strip().lower()
+            if key and key not in seen:
+                seen.add(key)
+                out.append(term.strip())
+    return out
+
+
+def _fetch_gdelt(keywords: dict[str, list[str]], cfg: dict, errors: dict) -> list[dict]:
+    """One broad GDELT request per refresh, then classify locally to avoid rate limits."""
+    terms = _gdelt_query_terms(keywords)
     if not terms:
         return []
-    query_terms = " OR ".join(f'"{t}"' if " " in t else t for t in terms[:12])
+    query_terms = " OR ".join(f'"{t}"' if " " in t else t for t in terms)
     params = {
         "query": f"({query_terms}) sourcelang:English",
         "mode": "ArtList",
-        "maxrecords": int(cfg.get("maxrecords", 75)),
+        "maxrecords": min(250, int(cfg.get("maxrecords", 250))),
         "format": "json",
         "sort": "HybridRel",
-        "timespan": cfg.get("timespan", "24h")
+        "timespan": cfg.get("timespan", "24h"),
     }
-    try:
-        r = HTTP.get(cfg.get("endpoint", DEFAULT_SOURCES["gdelt"]["endpoint"]), params=params, timeout=25)
-        r.raise_for_status()
-        payload = r.json()
-        rows = payload.get("articles") or []
-        out = []
-        for row in rows:
-            title = _clean(row.get("title"))
-            if not title:
+    endpoint = cfg.get("endpoint", DEFAULT_SOURCES["gdelt"]["endpoint"])
+    last_error: Exception | None = None
+    for attempt in range(2):
+        try:
+            r = HTTP.get(endpoint, params=params, timeout=30)
+            if r.status_code == 429 and attempt == 0:
+                retry_after = r.headers.get("Retry-After")
+                try:
+                    wait = min(10.0, max(2.0, float(retry_after))) if retry_after else 4.0
+                except Exception:
+                    wait = 4.0
+                time.sleep(wait)
                 continue
-            url = row.get("url") or ""
-            out.append({
-                "title": title,
-                "url": url,
-                "source": row.get("domain") or urlparse(url).netloc or "gdelt",
-                "published_at": row.get("seendate"),
-                "published_dt": _parse_dt(row.get("seendate")),
-                "origin": "gdelt",
-                "query_category": category,
-                "text": title
-            })
-        return out
-    except Exception as exc:
-        errors[f"gdelt:{category}"] = repr(exc)
-        return []
+            r.raise_for_status()
+            payload = r.json()
+            out = []
+            for row in payload.get("articles") or []:
+                title = _clean(row.get("title"))
+                if not title:
+                    continue
+                url = row.get("url") or ""
+                out.append({
+                    "title": title,
+                    "url": url,
+                    "source": row.get("domain") or urlparse(url).netloc or "gdelt",
+                    "published_at": row.get("seendate"),
+                    "published_dt": _parse_dt(row.get("seendate")),
+                    "origin": "gdelt",
+                    "query_category": None,
+                    "text": title,
+                })
+            return out
+        except Exception as exc:
+            last_error = exc
+            if attempt == 0:
+                time.sleep(2.0)
+    errors["gdelt"] = repr(last_error)
+    return []
 
 
 def _fetch_rss(source_id: str, cfg: dict, errors: dict) -> list[dict]:
@@ -177,23 +213,27 @@ def _fetch_rss(source_id: str, cfg: dict, errors: dict) -> list[dict]:
         r = HTTP.get(cfg["url"], timeout=20)
         r.raise_for_status()
         root = ET.fromstring(r.content)
+        max_age = float(cfg.get("max_age_hours", 72))
         out = []
         for item in root.findall(".//item"):
             title = _clean(item.findtext("title"))
             desc = _clean(item.findtext("description"))
             link = _clean(item.findtext("link"))
             pub = _clean(item.findtext("pubDate"))
+            dt = _parse_dt(pub)
             if not title:
+                continue
+            if dt is not None and _age_hours(dt) > max_age:
                 continue
             out.append({
                 "title": title,
                 "url": link,
                 "source": source_id,
                 "published_at": pub,
-                "published_dt": _parse_dt(pub),
+                "published_dt": dt,
                 "origin": "official",
                 "query_category": None,
-                "text": f"{title} {desc}".strip()
+                "text": f"{title} {desc}".strip(),
             })
         return out
     except Exception as exc:
@@ -205,11 +245,8 @@ def _classify(article: dict, keywords: dict) -> list[str]:
     text = article.get("text", article.get("title", ""))
     cats = []
     for category, terms in keywords.items():
-        if _token_match(text, terms):
+        if _token_match(text, list(terms)):
             cats.append(category)
-    hinted = article.get("query_category")
-    if hinted and hinted not in cats:
-        cats.append(hinted)
     return cats
 
 
@@ -275,7 +312,7 @@ def _category_signal(events: list[dict], category: str) -> dict:
             "sources": x.get("sources", []),
             "origins": x.get("origins", []),
             "age_hours": round(_age_hours(x.get("published_dt")), 1),
-            "severity": round(float(sev), 3)
+            "severity": round(float(sev), 3),
         })
     return {
         "score": round(float(score), 2),
@@ -283,7 +320,7 @@ def _category_signal(events: list[dict], category: str) -> dict:
         "attention_component": round(float(density), 2),
         "event_count": len(rows),
         "source_count": len(source_names),
-        "top_events": top
+        "top_events": top,
     }
 
 
@@ -297,8 +334,7 @@ def build_news_signals() -> dict:
 
     gdelt_cfg = source_cfg.get("gdelt", DEFAULT_SOURCES["gdelt"])
     if gdelt_cfg.get("enabled", True):
-        for category, terms in keywords.items():
-            rows.extend(_fetch_gdelt(category, list(terms), gdelt_cfg, errors))
+        rows.extend(_fetch_gdelt(keywords, gdelt_cfg, errors))
 
     for source_id, cfg in source_cfg.items():
         if source_id == "gdelt" or not isinstance(cfg, dict) or not cfg.get("enabled", True):
@@ -306,9 +342,12 @@ def build_news_signals() -> dict:
         if cfg.get("kind") == "official_rss":
             rows.extend(_fetch_rss(source_id, cfg, errors))
 
+    classified_rows = []
     for row in rows:
         row["categories"] = _classify(row, keywords)
-    events = _dedupe(rows)
+        if row["categories"]:
+            classified_rows.append(row)
+    events = _dedupe(classified_rows)
 
     signals = {category: _category_signal(events, category) for category in keywords}
     policy = signals.get("policy", {})
@@ -321,40 +360,41 @@ def build_news_signals() -> dict:
     for x in events:
         all_sources.update(x.get("sources", []))
     return {
-        "version": "NEWS-SIGNAL-V1",
+        "version": "NEWS-SIGNAL-V1.1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "feeds_market_model": False,
         "policy": "News is an explanatory/context layer in V1. It does not vote in Market Model V2 until forward validation is available.",
         "source_status": {
             "configured": sorted(source_cfg.keys()),
             "unique_sources_seen": len(all_sources),
-            "article_rows_before_dedupe": len(rows),
+            "article_rows_before_classification": len(rows),
+            "classified_rows": len(classified_rows),
             "events_after_dedupe": len(events),
-            "errors": errors
+            "errors": errors,
         },
         "signals": {
             "us_policy_event_sentiment": {
                 "score": policy.get("score", 0.0),
                 "note": "Market-relevant U.S. policy/monetary/regulatory event risk and attention; not a score of any political person or party.",
-                **{k: v for k, v in policy.items() if k != "score"}
+                **{k: v for k, v in policy.items() if k != "score"},
             },
             "geopolitical_news_risk": {
                 "score": geo.get("score", 0.0),
-                **{k: v for k, v in geo.items() if k != "score"}
+                **{k: v for k, v in geo.items() if k != "score"},
             },
             "systemic_news_risk": {
                 "score": systemic.get("score", 0.0),
-                **{k: v for k, v in systemic.items() if k != "score"}
+                **{k: v for k, v in systemic.items() if k != "score"},
             },
             "ai_narrative_risk": {
                 "score": ai.get("score", 0.0),
-                **{k: v for k, v in ai.items() if k != "score"}
+                **{k: v for k, v in ai.items() if k != "score"},
             },
             "negative_narrative_density": {
                 "score": negative.get("score", 0.0),
-                **{k: v for k, v in negative.items() if k != "score"}
-            }
-        }
+                **{k: v for k, v in negative.items() if k != "score"},
+            },
+        },
     }
 
 
