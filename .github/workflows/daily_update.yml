@@ -11,6 +11,7 @@ on:
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
+      - patch_box_age.py
       - indicator_config.json
       - market_model_v2.json
       - manual_inputs.json
@@ -63,6 +64,9 @@ jobs:
 
       - name: Apply analog current-level fix
         run: python patch_divergence_v2_fix.py
+
+      - name: Add formed age for range boxes
+        run: python patch_box_age.py
 
       - name: Commit refreshed dashboard
         run: |
