@@ -20,7 +20,7 @@ SOURCES_PATH = ROOT / "news_sources.json"
 
 HTTP = requests.Session()
 HTTP.headers.update({
-    "User-Agent": "MarketRegimeLab-News/1.2 (+https://github.com/galbbb2772/market-indicators-v1)"
+    "User-Agent": "MarketRegimeLab-News/1.3 (+https://github.com/galbbb2772/market-indicators-v1)"
 })
 
 RISK_TERMS = {
@@ -33,6 +33,41 @@ RISK_TERMS = {
 RELIEF_TERMS = {
     "ceasefire": 0.9, "de-escalation": 0.9, "deal reached": 0.8, "agreement reached": 0.8,
     "rate cut": 0.5, "liquidity support": 0.8, "stabilize": 0.5, "rescue": 0.6,
+}
+
+# Google News is only the broad discovery layer.  These anchors force each
+# category to stay in a financial/economic context instead of treating every
+# mention of "war", "default", "crash" or "AI" as a market event.
+MARKET_CONTEXT = {
+    "policy": [
+        "market", "markets", "economy", "economic", "inflation", "stock", "stocks",
+        "bond", "bonds", "rate", "rates", "trade", "prices", "earnings",
+    ],
+    "geopolitical": [
+        "market", "markets", "oil", "energy", "shipping", "stock", "stocks", "bond",
+        "bonds", "economy", "economic", "trade", "supply", "prices", "commodity",
+        "commodities", "company", "companies", "operations",
+    ],
+    "systemic": [
+        "bank", "banks", "banking", "credit", "bond", "bonds", "finance", "financial",
+        "market", "markets", "economy", "economic", "funding", "liquidity", "debt",
+    ],
+    "ai": [
+        "stock", "stocks", "market", "markets", "investment", "investor", "investors",
+        "capex", "earnings", "debt", "finance", "financing", "valuation", "valuations",
+        "revenue", "profit", "spending", "data center", "hyperscaler", "chip", "chips",
+        "semiconductor", "semiconductors",
+    ],
+    "negative_narrative": [
+        "stock", "stocks", "market", "markets", "economy", "economic", "bank", "banking",
+        "credit", "bond", "bonds", "finance", "financial", "investor", "investors",
+        "recession",
+    ],
+}
+
+QUERY_EXCLUSIONS = {
+    "geopolitical": ["game", "gaming", "movie", "film", "sports"],
+    "negative_narrative": ["traffic", "car crash", "road crash", "plane crash"],
 }
 
 DEFAULT_SOURCES = {
@@ -66,11 +101,11 @@ DEFAULT_SOURCES = {
 }
 
 DEFAULT_KEYWORDS = {
-    "policy": ["Federal Reserve", "FOMC", "interest rates", "tariff", "trade policy", "Treasury"],
-    "geopolitical": ["war", "conflict", "sanctions", "missile", "ceasefire", "geopolitical"],
-    "systemic": ["bank failure", "liquidity crisis", "credit stress", "default", "debt ceiling", "funding stress"],
-    "ai": ["artificial intelligence", "AI spending", "AI capex", "AI bubble", "data center debt", "AI regulation"],
-    "negative_narrative": ["recession", "crash", "crisis", "panic", "default", "bubble", "contagion"],
+    "policy": ["Federal Reserve", "FOMC", "interest rates", "tariff", "tariffs", "trade policy", "Treasury Department"],
+    "geopolitical": ["war", "armed conflict", "sanctions", "missile", "ceasefire", "geopolitical", "Iran", "Ukraine", "Russia", "Israel"],
+    "systemic": ["bank failure", "banking crisis", "liquidity crisis", "credit stress", "credit crisis", "debt default", "sovereign default", "debt ceiling", "funding stress", "credit spreads"],
+    "ai": ["artificial intelligence", "AI spending", "AI capex", "AI bubble", "data center debt", "AI regulation", "hyperscaler capex"],
+    "negative_narrative": ["recession", "market crash", "stock market crash", "financial crisis", "credit crisis", "debt crisis", "market panic", "debt default", "sovereign default", "asset bubble", "stock bubble", "contagion"],
 }
 
 
@@ -148,12 +183,26 @@ def _rss_items(content: bytes) -> list[ET.Element]:
     return list(root.findall(".//item"))
 
 
-def _fetch_google_news(category: str, terms: list[str], cfg: dict, errors: dict) -> list[dict]:
+def _google_query(category: str, terms: list[str]) -> str:
     query_terms = " OR ".join(f'"{t}"' if " " in t else t for t in terms if t.strip())
-    if not query_terms:
+    context_terms = MARKET_CONTEXT.get(category, [])
+    context = " OR ".join(f'"{t}"' if " " in t else t for t in context_terms)
+    exclusions = " ".join(f'-"{t}"' if " " in t else f"-{t}" for t in QUERY_EXCLUSIONS.get(category, []))
+    pieces = [f"({query_terms})"]
+    if context:
+        pieces.append(f"({context})")
+    if exclusions:
+        pieces.append(exclusions)
+    pieces.append("when:1d")
+    return " ".join(pieces)
+
+
+def _fetch_google_news(category: str, terms: list[str], cfg: dict, errors: dict) -> list[dict]:
+    query = _google_query(category, terms)
+    if not query:
         return []
     params = {
-        "q": f"({query_terms}) when:1d",
+        "q": query,
         "hl": cfg.get("hl", "en-US"),
         "gl": cfg.get("gl", "US"),
         "ceid": cfg.get("ceid", "US:en"),
@@ -171,6 +220,15 @@ def _fetch_google_news(category: str, terms: list[str], cfg: dict, errors: dict)
             source_el = item.find("source")
             source_name = _clean(source_el.text if source_el is not None else "") or "Google News"
             if not title or (dt is not None and _age_hours(dt) > max_age):
+                continue
+            # Precision gate: a discovery result must show both a category term and
+            # a financial/economic anchor in the headline itself.  Search-body-only
+            # matches are discarded so generic politics, gaming and accident stories
+            # cannot contaminate the signal.
+            if not _token_match(title, terms):
+                continue
+            anchors = MARKET_CONTEXT.get(category, [])
+            if anchors and not _token_match(title, anchors):
                 continue
             out.append({
                 "title": title,
@@ -282,10 +340,11 @@ def _classify(article: dict, keywords: dict) -> list[str]:
     cats = []
     for category, terms in keywords.items():
         if _token_match(text, list(terms)):
+            if article.get("origin") == "google_news":
+                anchors = MARKET_CONTEXT.get(category, [])
+                if anchors and not _token_match(text, anchors):
+                    continue
             cats.append(category)
-    hinted = article.get("query_category")
-    if article.get("origin") == "google_news" and hinted and hinted not in cats:
-        cats.append(hinted)
     return cats
 
 
@@ -324,22 +383,31 @@ def _category_signal(events: list[dict], category: str) -> dict:
     weighted_risk = 0.0
     weighted_attention = 0.0
     source_names = set()
+    source_hits: dict[str, int] = {}
     ranked = []
     for x in rows:
         age = _age_hours(x.get("published_dt"))
         decay = math.exp(-age / 18.0)
         sev = _severity(x.get("text", x["title"]))
-        source_count = max(1, len(x.get("sources", [])))
+        sources = x.get("sources", []) or ["unknown"]
+        source_count = max(1, len(sources))
         confirmation = min(1.45, 1.0 + 0.12 * (source_count - 1))
         official = 1.18 if "official" in x.get("origins", []) else 1.0
-        weight = decay * confirmation * official
+        primary_source = str(sources[0])
+        prior_hits = source_hits.get(primary_source, 0)
+        source_diversity_penalty = 1.0 / math.sqrt(1.0 + prior_hits)
+        source_hits[primary_source] = prior_hits + 1
+        weight = decay * confirmation * official * source_diversity_penalty
         risk_component = max(0.0, sev) * weight
         weighted_attention += weight
         weighted_risk += risk_component
-        source_names.update(x.get("sources", []))
+        source_names.update(sources)
         ranked.append((risk_component + 0.20 * weight, x, sev))
-    density = 100.0 * (1.0 - math.exp(-weighted_attention / 6.0))
-    risk = 100.0 * (1.0 - math.exp(-weighted_risk / 3.5))
+
+    # V1.3 intentionally saturates much more slowly than V1.2.  A category now
+    # needs sustained, diverse coverage to reach extreme values.
+    density = 100.0 * (1.0 - math.exp(-weighted_attention / 20.0))
+    risk = 100.0 * (1.0 - math.exp(-weighted_risk / 10.0))
     score = min(100.0, 0.65 * risk + 0.35 * density)
     ranked.sort(key=lambda z: z[0], reverse=True)
     top = []
@@ -403,12 +471,13 @@ def build_news_signals() -> dict:
     for x in events:
         all_sources.update(x.get("sources", []))
     return {
-        "version": "NEWS-SIGNAL-V1.2",
+        "version": "NEWS-SIGNAL-V1.3",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "feeds_market_model": False,
         "policy": "News is an explanatory/context layer in V1. It does not vote in Market Model V2 until forward validation is available.",
         "source_status": {
             "configured": sorted(source_cfg.keys()),
+            "query_mode": "market_context_headline_confirmed",
             "unique_sources_seen": len(all_sources),
             "article_rows_before_classification": len(rows),
             "classified_rows": len(classified_rows),
