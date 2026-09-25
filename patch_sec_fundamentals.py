@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from sec_fundamentals import build_sec_fundamentals
+from yahoo_fundamentals import build_fundamentals
 
 ROOT = Path(__file__).resolve().parent
 DATA_PATH = ROOT / "docs" / "data" / "current.json"
@@ -39,9 +39,8 @@ def _series(history: list[dict], signal_id: str) -> list[tuple[str, float]]:
     return out
 
 
-def _patch_indicator(data: dict, history: list[dict], signal_id: str, raw_unit: str) -> None:
-    sec = data.get("sec_fundamentals_v1") or {}
-    score = (sec.get("signals") or {}).get(signal_id)
+def _patch_indicator(data: dict, history: list[dict], fundamentals: dict, signal_id: str, raw_unit: str) -> None:
+    score = (fundamentals.get("signals") or {}).get(signal_id)
     if score is None:
         return
     vals = _series(history, signal_id)
@@ -57,12 +56,12 @@ def _patch_indicator(data: dict, history: list[dict], signal_id: str, raw_unit: 
         item["raw_unit"] = raw_unit
         item["d1"] = round(d1, 2) if d1 is not None else None
         item["d2"] = round(d2, 2) if d2 is not None else None
-        item["asof"] = sec.get("asof") or _today()
+        item["asof"] = fundamentals.get("asof") or _today()
         item["history"] = [{"date": d, "score": round(v, 2)} for d, v in vals[-180:]]
-        item["quality"] = "direct_sec_fundamental_context"
+        item["quality"] = "direct_fundamental_context"
         item["source_note"] = (
-            "SEC Company Facts V1; mega-cap median context score. Archive/context only; "
-            "does not vote in Market Model V2 pending validation."
+            f"{fundamentals.get('source', 'Fundamentals V1')}; mega-cap median context score. "
+            "Archive/context only; does not vote in Market Model V2 pending validation."
         )
         break
 
@@ -72,43 +71,61 @@ def main() -> None:
     if not isinstance(data, dict):
         raise RuntimeError("docs/data/current.json is missing or invalid")
 
-    sec = build_sec_fundamentals()
-    data["sec_fundamentals_v1"] = sec
+    fundamentals = build_fundamentals()
+    # Do not replace real dashboard state with an empty source result.
+    if int(fundamentals.get("company_count") or 0) < 5 or not any(
+        v is not None for v in (fundamentals.get("signals") or {}).values()
+    ):
+        model = data.get("market_model_v2")
+        if isinstance(model, dict):
+            model["fundamentals_status"] = {
+                "connected": False,
+                "feeds_market_model": False,
+                "source": fundamentals.get("source"),
+                "errors": fundamentals.get("errors", {}),
+            }
+        DATA_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        print("Fundamentals source unavailable; preserved prior indicator state.")
+        return
+
+    data["fundamentals_v1"] = fundamentals
 
     today = _today()
-    hist_obj = _load(HISTORY_PATH, {"version": "SEC-FUNDAMENTALS-HISTORY-V1", "history": []})
+    hist_obj = _load(HISTORY_PATH, {"version": "FUNDAMENTALS-HISTORY-V1", "history": []})
     history = list(hist_obj.get("history") or [])
     row = {
         "date": today,
-        "generated_at": sec.get("generated_at"),
-        "asof": sec.get("asof"),
-        "company_count": sec.get("company_count"),
-        "signals": sec.get("signals", {}),
-        "errors": sec.get("errors", {}),
+        "generated_at": fundamentals.get("generated_at"),
+        "asof": fundamentals.get("asof"),
+        "source": fundamentals.get("source"),
+        "company_count": fundamentals.get("company_count"),
+        "signals": fundamentals.get("signals", {}),
+        "errors": fundamentals.get("errors", {}),
     }
     history = [x for x in history if x.get("date") != today]
     history.append(row)
     history = sorted(history, key=lambda x: x.get("date", ""))[-400:]
-    hist_obj = {"version": "SEC-FUNDAMENTALS-HISTORY-V1", "history": history}
+    hist_obj = {"version": "FUNDAMENTALS-HISTORY-V1", "history": history}
 
-    _patch_indicator(data, history, "mega_earnings_health", "SEC fundamentals score / 0-100")
-    _patch_indicator(data, history, "mega_excess_cash", "SEC liquidity score / 0-100")
-    _patch_indicator(data, history, "mega_debt_capacity", "SEC debt-capacity score / 0-100")
+    _patch_indicator(data, history, fundamentals, "mega_earnings_health", "fundamentals score / 0-100")
+    _patch_indicator(data, history, fundamentals, "mega_excess_cash", "liquidity score / 0-100")
+    _patch_indicator(data, history, fundamentals, "mega_debt_capacity", "debt-capacity score / 0-100")
 
     model = data.get("market_model_v2")
     if isinstance(model, dict):
-        model["sec_fundamentals_status"] = {
+        model["fundamentals_status"] = {
             "connected": True,
-            "version": sec.get("version"),
+            "version": fundamentals.get("version"),
+            "source": fundamentals.get("source"),
             "feeds_market_model": False,
-            "company_count": sec.get("company_count"),
+            "company_count": fundamentals.get("company_count"),
             "history_days": len(history),
         }
 
     DATA_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
     HISTORY_PATH.write_text(json.dumps(hist_obj, ensure_ascii=False, indent=2), encoding="utf-8")
-    print("SEC fundamentals updated:", json.dumps(sec.get("signals", {}), ensure_ascii=False), "errors:", len(sec.get("errors", {})))
+    print("Fundamentals updated:", json.dumps(fundamentals.get("signals", {}), ensure_ascii=False), "errors:", len(fundamentals.get("errors", {})))
 
 
 if __name__ == "__main__":
