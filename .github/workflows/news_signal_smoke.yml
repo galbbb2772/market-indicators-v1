@@ -5,9 +5,16 @@ on:
     branches: [main]
     paths:
       - .github/workflows/news_signal_smoke.yml
+      - news_signal.py
+      - news_sources.json
+      - news_keywords.json
 
 permissions:
   contents: read
+
+concurrency:
+  group: news-signal-smoke
+  cancel-in-progress: true
 
 jobs:
   smoke:
