@@ -12,6 +12,7 @@ on:
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
       - patch_box_age.py
+      - patch_narrative_layer.py
       - indicator_config.json
       - market_model_v2.json
       - manual_inputs.json
@@ -68,6 +69,9 @@ jobs:
       - name: Add formed age for range boxes
         run: python patch_box_age.py
 
+      - name: Build Narrative Layer V1
+        run: python patch_narrative_layer.py
+
       - name: Commit refreshed dashboard
         run: |
           git config user.name "github-actions[bot]"
@@ -76,7 +80,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
-            git commit -m "chore: refresh indicators, ablation and divergence dashboard"
+            git commit -m "chore: refresh indicators, narratives and dashboard"
             git pull --rebase origin main
             git push
           fi
