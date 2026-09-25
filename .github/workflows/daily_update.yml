@@ -14,7 +14,7 @@ on:
       - patch_box_age.py
       - patch_narrative_layer.py
       - patch_sec_fundamentals.py
-      - sec_fundamentals.py
+      - yahoo_fundamentals.py
       - patch_news_ui.py
       - patch_news_ui_v2.py
       - patch_news_signal.py
@@ -76,7 +76,7 @@ jobs:
       - name: Add formed age for range boxes
         run: python patch_box_age.py
 
-      - name: Build SEC Fundamentals V1
+      - name: Build Mega-cap Fundamentals V1
         run: python patch_sec_fundamentals.py
 
       - name: Build Narrative Layer V1
