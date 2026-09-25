@@ -3,13 +3,13 @@
   "history": [
     {
       "date": "2026-09-25",
-      "generated_at": "2026-09-25T12:48:25.749236+00:00",
+      "generated_at": "2026-09-25T14:53:01.171177+00:00",
       "signals": {
-        "us_policy_event_sentiment": 1.47,
-        "geopolitical_news_risk": 31.83,
-        "systemic_news_risk": 4.44,
-        "ai_narrative_risk": 3.88,
-        "negative_narrative_density": 19.57
+        "us_policy_event_sentiment": 3.73,
+        "geopolitical_news_risk": 29.21,
+        "systemic_news_risk": 3.96,
+        "ai_narrative_risk": 2.97,
+        "negative_narrative_density": 17.64
       },
       "source_status": {
         "configured": [
@@ -20,9 +20,9 @@
         ],
         "query_mode": "market_context_headline_confirmed",
         "unique_sources_seen": 50,
-        "article_rows_before_classification": 60,
-        "classified_rows": 57,
-        "events_after_dedupe": 55,
+        "article_rows_before_classification": 63,
+        "classified_rows": 60,
+        "events_after_dedupe": 59,
         "errors": {}
       }
     }
