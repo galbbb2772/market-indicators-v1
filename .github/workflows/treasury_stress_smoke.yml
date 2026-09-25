@@ -1,0 +1,26 @@
+name: Treasury Stress Smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/treasury_stress_smoke.yml
+      - patch_treasury_stress.py
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy requests
+      - name: Seed current data and run Treasury stress
+        run: |
+          mkdir -p docs/data
+          git show HEAD:docs/data/current.json > docs/data/current.json
+          python patch_treasury_stress.py
