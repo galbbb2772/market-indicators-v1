@@ -1,0 +1,67 @@
+name: Patch Box Formed Age
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/patch_box_formed_age.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add explicit formed-age fields and UI
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('update_data.py')
+          s = p.read_text(encoding='utf-8')
+          old = '''            cur["window_days"]=window
+            cur["box_age_estimate_trading_days"]=window+current_run-1 if cur["formed"] else 0
+'''
+          new = '''            cur["window_days"]=window
+            cur["box_age_estimate_trading_days"]=window+current_run-1 if cur["formed"] else 0
+            if cur["formed"] and current_run>0 and dates:
+                formation_start=pd.Timestamp(dates[-current_run]).normalize()
+                formation_end=pd.Timestamp(dates[-1]).normalize()
+                cur["formed_age_trading_days"]=int(current_run)
+                cur["formed_age_calendar_days"]=int((formation_end-formation_start).days)+1
+                cur["formation_start_date"]=str(formation_start.date())
+            else:
+                cur["formed_age_trading_days"]=0
+                cur["formed_age_calendar_days"]=0
+                cur["formation_start_date"]=None
+'''
+          if old not in s:
+              raise SystemExit('update_data.py target block not found')
+          p.write_text(s.replace(old,new,1), encoding='utf-8')
+
+          h = Path('docs/index.html')
+          x = h.read_text(encoding='utf-8')
+          pat = r'<div class=\\"boxLine\\"><span>当前估计年龄</span><b>\'\+\(b\.box_age_estimate_trading_days\|\|0\)\+\' 天</b></div>'
+          m = re.search(pat, x)
+          if not m:
+              raise SystemExit('docs/index.html age row not found')
+          oldrow = m.group(0)
+          formed = '''<div class=\\"boxLine\\"><span>已形成年龄</span><b>'+((b.formed)?((b.formed_age_trading_days??Math.max(1,(b.box_age_estimate_trading_days||0)-(b.window_days||0)+1))+' 交易日'+(b.formed_age_calendar_days?(' · '+b.formed_age_calendar_days+' 自然日'):'')+(b.formation_start_date?(' · 自 '+b.formation_start_date):'')):'0 天')+'</b></div>'''
+          estimate = oldrow.replace('当前估计年龄','结构年龄估计')
+          h.write_text(x.replace(oldrow, formed+estimate, 1), encoding='utf-8')
+          PY
+
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add update_data.py docs/index.html
+          git commit -m "feat: show exact formed age for range boxes"
+          git pull --rebase origin main
+          git push
