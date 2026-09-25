@@ -14,8 +14,11 @@ on:
       - patch_box_age.py
       - patch_narrative_layer.py
       - patch_news_ui.py
+      - patch_news_ui_v2.py
       - patch_news_signal.py
       - news_signal.py
+      - news_signal_v2.py
+      - market_reaction.py
       - news_sources.json
       - news_keywords.json
       - indicator_config.json
@@ -62,9 +65,6 @@ jobs:
       - name: Build three-index history
         run: python history_builder.py
 
-      # patch_divergence_ui.py is a one-time HTML installer. The divergence UI is
-      # already present in docs/index.html, so rerunning that installer daily can
-      # fail after later tabs (for example Narrative) extend switchTab().
       - name: Patch divergence interval and analog model
         run: python patch_divergence_v2.py
 
@@ -80,7 +80,10 @@ jobs:
       - name: Install News Signal dashboard UI
         run: python patch_news_ui.py
 
-      - name: Build News Signal V1
+      - name: Install News market-confirmation UI
+        run: python patch_news_ui_v2.py
+
+      - name: Build News Signal V1.4
         run: python patch_news_signal.py
 
       - name: Commit refreshed dashboard
