@@ -3,13 +3,15 @@ from __future__ import annotations
 import json
 import math
 import statistics
+import time
 from datetime import datetime, timezone
 
 import requests
 
 HTTP = requests.Session()
 HTTP.headers.update({
-    "User-Agent": "MarketRegimeLab/1.0 research dashboard contact https://github.com/galbbb2772",
+    "User-Agent": "galbbb2772 market-indicators-v1 160202684+galbbb2772@users.noreply.github.com",
+    "Accept": "application/json,text/plain,*/*",
     "Accept-Encoding": "gzip, deflate",
 })
 
@@ -61,10 +63,25 @@ def _safe_div(a: float | None, b: float | None) -> float | None:
 
 
 def _fetch(cik: str) -> dict:
+    # SEC fair-access guidance asks automated clients to declare identity and stay
+    # comfortably below 10 requests/second.  This layer is only 9 companies and
+    # runs once per daily dashboard refresh.
     url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
-    r = HTTP.get(url, timeout=20)
-    r.raise_for_status()
-    return r.json()
+    last = None
+    for attempt in range(3):
+        try:
+            r = HTTP.get(url, timeout=20)
+            if r.status_code in {403, 429} and attempt < 2:
+                time.sleep(1.2 * (attempt + 1))
+                continue
+            r.raise_for_status()
+            time.sleep(0.18)
+            return r.json()
+        except Exception as exc:
+            last = exc
+            if attempt < 2:
+                time.sleep(0.8 * (attempt + 1))
+    raise last or RuntimeError("SEC request failed")
 
 
 def _fact(payload: dict, tags: list[str]) -> dict | None:
@@ -104,7 +121,6 @@ def _duration_days(row: dict) -> int | None:
 
 
 def _dedupe_period(rows: list[dict]) -> list[dict]:
-    # Keep the latest-filed value for each period end/form combination.
     best = {}
     for row in rows:
         end = row.get("end")
@@ -194,8 +210,6 @@ def _sum_latest_instants(payload: dict, tags: list[str]) -> tuple[float | None, 
                 ends.append(end)
     if not vals:
         return None, None
-    # Avoid obvious double counting of LongTermDebt vs current/noncurrent pieces:
-    # if aggregate LongTermDebt exists, prefer it plus short-term borrowings.
     aggregate = usgaap.get("LongTermDebt")
     agg_val, agg_end = _latest_instant(aggregate) if isinstance(aggregate, dict) else (None, None)
     if agg_val is not None:
@@ -215,10 +229,8 @@ def _sum_latest_instants(payload: dict, tags: list[str]) -> tuple[float | None, 
 def _score_earnings(rev_yoy: float | None, ni_yoy: float | None) -> float | None:
     parts = []
     if rev_yoy is not None:
-        # -20% revenue growth -> 0, 0% -> 40, +15% -> 70, +30% -> 100.
         parts.append(_clip(40.0 + 2.0 * rev_yoy, 0, 100))
     if ni_yoy is not None:
-        # Profit is more volatile; use gentler slope and cap extremes.
         parts.append(_clip(45.0 + 0.75 * _clip(ni_yoy, -60, 80), 0, 100))
     return statistics.mean(parts) if parts else None
 
@@ -252,8 +264,8 @@ def _company_metrics(ticker: str, cik: str) -> dict:
     cash_fact = _fact(p, CASH_TAGS)
     asset_fact = _fact(p, ASSET_TAGS)
 
-    rev_q, rev_yoy, rev_end = _latest_quarter_and_yoy(rev_fact)
-    ni_q, ni_yoy, ni_end = _latest_quarter_and_yoy(ni_fact)
+    _, rev_yoy, rev_end = _latest_quarter_and_yoy(rev_fact)
+    _, ni_yoy, ni_end = _latest_quarter_and_yoy(ni_fact)
     rev_a, rev_a_end = _annual_value(rev_fact)
     ocf_a, ocf_end = _annual_value(ocf_fact)
     capex_a, capex_end = _annual_value(capex_fact)
@@ -268,6 +280,9 @@ def _company_metrics(ticker: str, cik: str) -> dict:
     ocf_debt = None if debt is None or debt <= 0 else _safe_div(ocf_a, debt)
     debt_assets = _safe_div(debt, assets)
 
+    earnings = _score_earnings(rev_yoy, ni_yoy)
+    liquidity = _score_liquidity(cash_assets, fcf_margin)
+    debt_score = _score_debt(cash_debt, ocf_debt, debt_assets)
     ends = [x for x in (rev_end, ni_end, rev_a_end, ocf_end, capex_end, cash_end, assets_end, debt_end) if x]
     return {
         "ticker": ticker,
@@ -280,9 +295,9 @@ def _company_metrics(ticker: str, cik: str) -> dict:
         "cash_to_debt": round(cash_debt, 3) if cash_debt is not None else None,
         "ocf_to_debt": round(ocf_debt, 3) if ocf_debt is not None else None,
         "debt_assets_pct": round(debt_assets * 100, 2) if debt_assets is not None else None,
-        "earnings_health_score": round(_score_earnings(rev_yoy, ni_yoy), 2) if _score_earnings(rev_yoy, ni_yoy) is not None else None,
-        "excess_cash_score": round(_score_liquidity(cash_assets, fcf_margin), 2) if _score_liquidity(cash_assets, fcf_margin) is not None else None,
-        "debt_capacity_score": round(_score_debt(cash_debt, ocf_debt, debt_assets), 2) if _score_debt(cash_debt, ocf_debt, debt_assets) is not None else None,
+        "earnings_health_score": round(earnings, 2) if earnings is not None else None,
+        "excess_cash_score": round(liquidity, 2) if liquidity is not None else None,
+        "debt_capacity_score": round(debt_score, 2) if debt_score is not None else None,
     }
 
 
