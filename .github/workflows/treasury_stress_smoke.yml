@@ -17,17 +17,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install requests
-      - name: Probe Treasury Fiscal Data
-        run: |
-          python - <<'PY'
-          import json, requests
-          base='https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/dts/'
-          for endpoint in ('operating_cash_balance','debt_subject_to_limit'):
-              r=requests.get(base+endpoint,params={'sort':'-record_date','page[size]':'20'},timeout=20)
-              print('\nENDPOINT',endpoint,'STATUS',r.status_code)
-              r.raise_for_status()
-              rows=r.json().get('data') or []
-              print('KEYS',sorted(rows[0].keys()) if rows else [])
-              print(json.dumps(rows[:8],indent=2)[:16000])
-          PY
+      - run: pip install pandas numpy requests
+      - name: Run Treasury stress calculation
+        run: python patch_treasury_stress.py
