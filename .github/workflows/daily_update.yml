@@ -13,6 +13,8 @@ on:
       - patch_divergence_v2_fix.py
       - patch_box_age.py
       - patch_narrative_layer.py
+      - patch_sec_fundamentals.py
+      - sec_fundamentals.py
       - patch_news_ui.py
       - patch_news_ui_v2.py
       - patch_news_signal.py
@@ -74,6 +76,9 @@ jobs:
       - name: Add formed age for range boxes
         run: python patch_box_age.py
 
+      - name: Build SEC Fundamentals V1
+        run: python patch_sec_fundamentals.py
+
       - name: Build Narrative Layer V1
         run: python patch_narrative_layer.py
 
@@ -90,11 +95,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/current.json docs/data/news_history.json docs/index.html
+          git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/index.html
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
-            git commit -m "chore: refresh indicators, narratives, news and dashboard"
+            git commit -m "chore: refresh indicators, fundamentals, narratives, news and dashboard"
             git pull --rebase origin main
             git push
           fi
