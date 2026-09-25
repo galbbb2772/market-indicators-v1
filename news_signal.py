@@ -20,13 +20,13 @@ SOURCES_PATH = ROOT / "news_sources.json"
 
 HTTP = requests.Session()
 HTTP.headers.update({
-    "User-Agent": "MarketRegimeLab-News/1.1 (+https://github.com/galbbb2772/market-indicators-v1)"
+    "User-Agent": "MarketRegimeLab-News/1.2 (+https://github.com/galbbb2772/market-indicators-v1)"
 })
 
 RISK_TERMS = {
     "crisis": 1.0, "crash": 1.0, "default": 1.0, "panic": 0.9, "contagion": 1.0,
     "bank failure": 1.0, "bankruptcy": 0.9, "recession": 0.8, "war": 0.9,
-    "missile": 0.9, "attack": 0.8, "sanction": 0.6, "tariff": 0.5,
+    "missile": 0.9, "attack": 0.8, "sanction": 0.6, "sanctions": 0.6, "tariff": 0.5,
     "liquidity stress": 0.9, "credit stress": 0.9, "debt ceiling": 0.8,
     "emergency": 0.8, "downgrade": 0.8, "bubble": 0.6, "layoff": 0.5,
 }
@@ -36,17 +36,20 @@ RELIEF_TERMS = {
 }
 
 DEFAULT_SOURCES = {
-    "gdelt": {
+    "google_news": {
         "enabled": True,
+        "kind": "google_news_search",
+        "endpoint": "https://news.google.com/rss/search",
+        "hl": "en-US",
+        "gl": "US",
+        "ceid": "US:en",
+        "max_age_hours": 36,
+    },
+    "gdelt": {
+        "enabled": False,
         "endpoint": "https://api.gdeltproject.org/api/v2/doc/doc",
         "timespan": "24h",
         "maxrecords": 250,
-    },
-    "fed_all": {
-        "enabled": True,
-        "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-        "kind": "official_rss",
-        "max_age_hours": 72,
     },
     "fed_monetary": {
         "enabled": True,
@@ -94,8 +97,7 @@ def _norm_title(title: str) -> str:
 
 
 def _event_key(title: str) -> str:
-    norm = _norm_title(title)
-    core = " ".join(norm.split()[:12])
+    core = " ".join(_norm_title(title).split()[:12])
     return hashlib.sha1(core.encode("utf-8")).hexdigest()[:14]
 
 
@@ -124,7 +126,6 @@ def _age_hours(dt: datetime | None) -> float:
 
 
 def _contains_term(text: str, term: str) -> bool:
-    """Match complete words/phrases so short tokens such as AI/war do not hit inside other words."""
     t = re.sub(r"\s+", " ", (term or "").strip().lower())
     if not t:
         return False
@@ -142,9 +143,53 @@ def _severity(text: str) -> float:
     return max(-1.0, min(1.0, (risk - relief) / 2.2))
 
 
+def _rss_items(content: bytes) -> list[ET.Element]:
+    root = ET.fromstring(content)
+    return list(root.findall(".//item"))
+
+
+def _fetch_google_news(category: str, terms: list[str], cfg: dict, errors: dict) -> list[dict]:
+    query_terms = " OR ".join(f'"{t}"' if " " in t else t for t in terms if t.strip())
+    if not query_terms:
+        return []
+    params = {
+        "q": f"({query_terms}) when:1d",
+        "hl": cfg.get("hl", "en-US"),
+        "gl": cfg.get("gl", "US"),
+        "ceid": cfg.get("ceid", "US:en"),
+    }
+    try:
+        r = HTTP.get(cfg.get("endpoint", DEFAULT_SOURCES["google_news"]["endpoint"]), params=params, timeout=20)
+        r.raise_for_status()
+        max_age = float(cfg.get("max_age_hours", 36))
+        out = []
+        for item in _rss_items(r.content):
+            title = _clean(item.findtext("title"))
+            link = _clean(item.findtext("link"))
+            pub = _clean(item.findtext("pubDate"))
+            dt = _parse_dt(pub)
+            source_el = item.find("source")
+            source_name = _clean(source_el.text if source_el is not None else "") or "Google News"
+            if not title or (dt is not None and _age_hours(dt) > max_age):
+                continue
+            out.append({
+                "title": title,
+                "url": link,
+                "source": source_name,
+                "published_at": pub,
+                "published_dt": dt,
+                "origin": "google_news",
+                "query_category": category,
+                "text": title,
+            })
+        return out
+    except Exception as exc:
+        errors[f"google_news:{category}"] = repr(exc)
+        return []
+
+
 def _gdelt_query_terms(keywords: dict[str, list[str]]) -> list[str]:
-    out: list[str] = []
-    seen = set()
+    out, seen = [], set()
     for terms in keywords.values():
         for term in terms:
             key = term.strip().lower()
@@ -155,7 +200,6 @@ def _gdelt_query_terms(keywords: dict[str, list[str]]) -> list[str]:
 
 
 def _fetch_gdelt(keywords: dict[str, list[str]], cfg: dict, errors: dict) -> list[dict]:
-    """One broad GDELT request per refresh, then classify locally to avoid rate limits."""
     terms = _gdelt_query_terms(keywords)
     if not terms:
         return []
@@ -172,14 +216,9 @@ def _fetch_gdelt(keywords: dict[str, list[str]], cfg: dict, errors: dict) -> lis
     last_error: Exception | None = None
     for attempt in range(2):
         try:
-            r = HTTP.get(endpoint, params=params, timeout=30)
+            r = HTTP.get(endpoint, params=params, timeout=25)
             if r.status_code == 429 and attempt == 0:
-                retry_after = r.headers.get("Retry-After")
-                try:
-                    wait = min(10.0, max(2.0, float(retry_after))) if retry_after else 4.0
-                except Exception:
-                    wait = 4.0
-                time.sleep(wait)
+                time.sleep(4.0)
                 continue
             r.raise_for_status()
             payload = r.json()
@@ -212,18 +251,15 @@ def _fetch_rss(source_id: str, cfg: dict, errors: dict) -> list[dict]:
     try:
         r = HTTP.get(cfg["url"], timeout=20)
         r.raise_for_status()
-        root = ET.fromstring(r.content)
         max_age = float(cfg.get("max_age_hours", 72))
         out = []
-        for item in root.findall(".//item"):
+        for item in _rss_items(r.content):
             title = _clean(item.findtext("title"))
             desc = _clean(item.findtext("description"))
             link = _clean(item.findtext("link"))
             pub = _clean(item.findtext("pubDate"))
             dt = _parse_dt(pub)
-            if not title:
-                continue
-            if dt is not None and _age_hours(dt) > max_age:
+            if not title or (dt is not None and _age_hours(dt) > max_age):
                 continue
             out.append({
                 "title": title,
@@ -247,6 +283,9 @@ def _classify(article: dict, keywords: dict) -> list[str]:
     for category, terms in keywords.items():
         if _token_match(text, list(terms)):
             cats.append(category)
+    hinted = article.get("query_category")
+    if article.get("origin") == "google_news" and hinted and hinted not in cats:
+        cats.append(hinted)
     return cats
 
 
@@ -295,11 +334,10 @@ def _category_signal(events: list[dict], category: str) -> dict:
         official = 1.18 if "official" in x.get("origins", []) else 1.0
         weight = decay * confirmation * official
         risk_component = max(0.0, sev) * weight
-        attention_component = weight
+        weighted_attention += weight
         weighted_risk += risk_component
-        weighted_attention += attention_component
         source_names.update(x.get("sources", []))
-        ranked.append((risk_component + 0.20 * attention_component, x, sev))
+        ranked.append((risk_component + 0.20 * weight, x, sev))
     density = 100.0 * (1.0 - math.exp(-weighted_attention / 6.0))
     risk = 100.0 * (1.0 - math.exp(-weighted_risk / 3.5))
     score = min(100.0, 0.65 * risk + 0.35 * density)
@@ -332,12 +370,17 @@ def build_news_signals() -> dict:
     errors: dict[str, str] = {}
     rows: list[dict] = []
 
+    google_cfg = source_cfg.get("google_news", DEFAULT_SOURCES["google_news"])
+    if google_cfg.get("enabled", True):
+        for category, terms in keywords.items():
+            rows.extend(_fetch_google_news(category, list(terms), google_cfg, errors))
+
     gdelt_cfg = source_cfg.get("gdelt", DEFAULT_SOURCES["gdelt"])
-    if gdelt_cfg.get("enabled", True):
+    if gdelt_cfg.get("enabled", False):
         rows.extend(_fetch_gdelt(keywords, gdelt_cfg, errors))
 
     for source_id, cfg in source_cfg.items():
-        if source_id == "gdelt" or not isinstance(cfg, dict) or not cfg.get("enabled", True):
+        if source_id in {"gdelt", "google_news"} or not isinstance(cfg, dict) or not cfg.get("enabled", True):
             continue
         if cfg.get("kind") == "official_rss":
             rows.extend(_fetch_rss(source_id, cfg, errors))
@@ -360,7 +403,7 @@ def build_news_signals() -> dict:
     for x in events:
         all_sources.update(x.get("sources", []))
     return {
-        "version": "NEWS-SIGNAL-V1.1",
+        "version": "NEWS-SIGNAL-V1.2",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "feeds_market_model": False,
         "policy": "News is an explanatory/context layer in V1. It does not vote in Market Model V2 until forward validation is available.",
@@ -378,22 +421,10 @@ def build_news_signals() -> dict:
                 "note": "Market-relevant U.S. policy/monetary/regulatory event risk and attention; not a score of any political person or party.",
                 **{k: v for k, v in policy.items() if k != "score"},
             },
-            "geopolitical_news_risk": {
-                "score": geo.get("score", 0.0),
-                **{k: v for k, v in geo.items() if k != "score"},
-            },
-            "systemic_news_risk": {
-                "score": systemic.get("score", 0.0),
-                **{k: v for k, v in systemic.items() if k != "score"},
-            },
-            "ai_narrative_risk": {
-                "score": ai.get("score", 0.0),
-                **{k: v for k, v in ai.items() if k != "score"},
-            },
-            "negative_narrative_density": {
-                "score": negative.get("score", 0.0),
-                **{k: v for k, v in negative.items() if k != "score"},
-            },
+            "geopolitical_news_risk": {"score": geo.get("score", 0.0), **{k: v for k, v in geo.items() if k != "score"}},
+            "systemic_news_risk": {"score": systemic.get("score", 0.0), **{k: v for k, v in systemic.items() if k != "score"}},
+            "ai_narrative_risk": {"score": ai.get("score", 0.0), **{k: v for k, v in ai.items() if k != "score"}},
+            "negative_narrative_density": {"score": negative.get("score", 0.0), **{k: v for k, v in negative.items() if k != "score"}},
         },
     }
 
