@@ -1,4 +1,4 @@
-name: SEC Fundamentals Smoke
+name: Fundamentals Source Smoke
 
 on:
   push:
@@ -19,5 +19,20 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install requests
-      - name: Run SEC fundamentals
-        run: python sec_fundamentals.py
+      - name: Probe Yahoo fundamentals timeseries
+        run: |
+          python - <<'PY'
+          import time, requests
+          now=int(time.time())
+          url='https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/AAPL'
+          params={
+            'symbol':'AAPL',
+            'type':'quarterlyTotalRevenue,quarterlyNetIncome,annualOperatingCashFlow,annualCapitalExpenditure,quarterlyCashCashEquivalentsAndShortTermInvestments,quarterlyTotalAssets,quarterlyTotalDebt',
+            'period1':now-60*60*24*365*5,
+            'period2':now,
+          }
+          r=requests.get(url,params=params,headers={'User-Agent':'Mozilla/5.0'},timeout=20)
+          print('status',r.status_code)
+          print(r.text[:5000])
+          r.raise_for_status()
+          PY
