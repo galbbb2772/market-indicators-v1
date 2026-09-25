@@ -13,6 +13,10 @@ on:
       - patch_divergence_v2_fix.py
       - patch_box_age.py
       - patch_narrative_layer.py
+      - patch_news_signal.py
+      - news_signal.py
+      - news_sources.json
+      - news_keywords.json
       - indicator_config.json
       - market_model_v2.json
       - manual_inputs.json
@@ -72,15 +76,18 @@ jobs:
       - name: Build Narrative Layer V1
         run: python patch_narrative_layer.py
 
+      - name: Build News Signal V1
+        run: python patch_news_signal.py
+
       - name: Commit refreshed dashboard
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/current.json docs/index.html
+          git add docs/data/current.json docs/data/news_history.json docs/index.html
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
-            git commit -m "chore: refresh indicators, narratives and dashboard"
+            git commit -m "chore: refresh indicators, narratives, news and dashboard"
             git pull --rebase origin main
             git push
           fi
