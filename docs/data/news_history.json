@@ -1,15 +1,63 @@
 {
-  "version": "NEWS-SIGNAL-HISTORY-V1",
+  "version": "NEWS-SIGNAL-HISTORY-V1.1",
   "history": [
     {
       "date": "2026-09-25",
-      "generated_at": "2026-09-25T14:53:01.171177+00:00",
+      "generated_at": "2026-09-25T14:59:58.219031+00:00",
       "signals": {
-        "us_policy_event_sentiment": 3.73,
-        "geopolitical_news_risk": 29.21,
-        "systemic_news_risk": 3.96,
-        "ai_narrative_risk": 2.97,
-        "negative_narrative_density": 17.64
+        "us_policy_event_sentiment": 3.71,
+        "geopolitical_news_risk": 29.06,
+        "systemic_news_risk": 3.94,
+        "ai_narrative_risk": 2.95,
+        "negative_narrative_density": 17.54
+      },
+      "reaction_adjusted": {
+        "us_policy_event_sentiment": 2.06,
+        "geopolitical_news_risk": 16.11,
+        "systemic_news_risk": 2.31,
+        "ai_narrative_risk": 1.58,
+        "negative_narrative_density": 9.86
+      },
+      "market_confirmation": {
+        "us_policy_event_sentiment": 11.21,
+        "geopolitical_news_risk": 10.85,
+        "systemic_news_risk": 17.12,
+        "ai_narrative_risk": 6.87,
+        "negative_narrative_density": 12.4
+      },
+      "market_assets": {
+        "vix": {
+          "close": 15.69,
+          "day_pct": 0.128,
+          "five_day_pct": 5.942,
+          "timestamp": 1790319600,
+          "label": "VIX",
+          "symbol": "^VIX"
+        },
+        "oil": {
+          "close": 93.88,
+          "day_pct": -0.772,
+          "five_day_pct": -6.401,
+          "timestamp": 1790308800,
+          "label": "WTI原油",
+          "symbol": "CL=F"
+        },
+        "gold": {
+          "close": 4312.6001,
+          "day_pct": 0.34,
+          "five_day_pct": -2.538,
+          "timestamp": 1790308800,
+          "label": "黄金",
+          "symbol": "GC=F"
+        },
+        "spy": {
+          "close": 768.8,
+          "day_pct": 0.211,
+          "five_day_pct": 0.933,
+          "timestamp": 1790343000,
+          "label": "SPY",
+          "symbol": "SPY"
+        }
       },
       "source_status": {
         "configured": [
