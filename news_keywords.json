@@ -1,0 +1,7 @@
+{
+  "policy": ["Federal Reserve", "FOMC", "interest rates", "tariff", "trade policy", "Treasury"],
+  "geopolitical": ["war", "conflict", "sanctions", "missile", "ceasefire", "geopolitical"],
+  "systemic": ["bank failure", "liquidity crisis", "credit stress", "default", "debt ceiling", "funding stress"],
+  "ai": ["artificial intelligence", "AI spending", "AI capex", "AI bubble", "data center debt", "AI regulation"],
+  "negative_narrative": ["recession", "crash", "crisis", "panic", "default", "bubble", "contagion"]
+}
