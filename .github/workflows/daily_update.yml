@@ -15,6 +15,7 @@ on:
       - patch_narrative_layer.py
       - patch_sec_fundamentals.py
       - yahoo_fundamentals.py
+      - patch_treasury_stress.py
       - patch_news_ui.py
       - patch_news_ui_v2.py
       - patch_news_signal.py
@@ -79,6 +80,9 @@ jobs:
       - name: Build Mega-cap Fundamentals V1
         run: python patch_sec_fundamentals.py
 
+      - name: Build Treasury short-term stress context
+        run: python patch_treasury_stress.py
+
       - name: Build Narrative Layer V1
         run: python patch_narrative_layer.py
 
@@ -99,7 +103,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
-            git commit -m "chore: refresh indicators, fundamentals, narratives, news and dashboard"
+            git commit -m "chore: refresh indicators, fundamentals, Treasury stress, narratives, news and dashboard"
             git pull --rebase origin main
             git push
           fi
