@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from news_signal import build_news_signals
+from news_signal_v2 import build_confirmed_news_signals
 
 ROOT = Path(__file__).resolve().parent
 DATA_PATH = ROOT / "docs" / "data" / "current.json"
@@ -60,7 +60,7 @@ def _set_indicator(data: dict, indicator_id: str, signal_id: str, history: list[
         item["asof"] = values[-1][0] if values else _market_today()
         item["history"] = [{"date": d, "score": round(v, 2)} for d, v in values[-180:]]
         item["quality"] = quality
-        item["source_note"] = "News Signal V1; context/archive only, no Market Model V2 vote."
+        item["source_note"] = "News Signal V1.4; text + market reaction context only, no Market Model V2 vote."
         break
 
 
@@ -69,56 +69,76 @@ def main() -> None:
     if not isinstance(data, dict):
         raise RuntimeError("docs/data/current.json is missing or invalid")
 
-    news = build_news_signals()
+    news = build_confirmed_news_signals()
     data["news_signal_v1"] = news
 
     # Keep daily history aligned with the U.S. market/session date.  The scheduled
     # workflow runs in the evening New York time, which can already be the next
     # UTC calendar day.
     today = _market_today()
-    history_obj = _load(HISTORY_PATH, {"version": "NEWS-SIGNAL-HISTORY-V1", "history": []})
+    history_obj = _load(HISTORY_PATH, {"version": "NEWS-SIGNAL-HISTORY-V1.1", "history": []})
     history = list(history_obj.get("history") or [])
+
+    signals = news.get("signals") or {}
     score_row = {
         "date": today,
         "generated_at": news.get("generated_at"),
         "signals": {
             key: value.get("score")
-            for key, value in (news.get("signals") or {}).items()
+            for key, value in signals.items()
             if isinstance(value, dict)
         },
+        "reaction_adjusted": {
+            key: value.get("reaction_adjusted_score")
+            for key, value in signals.items()
+            if isinstance(value, dict)
+        },
+        "market_confirmation": {
+            key: ((value.get("market_confirmation") or {}).get("score"))
+            for key, value in signals.items()
+            if isinstance(value, dict)
+        },
+        "market_assets": (news.get("market_reaction") or {}).get("assets", {}),
         "source_status": news.get("source_status", {})
     }
     history = [x for x in history if x.get("date") != today]
     history.append(score_row)
     history = sorted(history, key=lambda x: x.get("date", ""))[-400:]
-    history_obj = {"version": "NEWS-SIGNAL-HISTORY-V1", "history": history}
+    history_obj = {"version": "NEWS-SIGNAL-HISTORY-V1.1", "history": history}
 
     _set_indicator(
         data,
         indicator_id="ghost_story_density",
         signal_id="negative_narrative_density",
         history=history,
-        quality="direct_news_text_context"
+        quality="direct_news_text_plus_market_confirmation_context"
     )
 
     narrative = data.get("narrative_layer")
     if isinstance(narrative, dict):
         narrative["news_nlp_connected"] = True
+        narrative["news_market_confirmation_connected"] = True
         narrative["news_feeds_market_model"] = False
         narrative["news_context"] = {
-            key: value.get("score")
-            for key, value in (news.get("signals") or {}).items()
+            key: {
+                "raw_score": value.get("score"),
+                "reaction_adjusted_score": value.get("reaction_adjusted_score"),
+                "market_confirmation": (value.get("market_confirmation") or {}).get("score"),
+                "confirmation_state": (value.get("market_confirmation") or {}).get("state"),
+            }
+            for key, value in signals.items()
             if isinstance(value, dict)
         }
         narrative["news_note"] = (
-            "News Signal V1 is context-only. Narrative scores remain quantitative-proxy based; "
-            "news does not vote in Market Model V2 until forward validation."
+            "News Signal V1.4 records text risk plus VIX/WTI/gold/SPY confirmation. "
+            "Neither raw nor reaction-adjusted news scores vote in Market Model V2 until forward validation."
         )
 
     model = data.get("market_model_v2")
     if isinstance(model, dict):
         model["news_signal_status"] = {
             "connected": True,
+            "market_confirmation_connected": True,
             "version": news.get("version"),
             "feeds_market_model": False,
             "history_days": len(history)
@@ -130,7 +150,15 @@ def main() -> None:
     print(
         "news signal updated:",
         json.dumps(
-            {k: v.get("score") for k, v in (news.get("signals") or {}).items()},
+            {
+                k: {
+                    "raw": v.get("score"),
+                    "confirm": (v.get("market_confirmation") or {}).get("score"),
+                    "adjusted": v.get("reaction_adjusted_score"),
+                }
+                for k, v in signals.items()
+                if isinstance(v, dict)
+            },
             ensure_ascii=False
         )
     )
