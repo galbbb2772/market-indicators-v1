@@ -1,0 +1,22 @@
+name: News Signal Smoke Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/news_signal_smoke.yml
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: Run News Signal V1
+        run: python news_signal.py
