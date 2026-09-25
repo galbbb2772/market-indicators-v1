@@ -1,7 +1,7 @@
 {
-  "policy": ["Federal Reserve", "FOMC", "interest rates", "tariff", "trade policy", "Treasury"],
-  "geopolitical": ["war", "conflict", "sanctions", "missile", "ceasefire", "geopolitical"],
-  "systemic": ["bank failure", "liquidity crisis", "credit stress", "default", "debt ceiling", "funding stress"],
-  "ai": ["artificial intelligence", "AI spending", "AI capex", "AI bubble", "data center debt", "AI regulation"],
-  "negative_narrative": ["recession", "crash", "crisis", "panic", "default", "bubble", "contagion"]
+  "policy": ["Federal Reserve", "FOMC", "interest rates", "tariff", "tariffs", "trade policy", "Treasury Department"],
+  "geopolitical": ["war", "armed conflict", "sanctions", "missile", "ceasefire", "geopolitical", "Iran", "Ukraine", "Russia", "Israel"],
+  "systemic": ["bank failure", "banking crisis", "liquidity crisis", "credit stress", "credit crisis", "debt default", "sovereign default", "debt ceiling", "funding stress", "credit spreads"],
+  "ai": ["artificial intelligence", "AI spending", "AI capex", "AI bubble", "data center debt", "AI regulation", "hyperscaler capex"],
+  "negative_narrative": ["recession", "market crash", "stock market crash", "financial crisis", "credit crisis", "debt crisis", "market panic", "debt default", "sovereign default", "asset bubble", "stock bubble", "contagion"]
 }
