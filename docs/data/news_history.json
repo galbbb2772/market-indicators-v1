@@ -3,13 +3,13 @@
   "history": [
     {
       "date": "2026-09-25",
-      "generated_at": "2026-09-25T12:33:34.854788+00:00",
+      "generated_at": "2026-09-25T12:38:46.176031+00:00",
       "signals": {
-        "us_policy_event_sentiment": 15.39,
-        "geopolitical_news_risk": 18.81,
+        "us_policy_event_sentiment": 4.46,
+        "geopolitical_news_risk": 0.0,
         "systemic_news_risk": 0.0,
-        "ai_narrative_risk": 3.9,
-        "negative_narrative_density": 90.11
+        "ai_narrative_risk": 0.0,
+        "negative_narrative_density": 0.0
       },
       "source_status": {
         "configured": [
@@ -18,14 +18,12 @@
           "gdelt",
           "sec_press"
         ],
-        "unique_sources_seen": 60,
-        "article_rows_before_dedupe": 135,
-        "events_after_dedupe": 124,
+        "unique_sources_seen": 1,
+        "article_rows_before_classification": 6,
+        "classified_rows": 3,
+        "events_after_dedupe": 3,
         "errors": {
-          "gdelt:policy": "HTTPError('429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22Federal+Reserve%22+OR+FOMC+OR+%22interest+rates%22+OR+tariff+OR+%22trade+policy%22+OR+Treasury%29+sourcelang%3AEnglish&mode=ArtList&maxrecords=75&format=json&sort=HybridRel&timespan=24h')",
-          "gdelt:geopolitical": "ConnectionError(ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))",
-          "gdelt:systemic": "HTTPError('429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22bank+failure%22+OR+%22liquidity+crisis%22+OR+%22credit+stress%22+OR+default+OR+%22debt+ceiling%22+OR+%22funding+stress%22%29+sourcelang%3AEnglish&mode=ArtList&maxrecords=75&format=json&sort=HybridRel&timespan=24h')",
-          "gdelt:ai": "ConnectionError(ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
+          "gdelt": "HTTPError('429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22Federal+Reserve%22+OR+FOMC+OR+%22interest+rates%22+OR+tariff+OR+%22trade+policy%22+OR+Treasury+OR+war+OR+conflict+OR+sanctions+OR+missile+OR+ceasefire+OR+geopolitical+OR+%22bank+failure%22+OR+%22liquidity+crisis%22+OR+%22credit+stress%22+OR+default+OR+%22debt+ceiling%22+OR+%22funding+stress%22+OR+%22artificial+intelligence%22+OR+%22AI+spending%22+OR+%22AI+capex%22+OR+%22AI+bubble%22+OR+%22data+center+debt%22+OR+%22AI+regulation%22+OR+recession+OR+crash+OR+crisis+OR+panic+OR+bubble+OR+contagion%29+sourcelang%3AEnglish&mode=ArtList&maxrecords=250&format=json&sort=HybridRel&timespan=24h')"
         }
       }
     }
