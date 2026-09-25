@@ -1,14 +1,20 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from news_signal import build_news_signals
 
 ROOT = Path(__file__).resolve().parent
 DATA_PATH = ROOT / "docs" / "data" / "current.json"
 HISTORY_PATH = ROOT / "docs" / "data" / "news_history.json"
+MARKET_TZ = ZoneInfo("America/New_York")
+
+
+def _market_today() -> str:
+    return datetime.now(MARKET_TZ).date().isoformat()
 
 
 def _load(path: Path, fallback):
@@ -51,7 +57,7 @@ def _set_indicator(data: dict, indicator_id: str, signal_id: str, history: list[
         item["raw_unit"] = "deduped news events / 24h"
         item["d1"] = round(float(d1), 2) if d1 is not None else None
         item["d2"] = round(float(d2), 2) if d2 is not None else None
-        item["asof"] = values[-1][0] if values else datetime.now(timezone.utc).date().isoformat()
+        item["asof"] = values[-1][0] if values else _market_today()
         item["history"] = [{"date": d, "score": round(v, 2)} for d, v in values[-180:]]
         item["quality"] = quality
         item["source_note"] = "News Signal V1; context/archive only, no Market Model V2 vote."
@@ -66,7 +72,10 @@ def main() -> None:
     news = build_news_signals()
     data["news_signal_v1"] = news
 
-    today = datetime.now(timezone.utc).date().isoformat()
+    # Keep daily history aligned with the U.S. market/session date.  The scheduled
+    # workflow runs in the evening New York time, which can already be the next
+    # UTC calendar day.
+    today = _market_today()
     history_obj = _load(HISTORY_PATH, {"version": "NEWS-SIGNAL-HISTORY-V1", "history": []})
     history = list(history_obj.get("history") or [])
     score_row = {
