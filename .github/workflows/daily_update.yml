@@ -7,6 +7,7 @@ on:
     paths:
       - update_data.py
       - ablation_runner.py
+      - run_ablation_resilient.py
       - history_builder.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
@@ -63,7 +64,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Refresh indicators and run ablation
-        run: python ablation_runner.py
+        run: python run_ablation_resilient.py
 
       - name: Build three-index history
         run: python history_builder.py
