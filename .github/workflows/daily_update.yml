@@ -18,6 +18,7 @@ on:
       - patch_structure_nav.py
       - patch_structure_cycle_nav.py
       - patch_research_hub_nav.py
+      - patch_research_terminal_v2.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
@@ -42,7 +43,10 @@ on:
       - docs/structure-lab.html
       - docs/cycle-lab.html
       - docs/research-hub.html
+      - docs/research-terminal-v2.css
+      - docs/research-terminal-v2.js
       - tests/test_research_hub.py
+      - tests/test_research_terminal_v2.py
       - tests/test_structure_core.py
       - tests/test_macro_sources.py
       - tests/test_official_indpro.py
@@ -105,12 +109,13 @@ jobs:
           STRUCTURE_DEPLOY_AUTHORIZED: 'true'
         run: python structure_resilient.py
         continue-on-error: true
-      - name: Link approved structure, cycle and research hub pages
+      - name: Link and style approved structure, cycle and research hub pages
         if: vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED == 'true' && vars.STRUCTURE_DEPLOY_AUTHORIZED == 'true'
         run: |
           python patch_structure_nav.py
           python patch_structure_cycle_nav.py
           python patch_research_hub_nav.py
+          python patch_research_terminal_v2.py
       - name: Commit refreshed dashboard, retaining approval gate
         run: |
           git config user.name "github-actions[bot]"
@@ -118,7 +123,7 @@ jobs:
           git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/index.html
           if test "${{ vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED }}" = 'true' && test "${{ vars.STRUCTURE_DEPLOY_AUTHORIZED }}" = 'true'; then
             if test -f docs/data/structure_lab.json; then git add docs/data/structure_lab.json; fi
-            git add docs/structure-lab.html docs/cycle-lab.html docs/research-hub.html
+            git add docs/structure-lab.html docs/cycle-lab.html docs/research-hub.html docs/research-terminal-v2.css docs/research-terminal-v2.js
           fi
           if git diff --cached --quiet; then
             echo "No dashboard changes"
@@ -127,10 +132,10 @@ jobs:
             git pull --rebase origin main
             git push
           fi
-      - name: Exclude unapproved research pages from GitHub Pages artifact
+      - name: Exclude unapproved research pages and terminal assets from GitHub Pages artifact
         if: vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED != 'true' || vars.STRUCTURE_DEPLOY_AUTHORIZED != 'true'
         run: |
-          rm -f docs/structure-lab.html docs/cycle-lab.html docs/research-hub.html docs/data/structure_lab.json
+          rm -f docs/structure-lab.html docs/cycle-lab.html docs/research-hub.html docs/research-terminal-v2.css docs/research-terminal-v2.js docs/data/structure_lab.json
           echo "Research page deployment disabled; existing approved dashboard preserved."
       - name: Configure Pages
         uses: actions/configure-pages@v5
