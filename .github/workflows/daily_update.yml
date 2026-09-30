@@ -9,6 +9,9 @@ on:
       - ablation_runner.py
       - run_ablation_resilient.py
       - history_builder.py
+      - build_structure_lab.py
+      - structure_core.py
+      - patch_structure_nav.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
@@ -30,6 +33,8 @@ on:
       - manual_inputs.json
       - requirements.txt
       - docs/index.html
+      - docs/structure-lab.html
+      - tests/test_structure_core.py
       - .github/workflows/daily_update.yml
   schedule:
     - cron: '30 22 * * *'
@@ -62,6 +67,9 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: Verify causal structure core
+        run: python -m unittest discover -s tests -v
 
       - name: Refresh indicators and run ablation
         run: python run_ablation_resilient.py
@@ -96,15 +104,26 @@ jobs:
       - name: Build News Signal V1.4
         run: python patch_news_signal.py
 
+      - name: Build historical structure, sectors and cycle research
+        # Vendor interruptions must not prevent the existing official dashboard
+        # from refreshing. The script preserves the last genuinely sourced data
+        # when data endpoints fail and records stale/error states per series.
+        run: python build_structure_lab.py
+        continue-on-error: true
+
+      - name: Link separate structure research page
+        run: python patch_structure_nav.py
+
       - name: Commit refreshed dashboard
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/index.html
+          if test -f docs/data/structure_lab.json; then git add docs/data/structure_lab.json; fi
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
-            git commit -m "chore: refresh indicators, fundamentals, Treasury stress, narratives, news and dashboard"
+            git commit -m "chore: refresh market indicators, news and structure research"
             git pull --rebase origin main
             git push
           fi
