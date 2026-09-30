@@ -1,14 +1,17 @@
-"""Source-safe historical macro caching. Never mix a FRED key with a new proxy.
-Metadata is descriptive; all historical observations are revised, not as-published.
+"""Source-safe historical macro integrity; never mix same-named, differently defined series.
+
+The US BLS confirms there is NO CPS unemployment observation for 2025-10:
+https://www.bls.gov/cps/methods/2025-federal-government-shutdown-impact-cps.htm
+That month is recorded as an official structural absence, NEVER imputed.
 """
 from __future__ import annotations
-from datetime import date
 
 SOURCE_BY_KEY={'T10Y3M':'US_TREASURY_DIRECT','UNRATE':'US_BLS_DIRECT'}
+KNOWN_UNAVAILABLE_BY_KEY={'UNRATE':{'2025-10'},'T10Y3M':set()}
+BLS_ABSENCE_URL='https://www.bls.gov/cps/methods/2025-federal-government-shutdown-impact-cps.htm'
 
 
 def source_compatible(key:str,previous:dict)->bool:
-    """A same-named FRED or unknown-source series MUST NOT be reused."""
     return bool(isinstance(previous,dict) and previous.get('source')==SOURCE_BY_KEY[key])
 
 
@@ -23,36 +26,41 @@ def _months_inclusive(start:str,end:str)->list[str]:
     return out
 
 
-def missing_internal_months(rows:list[list],first_month:str|None=None)->list[str]:
-    """Missing only from earliest expected historical month through last observed.
-    Missing months after the last observation might be legitimate publication lag.
+def missing_internal_months(rows:list[list],first_month:str|None=None,
+                            exclude_months=None)->list[str]:
+    """Report holes through last observed month, excluding explicitly proven
+    structural absences ONLY when called with the exact source's exclusion set.
     """
     if not rows:return []
     values={str(m)[:7] for m,_ in rows}
     start=first_month or min(values)
-    return [m for m in _months_inclusive(start,max(values)) if m not in values]
+    exempt=set(exclude_months or [])
+    return [m for m in _months_inclusive(start,max(values)) if m not in values and m not in exempt]
 
 
 def merge_same_source(key:str,previous:dict,new:dict,expected_first:str|None=None)->dict:
-    """Use only compatible old source; report actual missing months after merge."""
     if new.get('source')!=SOURCE_BY_KEY[key]:raise ValueError('unexpected direct source')
     prev=previous if source_compatible(key,previous) else {}
     combined={str(month)[:7]:float(value) for month,value in prev.get('observations',[])}
     combined.update({str(month)[:7]:float(value) for month,value in new['observations']})
     rows=[[m,round(combined[m],4)] for m in sorted(combined)]
-    gaps=missing_internal_months(rows,first_month=expected_first)
+    exempt=KNOWN_UNAVAILABLE_BY_KEY.get(key,set())
+    gaps=missing_internal_months(rows,first_month=expected_first,exclude_months=exempt)
+    known_absences=sorted(m for m in exempt if rows[0][0]<=m<=rows[-1][0] and m not in combined)
     status='partial' if new.get('failed_years') or gaps else 'refreshed'
     return {**new,'observations':rows,'start':rows[0][0],'end':rows[-1][0],
             'missing_month_count':len(gaps),'first_missing_month':gaps[0] if gaps else None,
-            'status':status,
-            'cache_reused':bool(prev),'source_mismatch_old_cache_discarded':bool(previous and not prev)}
+            'official_unavailable_months':known_absences,
+            'official_unavailable_provenance':BLS_ABSENCE_URL if key=='UNRATE' and known_absences else None,
+            'status':status,'cache_reused':bool(prev),
+            'source_mismatch_old_cache_discarded':bool(previous and not prev)}
 
 
 def refetch_anchor(key:str,previous:dict)->str|None:
-    """Resume normally but return to the earliest internal gap for backfill."""
     if not source_compatible(key,previous):return None
     rows=previous.get('observations') or []
     if not rows:return None
     first_expected={'T10Y3M':'1990-01','UNRATE':'1948-01'}[key]
-    gaps=missing_internal_months(rows,first_month=first_expected)
+    gaps=missing_internal_months(rows,first_month=first_expected,
+                                exclude_months=KNOWN_UNAVAILABLE_BY_KEY.get(key,set()))
     return gaps[0] if gaps else rows[-1][0]
