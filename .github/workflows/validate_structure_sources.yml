@@ -1,5 +1,4 @@
 name: Validate Structure Source Bootstrap
-
 on:
   pull_request:
     branches: [main]
@@ -8,8 +7,12 @@ on:
       - build_structure_lab.py
       - macro_sources.py
       - structure_resilient.py
+      - cycle_research.py
+      - docs/cycle-lab.html
+      - patch_structure_cycle_nav.py
       - tests/test_structure_core.py
       - tests/test_macro_sources.py
+      - tests/test_cycle_research.py
       - .github/workflows/validate_structure_sources.yml
   workflow_dispatch:
 permissions:
@@ -24,8 +27,13 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt
-      - name: Test direct providers and causal research code
+      - name: Validate source adapters, online boxes, and predictive causality tests
         run: python -m unittest discover -s tests -v
+      - name: Verify research page link insertion is idempotent
+        run: |
+          python patch_structure_cycle_nav.py
+          python patch_structure_cycle_nav.py
+          grep -q '周期性与预测能力图表' docs/structure-lab.html
       - name: Live data dry run without distributing raw data
         run: |
           python - <<'PY'
@@ -44,6 +52,12 @@ jobs:
                     out['macro'][k]['start'],out['macro'][k]['end'],
                     'n',len(out['macro'][k]['observations']),
                     'coverage',out['macro'][k]['completeness'])
+          assert out['cycle_research']['status']=='research_only',out['errors']
+          assert out['cycle_research']['directional']['5']['n']>0
+          assert 'XLK' in out['cycle_research']['sectors']
+          print('CYCLE REPORT VERIFIED:',
+                out['cycle_research']['directional']['5']['status'],
+                'n',out['cycle_research']['directional']['5']['n'])
           print('VERIFIED PRICE SPY:',len(out['instruments']['SPY']['bars']),'bars')
           print('RESEARCH ONLY: no data written, no public deployment.')
           PY
