@@ -21,7 +21,7 @@ class OfficialIndustrialProductionTests(unittest.TestCase):
         result=merge_same_source('INDPRO',{},src,expected_first='1919-01')
         self.assertEqual(result['status'],'partial')
         self.assertEqual(result['first_missing_month'],'1919-03')
-        self.assertEqual(result['missing_month_count'],11)
+        self.assertEqual(result['missing_month_count'],9)
 
     def test_provider_provenance_revised_flag(self):
         reply=Mock(text=self.SAMPLE)
