@@ -1,5 +1,5 @@
 """Research bootstrap: vetted direct official providers, source-safe caching.
-No raw public output before both vendor-rights and deployment-authority reviews.
+No raw public output before vendor-rights and deployment-authority reviews.
 """
 from __future__ import annotations
 import argparse,csv,io,json,os,tempfile
@@ -8,14 +8,15 @@ from pathlib import Path
 import requests
 import build_structure_lab as lab
 from macro_sources import treasury_spread,bls_unrate
+from official_indpro import fed_g17_indpro
 from macro_integrity import merge_same_source,refetch_anchor,SOURCE_BY_KEY
 from cycle_research import cycle_report
 
 ROOT=Path(__file__).resolve().parent
 TARGET=ROOT/'docs/data/structure_lab.json'
 FULL_MACRO=lab.MACRO.copy()
-DIRECT={'T10Y3M':treasury_spread,'UNRATE':bls_unrate}
-EXPECTED_START={'T10Y3M':'1990-01','UNRATE':'1948-01'}
+DIRECT={'T10Y3M':treasury_spread,'UNRATE':bls_unrate,'INDPRO':fed_g17_indpro}
+EXPECTED_START={'T10Y3M':'1990-01','UNRATE':'1948-01','INDPRO':'1919-01'}
 
 
 def _previous():
@@ -25,7 +26,7 @@ def _previous():
 
 def assemble(prices=True,existing=None,optional_fred=False):
     prior=existing if existing is not None else _previous()
-    # The old FRED endpoint is NEVER mandatory or allowed to block direct sources.
+    # FRED is NEVER mandatory or allowed to block direct official sources.
     lab.MACRO={}
     if prices:
         out=lab.build(prior)
@@ -42,10 +43,15 @@ def assemble(prices=True,existing=None,optional_fred=False):
         last_month=refetch_anchor(key,previous)
         try:
             source=download(session,last_month=last_month)
-            # Never combine a legacy FRED T10Y3M with Treasury par yield proxy;
-            # similarly do not silently combine unknown-cache UNRATE with BLS.
-            merged=merge_same_source(key,previous,source,EXPECTED_START[key])
-            label='（US Treasury par-yield PROXY, not FRED T10Y3M）' if key=='T10Y3M' else '（US BLS direct）'
+            # G.17 is a complete revised official file. Audit that file as a
+            # whole rather than allowing a former cache to disguise gaps in it.
+            # For incremental BLS / Treasury fetches compatible caches are safe
+            # to merge; old FRED values are never mixed with different sources.
+            history_cache={} if key=='INDPRO' else previous
+            merged=merge_same_source(key,history_cache,source,EXPECTED_START[key])
+            label={'T10Y3M':'（US Treasury par-yield PROXY, not FRED T10Y3M）',
+                   'UNRATE':'（US BLS direct）',
+                   'INDPRO':'（Federal Reserve G.17 TOTAL index, revised—not vintage）'}[key]
             out['macro'][key]={'name':FULL_MACRO[key]+label,**merged}
             out['errors'].pop(key,None)
             print('DIRECT',key,source['source'],len(merged['observations']),
@@ -56,8 +62,7 @@ def assemble(prices=True,existing=None,optional_fred=False):
             if previous.get('source')==SOURCE_BY_KEY[key] and previous.get('observations'):
                 out['macro'][key]['status']='stale_cached'
             else:
-                # The old series of the same ID from a different vendor is NOT
-                # a valid fallback for the differently defined direct source.
+                # Differently sourced old series is NOT a valid fallback.
                 out['macro'].pop(key,None)
             print('DIRECT UNAVAILABLE',key,out['errors'][key],flush=True)
     for key in FULL_MACRO:
@@ -67,8 +72,8 @@ def assemble(prices=True,existing=None,optional_fred=False):
                 out['errors'][key]='Direct official provider unverified; no synthetic series'
             continue
         try:
-            # PRIVATE research only: vendor rights, exact definitions and
-            # vintage dates MUST be reviewed before publication or forecast use.
+            # PRIVATE research only: source rights, exact definitions and vintage
+            # dates MUST be reviewed before publication or predictive use.
             r=session.get(f'https://fred.stlouisfed.org/graph/fredgraph.csv?id={key}',timeout=7)
             r.raise_for_status();monthly={}
             for row in csv.DictReader(io.StringIO(r.text)):
@@ -82,7 +87,7 @@ def assemble(prices=True,existing=None,optional_fred=False):
         except Exception as exc:
             out['errors'][key]=type(exc).__name__+': '+str(exc)[:140]
             if key in out['macro']:out['macro'][key]['status']='stale_cached'
-    out['policy']['macro']='Treasury par-yield spread PROXY and BLS direct unemployment; revised, not publication-time data; source-safe cache and missing-month audit'
+    out['policy']['macro']='Treasury par-yield spread PROXY, BLS direct unemployment and Fed G.17 direct revised industrial production; NOT publication-time vintages; source-safe cache and missing-month audit'
     out['policy']['publication_gate']='No raw/vendor-history redistribution or new-site deployment without vendor-rights audit and explicit owner authorization'
     try:
         out['cycle_research']=cycle_report(out['instruments'],out.get('news_tension') or [])
