@@ -11,11 +11,13 @@ on:
       - build_structure_lab.py
       - macro_sources.py
       - macro_integrity.py
+      - official_indpro.py
       - structure_resilient.py
       - cycle_research.py
       - structure_core.py
       - patch_structure_nav.py
       - patch_structure_cycle_nav.py
+      - patch_research_hub_nav.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
@@ -39,8 +41,11 @@ on:
       - docs/index.html
       - docs/structure-lab.html
       - docs/cycle-lab.html
+      - docs/research-hub.html
+      - tests/test_research_hub.py
       - tests/test_structure_core.py
       - tests/test_macro_sources.py
+      - tests/test_official_indpro.py
       - tests/test_cycle_research.py
       - .github/workflows/daily_update.yml
   schedule:
@@ -69,7 +74,7 @@ jobs:
           cache: 'pip'
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Verify causal structure, research clock and direct macro provider adapters
+      - name: Verify causal structure and official source adapters
         run: python -m unittest discover -s tests -v
       - name: Refresh indicators and run ablation
         run: python run_ablation_resilient.py
@@ -100,11 +105,12 @@ jobs:
           STRUCTURE_DEPLOY_AUTHORIZED: 'true'
         run: python structure_resilient.py
         continue-on-error: true
-      - name: Link approved structure and cycle pages
+      - name: Link approved structure, cycle and research hub pages
         if: vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED == 'true' && vars.STRUCTURE_DEPLOY_AUTHORIZED == 'true'
         run: |
           python patch_structure_nav.py
           python patch_structure_cycle_nav.py
+          python patch_research_hub_nav.py
       - name: Commit refreshed dashboard, retaining approval gate
         run: |
           git config user.name "github-actions[bot]"
@@ -112,7 +118,7 @@ jobs:
           git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/index.html
           if test "${{ vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED }}" = 'true' && test "${{ vars.STRUCTURE_DEPLOY_AUTHORIZED }}" = 'true'; then
             if test -f docs/data/structure_lab.json; then git add docs/data/structure_lab.json; fi
-            git add docs/structure-lab.html docs/cycle-lab.html
+            git add docs/structure-lab.html docs/cycle-lab.html docs/research-hub.html
           fi
           if git diff --cached --quiet; then
             echo "No dashboard changes"
@@ -124,7 +130,7 @@ jobs:
       - name: Exclude unapproved research pages from GitHub Pages artifact
         if: vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED != 'true' || vars.STRUCTURE_DEPLOY_AUTHORIZED != 'true'
         run: |
-          rm -f docs/structure-lab.html docs/cycle-lab.html docs/data/structure_lab.json
+          rm -f docs/structure-lab.html docs/cycle-lab.html docs/research-hub.html docs/data/structure_lab.json
           echo "Research page deployment disabled; existing approved dashboard preserved."
       - name: Configure Pages
         uses: actions/configure-pages@v5
