@@ -1,0 +1,44 @@
+name: Validate Structure Source Bootstrap
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - structure_core.py
+      - build_structure_lab.py
+      - tests/test_structure_core.py
+      - .github/workflows/validate_structure_sources.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - name: Dry-run actual source ingestion (never commit or upload raw data)
+        run: |
+          python - <<'PY'
+          import build_structure_lab as lab
+          lab.SYMBOLS = {k: lab.SYMBOLS[k] for k in ('SPY', 'XLK', '^GSPC')}
+          lab.MACRO = {'T10Y3M': lab.MACRO['T10Y3M']}
+          # Fetch just enough live data to validate the real ingestion pipeline.
+          # Intentionally do not write JSON to Git or upload any artifacts.
+          out = lab.build()
+          assert 'SPY' in out['instruments'], out['errors']
+          assert len(out['instruments']['SPY']['bars']) >= 200, 'Insufficient SPY price history'
+          assert out['instruments']['SPY']['boxes'], 'SPY box detection returned no examples'
+          assert 'XLK' in out['instruments'], out['errors']
+          assert 'T10Y3M' in out['macro'], out['errors']
+          print('SOURCE BOOTSTRAP PASSED: instrument coverage & FRED observed history')
+          print('SPY sessions', len(out['instruments']['SPY']['bars']))
+          print('SPY boxes', len(out['instruments']['SPY']['boxes']))
+          print('Recorded news days', len(out['news_tension']))
+          PY
