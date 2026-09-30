@@ -4,8 +4,12 @@ on:
     branches: [main]
     paths:
       - docs/research-hub.html
+      - docs/research-terminal-v2.css
+      - docs/research-terminal-v2.js
       - patch_research_hub_nav.py
+      - patch_research_terminal_v2.py
       - tests/test_research_hub.py
+      - tests/test_research_terminal_v2.py
       - .github/workflows/validate_research_site.yml
   workflow_dispatch:
 permissions:
@@ -19,18 +23,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate real-archive-only six-module site
-        run: python -m unittest discover -s tests -p 'test_research_hub.py' -v
-      - name: Verify nav patch idempotence and deep links in disposable Actions checkout
+      - name: Validate real-archive-only research site and terminal UI
+        run: python -m unittest discover -s tests -p 'test_research*.py' -v
+      - name: Verify nav and terminal patches are idempotent in disposable Actions checkout
         run: |
-          python -m py_compile patch_research_hub_nav.py
+          python -m py_compile patch_research_hub_nav.py patch_research_terminal_v2.py
           python patch_research_hub_nav.py
           python patch_research_hub_nav.py
+          python patch_research_terminal_v2.py
+          python patch_research_terminal_v2.py
           grep -q 'research-hub-nav: approved deployment only' docs/index.html
           grep -q 'research-hub-deeplink' docs/structure-lab.html
           grep -q 'research-hub.html' docs/cycle-lab.html
-      - name: JavaScript syntax check for new hub and tab router
+          for p in research-hub.html structure-lab.html cycle-lab.html; do
+            test "$(grep -o 'research-terminal-v2-css' "docs/$p" | wc -l)" -eq 1
+            test "$(grep -o 'research-terminal-v2-js' "docs/$p" | wc -l)" -eq 1
+          done
+      - name: JavaScript syntax check for hub, tab router and terminal V2
         run: |
+          node --check docs/research-terminal-v2.js
           python - <<'PY'
           import re, subprocess
           from pathlib import Path
@@ -38,11 +49,8 @@ jobs:
               html=Path('docs',name).read_text(encoding='utf-8')
               scripts=re.findall(r'<script[^>]*>(.*?)</script>',html,re.S|re.I)
               scripts=[x for x in scripts if x.strip()]
-              # Only verify the new hub JS / new appended router. Original
-              # third-party dashboard JS is validated in its own CI.
-              if name=='structure-lab.html':
-                  scripts=[scripts[-1]]
-              assert scripts, f'{name}: no new JS found'
+              if name=='structure-lab.html':scripts=[scripts[-1]]
+              assert scripts, f'{name}: no new inline JS found'
               for script in scripts:
                   subprocess.run(['node','--check','-'],input=script,text=True,check=True)
               print('JavaScript syntax OK',name,flush=True)
@@ -51,15 +59,18 @@ jobs:
         run: |
           mkdir -p preview/data
           cp docs/research-hub.html docs/structure-lab.html docs/cycle-lab.html docs/index.html preview/
+          cp docs/research-terminal-v2.css docs/research-terminal-v2.js preview/
           cp docs/data/news_history.json docs/data/current.json docs/data/fundamental_history.json preview/data/
           cat > preview/README.txt <<'TXT'
           This is a NON-DEPLOYED research website preview.
           Contains already-present public Market V2 files and genuine archived news data.
           No unlicensed structure_lab.json or private trading data is included.
+          Terminal V2 adds responsive layout, date-range controls, OHLC hover inspection,
+          box score detail cards and source-status panels; it does not run backtests.
           From a computer with Python 3: python -m http.server 8000 --directory preview
           Then open http://localhost:8000/research-hub.html in your browser.
           Historical stock/ETF box graphs still require source-rights review and
-          explicit website deployment permission; no backtests are being run.
+          explicit website deployment permission; no fabricated data are included.
           TXT
       - uses: actions/upload-artifact@v4
         with:
