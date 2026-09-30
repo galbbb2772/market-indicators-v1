@@ -18,8 +18,10 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - name: Compile
-        run: python -m py_compile update_data.py
+      - name: Compile V2 and Structure Lab
+        run: python -m py_compile update_data.py build_structure_lab.py structure_core.py patch_structure_nav.py
+      - name: Test market structure causal invariants
+        run: python -m unittest discover -s tests -v
       - name: Refresh V2 snapshot
         run: python update_data.py
       - name: Assert V2 outputs
