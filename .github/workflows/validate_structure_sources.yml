@@ -1,3 +1,5 @@
+# Full official-source coverage is defined as all COLLECTED releases, not imputed calendar continuity.
+# Oct 2025 CPS unemployment was not collected: https://www.bls.gov/cps/methods/2025-federal-government-shutdown-impact-cps.htm
 name: Validate Structure Source Bootstrap
 
 on:
