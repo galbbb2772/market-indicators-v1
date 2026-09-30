@@ -37,7 +37,7 @@ jobs:
           python patch_structure_cycle_nav.py
           python patch_structure_cycle_nav.py
           grep -q '周期性与预测能力图表' docs/structure-lab.html
-      - name: Dry-run REAL sources and audit latest BLS monthly coverage (NO raw publication)
+      - name: Real-source audit: 943 observed BLS months plus OFFICIAL structural absence (no publication)
         run: |
           python - <<'PY'
           import build_structure_lab as lab
@@ -53,13 +53,17 @@ jobs:
               a=out['macro'][k]
               assert a['source']==source and len(a['observations'])>=12,out['errors']
               print('MACRO',k,source,a['start'],a['end'],'n',len(a['observations']),
-                    'status',a['status'],'missing_history_months',a['missing_month_count'],
-                    'requests',a.get('request_count'),'failed_segments',a.get('request_errors',[])[:4],flush=True)
+                    'status',a['status'],'repairable_missing',a['missing_month_count'],
+                    'official_unavailable',a.get('official_unavailable_months',[]),
+                    'requests',a.get('request_count'),'request_errors',a.get('request_errors',[])[:4],flush=True)
           bls=out['macro']['UNRATE']
           assert bls['start']=='1948-01',bls
           assert bls['end']>='2026-08',('Latest BLS month missing',bls['end'])
-          assert bls['missing_month_count']==0,('Historical BLS gaps',bls['first_missing_month'])
-          assert len(bls['observations'])>=944,'BLS Jan1948-Aug2026 coverage incomplete'
+          assert bls['missing_month_count']==0,('Repairable BLS gaps remain',bls['first_missing_month'])
+          assert bls['official_unavailable_months']==['2025-10'],'Oct 2025 must stay absent'
+          assert len(bls['observations'])>=943,'1948-Jan to 2026-Aug expected 944 months minus Oct 2025 structural absence'
+          assert '2025-10' not in {r[0] for r in bls['observations']},'NEVER impute uncollected BLS values'
+          assert bls['status']=='refreshed','All observed BLS months must be source-complete'
           c=out['cycle_research']
           assert c['status']=='research_only',out['errors']
           assert c['directional']['5']['n']>0
@@ -69,8 +73,6 @@ jobs:
               print('WALKFORWARD',horizon,'n',a['n'],'model_brier',a['brier_model'],
                     'prior_only_baseline_brier',a['brier_base'],
                     'difference',a['brier_difference'],'skill',a['brier_skill'])
-          s=c['sectors']['XLK']
-          print('XLK RELATIVE AUTOCORRELATION',s['weeks'],s['lags'])
-          print('VERIFIED PRICE SPY sessions',len(out['instruments']['SPY']['bars']))
-          print('RESEARCH ONLY; all observations are revised vendor history. NO files written or publicly deployed.')
+          print('SPY sessions',len(out['instruments']['SPY']['bars']))
+          print('RESEARCH ONLY: revised vendor history, no public data files, no deployment.')
           PY
