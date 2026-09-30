@@ -1,0 +1,44 @@
+name: Validate Direct Fed INDPRO
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - official_indpro.py
+      - macro_integrity.py
+      - structure_resilient.py
+      - tests/test_official_indpro.py
+      - .github/workflows/validate_indpro_direct.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  direct-indpro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: Check G17 exact-series and source-safe gap rules
+        run: python -m unittest discover -s tests -p 'test_official_indpro.py' -v
+      - name: Verify live official total-index source (read-only; no history persisted)
+        run: |
+          python - <<'PY'
+          import requests
+          from official_indpro import fed_g17_indpro
+          from macro_integrity import merge_same_source
+          source=fed_g17_indpro(requests.Session())
+          data=merge_same_source('INDPRO',{},source,expected_first='1919-01')
+          print('OFFICIAL_FED_INDPRO',data['start'],data['end'],
+                'n',len(data['observations']), 'status',data['status'],
+                'gaps',data['missing_month_count'],flush=True)
+          assert data['source']=='FED_G17_DIRECT' and data['series_code']=='B50001'
+          assert data['frequency']=='monthly' and data['point_in_time'] is False
+          assert data['start']=='1919-01' and data['end']>='2026-06'
+          assert len(data['observations'])>1250
+          assert data['missing_month_count']==0, data['first_missing_month']
+          assert data['status']=='refreshed'
+          print('RESEARCH ONLY: revised history, not real-time vintages; do not publish historical raw data.')
+          PY

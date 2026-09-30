@@ -1,0 +1,42 @@
+name: Probe Secondary Sources
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/probe_secondary_sources.yml']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: Probe alternative vendor response schema (no raw data persisted)
+        run: |
+          python - <<'PY'
+          import requests
+          urls={
+            'DBNOMICS_FRED_T10Y3M':'https://api.db.nomics.world/v22/series/FRED/T10Y3M?observations=1',
+            'DBNOMICS_FRED_UNRATE':'https://api.db.nomics.world/v22/series/FRED/UNRATE?observations=1',
+            'US_TREASURY_2026':'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv',
+            'STOOQ_XLK':'https://stooq.com/q/d/l/?s=xlk.us&i=d&d1=20240901',
+            'BLS_UNRATE':'https://api.bls.gov/publicAPI/v2/timeseries/data/LNS14000000?startyear=2024&endyear=2026'
+          }
+          for name,url in urls.items():
+            try:
+              r=requests.get(url,timeout=9,headers={'User-Agent':'Mozilla/5.0 MarketStructureLab/1.0'})
+              ctype=r.headers.get('Content-Type','')
+              print(name,'status',r.status_code,'type',ctype,'size',len(r.content),flush=True)
+              if name.startswith('DBNOMICS') and r.ok:
+                d=r.json();docs=d.get('series',{}).get('docs',[])
+                print('  docs',len(docs),'obs',len(docs[0].get('period',[])) if docs else 0,flush=True)
+              elif r.ok:
+                print('  header',repr(r.text[:120]),flush=True)
+            except Exception as e:
+              print(name,'unavailable',type(e).__name__,str(e)[:130],flush=True)
+          PY

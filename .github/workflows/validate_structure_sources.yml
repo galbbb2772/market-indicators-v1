@@ -1,0 +1,89 @@
+# Oct 2025 CPS unemployment was not collected (not an interpolatable data gap).
+# See https://www.bls.gov/cps/methods/2025-federal-government-shutdown-impact-cps.htm
+name: Validate Structure Source Bootstrap
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - structure_core.py
+      - build_structure_lab.py
+      - macro_sources.py
+      - macro_integrity.py
+      - official_indpro.py
+      - structure_resilient.py
+      - cycle_research.py
+      - docs/cycle-lab.html
+      - patch_structure_cycle_nav.py
+      - tests/test_structure_core.py
+      - tests/test_macro_sources.py
+      - tests/test_official_indpro.py
+      - tests/test_bls_recent_backfill.py
+      - tests/test_cycle_research.py
+      - .github/workflows/validate_structure_sources.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - name: Validate source adapters and causal research invariants
+        run: python -m unittest discover -s tests -v
+      - name: Verify research page navigation patch is idempotent
+        run: |
+          python patch_structure_cycle_nav.py
+          python patch_structure_cycle_nav.py
+          grep -q '周期性与预测能力图表' docs/structure-lab.html
+      - name: Real-source audit for US Treasury, Fed G17, BLS observed history (NO publication)
+        run: |
+          python - <<'PY'
+          import build_structure_lab as lab
+          import structure_resilient as resilient
+          lab.SYMBOLS={k:lab.SYMBOLS[k] for k in ('SPY','XLK','^GSPC')}
+          out=resilient.assemble(prices=True,optional_fred=False)
+          assert 'SPY' in out['instruments'],out['errors']
+          assert len(out['instruments']['SPY']['bars'])>=200
+          assert len(out['instruments']['SPY']['boxes'])>0
+          assert 'XLK' in out['instruments'],out['errors']
+          for k,source in [('T10Y3M','US_TREASURY_DIRECT'),('UNRATE','US_BLS_DIRECT'),
+                           ('INDPRO','FED_G17_DIRECT')]:
+              assert k in out['macro'],out['errors']
+              a=out['macro'][k]
+              assert a['source']==source and len(a['observations'])>=12,out['errors']
+              print('MACRO',k,source,a['start'],a['end'],'n',len(a['observations']),
+                    'status',a['status'],'repairable_missing',a['missing_month_count'],
+                    'official_unavailable',a.get('official_unavailable_months',[]),
+                    'requests',a.get('request_count'),'request_errors',a.get('request_errors',[])[:4],flush=True)
+          bls=out['macro']['UNRATE']
+          assert bls['start']=='1948-01',bls
+          assert bls['end']>='2026-08',('Latest BLS month missing',bls['end'])
+          assert bls['missing_month_count']==0,('Repairable BLS gaps remain',bls['first_missing_month'])
+          assert bls['official_unavailable_months']==['2025-10'],'Oct 2025 must stay absent'
+          assert len(bls['observations'])>=943,'1948-Jan to 2026-Aug = 944 months minus Oct 2025 structural absence'
+          assert '2025-10' not in {r[0] for r in bls['observations']},'NEVER impute uncollected BLS values'
+          assert bls['status']=='refreshed','All observed BLS months must be source-complete'
+          ind=out['macro']['INDPRO']
+          assert ind['start']=='1919-01' and ind['end']>='2026-08',ind
+          assert len(ind['observations'])>=1292,ind
+          assert ind['series_code']=='B50001' and ind['frequency']=='monthly'
+          assert ind['point_in_time'] is False
+          assert ind['missing_month_count']==0 and ind['status']=='refreshed',ind
+          c=out['cycle_research']
+          assert c['status']=='research_only',out['errors']
+          assert c['directional']['5']['n']>0
+          assert 'XLK' in c['sectors']
+          for horizon in ('5','20'):
+              a=c['directional'][horizon]
+              print('WALKFORWARD',horizon,'n',a['n'],'model_brier',a['brier_model'],
+                    'prior_only_baseline_brier',a['brier_base'],
+                    'difference',a['brier_difference'],'skill',a['brier_skill'])
+          print('SPY sessions',len(out['instruments']['SPY']['bars']))
+          print('RESEARCH ONLY: revised vendor history, no public data files, no deployment.')
+          PY
