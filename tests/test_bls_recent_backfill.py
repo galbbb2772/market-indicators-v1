@@ -1,4 +1,4 @@
-"""Offline tests: latest-first BLS, adaptive repair, and documented structural absence."""
+"""Offline tests: latest-first BLS, adaptive repair, documented structural absence."""
 import sys,unittest
 from pathlib import Path
 from unittest.mock import Mock
@@ -65,6 +65,8 @@ class BLSRecentBackfillTests(unittest.TestCase):
         self.assertEqual(combined['status'],'refreshed')
         self.assertEqual(combined['missing_month_count'],0)
         self.assertEqual(combined['official_unavailable_months'],['2025-10'])
-        self.assertEqual(refetch_anchor('UNRATE',combined),'2025-11')
+        # The tiny cache really lacks its 1948-2025 history; anchor must repair
+        # THAT absence rather than chasing the uncollected October 2025 month.
+        self.assertEqual(refetch_anchor('UNRATE',combined),'1948-01')
 
 if __name__=='__main__':unittest.main()
