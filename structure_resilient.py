@@ -1,5 +1,5 @@
-"""Research-only bootstrap: direct Treasury/BLS first; failed feeds preserve cached data.
-No public JSON is written until operator confirms vendor publication permissions.
+"""Research bootstrap: vetted direct official providers, source-safe caching.
+No raw public output before both vendor-rights and deployment-authority reviews.
 """
 from __future__ import annotations
 import argparse,csv,io,json,os,tempfile
@@ -8,12 +8,14 @@ from pathlib import Path
 import requests
 import build_structure_lab as lab
 from macro_sources import treasury_spread,bls_unrate
+from macro_integrity import merge_same_source,refetch_anchor,SOURCE_BY_KEY
 from cycle_research import cycle_report
 
 ROOT=Path(__file__).resolve().parent
 TARGET=ROOT/'docs/data/structure_lab.json'
 FULL_MACRO=lab.MACRO.copy()
 DIRECT={'T10Y3M':treasury_spread,'UNRATE':bls_unrate}
+EXPECTED_START={'T10Y3M':'1990-01','UNRATE':'1948-01'}
 
 
 def _previous():
@@ -23,7 +25,7 @@ def _previous():
 
 def assemble(prices=True,existing=None,optional_fred=False):
     prior=existing if existing is not None else _previous()
-    # Old remote FRED endpoint cannot block primary direct-source research.
+    # The old FRED endpoint is NEVER mandatory or allowed to block direct sources.
     lab.MACRO={}
     if prices:
         out=lab.build(prior)
@@ -36,21 +38,27 @@ def assemble(prices=True,existing=None,optional_fred=False):
     session=requests.Session()
     session.headers.update({'User-Agent':'MarketStructureLab/1.0 (research)'})
     for key,download in DIRECT.items():
-        prev_rows=out['macro'].get(key,{}).get('observations') or []
-        last_month=prev_rows[-1][0] if prev_rows else None
+        previous=out['macro'].get(key,{})
+        last_month=refetch_anchor(key,previous)
         try:
             source=download(session,last_month=last_month)
-            combined={month:value for month,value in prev_rows}
-            combined.update({month:value for month,value in source['observations']})
-            history=[[month,combined[month]] for month in sorted(combined)]
-            label='（US Treasury par-yield proxy）' if key=='T10Y3M' else '（US BLS direct）'
-            out['macro'][key]={'name':FULL_MACRO[key]+label,**source,
-                'observations':history,'start':history[0][0],'end':history[-1][0],
-                'status':'partial' if source['failed_years'] else 'refreshed'}
-            print('DIRECT',key,source['source'],len(history),source['completeness'],flush=True)
+            # Never combine a legacy FRED T10Y3M with Treasury par yield proxy;
+            # similarly do not silently combine unknown-cache UNRATE with BLS.
+            merged=merge_same_source(key,previous,source,EXPECTED_START[key])
+            label='（US Treasury par-yield PROXY, not FRED T10Y3M）' if key=='T10Y3M' else '（US BLS direct）'
+            out['macro'][key]={'name':FULL_MACRO[key]+label,**merged}
+            out['errors'].pop(key,None)
+            print('DIRECT',key,source['source'],len(merged['observations']),
+                  merged['status'],'missing_months',merged['missing_month_count'],
+                  'discarded_incompatible_old_cache',merged['source_mismatch_old_cache_discarded'],flush=True)
         except Exception as exc:
             out['errors'][key]=type(exc).__name__+': '+str(exc)[:140]
-            if key in out['macro']:out['macro'][key]['status']='stale_cached'
+            if previous.get('source')==SOURCE_BY_KEY[key] and previous.get('observations'):
+                out['macro'][key]['status']='stale_cached'
+            else:
+                # The old series of the same ID from a different vendor is NOT
+                # a valid fallback for the differently defined direct source.
+                out['macro'].pop(key,None)
             print('DIRECT UNAVAILABLE',key,out['errors'][key],flush=True)
     for key in FULL_MACRO:
         if key in DIRECT:continue
@@ -59,7 +67,8 @@ def assemble(prices=True,existing=None,optional_fred=False):
                 out['errors'][key]='Direct official provider unverified; no synthetic series'
             continue
         try:
-            # Private research optional backup: rights/vintage audit BEFORE public use.
+            # PRIVATE research only: vendor rights, exact definitions and
+            # vintage dates MUST be reviewed before publication or forecast use.
             r=session.get(f'https://fred.stlouisfed.org/graph/fredgraph.csv?id={key}',timeout=7)
             r.raise_for_status();monthly={}
             for row in csv.DictReader(io.StringIO(r.text)):
@@ -73,10 +82,9 @@ def assemble(prices=True,existing=None,optional_fred=False):
         except Exception as exc:
             out['errors'][key]=type(exc).__name__+': '+str(exc)[:140]
             if key in out['macro']:out['macro'][key]['status']='stale_cached'
-    out['policy']['macro']='Direct Treasury par-yield proxy and BLS unemployment; revised, not publication-time data'
-    out['policy']['publication_gate']='No redistribution of Yahoo OHLCV or uncertain-license macro history without rights audit'
+    out['policy']['macro']='Treasury par-yield spread PROXY and BLS direct unemployment; revised, not publication-time data; source-safe cache and missing-month audit'
+    out['policy']['publication_gate']='No raw/vendor-history redistribution or new-site deployment without vendor-rights audit and explicit owner authorization'
     try:
-        # Purely derived, from real source observations available in memory.
         out['cycle_research']=cycle_report(out['instruments'],out.get('news_tension') or [])
     except Exception as exc:
         out['errors']['cycle_research']=type(exc).__name__+': '+str(exc)[:140]
@@ -93,8 +101,9 @@ def main():
         print('PROBE ONLY', {k:(v.get('start'),v.get('end'),v.get('status')) for k,v in out['macro'].items()})
         print('CYCLE STATUS',out['cycle_research'].get('status'))
         return
-    if os.getenv('STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED')!='true':
-        print('Publication gated: no public JSON file written.')
+    if (os.getenv('STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED')!='true' or
+        os.getenv('STRUCTURE_DEPLOY_AUTHORIZED')!='true'):
+        print('Publication gated: explicit data-rights AND owner website authorization required. No public JSON written.')
         return
     TARGET.parent.mkdir(exist_ok=True,parents=True)
     with tempfile.NamedTemporaryFile('w',encoding='utf-8',dir=TARGET.parent,delete=False) as f:
@@ -102,4 +111,4 @@ def main():
     os.replace(temp,TARGET)
     print('Updated approved public research dataset:',TARGET)
 
-if __name__=='__main__': main()
+if __name__=='__main__':main()
