@@ -1,13 +1,15 @@
-"""Source-safe historical macro integrity; never mix same-named, differently defined series.
+"""Source-safe historical macro integrity; never mix differently defined series.
 
-The US BLS confirms there is NO CPS unemployment observation for 2025-10:
+US BLS confirms no CPS unemployment observation exists for 2025-10:
 https://www.bls.gov/cps/methods/2025-federal-government-shutdown-impact-cps.htm
-That month is recorded as an official structural absence, NEVER imputed.
+Only this documented structural absence is exempt from the monthly gap audit.
 """
 from __future__ import annotations
 
-SOURCE_BY_KEY={'T10Y3M':'US_TREASURY_DIRECT','UNRATE':'US_BLS_DIRECT'}
-KNOWN_UNAVAILABLE_BY_KEY={'UNRATE':{'2025-10'},'T10Y3M':set()}
+SOURCE_BY_KEY={'T10Y3M':'US_TREASURY_DIRECT','UNRATE':'US_BLS_DIRECT',
+               'INDPRO':'FED_G17_DIRECT'}
+KNOWN_UNAVAILABLE_BY_KEY={'UNRATE':{'2025-10'},'T10Y3M':set(),
+                          'INDPRO':set()}
 BLS_ABSENCE_URL='https://www.bls.gov/cps/methods/2025-federal-government-shutdown-impact-cps.htm'
 
 
@@ -28,9 +30,7 @@ def _months_inclusive(start:str,end:str)->list[str]:
 
 def missing_internal_months(rows:list[list],first_month:str|None=None,
                             exclude_months=None)->list[str]:
-    """Report holes through last observed month, excluding explicitly proven
-    structural absences ONLY when called with the exact source's exclusion set.
-    """
+    """Report holes through last observed month; exempt only proved source absences."""
     if not rows:return []
     values={str(m)[:7] for m,_ in rows}
     start=first_month or min(values)
@@ -60,7 +60,7 @@ def refetch_anchor(key:str,previous:dict)->str|None:
     if not source_compatible(key,previous):return None
     rows=previous.get('observations') or []
     if not rows:return None
-    first_expected={'T10Y3M':'1990-01','UNRATE':'1948-01'}[key]
+    first_expected={'T10Y3M':'1990-01','UNRATE':'1948-01','INDPRO':'1919-01'}[key]
     gaps=missing_internal_months(rows,first_month=first_expected,
                                 exclude_months=KNOWN_UNAVAILABLE_BY_KEY.get(key,set()))
     return gaps[0] if gaps else rows[-1][0]
