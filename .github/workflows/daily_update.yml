@@ -10,9 +10,12 @@ on:
       - history_builder.py
       - build_structure_lab.py
       - macro_sources.py
+      - macro_integrity.py
       - structure_resilient.py
+      - cycle_research.py
       - structure_core.py
       - patch_structure_nav.py
+      - patch_structure_cycle_nav.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
@@ -35,8 +38,10 @@ on:
       - requirements.txt
       - docs/index.html
       - docs/structure-lab.html
+      - docs/cycle-lab.html
       - tests/test_structure_core.py
       - tests/test_macro_sources.py
+      - tests/test_cycle_research.py
       - .github/workflows/daily_update.yml
   schedule:
     - cron: '30 22 * * *'
@@ -64,7 +69,7 @@ jobs:
           cache: 'pip'
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Verify causal structure and direct-provider adapters
+      - name: Verify causal structure, research clock and direct macro provider adapters
         run: python -m unittest discover -s tests -v
       - name: Refresh indicators and run ablation
         run: python run_ablation_resilient.py
@@ -88,27 +93,39 @@ jobs:
         run: python patch_news_ui_v2.py
       - name: Build News Signal V1.4
         run: python patch_news_signal.py
-      - name: Build and publish Structure Lab only AFTER separate data-rights approval
-        if: vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED == 'true'
+      - name: Build new research ONLY after vendor rights AND explicit owner website approval
+        if: vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED == 'true' && vars.STRUCTURE_DEPLOY_AUTHORIZED == 'true'
         env:
           STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED: 'true'
+          STRUCTURE_DEPLOY_AUTHORIZED: 'true'
         run: python structure_resilient.py
         continue-on-error: true
-      - name: Link separate structure research page
-        run: python patch_structure_nav.py
-      - name: Commit refreshed dashboard
+      - name: Link approved structure and cycle pages
+        if: vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED == 'true' && vars.STRUCTURE_DEPLOY_AUTHORIZED == 'true'
+        run: |
+          python patch_structure_nav.py
+          python patch_structure_cycle_nav.py
+      - name: Commit refreshed dashboard, retaining approval gate
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/index.html
-          if test -f docs/data/structure_lab.json && test "${{ vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED }}" = 'true'; then git add docs/data/structure_lab.json; fi
+          if test "${{ vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED }}" = 'true' && test "${{ vars.STRUCTURE_DEPLOY_AUTHORIZED }}" = 'true'; then
+            if test -f docs/data/structure_lab.json; then git add docs/data/structure_lab.json; fi
+            git add docs/structure-lab.html docs/cycle-lab.html
+          fi
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
-            git commit -m "chore: refresh market indicators, news and approved structure research"
+            git commit -m "chore: refresh indicators and explicitly authorized research"
             git pull --rebase origin main
             git push
           fi
+      - name: Exclude unapproved research pages from GitHub Pages artifact
+        if: vars.STRUCTURE_PUBLIC_DATA_LICENSES_APPROVED != 'true' || vars.STRUCTURE_DEPLOY_AUTHORIZED != 'true'
+        run: |
+          rm -f docs/structure-lab.html docs/cycle-lab.html docs/data/structure_lab.json
+          echo "Research page deployment disabled; existing approved dashboard preserved."
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
