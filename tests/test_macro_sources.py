@@ -3,7 +3,7 @@ from pathlib import Path
 from unittest.mock import Mock
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from macro_sources import _month_rows,treasury_spread,bls_unrate
-from macro_integrity import (source_compatible,missing_internal_months,merge_same_source,refetch_anchor)
+from macro_integrity import source_compatible,missing_internal_months,merge_same_source,refetch_anchor
 
 class MacroSourcesTests(unittest.TestCase):
     def test_last_real_daily_monthly_sample(self):
@@ -55,13 +55,14 @@ class MacroSourcesTests(unittest.TestCase):
         calls=[]
         def get(url,params,timeout):
             calls.append((params['startyear'],params['endyear']))
-            if params['endyear']-params['startyear']>=9:raise requests.Timeout('failed whole decade')
+            if params['endyear']-params['startyear']>=9:raise requests.Timeout('whole decade unavailable')
             y=params['startyear']
             return Mock(json=lambda:{'status':'REQUEST_SUCCEEDED','Results':{'series':[{'data':[
                 {'year':str(y),'period':'M01','value':'4.0'}]}]}})
         out=bls_unrate(Mock(get=get),last_month=None,first_year=2000,current_year=2009)
         self.assertEqual(calls,[(2000,2009),(2000,2004),(2005,2009)])
         self.assertEqual(len(out['observations']),2)
-        self.assertEqual(out['completeness'],'full_requested_range')
+        # A successful HTTP response isn't the same as complete month coverage.
+        self.assertEqual(out['completeness'],'partial_month_coverage')
 
 if __name__=='__main__':unittest.main()
