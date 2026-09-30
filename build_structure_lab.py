@@ -37,25 +37,28 @@ SYMBOLS = {
     'XLU': ('Utilities', 'sector'), 'XLV': ('Healthcare', 'sector'),
     'XLY': ('Consumer Discretionary', 'sector'),
 }
-# Historical macro values may have been revised; observation dates are NOT ALFRED vintages.
+# Revised observation-history data. NOT as-published ALFRED vintages.
+# Use official Fed SLOOS DRTSCILM as credit-tightness context. Do not redistribute
+# proprietary Moody's spread series or treat monthly/quarterly data as daily.
 MACRO = {
     'T10Y3M': '10年-3个月国债期限利差',
     'UNRATE': '失业率',
     'INDPRO': '工业生产指数',
     'PERMIT': '新屋许可数量',
-    'BAA10YM': 'BAA公司债相对10年国债利差',
+    'DRTSCILM': '美联储：大中企业工商贷款标准收紧比例（季度）',
     'NFCI': '芝加哥联储金融状况指数',
 }
 
 
 def get_json(url: str) -> dict:
     error = None
-    for host in (url, url.replace('query1.finance.yahoo.com', 'query2.finance.yahoo.com')):
-        for wait in (0, 2, 5):
+    variants = [url, url.replace('query1.finance.yahoo.com', 'query2.finance.yahoo.com')]
+    for host in variants:
+        for wait in (0, 2):
             if wait:
                 time.sleep(wait)
             try:
-                r = S.get(host, timeout=25)
+                r = S.get(host, timeout=12)
                 if r.ok:
                     return r.json()
                 error = f'HTTP {r.status_code}'
@@ -96,6 +99,8 @@ def merge_bars(previous: list[list], newer: list[list]) -> list[list]:
 
 
 def macro_monthly(series_id: str) -> list[list]:
+    # Month-keyed display. For a quarterly source, quarters remain separate
+    # three-month-spaced observations and are NOT forward-filled.
     url = f'https://fred.stlouisfed.org/graph/fredgraph.csv?id={quote(series_id)}&cosd=1900-01-01'
     r = S.get(url, timeout=22)
     r.raise_for_status()
@@ -124,8 +129,15 @@ def build(existing: dict | None = None) -> dict:
         prev = validate_bars(old.get('bars') or [])
         since = (pd.Timestamp(prev[-1][0]) - pd.Timedelta(days=150)).date().isoformat() if prev else None
         try:
-            bars = merge_bars(prev, yahoo_bars(sym, since))
-            source_status = 'refreshed'
+            fresh = yahoo_bars(sym, since)
+            if not fresh:
+                raise RuntimeError('Vendor returned no valid price bars')
+            bars = merge_bars(prev, fresh)
+            if prev and fresh[-1][0] < prev[-1][0]:
+                errors[sym] = 'Vendor latest price older than cached price'
+                source_status = 'stale_cached'
+            else:
+                source_status = 'refreshed'
         except Exception as exc:
             errors[sym] = repr(exc)
             bars, source_status = prev, 'stale_cached' if prev else 'unavailable'
@@ -143,7 +155,7 @@ def build(existing: dict | None = None) -> dict:
 
     if not instruments:
         raise RuntimeError('No historical prices available; old public dataset not overwritten.')
-    macro = existing.get('macro') or {}
+    macro = {k: v for k, v in (existing.get('macro') or {}).items() if k in MACRO}
     for series_id, name in MACRO.items():
         try:
             history = macro_monthly(series_id)
@@ -170,7 +182,7 @@ def build(existing: dict | None = None) -> dict:
                    'box_scores': 'provisional descriptive 0-10; historical finalized scores are EX POST',
                    'news': 'equal-weight reaction_adjusted components from recorded news_history only',
                    'activity': 'current ETF dollar volume and high-low percent ranked vs prior 60 trading days',
-                   'macro': 'latest/revised FRED monthly observations; publication vintages not captured',
+                   'macro': 'revised FRED monthly and quarterly month-keyed observations; publication vintages not captured',
                    'universe': 'benchmarks and sector ETFs only; NOT all US stocks; no delisted-stock coverage'},
         'instruments': instruments,
         'macro': macro,
