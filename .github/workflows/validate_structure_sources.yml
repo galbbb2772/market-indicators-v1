@@ -1,4 +1,5 @@
 name: Validate Structure Source Bootstrap
+
 on:
   pull_request:
     branches: [main]
@@ -13,6 +14,7 @@ on:
       - patch_structure_cycle_nav.py
       - tests/test_structure_core.py
       - tests/test_macro_sources.py
+      - tests/test_bls_recent_backfill.py
       - tests/test_cycle_research.py
       - .github/workflows/validate_structure_sources.yml
   workflow_dispatch:
@@ -28,14 +30,14 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt
-      - name: Validate direct providers, causal clock, and strict source-safe caching
+      - name: Validate source adapters and causal research invariants
         run: python -m unittest discover -s tests -v
       - name: Verify research page navigation patch is idempotent
         run: |
           python patch_structure_cycle_nav.py
           python patch_structure_cycle_nav.py
           grep -q '周期性与预测能力图表' docs/structure-lab.html
-      - name: Dry-run REAL source and print AGGREGATED descriptive research numbers only
+      - name: Dry-run REAL sources and audit latest BLS monthly coverage (NO raw publication)
         run: |
           python - <<'PY'
           import build_structure_lab as lab
@@ -51,7 +53,13 @@ jobs:
               a=out['macro'][k]
               assert a['source']==source and len(a['observations'])>=12,out['errors']
               print('MACRO',k,source,a['start'],a['end'],'n',len(a['observations']),
-                    'status',a['status'],'missing_history_months',a['missing_month_count'])
+                    'status',a['status'],'missing_history_months',a['missing_month_count'],
+                    'requests',a.get('request_count'),'failed_segments',a.get('request_errors',[])[:4],flush=True)
+          bls=out['macro']['UNRATE']
+          assert bls['start']=='1948-01',bls
+          assert bls['end']>='2026-08',('Latest BLS month missing',bls['end'])
+          assert bls['missing_month_count']==0,('Historical BLS gaps',bls['first_missing_month'])
+          assert len(bls['observations'])>=944,'BLS Jan1948-Aug2026 coverage incomplete'
           c=out['cycle_research']
           assert c['status']=='research_only',out['errors']
           assert c['directional']['5']['n']>0
@@ -64,5 +72,5 @@ jobs:
           s=c['sectors']['XLK']
           print('XLK RELATIVE AUTOCORRELATION',s['weeks'],s['lags'])
           print('VERIFIED PRICE SPY sessions',len(out['instruments']['SPY']['bars']))
-          print('RESEARCH ONLY; observations are revised vendor history. NO files written or publicly deployed.')
+          print('RESEARCH ONLY; all observations are revised vendor history. NO files written or publicly deployed.')
           PY
