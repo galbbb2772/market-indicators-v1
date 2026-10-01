@@ -11,6 +11,7 @@ on:
       - history_builder.py
       - sentiment_history.py
       - patch_sentiment_tab.py
+      - patch_sentiment_series_filter.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
@@ -104,6 +105,9 @@ jobs:
 
       - name: Install sentiment dashboard navigation
         run: python patch_sentiment_tab.py
+
+      - name: Install sentiment chart series filters
+        run: python patch_sentiment_series_filter.py
 
       - name: Commit refreshed dashboard
         run: |
