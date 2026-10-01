@@ -7,6 +7,7 @@ on:
     paths:
       - sentiment_history.py
       - patch_sentiment_tab.py
+      - patch_sentiment_series_filter.py
       - docs/sentiment.html
       - .github/workflows/sentiment_refresh.yml
 
@@ -43,6 +44,9 @@ jobs:
 
       - name: Install sentiment dashboard navigation
         run: python patch_sentiment_tab.py
+
+      - name: Install sentiment chart series filters
+        run: python patch_sentiment_series_filter.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
