@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Market Regime Lab · 情绪周期</title>
+<style>
+:root{--bg:#07101f;--p:#0f1b2f;--line:#233b5e;--t:#eef5ff;--m:#91a8ca;--g:#61dfb2;--r:#ff738b;--y:#ffc95c;--b:#79a9ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#132c51 0,#07101f 38%);color:var(--t);font-family:Inter,system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1360px;margin:auto;padding:18px}.head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.title{margin:0;font-size:clamp(27px,5vw,40px);font-weight:850}.sub,.note,.tiny{color:var(--m);line-height:1.6}.sub{margin-top:8px}.note{font-size:12px}.tiny{font-size:10px}.tabs,.controls,.legend{display:flex;gap:8px;flex-wrap:wrap}.tabs{margin:18px 0 12px}.tab,.controls button,.controls select,.controls input{border:1px solid var(--line);background:#0b1729;color:var(--t);padding:10px 12px;border-radius:11px}.tab{text-decoration:none;color:#eef5ff;font-weight:700}.badge,.pill{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#0a1628;color:#bad0f2;font-size:11px;white-space:nowrap}.hero,.panel{background:rgba(15,27,47,.95);border:1px solid var(--line);border-radius:16px;padding:15px;margin:12px 0}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}.sum{background:#0d192b;border:1px solid var(--line);border-radius:14px;padding:13px}.sum small{display:block;color:var(--m)}.sum b{font-size:28px}.pos{color:var(--g)}.neg{color:var(--r)}.flat{color:#d7e0ef}.controls{margin:12px 0;align-items:end}.controls label{font-size:10px;color:var(--m)}.legend{font-size:11px;color:var(--m);margin:8px 0 4px}.legend span::before{content:"";display:inline-block;width:16px;height:3px;background:var(--c);margin-right:6px;vertical-align:middle}.canvasWrap{position:relative}.canvasWrap canvas{width:100%;height:390px;display:block;touch-action:none}.hover{min-height:24px;font-size:12px;color:#dbe9ff;margin-top:8px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:12px 0}.stat{background:#0a1527;border:1px solid #1c304d;border-radius:12px;padding:10px}.stat small{display:block;color:var(--m);font-size:10px}.stat b{font-size:16px}.cycleGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.cycle{background:#0a1527;border:1px solid #1c304d;border-radius:12px;padding:12px}.cycle h4{margin:0 0 7px}.euphoriaBar{height:12px;border-radius:999px;background:linear-gradient(90deg,#274a70 0 30%,#59616f 30% 60%,#997426 60% 80%,#883744 80% 100%);position:relative;margin:12px 0}.euphoriaDot{position:absolute;top:-5px;width:4px;height:22px;background:#fff;border-radius:3px;box-shadow:0 0 10px #fff}.method{border-top:1px solid #1c304d;margin-top:10px;padding-top:10px}.empty{padding:20px;color:var(--m)}
+@media(max-width:900px){.summary,.stats{grid-template-columns:1fr 1fr}.cycleGrid{grid-template-columns:1fr 1fr}}@media(max-width:620px){.summary,.stats,.cycleGrid{grid-template-columns:1fr}.head{display:block}.badge{display:inline-block;margin-top:10px}.canvasWrap canvas{height:320px}}
+</style>
+</head>
+<body><main class="wrap">
+<div class="head"><div><h1 class="title">市场情绪周期 / 狂热度</h1><div class="sub">Market Regime Lab 同站模块 · 历史情绪、价格背离、市场狂热程度。历史值按现有指标公式重建，并尽量拉到数据源最早可用区间。</div></div><div class="badge" id="updated">读取中…</div></div>
+<div class="tabs"><a class="tab" href="./">← 市场综合</a><a class="tab" href="#history">历史情绪周期</a><a class="tab" href="#divergence">情绪 / 价格背离</a><a class="tab" href="#euphoria">市场狂热程度</a></div>
+
+<section id="history" class="hero">
+<div class="tiny">当前历史情绪</div>
+<div class="summary" id="latestCards"><div class="empty">读取中…</div></div>
+<div class="note" id="startNote"></div>
+</section>
+
+<section class="panel">
+<h3>① 市场情绪历史周期</h3>
+<div class="note">乐观度、悲观度、总负面压力与狂热度均为 0–100。可以任意选择起止日期；日 / 周 / 月只改变显示粒度，不改变底层历史。</div>
+<div class="controls">
+<label>开始日期<br><input id="histStart" type="date" onchange="renderHistory()"></label>
+<label>结束日期<br><input id="histEnd" type="date" onchange="renderHistory()"></label>
+<label>显示粒度<br><select id="histGran" onchange="renderHistory()"><option value="day">日</option><option value="week">周</option><option value="month">月</option></select></label>
+<button onclick="quickHistory('all')">全部</button><button onclick="quickHistory('10y')">10年</button><button onclick="quickHistory('5y')">5年</button><button onclick="quickHistory('3y')">3年</button><button onclick="quickHistory('1y')">1年</button>
+</div>
+<div class="legend"><span style="--c:#61dfb2">乐观度</span><span style="--c:#ff738b">悲观度</span><span style="--c:#ffc95c">总负面</span><span style="--c:#eef5ff">狂热度</span></div>
+<div class="canvasWrap"><canvas id="historyChart"></canvas></div><div class="hover" id="historyHover">移动鼠标 / 触摸曲线查看日期。</div>
+<div class="stats" id="historyStats"></div>
+</section>
+
+<section id="divergence" class="panel">
+<h3>② 情绪与价格背离</h3>
+<div class="note">负面指标会先转换为“风险偏好方向”（100 − 悲观/总负面）再与指数比较。风险偏好走弱但指数上涨 = 顶部风险背离；风险偏好改善但指数下跌 = 底部修复背离。它是观察信号，不是顶部/底部确认。</div>
+<div class="controls">
+<label>情绪序列<br><select id="divSent" onchange="renderDivergence()"><option value="optimism">乐观度</option><option value="pessimism">悲观度</option><option value="total_negative">总负面</option><option value="euphoria" selected>狂热度</option></select></label>
+<label>指数<br><select id="divIndex" onchange="renderDivergence()"><option value="sp500">S&amp;P 500</option><option value="nasdaq">Nasdaq Composite</option><option value="dow">Dow Jones</option></select></label>
+<label>观察窗口<br><select id="divWindow" onchange="renderDivergence()"><option value="5">5D</option><option value="10">10D</option><option value="20" selected>20D</option><option value="60">60D</option></select></label>
+<label>开始日期<br><input id="divStart" type="date" onchange="renderDivergence()"></label>
+<label>结束日期<br><input id="divEnd" type="date" onchange="renderDivergence()"></label>
+</div>
+<div class="stats" id="divStats"></div>
+<div class="legend"><span style="--c:#eef5ff">情绪风险偏好变化</span><span style="--c:#79a9ff">指数同期涨跌 %</span></div>
+<div class="canvasWrap"><canvas id="divChart"></canvas></div><div class="hover" id="divHover">移动鼠标 / 触摸曲线查看背离状态。</div>
+</section>
+
+<section id="euphoria" class="panel">
+<h3>③ 市场狂热程度 / Euphoria</h3>
+<div class="summary" id="euphoriaCards"></div>
+<div class="euphoriaBar"><i class="euphoriaDot" id="euphoriaDot" style="left:0%"></i></div>
+<div class="tiny">0–30 低迷 · 30–60 中性 · 60–80 乐观 · 80–100 狂热</div>
+<div class="cycleGrid" id="cycleGrid"></div>
+<div class="note method" id="methodNote"></div>
+</section>
+</main>
+<script>
+let DATA={daily:[]},HIST_POINTS=[],DIV_POINTS=[];
+const $=s=>document.querySelector(s),fmt=n=>n==null||!Number.isFinite(Number(n))?'—':(Math.round(Number(n)*100)/100).toFixed(2),pct=n=>n==null||!Number.isFinite(Number(n))?'—':(n>0?'+':'')+fmt(n)+'%',cls=n=>n==null?'flat':n>0?'pos':n<0?'neg':'flat';
+const labels={optimism:'乐观度',pessimism:'悲观度',total_negative:'总负面',euphoria:'狂热度'},idxLabels={sp500:'S&P 500',nasdaq:'Nasdaq',dow:'Dow Jones'};
+function mean(a){const v=a.filter(Number.isFinite);return v.length?v.reduce((s,x)=>s+x,0)/v.length:null}function std(a){const v=a.filter(Number.isFinite),m=mean(v);return v.length>1?Math.sqrt(v.reduce((s,x)=>s+(x-m)*(x-m),0)/(v.length-1)):null}
+function percentile(a,x){const v=a.filter(Number.isFinite).sort((a,b)=>a-b);if(!v.length||!Number.isFinite(x))return null;return 100*v.filter(z=>z<=x).length/v.length}
+function dateShift(date,years){const d=new Date(date+'T00:00:00Z');d.setUTCFullYear(d.getUTCFullYear()-years);return d.toISOString().slice(0,10)}
+function resample(rows,g){if(g==='day')return rows;const m=new Map();rows.forEach(r=>{let k;if(g==='month')k=r.date.slice(0,7);else{const d=new Date(r.date+'T00:00:00Z'),dow=(d.getUTCDay()+6)%7;d.setUTCDate(d.getUTCDate()-dow);k=d.toISOString().slice(0,10)}m.set(k,r)});return [...m.values()]}
+function line(ctx,pts,key,color,y,width=3){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();let on=false;pts.forEach(p=>{const v=p[key];if(!Number.isFinite(v)){on=false;return}if(on)ctx.lineTo(p.x,y(v));else{ctx.moveTo(p.x,y(v));on=true}});ctx.stroke()}
+function setupCanvas(id){const c=$(id),w=c.width=Math.max(760,c.clientWidth*2),h=c.height=Math.max(640,c.clientHeight*2);return {c,ctx:c.getContext('2d'),w,h}}
+function renderLatest(){const x=DATA.latest||{},starts=DATA.meta?.series_start||{},root=$('#latestCards');root.innerHTML='';[['optimism','🟢 乐观度'],['pessimism','🔴 悲观度'],['total_negative','🟠 总负面压力'],['euphoria','⚪ 狂热度']].forEach(([k,n])=>{const d=document.createElement('div');d.className='sum';d.innerHTML='<small>'+n+'</small><b>'+fmt(x[k])+'</b><div class="tiny">历史起点 '+(starts[k]||'—')+'</div>';root.appendChild(d)});$('#startNote').textContent='历史起点按每条序列实际可用数据决定，不强行截成同一天。当前数据截至 '+(x.date||'—')+'。'}
+function historyRows(){return (DATA.daily||[]).filter(r=>r.date>=$('#histStart').value&&r.date<=$('#histEnd').value)}
+function quickHistory(t){const a=DATA.daily||[];if(!a.length)return;const end=a[a.length-1].date;$('#histEnd').value=end;$('#histStart').value=t==='all'?a[0].date:dateShift(end,Number(t.replace('y','')));renderHistory()}
+function renderHistory(){let rows=historyRows();rows=resample(rows,$('#histGran').value);const {c,ctx,w,h}=setupCanvas('#historyChart');ctx.clearRect(0,0,w,h);if(rows.length<2){ctx.fillStyle='#91a8ca';ctx.fillText('所选区间数据不足',30,40);return}const pad={l:58,r:28,t:22,b:38},pw=w-pad.l-pad.r,ph=h-pad.t-pad.b,x=i=>pad.l+i/(rows.length-1)*pw,y=v=>pad.t+(100-v)/100*ph;ctx.font='20px system-ui';[0,20,30,50,60,80,100].forEach(v=>{ctx.fillStyle='#728aaa';ctx.fillText(v,8,y(v)+6);ctx.strokeStyle=v===80?'#62333f':'#20344f';ctx.beginPath();ctx.moveTo(pad.l,y(v));ctx.lineTo(w-pad.r,y(v));ctx.stroke()});const pts=rows.map((r,i)=>({...r,x:x(i)}));line(ctx,pts,'optimism','#61dfb2',y,3);line(ctx,pts,'pessimism','#ff738b',y,3);line(ctx,pts,'total_negative','#ffc95c',y,3);line(ctx,pts,'euphoria','#eef5ff',y,4);ctx.fillStyle='#728aaa';for(let i=0;i<=5;i++){const j=Math.min(rows.length-1,Math.round(i*(rows.length-1)/5));ctx.fillText(rows[j].date,Math.max(0,pts[j].x-46),h-10)}HIST_POINTS=pts;const s=$('#historyStats');s.innerHTML='';[['乐观均值',mean(rows.map(r=>r.optimism))],['悲观均值',mean(rows.map(r=>r.pessimism))],['总负面均值',mean(rows.map(r=>r.total_negative))],['狂热均值',mean(rows.map(r=>r.euphoria))],['狂热≥80天数',rows.filter(r=>Number(r.euphoria)>=80).length]].forEach(([n,v])=>{const d=document.createElement('div');d.className='stat';d.innerHTML='<small>'+n+'</small><b>'+fmt(v)+'</b>';s.appendChild(d)})}
+function historyPointer(ev){if(!HIST_POINTS.length)return;const c=$('#historyChart'),r=c.getBoundingClientRect(),px=((ev.touches?ev.touches[0].clientX:ev.clientX)-r.left)*c.width/r.width;let best=HIST_POINTS[0],dist=Infinity;HIST_POINTS.forEach(p=>{const d=Math.abs(p.x-px);if(d<dist){dist=d;best=p}});$('#historyHover').textContent=best.date+' · 乐观 '+fmt(best.optimism)+' · 悲观 '+fmt(best.pessimism)+' · 总负面 '+fmt(best.total_negative)+' · 狂热 '+fmt(best.euphoria)}
+function riskOn(r,key){const v=Number(r[key]);return key==='pessimism'||key==='total_negative'?100-v:v}
+function buildDiv(){const rows=DATA.daily||[],key=$('#divSent').value,idx=$('#divIndex').value,w=Number($('#divWindow').value),ds=[],rr=[];for(let i=0;i<rows.length;i++){if(i<w){ds.push(null);rr.push(null);continue}const a=riskOn(rows[i],key),b=riskOn(rows[i-w],key),p=Number(rows[i][idx]),q=Number(rows[i-w][idx]);ds.push(Number.isFinite(a)&&Number.isFinite(b)?a-b:null);rr.push(Number.isFinite(p)&&Number.isFinite(q)?(p/q-1)*100:null)}const sdS=std(ds),sdR=std(rr),mags=[];for(let i=0;i<rows.length;i++)if(Number.isFinite(ds[i])&&Number.isFinite(rr[i])&&ds[i]*rr[i]<0&&sdS&&sdR)mags.push(Math.abs(ds[i]/sdS)+Math.abs(rr[i]/sdR));return rows.map((r,i)=>{let state='数据不足',kind='na',strength=null;if(Number.isFinite(ds[i])&&Number.isFinite(rr[i])){if(ds[i]<0&&rr[i]>0){state='顶部风险背离';kind='top'}else if(ds[i]>0&&rr[i]<0){state='底部修复背离';kind='bottom'}else if(ds[i]>=0&&rr[i]>=0){state='上涨确认';kind='up'}else{state='下跌确认';kind='down'}if(ds[i]*rr[i]<0&&sdS&&sdR)strength=percentile(mags,Math.abs(ds[i]/sdS)+Math.abs(rr[i]/sdR));else strength=0}return {...r,sentDelta:ds[i],indexRet:rr[i],divState:state,divKind:kind,divStrength:strength}})}
+function renderDivergence(){let s=buildDiv(),start=$('#divStart').value,end=$('#divEnd').value;s=s.filter(r=>r.date>=start&&r.date<=end);const good=s.filter(r=>Number.isFinite(r.sentDelta)&&Number.isFinite(r.indexRet)),latest=[...good].reverse()[0],stats=$('#divStats');stats.innerHTML='';const cards=latest?[[labels[$('#divSent').value]+' '+$('#divWindow').value+'D方向变化',(latest.sentDelta>0?'+':'')+fmt(latest.sentDelta),cls(latest.sentDelta)],[idxLabels[$('#divIndex').value]+' '+$('#divWindow').value+'D涨跌',pct(latest.indexRet),cls(latest.indexRet)],['当前关系',latest.divState,latest.divKind==='top'?'neg':latest.divKind==='bottom'?'pos':'flat'],['背离强度',fmt(latest.divStrength)+'/100','flat'],['区间背离占比',good.length?fmt(100*good.filter(x=>x.divKind==='top'||x.divKind==='bottom').length/good.length)+'%':'—','flat']]:[];cards.forEach(v=>{const d=document.createElement('div');d.className='stat';d.innerHTML='<small>'+v[0]+'</small><b class="'+v[2]+'">'+v[1]+'</b>';stats.appendChild(d)});const {c,ctx,w,h}=setupCanvas('#divChart');ctx.clearRect(0,0,w,h);if(good.length<2){ctx.fillStyle='#91a8ca';ctx.fillText('所选区间数据不足',30,40);return}const pad={l:62,r:28,t:22,b:38},pw=w-pad.l-pad.r,ph=h-pad.t-pad.b,lim=Math.max(5,Math.ceil(Math.max(...good.flatMap(x=>[Math.abs(x.sentDelta),Math.abs(x.indexRet)]))/5)*5),x=i=>pad.l+i/(good.length-1)*pw,y=v=>pad.t+(lim-v)/(2*lim)*ph;ctx.font='20px system-ui';[-lim,-lim/2,0,lim/2,lim].forEach(v=>{ctx.fillStyle='#728aaa';ctx.fillText(fmt(v),8,y(v)+6);ctx.strokeStyle='#20344f';ctx.beginPath();ctx.moveTo(pad.l,y(v));ctx.lineTo(w-pad.r,y(v));ctx.stroke()});const pts=good.map((r,i)=>({...r,x:x(i)}));line(ctx,pts,'sentDelta','#eef5ff',y,4);line(ctx,pts,'indexRet','#79a9ff',y,3);pts.forEach(p=>{if(p.divKind==='top'||p.divKind==='bottom'){ctx.fillStyle=p.divKind==='top'?'#ff738b':'#61dfb2';ctx.globalAlpha=.18;ctx.fillRect(p.x-2,pad.t,4,ph);ctx.globalAlpha=1}});ctx.fillStyle='#728aaa';for(let i=0;i<=5;i++){const j=Math.min(pts.length-1,Math.round(i*(pts.length-1)/5));ctx.fillText(pts[j].date,Math.max(0,pts[j].x-46),h-10)}DIV_POINTS=pts}
+function divPointer(ev){if(!DIV_POINTS.length)return;const c=$('#divChart'),r=c.getBoundingClientRect(),px=((ev.touches?ev.touches[0].clientX:ev.clientX)-r.left)*c.width/r.width;let best=DIV_POINTS[0],dist=Infinity;DIV_POINTS.forEach(p=>{const d=Math.abs(p.x-px);if(d<dist){dist=d;best=p}});$('#divHover').textContent=best.date+' · 情绪方向变化 '+(best.sentDelta>0?'+':'')+fmt(best.sentDelta)+' · 指数 '+pct(best.indexRet)+' · '+best.divState+' · 强度 '+fmt(best.divStrength)}
+function renderEuphoria(){const x=DATA.latest||{},root=$('#euphoriaCards');root.innerHTML='';[['当前狂热度',fmt(x.euphoria)],['历史分位',fmt(x.euphoria_historical_percentile)+'%'],['当前区间',x.euphoria_band||'—'],['当前区间持续',(DATA.cycle_stats?.current_episode?.trading_days??'—')+' 交易日']].forEach(([n,v])=>{const d=document.createElement('div');d.className='sum';d.innerHTML='<small>'+n+'</small><b>'+v+'</b>';root.appendChild(d)});$('#euphoriaDot').style.left=Math.max(0,Math.min(100,Number(x.euphoria)||0))+'%';const g=$('#cycleGrid');g.innerHTML='';['低迷','中性','乐观','狂热'].forEach(k=>{const z=DATA.cycle_stats?.bands?.[k]||{},d=document.createElement('div');d.className='cycle';d.innerHTML='<h4>'+k+'</h4><div class="tiny">历史段数 '+(z.episodes??'—')+'</div><b>中位 '+(z.median_trading_days??'—')+' 天</b><div class="tiny">IQR '+(z.p25??'—')+'–'+(z.p75??'—')+' · 最长 '+(z.max_trading_days??'—')+' 天</div>';g.appendChild(d)});const f=DATA.meta?.formula||{};$('#methodNote').textContent='狂热度 = '+(f.euphoria||'—')+'。'+(DATA.meta?.warning||'')}
+function init(){const rows=DATA.daily||[];if(!rows.length)return;const first=rows[0].date,last=rows[rows.length-1].date;[['#histStart',first],['#histEnd',last],['#divStart',dateShift(last,3)],['#divEnd',last]].forEach(([id,v])=>{const e=$(id);e.min=first;e.max=last;e.value=v<first?first:v});renderLatest();renderHistory();renderDivergence();renderEuphoria();$('#updated').textContent='更新时间 '+new Date(DATA.generated_at).toLocaleString()}
+$('#historyChart').addEventListener('mousemove',historyPointer);$('#historyChart').addEventListener('touchmove',e=>{historyPointer(e);e.preventDefault()},{passive:false});$('#divChart').addEventListener('mousemove',divPointer);$('#divChart').addEventListener('touchmove',e=>{divPointer(e);e.preventDefault()},{passive:false});window.addEventListener('resize',()=>{renderHistory();renderDivergence()});
+fetch('./data/sentiment_history.json?ts='+Date.now()).then(r=>r.json()).then(d=>{DATA=d;init()}).catch(e=>{$('#latestCards').innerHTML='<div class="empty">读取情绪历史失败：'+e+'</div>'});
+</script>
+</body></html>
