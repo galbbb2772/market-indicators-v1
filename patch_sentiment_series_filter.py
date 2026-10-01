@@ -46,11 +46,14 @@ if 'function syncSeriesBoxes()' not in html:
     html = html.replace(labels_anchor, labels_anchor + '\n' + filter_functions, 1)
 
 lines_old = "line(ctx,pts,'optimism','#61dfb2',y,3);line(ctx,pts,'pessimism','#ff738b',y,3);line(ctx,pts,'total_negative','#ffc95c',y,3);line(ctx,pts,'euphoria','#eef5ff',y,4);"
-lines_new = "const defs=[['optimism','#61dfb2',3],['pessimism','#ff738b',3],['total_negative','#ffc95c',3],['euphoria','#eef5ff',4]],activeCount=Object.values(visibleSeries).filter(Boolean).length;defs.forEach(([key,color,width])=>{if(visibleSeries[key])line(ctx,pts,key,color,y,width+(activeCount===1?2:0))});"
-if 'activeCount=Object.values(visibleSeries)' not in html:
+lines_thick = "const defs=[['optimism','#61dfb2',3],['pessimism','#ff738b',3],['total_negative','#ffc95c',3],['euphoria','#eef5ff',4]],activeCount=Object.values(visibleSeries).filter(Boolean).length;defs.forEach(([key,color,width])=>{if(visibleSeries[key])line(ctx,pts,key,color,y,width+(activeCount===1?2:0))});"
+lines_fixed = "const defs=[['optimism','#61dfb2',3],['pessimism','#ff738b',3],['total_negative','#ffc95c',3],['euphoria','#eef5ff',4]];defs.forEach(([key,color,width])=>{if(visibleSeries[key])line(ctx,pts,key,color,y,width)});"
+if lines_thick in html:
+    html = html.replace(lines_thick, lines_fixed, 1)
+elif lines_fixed not in html:
     if lines_old not in html:
         raise SystemExit("History line anchor not found")
-    html = html.replace(lines_old, lines_new, 1)
+    html = html.replace(lines_old, lines_fixed, 1)
 
 pointer_old = "function historyPointer(ev){if(!HIST_POINTS.length)return;const c=$('#historyChart'),r=c.getBoundingClientRect(),px=((ev.touches?ev.touches[0].clientX:ev.clientX)-r.left)*c.width/r.width;let best=HIST_POINTS[0],dist=Infinity;HIST_POINTS.forEach(p=>{const d=Math.abs(p.x-px);if(d<dist){dist=d;best=p}});$('#historyHover').textContent=best.date+' · 乐观 '+fmt(best.optimism)+' · 悲观 '+fmt(best.pessimism)+' · 总负面 '+fmt(best.total_negative)+' · 狂热 '+fmt(best.euphoria)}"
 pointer_new = "function historyPointer(ev){if(!HIST_POINTS.length)return;const c=$('#historyChart'),r=c.getBoundingClientRect(),px=((ev.touches?ev.touches[0].clientX:ev.clientX)-r.left)*c.width/r.width;let best=HIST_POINTS[0],dist=Infinity;HIST_POINTS.forEach(p=>{const d=Math.abs(p.x-px);if(d<dist){dist=d;best=p}});const parts=[best.date];if(visibleSeries.optimism)parts.push('乐观 '+fmt(best.optimism));if(visibleSeries.pessimism)parts.push('悲观 '+fmt(best.pessimism));if(visibleSeries.total_negative)parts.push('总负面 '+fmt(best.total_negative));if(visibleSeries.euphoria)parts.push('狂热 '+fmt(best.euphoria));$('#historyHover').textContent=parts.join(' · ')}"
