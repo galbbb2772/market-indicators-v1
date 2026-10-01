@@ -9,6 +9,8 @@ on:
       - ablation_runner.py
       - run_ablation_resilient.py
       - history_builder.py
+      - sentiment_history.py
+      - patch_sentiment_tab.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
@@ -30,6 +32,7 @@ on:
       - manual_inputs.json
       - requirements.txt
       - docs/index.html
+      - docs/sentiment.html
       - .github/workflows/daily_update.yml
   schedule:
     - cron: '30 22 * * *'
@@ -69,6 +72,9 @@ jobs:
       - name: Build three-index history
         run: python history_builder.py
 
+      - name: Build sentiment and euphoria history
+        run: python sentiment_history.py
+
       - name: Patch divergence interval and analog model
         run: python patch_divergence_v2.py
 
@@ -96,15 +102,18 @@ jobs:
       - name: Build News Signal V1.4
         run: python patch_news_signal.py
 
+      - name: Install sentiment dashboard navigation
+        run: python patch_sentiment_tab.py
+
       - name: Commit refreshed dashboard
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/index.html
+          git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/data/sentiment_history.json docs/index.html
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
-            git commit -m "chore: refresh indicators, fundamentals, Treasury stress, narratives, news and dashboard"
+            git commit -m "chore: refresh indicators, sentiment, fundamentals, Treasury stress, narratives, news and dashboard"
             git pull --rebase origin main
             git push
           fi
