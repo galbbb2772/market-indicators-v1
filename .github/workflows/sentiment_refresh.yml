@@ -1,5 +1,6 @@
 name: Sentiment History Refresh
 
+# bounded pan/zoom deploy path
 on:
   workflow_dispatch:
   push:
