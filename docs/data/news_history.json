@@ -441,58 +441,58 @@
     },
     {
       "date": "2026-10-01",
-      "generated_at": "2026-10-01T13:18:14.233015+00:00",
+      "generated_at": "2026-10-01T14:21:12.027048+00:00",
       "signals": {
-        "us_policy_event_sentiment": 1.01,
-        "geopolitical_news_risk": 34.75,
-        "systemic_news_risk": 10.14,
-        "ai_narrative_risk": 5.07,
-        "negative_narrative_density": 31.67
+        "us_policy_event_sentiment": 2.81,
+        "geopolitical_news_risk": 33.73,
+        "systemic_news_risk": 9.6,
+        "ai_narrative_risk": 6.58,
+        "negative_narrative_density": 36.89
       },
       "reaction_adjusted": {
-        "us_policy_event_sentiment": 0.63,
-        "geopolitical_news_risk": 21.64,
-        "systemic_news_risk": 6.38,
-        "ai_narrative_risk": 3.15,
-        "negative_narrative_density": 19.83
+        "us_policy_event_sentiment": 2.23,
+        "geopolitical_news_risk": 24.39,
+        "systemic_news_risk": 7.37,
+        "ai_narrative_risk": 5.09,
+        "negative_narrative_density": 29.07
       },
       "market_confirmation": {
-        "us_policy_event_sentiment": 24.8,
-        "geopolitical_news_risk": 24.52,
-        "systemic_news_risk": 25.76,
-        "ai_narrative_risk": 24.07,
-        "negative_narrative_density": 25.22
+        "us_policy_event_sentiment": 58.91,
+        "geopolitical_news_risk": 44.62,
+        "systemic_news_risk": 53.56,
+        "ai_narrative_risk": 54.58,
+        "negative_narrative_density": 57.58
       },
       "market_assets": {
         "vix": {
-          "close": 16.44,
-          "day_pct": 0.612,
-          "five_day_pct": 4.914,
+          "close": 17.57,
+          "day_pct": 7.528,
+          "five_day_pct": 12.125,
           "timestamp": 1790838000,
           "label": "VIX",
           "symbol": "^VIX"
         },
         "oil": {
-          "close": 90.92,
-          "day_pct": 0.553,
-          "five_day_pct": -3.9,
+          "close": 91.47,
+          "day_pct": 1.161,
+          "five_day_pct": -3.319,
           "timestamp": 1790827200,
           "label": "WTI原油",
           "symbol": "CL=F"
         },
         "gold": {
-          "close": 4206.3999,
-          "day_pct": 0.471,
-          "five_day_pct": -2.131,
+          "close": 4188.7998,
+          "day_pct": 0.05,
+          "five_day_pct": -2.541,
           "timestamp": 1790827200,
           "label": "黄金",
           "symbol": "GC=F"
         },
         "spy": {
-          "close": 762.63,
-          "day_pct": -0.205,
-          "five_day_pct": -0.675,
-          "timestamp": 1790775000,
+          "close": 760.72,
+          "day_pct": -0.25,
+          "five_day_pct": -0.842,
+          "timestamp": 1790861400,
           "label": "SPY",
           "symbol": "SPY"
         }
@@ -505,10 +505,10 @@
           "sec_press"
         ],
         "query_mode": "market_context_headline_confirmed",
-        "unique_sources_seen": 54,
-        "article_rows_before_classification": 76,
-        "classified_rows": 71,
-        "events_after_dedupe": 70,
+        "unique_sources_seen": 57,
+        "article_rows_before_classification": 82,
+        "classified_rows": 77,
+        "events_after_dedupe": 76,
         "errors": {}
       }
     }
