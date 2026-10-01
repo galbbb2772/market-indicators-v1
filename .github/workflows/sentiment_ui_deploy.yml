@@ -1,0 +1,53 @@
+name: Sentiment UI Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - patch_sentiment_tab.py
+      - patch_sentiment_series_filter.py
+      - patch_sentiment_panzoom.py
+      - patch_sentiment_index_return.py
+      - docs/sentiment.html
+      - .github/workflows/sentiment_ui_deploy.yml
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: sentiment-ui-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy-ui:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch sentiment UI
+        run: |
+          python3 patch_sentiment_tab.py
+          python3 patch_sentiment_series_filter.py
+          python3 patch_sentiment_panzoom.py
+          python3 patch_sentiment_index_return.py
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
