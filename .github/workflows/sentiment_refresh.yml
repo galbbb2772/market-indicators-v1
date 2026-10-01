@@ -8,6 +8,7 @@ on:
       - sentiment_history.py
       - patch_sentiment_tab.py
       - patch_sentiment_series_filter.py
+      - patch_sentiment_panzoom.py
       - docs/sentiment.html
       - .github/workflows/sentiment_refresh.yml
 
@@ -47,6 +48,9 @@ jobs:
 
       - name: Install sentiment chart series filters
         run: python patch_sentiment_series_filter.py
+
+      - name: Install bounded sentiment chart pan and zoom
+        run: python patch_sentiment_panzoom.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
