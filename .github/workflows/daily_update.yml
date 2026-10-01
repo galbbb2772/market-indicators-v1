@@ -13,6 +13,7 @@ on:
       - patch_sentiment_tab.py
       - patch_sentiment_series_filter.py
       - patch_sentiment_panzoom.py
+      - patch_sentiment_index_return.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
@@ -112,6 +113,9 @@ jobs:
 
       - name: Install bounded sentiment chart pan and zoom
         run: python patch_sentiment_panzoom.py
+
+      - name: Install synchronized index return chart
+        run: python patch_sentiment_index_return.py
 
       - name: Commit refreshed dashboard
         run: |
