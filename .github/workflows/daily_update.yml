@@ -14,6 +14,7 @@ on:
       - patch_sentiment_series_filter.py
       - patch_sentiment_panzoom.py
       - patch_sentiment_index_return.py
+      - patch_sentiment_divergence_panzoom.py
       - patch_divergence_ui.py
       - patch_divergence_v2.py
       - patch_divergence_v2_fix.py
@@ -117,10 +118,13 @@ jobs:
       - name: Install synchronized index return chart
         run: python patch_sentiment_index_return.py
 
+      - name: Install bounded divergence chart pan and zoom
+        run: python patch_sentiment_divergence_panzoom.py
+
       - name: Commit refreshed dashboard
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+galbbb2772@users.noreply.github.com"
           git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/data/sentiment_history.json docs/index.html
           if git diff --cached --quiet; then
             echo "No dashboard changes"
