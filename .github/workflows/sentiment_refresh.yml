@@ -12,6 +12,7 @@ on:
       - patch_sentiment_panzoom.py
       - patch_sentiment_index_return.py
       - patch_sentiment_divergence_panzoom.py
+      - patch_sentiment_performance.py
       - docs/sentiment.html
       - .github/workflows/sentiment_refresh.yml
 
@@ -60,6 +61,9 @@ jobs:
 
       - name: Install bounded divergence chart pan and zoom
         run: python patch_sentiment_divergence_panzoom.py
+
+      - name: Optimize sentiment chart rendering
+        run: python patch_sentiment_performance.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
