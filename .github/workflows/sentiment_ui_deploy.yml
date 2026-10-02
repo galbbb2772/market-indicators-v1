@@ -11,6 +11,7 @@ on:
       - patch_sentiment_index_return.py
       - patch_sentiment_divergence_panzoom.py
       - patch_sentiment_performance.py
+      - patch_sentiment_syntax_repair.py
       - docs/sentiment.html
       - .github/workflows/sentiment_ui_deploy.yml
 
@@ -41,6 +42,20 @@ jobs:
           python3 patch_sentiment_index_return.py
           python3 patch_sentiment_divergence_panzoom.py
           python3 patch_sentiment_performance.py
+          python3 patch_sentiment_syntax_repair.py
+
+      - name: Validate sentiment JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('docs/sentiment.html').read_text(encoding='utf-8')
+          blocks = re.findall(r'<script>(.*?)</script>', html, flags=re.S)
+          if not blocks:
+              raise SystemExit('no inline script found')
+          Path('/tmp/sentiment.js').write_text('\n'.join(blocks), encoding='utf-8')
+          PY
+          node --check /tmp/sentiment.js
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
