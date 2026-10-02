@@ -10,6 +10,7 @@ on:
       - patch_sentiment_panzoom.py
       - patch_sentiment_index_return.py
       - patch_sentiment_divergence_panzoom.py
+      - patch_sentiment_performance.py
       - docs/sentiment.html
       - .github/workflows/sentiment_ui_deploy.yml
 
@@ -39,6 +40,7 @@ jobs:
           python3 patch_sentiment_panzoom.py
           python3 patch_sentiment_index_return.py
           python3 patch_sentiment_divergence_panzoom.py
+          python3 patch_sentiment_performance.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
