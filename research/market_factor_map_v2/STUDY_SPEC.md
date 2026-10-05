@@ -1,5 +1,7 @@
 # Market Factor Map V2 — Integration Spec
 
+Version: V2.0 / frozen through 2026-10-02.
+
 ## Purpose
 
 Create a single evidence map from the completed Stage-2 research without creating a new optimized score. V2 is an evidence registry, not a production model.
