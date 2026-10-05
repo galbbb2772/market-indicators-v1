@@ -1,0 +1,48 @@
+name: Indicator Validation Summary V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - summarize_indicator_validation_v1.py
+      - docs/data/indicator_validation_v1.json
+      - .github/workflows/indicator_validation_summary_v1.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build compact summary
+        run: python summarize_indicator_validation_v1.py
+      - name: Validate summary
+        run: |
+          python - <<'PY'
+          import json
+          p='docs/data/indicator_validation_v1_summary.json'
+          d=json.load(open(p,encoding='utf-8'))
+          assert d['schema']=='INDICATOR-VALIDATION-V1-COMPACT-SUMMARY'
+          assert d['research_only'] is True
+          assert d['counts']['rows']>=60
+          assert d['guardrails']['production_effect']=='none'
+          print('INDICATOR_VALIDATION_SUMMARY_VALID', d['counts'])
+          PY
+      - name: Commit summary
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/indicator_validation_v1_summary.json
+          if git diff --cached --quiet; then
+            echo 'No summary change.'
+          else
+            git commit -m 'data: summarize Indicator Validation V1'
+            git pull --rebase origin main
+            git push
+          fi
