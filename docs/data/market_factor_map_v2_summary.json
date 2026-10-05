@@ -1,11 +1,11 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2-SUMMARY",
-  "generated_at": "2026-10-05T15:31:19.909290+00:00",
+  "generated_at": "2026-10-05T15:32:44.544383+00:00",
   "research_only": true,
   "frozen_through_market_date": "2026-10-02",
   "design": "evidence_registry_not_weighted_score",
   "status_counts": {
-    "regime_or_descriptive": 5,
+    "regime_or_descriptive": 19,
     "historical_factor": 2,
     "forward_oos_priority": 3,
     "state_context": 1,
@@ -16,7 +16,7 @@
     "status": "blocked_missing_api_key",
     "official_factor_map_ready": false,
     "configured_count": 17,
-    "canonical_nonempty_count": null
+    "canonical_nonempty_count": 0
   },
   "forward_oos_representatives": [
     {
@@ -25,17 +25,22 @@
       "members": [
         "sector_utilities_vol"
       ],
+      "kind": "source_invariant_component",
       "status": "forward_oos_priority",
       "historical_ic10": -0.142821,
       "historical_ic10_2022_present": -0.1394,
       "historical_partial_ic10": -0.1483,
+      "historical_partial_ic10_2022_present": -0.0874,
       "bh_fdr_q": 0.061938,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.196,
+      "q5_minus_q1_10d_pp": -0.8278,
       "screening_gate_pass_count": 7,
+      "source_stability": "source_invariant",
       "forward_observation_count": 0,
       "matured_10d_count": 0,
       "discrepancy_count": 0,
-      "role": "prospective_return_factor_candidate",
-      "source_stability": "source_invariant"
+      "role": "prospective_return_factor_candidate"
     },
     {
       "id": "fear_volatility::c10",
@@ -43,17 +48,22 @@
       "members": [
         "sector_fin_vol"
       ],
+      "kind": "source_invariant_component",
       "status": "forward_oos_priority",
       "historical_ic10": -0.133317,
       "historical_ic10_2022_present": -0.0899,
       "historical_partial_ic10": -0.0673,
+      "historical_partial_ic10_2022_present": -0.0326,
       "bh_fdr_q": 0.077423,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.167,
+      "q5_minus_q1_10d_pp": -0.8404,
       "screening_gate_pass_count": 7,
+      "source_stability": "source_invariant",
       "forward_observation_count": 0,
       "matured_10d_count": 0,
       "discrepancy_count": 0,
-      "role": "prospective_return_factor_candidate",
-      "source_stability": "source_invariant"
+      "role": "prospective_return_factor_candidate"
     },
     {
       "id": "sentiment_event::c2",
@@ -61,17 +71,306 @@
       "members": [
         "geo_news_impact"
       ],
+      "kind": "source_invariant_component",
       "status": "forward_oos_priority",
       "historical_ic10": -0.093118,
       "historical_ic10_2022_present": -0.0714,
       "historical_partial_ic10": -0.0917,
+      "historical_partial_ic10_2022_present": -0.0773,
       "bh_fdr_q": 0.030969,
+      "phase_same_sign_pct10": 90.0,
+      "univariate_loyo_improvement_pct": 0.148,
+      "q5_minus_q1_10d_pp": -0.5816,
       "screening_gate_pass_count": 7,
+      "source_stability": "source_invariant",
       "forward_observation_count": 0,
       "matured_10d_count": 0,
       "discrepancy_count": 0,
-      "role": "prospective_return_factor_candidate",
-      "source_stability": "source_invariant"
+      "role": "prospective_return_factor_candidate"
+    }
+  ],
+  "component_watchlist": [
+    {
+      "id": "fear_volatility::c3",
+      "family": "fear_volatility",
+      "members": [
+        "largecap_panic"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.123504,
+      "historical_ic10_2022_present": -0.0546,
+      "historical_partial_ic10": -0.0433,
+      "historical_partial_ic10_2022_present": -0.0328,
+      "bh_fdr_q": 0.046454,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.377,
+      "q5_minus_q1_10d_pp": -0.3478,
+      "screening_gate_pass_count": 6,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "rates_policy::c2",
+      "family": "rates_policy",
+      "members": [
+        "rate_cycle_sensitivity"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.115099,
+      "historical_ic10_2022_present": -0.1501,
+      "historical_partial_ic10": -0.0892,
+      "historical_partial_ic10_2022_present": -0.0876,
+      "bh_fdr_q": 0.157426,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.261,
+      "q5_minus_q1_10d_pp": -0.6227,
+      "screening_gate_pass_count": 6,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "fear_volatility::c12",
+      "family": "fear_volatility",
+      "members": [
+        "sector_industrial_vol"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.112304,
+      "historical_ic10_2022_present": -0.0843,
+      "historical_partial_ic10": -0.0064,
+      "historical_partial_ic10_2022_present": -0.0766,
+      "bh_fdr_q": 0.13007,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.01,
+      "q5_minus_q1_10d_pp": -0.7994,
+      "screening_gate_pass_count": 6,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "fear_volatility::c4",
+      "family": "fear_volatility",
+      "members": [
+        "options_anomaly"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.102876,
+      "historical_ic10_2022_present": -0.0604,
+      "historical_partial_ic10": -0.0147,
+      "historical_partial_ic10_2022_present": -0.0449,
+      "bh_fdr_q": 0.077423,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.282,
+      "q5_minus_q1_10d_pp": -0.0794,
+      "screening_gate_pass_count": 6,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "valuation_price_structure::c1",
+      "family": "valuation_price_structure",
+      "members": [
+        "valuation_cycle",
+        "valuation_percentile"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": 0.118999,
+      "historical_ic10_2022_present": 0.0931,
+      "historical_partial_ic10": 0.0095,
+      "historical_partial_ic10_2022_present": 0.0029,
+      "bh_fdr_q": 0.15203,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -1.344,
+      "q5_minus_q1_10d_pp": 0.4922,
+      "screening_gate_pass_count": 5,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "fear_volatility::c13",
+      "family": "fear_volatility",
+      "members": [
+        "sector_materials_vol"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.112264,
+      "historical_ic10_2022_present": -0.0736,
+      "historical_partial_ic10": -0.0367,
+      "historical_partial_ic10_2022_present": -0.0347,
+      "bh_fdr_q": 0.077423,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.248,
+      "q5_minus_q1_10d_pp": -0.8331,
+      "screening_gate_pass_count": 5,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "sentiment_event::c1",
+      "family": "sentiment_event",
+      "members": [
+        "geo_lag_reaction"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.075131,
+      "historical_ic10_2022_present": -0.0299,
+      "historical_partial_ic10": -0.0282,
+      "historical_partial_ic10_2022_present": 0.0072,
+      "bh_fdr_q": 0.13007,
+      "phase_same_sign_pct10": 90.0,
+      "univariate_loyo_improvement_pct": 0.355,
+      "q5_minus_q1_10d_pp": -0.498,
+      "screening_gate_pass_count": 5,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "fear_volatility::c14",
+      "family": "fear_volatility",
+      "members": [
+        "sector_realestate_vol"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.1055,
+      "historical_ic10_2022_present": -0.1232,
+      "historical_partial_ic10": 0.0156,
+      "historical_partial_ic10_2022_present": -0.0719,
+      "bh_fdr_q": 0.13007,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.866,
+      "q5_minus_q1_10d_pp": -0.4859,
+      "screening_gate_pass_count": 4,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "rates_policy::c1",
+      "family": "rates_policy",
+      "members": [
+        "global_cb_cycle_entry"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": 0.090914,
+      "historical_ic10_2022_present": 0.1376,
+      "historical_partial_ic10": 0.0767,
+      "historical_partial_ic10_2022_present": 0.1604,
+      "bh_fdr_q": 0.194662,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -1.077,
+      "q5_minus_q1_10d_pp": 0.2593,
+      "screening_gate_pass_count": 4,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "fear_volatility::c16",
+      "family": "fear_volatility",
+      "members": [
+        "vol_60d_change"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.090385,
+      "historical_ic10_2022_present": -0.0459,
+      "historical_partial_ic10": -0.0149,
+      "historical_partial_ic10_2022_present": -0.0577,
+      "bh_fdr_q": 0.196744,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.57,
+      "q5_minus_q1_10d_pp": -0.1966,
+      "screening_gate_pass_count": 4,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "valuation_price_structure::c3",
+      "family": "valuation_price_structure",
+      "members": [
+        "market_support"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.082062,
+      "historical_ic10_2022_present": -0.0785,
+      "historical_partial_ic10": -0.0471,
+      "historical_partial_ic10_2022_present": -0.0957,
+      "bh_fdr_q": 0.196744,
+      "phase_same_sign_pct10": 80.0,
+      "univariate_loyo_improvement_pct": -0.184,
+      "q5_minus_q1_10d_pp": -0.4926,
+      "screening_gate_pass_count": 4,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "breadth_participation::c1",
+      "family": "breadth_participation",
+      "members": [
+        "breadth_concentration",
+        "concentration"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": 0.081816,
+      "historical_ic10_2022_present": -0.0136,
+      "historical_partial_ic10": 0.0287,
+      "historical_partial_ic10_2022_present": 0.0317,
+      "bh_fdr_q": 0.265682,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.299,
+      "q5_minus_q1_10d_pp": 1.0042,
+      "screening_gate_pass_count": 4,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "cross_asset_commodity::c1",
+      "family": "cross_asset_commodity",
+      "members": [
+        "cross_asset_correlation"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.081804,
+      "historical_ic10_2022_present": -0.1179,
+      "historical_partial_ic10": -0.0983,
+      "historical_partial_ic10_2022_present": -0.1626,
+      "bh_fdr_q": 0.194662,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.55,
+      "q5_minus_q1_10d_pp": -0.7422,
+      "screening_gate_pass_count": 4,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
+    },
+    {
+      "id": "breadth_participation::c3",
+      "family": "breadth_participation",
+      "members": [
+        "retail_participation"
+      ],
+      "kind": "source_invariant_component",
+      "status": "regime_or_descriptive",
+      "historical_ic10": -0.063046,
+      "historical_ic10_2022_present": -0.0812,
+      "historical_partial_ic10": 0.0294,
+      "historical_partial_ic10_2022_present": 0.0361,
+      "bh_fdr_q": 0.293468,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.148,
+      "q5_minus_q1_10d_pp": -0.8954,
+      "screening_gate_pass_count": 4,
+      "source_stability": "source_invariant",
+      "role": "component_level_watchlist_not_promoted"
     }
   ],
   "sector_rotation_context": {
