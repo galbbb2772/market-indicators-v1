@@ -1,0 +1,74 @@
+name: Source-Invariant Component Significance V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - research_source_invariant_component_significance_v1.py
+      - research/source_invariant_component_significance_v1/STUDY_SPEC.md
+      - research_factor_components_source_invariant_v1.py
+      - research_factor_map_source_invariant_v1.py
+      - research_factor_map_v1.py
+      - research_indicator_validation_marketprice_v1.py
+      - research_indicator_validation_v1_sourceaware.py
+      - update_data.py
+      - requirements.txt
+      - .github/workflows/source_invariant_component_significance_v1.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: source-invariant-component-significance-v1
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build significance audit
+        run: python research_source_invariant_component_significance_v1.py
+      - name: Validate audit
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/source_invariant_component_significance_v1.json',encoding='utf-8'))
+          s=json.load(open('docs/data/source_invariant_component_significance_v1_summary.json',encoding='utf-8'))
+          assert d['schema']=='SOURCE-INVARIANT-COMPONENT-SIGNIFICANCE-V1'
+          assert s['schema']=='SOURCE-INVARIANT-COMPONENT-SIGNIFICANCE-V1-SUMMARY'
+          assert d['research_only'] is True and d['diagnostic_only'] is True
+          assert d['post_discovery_screening'] is True and d['production_effect']=='none'
+          assert d['coverage']['component_count'] >= 25
+          assert len(d['rows']) == d['coverage']['component_count']
+          assert d['inference']['block_sessions']==20
+          assert d['inference']['bootstrap_replications']==1000
+          assert d['inference']['circular_shift_replications']==1000
+          assert d['guardrails']['historical_results_count_as_forward_oos'] is False
+          assert all('bh_fdr_q' in r for r in d['rows'])
+          print('SOURCE_INVARIANT_COMPONENT_SIGNIFICANCE_V1_VALID', {
+              'components':d['coverage']['component_count'],
+              'priority':len(d['forward_oos_priority_keys']),
+              'regime_or_descriptive':len(d['regime_or_descriptive_keys'])})
+          PY
+      - name: Commit research data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/source_invariant_component_significance_v1.json docs/data/source_invariant_component_significance_v1_summary.json
+          if git diff --cached --quiet; then
+            echo 'No significance-audit change.'
+          else
+            git commit -m 'data: refresh source-invariant component significance V1'
+            git restore --worktree --staged .
+            git pull --rebase origin main
+            git push
+          fi
