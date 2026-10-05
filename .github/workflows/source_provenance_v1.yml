@@ -1,0 +1,77 @@
+name: Source Provenance V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - research_source_provenance_v1.py
+      - research/source_provenance_v1/STUDY_SPEC.md
+      - research_indicator_validation_v1_sourceaware.py
+      - update_data.py
+      - requirements.txt
+      - .github/workflows/source_provenance_v1.yml
+  schedule:
+    - cron: '15 23 * * *'
+      timezone: 'America/New_York'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: source-provenance-v1
+  cancel-in-progress: true
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build source provenance archive
+        run: python research_source_provenance_v1.py
+      - name: Validate archive
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('docs/data/source_provenance_v1.json',encoding='utf-8'))
+          h=json.load(open('docs/data/source_provenance_history_v1.json',encoding='utf-8'))
+          c=json.load(open('docs/data/fred_canonical_v1.json',encoding='utf-8'))
+          r=json.load(open('docs/data/fred_revision_ledger_v1.json',encoding='utf-8'))
+          assert p['schema']=='SOURCE-PROVENANCE-V1'
+          assert h['schema']=='SOURCE-PROVENANCE-HISTORY-V1'
+          assert c['schema']=='FRED-CANONICAL-V1'
+          assert r['schema']=='FRED-REVISION-LEDGER-V1'
+          assert p['research_only'] is True and p['production_effect']=='none'
+          assert p['guardrails']['may_change_production'] is False
+          assert p['guardrails']['may_reweight_model'] is False
+          assert p['guardrails']['may_change_formula'] is False
+          assert set(p['formula_modes']) >= set(p['source_dependent_indicator_ids'])
+          assert len(h['runs']) >= 1
+          assert set(c['series']) == set(p['fred']['configured_ids'])
+          print('SOURCE_PROVENANCE_V1_VALID', {
+              'available':p['fred']['available_count'],
+              'configured':p['fred']['configured_count'],
+              'direct_complete':p['fred']['direct_complete'],
+              'new_revisions':p['fred']['new_revision_count']})
+          PY
+      - name: Commit archive
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/source_provenance_v1.json docs/data/source_provenance_history_v1.json docs/data/fred_canonical_v1.json docs/data/fred_revision_ledger_v1.json
+          if git diff --cached --quiet; then
+            echo 'No provenance change.'
+          else
+            git commit -m 'data: archive source provenance and FRED revisions'
+            git pull --rebase origin main
+            git push
+          fi
