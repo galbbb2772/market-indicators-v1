@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - research_source_provenance_v1.py
+      - fred_api_bridge.py
       - research/source_provenance_v1/STUDY_SPEC.md
       - research_indicator_validation_v1_sourceaware.py
       - update_data.py
@@ -20,11 +21,13 @@ permissions:
 
 concurrency:
   group: source-provenance-v1
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   archive:
     runs-on: ubuntu-latest
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
     steps:
       - name: Checkout full history
         uses: actions/checkout@v4
@@ -57,10 +60,14 @@ jobs:
           assert set(p['formula_modes']) >= set(p['source_dependent_indicator_ids'])
           assert len(h['runs']) >= 1
           assert set(c['series']) == set(p['fred']['configured_ids'])
+          assert p['fred']['api_available_count'] + p['fred']['csv_available_count'] == p['fred']['available_count']
           print('SOURCE_PROVENANCE_V1_VALID', {
               'available':p['fred']['available_count'],
               'configured':p['fred']['configured_count'],
               'direct_complete':p['fred']['direct_complete'],
+              'api_key_configured':p['fred']['api_key_configured'],
+              'api_available':p['fred']['api_available_count'],
+              'csv_available':p['fred']['csv_available_count'],
               'new_revisions':p['fred']['new_revision_count']})
           PY
       - name: Commit archive
