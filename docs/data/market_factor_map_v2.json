@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2",
-  "generated_at": "2026-10-05T15:32:44.544383+00:00",
+  "generated_at": "2026-10-05T18:19:23.172987+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -487,18 +487,42 @@
     {
       "id": "liquidity_credit_official",
       "kind": "official_macro_family",
-      "status": "provisional_source_dependent",
+      "canonical_family": "liquidity_credit",
+      "status": "regime_or_descriptive",
       "role": "liquidity_and_credit_state",
-      "official_source_ready": false,
-      "readiness_status": "blocked_missing_api_key"
+      "official_source_ready": true,
+      "canonical_evidence_available": true,
+      "readiness_status": "ready",
+      "canonical_ic10": -0.1886,
+      "canonical_ic10_2022_present": -0.2057,
+      "canonical_partial_ic10": -0.1781,
+      "canonical_partial_ic10_2022_present": -0.1912,
+      "canonical_phase_same_sign_pct10": 100.0,
+      "canonical_loyo_univariate_improvement_pct": -1.522,
+      "canonical_loyo_ablation_delta_pct": -1.471,
+      "canonical_snapshot_generated_at": "2026-10-05T18:00:31.260915+00:00",
+      "source_stability": "official_canonical_snapshot",
+      "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     },
     {
       "id": "official_macro_rates",
       "kind": "official_macro_family",
-      "status": "provisional_source_dependent",
+      "canonical_family": "rates_policy",
+      "status": "regime_or_descriptive",
       "role": "rates_and_curve_state",
-      "official_source_ready": false,
-      "readiness_status": "blocked_missing_api_key"
+      "official_source_ready": true,
+      "canonical_evidence_available": true,
+      "readiness_status": "ready",
+      "canonical_ic10": 0.0134,
+      "canonical_ic10_2022_present": -0.0052,
+      "canonical_partial_ic10": -0.0353,
+      "canonical_partial_ic10_2022_present": 0.0112,
+      "canonical_phase_same_sign_pct10": 90.0,
+      "canonical_loyo_univariate_improvement_pct": -0.798,
+      "canonical_loyo_ablation_delta_pct": -0.736,
+      "canonical_snapshot_generated_at": "2026-10-05T18:00:31.260915+00:00",
+      "source_stability": "official_canonical_snapshot",
+      "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     }
   ],
   "external_stage2_context": [
@@ -513,17 +537,18 @@
     }
   ],
   "fred_readiness": {
-    "status": "blocked_missing_api_key",
-    "official_factor_map_ready": false,
+    "status": "ready",
+    "official_factor_map_ready": true,
+    "canonical_factor_map_available": true,
     "configured_count": 17,
-    "canonical_nonempty_count": 0
+    "canonical_nonempty_count": 17,
+    "canonical_snapshot_generated_at": "2026-10-05T18:00:31.260915+00:00"
   },
   "status_counts": {
-    "regime_or_descriptive": 19,
+    "regime_or_descriptive": 21,
     "historical_factor": 2,
     "forward_oos_priority": 3,
     "state_context": 1,
-    "provisional_source_dependent": 2,
     "external_stage2_context": 1
   },
   "prospective_gate": {
