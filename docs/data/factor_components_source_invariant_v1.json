@@ -1,0 +1,1915 @@
+{
+  "schema": "SOURCE-INVARIANT-FACTOR-COMPONENT-AUDIT-V1",
+  "generated_at": "2026-10-05T13:13:55.519990+00:00",
+  "research_only": true,
+  "diagnostic_only": true,
+  "production_effect": "none",
+  "weights_changed": false,
+  "thresholds_changed": false,
+  "study_spec": "research/factor_components_source_invariant_v1/STUDY_SPEC.md",
+  "coverage": {
+    "spy_start": "2016-10-03",
+    "spy_end": "2026-10-02",
+    "spy_observations": 2514,
+    "eligible_directional_indicator_count": 35,
+    "family_count": 7,
+    "component_count": 31,
+    "excluded_count": 9
+  },
+  "assignment": {
+    "retail_participation": {
+      "family": "breadth_participation",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "散户参与度指标",
+      "role": "active"
+    },
+    "market_support": {
+      "family": "valuation_price_structure",
+      "method": "frozen_id_map",
+      "polarity": 1,
+      "name": "市场支撑度指标",
+      "role": "active"
+    },
+    "largecap_panic": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "大盘恐慌指标",
+      "role": "context"
+    },
+    "options_anomaly": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "期权市场异动/大单量指标",
+      "role": "active"
+    },
+    "valuation_cycle": {
+      "family": "valuation_price_structure",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "市场周期估值高低指标",
+      "role": "archived"
+    },
+    "vol_60d_change": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "60日波动率变化指标",
+      "role": "archived"
+    },
+    "valuation_percentile": {
+      "family": "valuation_price_structure",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "大盘估值历史百分位",
+      "role": "active"
+    },
+    "concentration": {
+      "family": "breadth_participation",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "市场风险集中度指标",
+      "role": "context"
+    },
+    "market_topic_heat": {
+      "family": "sentiment_event",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "市场话题度指标",
+      "role": "archived"
+    },
+    "cross_asset_correlation": {
+      "family": "cross_asset_commodity",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "市场关联度指标",
+      "role": "context"
+    },
+    "global_cb_cycle_entry": {
+      "family": "rates_policy",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "世界央行加息周期进入指标",
+      "role": "archived"
+    },
+    "retail_panic": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "散户恐慌指标",
+      "role": "archived"
+    },
+    "quant_crowding": {
+      "family": "crowding_mega",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "量化交易拥挤指标",
+      "role": "context"
+    },
+    "money_making_effect": {
+      "family": "valuation_price_structure",
+      "method": "frozen_id_map",
+      "polarity": 1,
+      "name": "市场赚钱效应指标",
+      "role": "active"
+    },
+    "geo_news_impact": {
+      "family": "sentiment_event",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "地缘政治消息冲击度指标",
+      "role": "archived"
+    },
+    "geo_lag_reaction": {
+      "family": "sentiment_event",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "地缘政治消息迟滞反应指标",
+      "role": "archived"
+    },
+    "retail_holdings_concentration": {
+      "family": "breadth_participation",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "美国散户持仓集中度指标",
+      "role": "archived"
+    },
+    "rate_cycle_sensitivity": {
+      "family": "rates_policy",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "加息周期市场敏感度指标",
+      "role": "context"
+    },
+    "market_overextension": {
+      "family": "valuation_price_structure",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "大盘涨跌过度指标",
+      "role": "active"
+    },
+    "breadth_concentration": {
+      "family": "breadth_participation",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "市场涨跌集中度指标",
+      "role": "active"
+    },
+    "sme_survival_growth": {
+      "family": "breadth_participation",
+      "method": "frozen_id_map",
+      "polarity": 1,
+      "name": "市场中小企业留存增长消亡指标",
+      "role": "active"
+    },
+    "mag7_volatility": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "七巨头波动率综合指标",
+      "role": "context"
+    },
+    "ai7_volatility": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "AI7市场波动率综合指标",
+      "role": "context"
+    },
+    "tech100_volatility": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "美国科技公司Top100综合波动率指标",
+      "role": "active"
+    },
+    "sector_it_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "信息技术头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_comm_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "通信服务头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_cons_disc_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "非必需消费头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_cons_staples_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "必需消费头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_fin_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "金融头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_health_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "医疗保健头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_industrial_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "工业头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_energy_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "能源头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_materials_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "原材料头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_utilities_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "公用事业头部企业波动率指标",
+      "role": "archived"
+    },
+    "sector_realestate_vol": {
+      "family": "fear_volatility",
+      "method": "frozen_id_map",
+      "polarity": -1,
+      "name": "房地产头部企业波动率指标",
+      "role": "archived"
+    }
+  },
+  "excluded": {
+    "gold": "non_directional_polarity",
+    "oil": "non_directional_polarity",
+    "buffett_cash": "aligned<252",
+    "market_volume": "non_directional_polarity",
+    "volume_speed": "non_directional_polarity",
+    "valuation_speed": "non_directional_polarity",
+    "market_move_speed": "non_directional_polarity",
+    "mag7_volume": "non_directional_polarity",
+    "ai7_volume": "non_directional_polarity"
+  },
+  "families": {
+    "breadth_participation": [
+      {
+        "key": "breadth_participation::c1",
+        "component": 1,
+        "members": [
+          "breadth_concentration",
+          "concentration"
+        ],
+        "size": 2
+      },
+      {
+        "key": "breadth_participation::c2",
+        "component": 2,
+        "members": [
+          "retail_holdings_concentration"
+        ],
+        "size": 1
+      },
+      {
+        "key": "breadth_participation::c3",
+        "component": 3,
+        "members": [
+          "retail_participation"
+        ],
+        "size": 1
+      },
+      {
+        "key": "breadth_participation::c4",
+        "component": 4,
+        "members": [
+          "sme_survival_growth"
+        ],
+        "size": 1
+      }
+    ],
+    "cross_asset_commodity": [
+      {
+        "key": "cross_asset_commodity::c1",
+        "component": 1,
+        "members": [
+          "cross_asset_correlation"
+        ],
+        "size": 1
+      }
+    ],
+    "crowding_mega": [
+      {
+        "key": "crowding_mega::c1",
+        "component": 1,
+        "members": [
+          "quant_crowding"
+        ],
+        "size": 1
+      }
+    ],
+    "fear_volatility": [
+      {
+        "key": "fear_volatility::c1",
+        "component": 1,
+        "members": [
+          "ai7_volatility",
+          "mag7_volatility"
+        ],
+        "size": 2
+      },
+      {
+        "key": "fear_volatility::c2",
+        "component": 2,
+        "members": [
+          "sector_it_vol",
+          "tech100_volatility"
+        ],
+        "size": 2
+      },
+      {
+        "key": "fear_volatility::c3",
+        "component": 3,
+        "members": [
+          "largecap_panic"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c4",
+        "component": 4,
+        "members": [
+          "options_anomaly"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c5",
+        "component": 5,
+        "members": [
+          "retail_panic"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c6",
+        "component": 6,
+        "members": [
+          "sector_comm_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c7",
+        "component": 7,
+        "members": [
+          "sector_cons_disc_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c8",
+        "component": 8,
+        "members": [
+          "sector_cons_staples_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c9",
+        "component": 9,
+        "members": [
+          "sector_energy_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c10",
+        "component": 10,
+        "members": [
+          "sector_fin_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c11",
+        "component": 11,
+        "members": [
+          "sector_health_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c12",
+        "component": 12,
+        "members": [
+          "sector_industrial_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c13",
+        "component": 13,
+        "members": [
+          "sector_materials_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c14",
+        "component": 14,
+        "members": [
+          "sector_realestate_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c15",
+        "component": 15,
+        "members": [
+          "sector_utilities_vol"
+        ],
+        "size": 1
+      },
+      {
+        "key": "fear_volatility::c16",
+        "component": 16,
+        "members": [
+          "vol_60d_change"
+        ],
+        "size": 1
+      }
+    ],
+    "rates_policy": [
+      {
+        "key": "rates_policy::c1",
+        "component": 1,
+        "members": [
+          "global_cb_cycle_entry"
+        ],
+        "size": 1
+      },
+      {
+        "key": "rates_policy::c2",
+        "component": 2,
+        "members": [
+          "rate_cycle_sensitivity"
+        ],
+        "size": 1
+      }
+    ],
+    "sentiment_event": [
+      {
+        "key": "sentiment_event::c1",
+        "component": 1,
+        "members": [
+          "geo_lag_reaction"
+        ],
+        "size": 1
+      },
+      {
+        "key": "sentiment_event::c2",
+        "component": 2,
+        "members": [
+          "geo_news_impact"
+        ],
+        "size": 1
+      },
+      {
+        "key": "sentiment_event::c3",
+        "component": 3,
+        "members": [
+          "market_topic_heat"
+        ],
+        "size": 1
+      }
+    ],
+    "valuation_price_structure": [
+      {
+        "key": "valuation_price_structure::c1",
+        "component": 1,
+        "members": [
+          "valuation_cycle",
+          "valuation_percentile"
+        ],
+        "size": 2
+      },
+      {
+        "key": "valuation_price_structure::c2",
+        "component": 2,
+        "members": [
+          "market_overextension"
+        ],
+        "size": 1
+      },
+      {
+        "key": "valuation_price_structure::c3",
+        "component": 3,
+        "members": [
+          "market_support"
+        ],
+        "size": 1
+      },
+      {
+        "key": "valuation_price_structure::c4",
+        "component": 4,
+        "members": [
+          "money_making_effect"
+        ],
+        "size": 1
+      }
+    ]
+  },
+  "within_family_redundancy_pairs": {
+    "breadth_participation": [
+      {
+        "a": "breadth_concentration",
+        "b": "concentration",
+        "rho": 1.0,
+        "abs_rho": 1.0,
+        "n": 2390
+      }
+    ],
+    "cross_asset_commodity": [],
+    "crowding_mega": [],
+    "fear_volatility": [
+      {
+        "a": "sector_it_vol",
+        "b": "tech100_volatility",
+        "rho": 0.9105,
+        "abs_rho": 0.9105,
+        "n": 2430
+      },
+      {
+        "a": "ai7_volatility",
+        "b": "mag7_volatility",
+        "rho": 0.8849,
+        "abs_rho": 0.8849,
+        "n": 2430
+      }
+    ],
+    "rates_policy": [],
+    "sentiment_event": [],
+    "valuation_price_structure": [
+      {
+        "a": "valuation_cycle",
+        "b": "valuation_percentile",
+        "rho": 1.0,
+        "abs_rho": 1.0,
+        "n": 2251
+      }
+    ]
+  },
+  "component_rows": [
+    {
+      "key": "fear_volatility::c15",
+      "family": "fear_volatility",
+      "component": 15,
+      "members": [
+        "sector_utilities_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.1004,
+      "ic10": -0.1426,
+      "ic20": -0.1715,
+      "ic10_2017_2019": -0.0019,
+      "ic10_2020_2021": -0.2767,
+      "ic10_2022_present": -0.1394,
+      "above200_ic10": -0.0542,
+      "below200_ic10": -0.3828,
+      "high_vol_ic10": -0.3326,
+      "low_vol_ic10": -0.0593,
+      "q5_minus_q1_10d_pp": -0.8278,
+      "rolling_median_ic10": -0.1626,
+      "rolling_positive_pct10": 14.42,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.196,
+      "partial_ic10": -0.1483,
+      "partial_ic10_2022_present": -0.0874,
+      "component_ablation_delta_pct": -0.789,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "cross_asset_commodity::c1",
+      "family": "cross_asset_commodity",
+      "component": 1,
+      "members": [
+        "cross_asset_correlation"
+      ],
+      "member_count": 1,
+      "ic5": -0.0606,
+      "ic10": -0.0813,
+      "ic20": -0.104,
+      "ic10_2017_2019": -0.2574,
+      "ic10_2020_2021": 0.0898,
+      "ic10_2022_present": -0.1179,
+      "above200_ic10": -0.0079,
+      "below200_ic10": -0.2837,
+      "high_vol_ic10": -0.2069,
+      "low_vol_ic10": -0.0381,
+      "q5_minus_q1_10d_pp": -0.7422,
+      "rolling_median_ic10": -0.0219,
+      "rolling_positive_pct10": 43.14,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.55,
+      "partial_ic10": -0.0983,
+      "partial_ic10_2022_present": -0.1626,
+      "component_ablation_delta_pct": -0.795,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "sentiment_event::c2",
+      "family": "sentiment_event",
+      "component": 2,
+      "members": [
+        "geo_news_impact"
+      ],
+      "member_count": 1,
+      "ic5": -0.0621,
+      "ic10": -0.0923,
+      "ic20": -0.0698,
+      "ic10_2017_2019": -0.0947,
+      "ic10_2020_2021": -0.1265,
+      "ic10_2022_present": -0.0714,
+      "above200_ic10": -0.076,
+      "below200_ic10": -0.1323,
+      "high_vol_ic10": -0.1648,
+      "low_vol_ic10": -0.0686,
+      "q5_minus_q1_10d_pp": -0.5816,
+      "rolling_median_ic10": -0.1016,
+      "rolling_positive_pct10": 7.62,
+      "phase_same_sign_pct10": 90.0,
+      "univariate_loyo_improvement_pct": 0.148,
+      "partial_ic10": -0.0917,
+      "partial_ic10_2022_present": -0.0773,
+      "component_ablation_delta_pct": 0.084,
+      "component_helps_full_model_if_positive": true
+    },
+    {
+      "key": "fear_volatility::c9",
+      "family": "fear_volatility",
+      "component": 9,
+      "members": [
+        "sector_energy_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.068,
+      "ic10": -0.0727,
+      "ic20": -0.0693,
+      "ic10_2017_2019": -0.0542,
+      "ic10_2020_2021": -0.1907,
+      "ic10_2022_present": 0.012,
+      "above200_ic10": -0.0133,
+      "below200_ic10": -0.2049,
+      "high_vol_ic10": -0.2644,
+      "low_vol_ic10": 0.0354,
+      "q5_minus_q1_10d_pp": -0.4264,
+      "rolling_median_ic10": -0.1583,
+      "rolling_positive_pct10": 18.27,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.439,
+      "partial_ic10": 0.091,
+      "partial_ic10_2022_present": 0.0846,
+      "component_ablation_delta_pct": 0.266,
+      "component_helps_full_model_if_positive": true
+    },
+    {
+      "key": "rates_policy::c2",
+      "family": "rates_policy",
+      "component": 2,
+      "members": [
+        "rate_cycle_sensitivity"
+      ],
+      "member_count": 1,
+      "ic5": -0.0911,
+      "ic10": -0.1151,
+      "ic20": -0.1374,
+      "ic10_2017_2019": -0.2485,
+      "ic10_2020_2021": 0.0292,
+      "ic10_2022_present": -0.1501,
+      "above200_ic10": -0.0868,
+      "below200_ic10": -0.2571,
+      "high_vol_ic10": -0.1545,
+      "low_vol_ic10": -0.1071,
+      "q5_minus_q1_10d_pp": -0.6227,
+      "rolling_median_ic10": -0.0691,
+      "rolling_positive_pct10": 30.39,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.261,
+      "partial_ic10": -0.0892,
+      "partial_ic10_2022_present": -0.0876,
+      "component_ablation_delta_pct": 0.229,
+      "component_helps_full_model_if_positive": true
+    },
+    {
+      "key": "crowding_mega::c1",
+      "family": "crowding_mega",
+      "component": 1,
+      "members": [
+        "quant_crowding"
+      ],
+      "member_count": 1,
+      "ic5": 0.0398,
+      "ic10": 0.0589,
+      "ic20": 0.0645,
+      "ic10_2017_2019": 0.0404,
+      "ic10_2020_2021": 0.2412,
+      "ic10_2022_present": -0.0259,
+      "above200_ic10": 0.0884,
+      "below200_ic10": -0.2491,
+      "high_vol_ic10": -0.1642,
+      "low_vol_ic10": 0.0699,
+      "q5_minus_q1_10d_pp": 0.244,
+      "rolling_median_ic10": 0.1303,
+      "rolling_positive_pct10": 86.54,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -1.244,
+      "partial_ic10": 0.0858,
+      "partial_ic10_2022_present": 0.1098,
+      "component_ablation_delta_pct": -0.323,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c8",
+      "family": "fear_volatility",
+      "component": 8,
+      "members": [
+        "sector_cons_staples_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.0322,
+      "ic10": -0.0636,
+      "ic20": -0.1145,
+      "ic10_2017_2019": -0.0963,
+      "ic10_2020_2021": -0.2307,
+      "ic10_2022_present": -0.0089,
+      "above200_ic10": 0.0246,
+      "below200_ic10": -0.2196,
+      "high_vol_ic10": -0.2071,
+      "low_vol_ic10": 0.0244,
+      "q5_minus_q1_10d_pp": -0.2839,
+      "rolling_median_ic10": -0.1401,
+      "rolling_positive_pct10": 21.15,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.202,
+      "partial_ic10": 0.077,
+      "partial_ic10_2022_present": 0.1173,
+      "component_ablation_delta_pct": -0.76,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "rates_policy::c1",
+      "family": "rates_policy",
+      "component": 1,
+      "members": [
+        "global_cb_cycle_entry"
+      ],
+      "member_count": 1,
+      "ic5": 0.0705,
+      "ic10": 0.0909,
+      "ic20": 0.0858,
+      "ic10_2017_2019": 0.1499,
+      "ic10_2020_2021": -0.0059,
+      "ic10_2022_present": 0.1376,
+      "above200_ic10": 0.0631,
+      "below200_ic10": 0.1636,
+      "high_vol_ic10": 0.1317,
+      "low_vol_ic10": 0.0753,
+      "q5_minus_q1_10d_pp": 0.2593,
+      "rolling_median_ic10": 0.0912,
+      "rolling_positive_pct10": 66.35,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -1.077,
+      "partial_ic10": 0.0767,
+      "partial_ic10_2022_present": 0.1604,
+      "component_ablation_delta_pct": -1.17,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c10",
+      "family": "fear_volatility",
+      "component": 10,
+      "members": [
+        "sector_fin_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.0907,
+      "ic10": -0.1331,
+      "ic20": -0.1557,
+      "ic10_2017_2019": -0.1146,
+      "ic10_2020_2021": -0.2252,
+      "ic10_2022_present": -0.0899,
+      "above200_ic10": -0.0799,
+      "below200_ic10": -0.2594,
+      "high_vol_ic10": -0.2697,
+      "low_vol_ic10": -0.076,
+      "q5_minus_q1_10d_pp": -0.8404,
+      "rolling_median_ic10": -0.2192,
+      "rolling_positive_pct10": 12.5,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.167,
+      "partial_ic10": -0.0673,
+      "partial_ic10_2022_present": -0.0326,
+      "component_ablation_delta_pct": 0.046,
+      "component_helps_full_model_if_positive": true
+    },
+    {
+      "key": "fear_volatility::c2",
+      "family": "fear_volatility",
+      "component": 2,
+      "members": [
+        "sector_it_vol",
+        "tech100_volatility"
+      ],
+      "member_count": 2,
+      "ic5": -0.0414,
+      "ic10": -0.0553,
+      "ic20": -0.0532,
+      "ic10_2017_2019": -0.113,
+      "ic10_2020_2021": -0.2355,
+      "ic10_2022_present": 0.0419,
+      "above200_ic10": -0.0039,
+      "below200_ic10": -0.1138,
+      "high_vol_ic10": -0.0788,
+      "low_vol_ic10": 0.011,
+      "q5_minus_q1_10d_pp": -0.0318,
+      "rolling_median_ic10": -0.0929,
+      "rolling_positive_pct10": 21.15,
+      "phase_same_sign_pct10": 90.0,
+      "univariate_loyo_improvement_pct": -0.594,
+      "partial_ic10": 0.0485,
+      "partial_ic10_2022_present": 0.1067,
+      "component_ablation_delta_pct": -0.711,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "valuation_price_structure::c3",
+      "family": "valuation_price_structure",
+      "component": 3,
+      "members": [
+        "market_support"
+      ],
+      "member_count": 1,
+      "ic5": -0.048,
+      "ic10": -0.0819,
+      "ic20": -0.1061,
+      "ic10_2017_2019": -0.0651,
+      "ic10_2020_2021": -0.1938,
+      "ic10_2022_present": -0.0785,
+      "above200_ic10": -0.0644,
+      "below200_ic10": -0.1112,
+      "high_vol_ic10": -0.0996,
+      "low_vol_ic10": -0.0574,
+      "q5_minus_q1_10d_pp": -0.4926,
+      "rolling_median_ic10": -0.1648,
+      "rolling_positive_pct10": 7.69,
+      "phase_same_sign_pct10": 80.0,
+      "univariate_loyo_improvement_pct": -0.184,
+      "partial_ic10": -0.0471,
+      "partial_ic10_2022_present": -0.0957,
+      "component_ablation_delta_pct": -0.708,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c1",
+      "family": "fear_volatility",
+      "component": 1,
+      "members": [
+        "ai7_volatility",
+        "mag7_volatility"
+      ],
+      "member_count": 2,
+      "ic5": -0.0319,
+      "ic10": -0.0373,
+      "ic20": -0.0276,
+      "ic10_2017_2019": -0.0906,
+      "ic10_2020_2021": -0.197,
+      "ic10_2022_present": 0.0563,
+      "above200_ic10": 0.0405,
+      "below200_ic10": -0.1164,
+      "high_vol_ic10": -0.1109,
+      "low_vol_ic10": 0.0534,
+      "q5_minus_q1_10d_pp": 0.1142,
+      "rolling_median_ic10": -0.0609,
+      "rolling_positive_pct10": 28.85,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.537,
+      "partial_ic10": 0.0448,
+      "partial_ic10_2022_present": 0.0289,
+      "component_ablation_delta_pct": -0.231,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "breadth_participation::c2",
+      "family": "breadth_participation",
+      "component": 2,
+      "members": [
+        "retail_holdings_concentration"
+      ],
+      "member_count": 1,
+      "ic5": 0.0123,
+      "ic10": 0.0363,
+      "ic20": 0.0272,
+      "ic10_2017_2019": 0.1572,
+      "ic10_2020_2021": 0.0861,
+      "ic10_2022_present": -0.061,
+      "above200_ic10": 0.0505,
+      "below200_ic10": -0.0621,
+      "high_vol_ic10": -0.1181,
+      "low_vol_ic10": 0.0754,
+      "q5_minus_q1_10d_pp": 0.2195,
+      "rolling_median_ic10": 0.0385,
+      "rolling_positive_pct10": 58.65,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.427,
+      "partial_ic10": -0.0445,
+      "partial_ic10_2022_present": -0.0755,
+      "component_ablation_delta_pct": -0.033,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c3",
+      "family": "fear_volatility",
+      "component": 3,
+      "members": [
+        "largecap_panic"
+      ],
+      "member_count": 1,
+      "ic5": -0.092,
+      "ic10": -0.1236,
+      "ic20": -0.1292,
+      "ic10_2017_2019": -0.1066,
+      "ic10_2020_2021": -0.3176,
+      "ic10_2022_present": -0.0546,
+      "above200_ic10": -0.0886,
+      "below200_ic10": -0.1215,
+      "high_vol_ic10": -0.1638,
+      "low_vol_ic10": -0.0711,
+      "q5_minus_q1_10d_pp": -0.3478,
+      "rolling_median_ic10": -0.1555,
+      "rolling_positive_pct10": 5.71,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.377,
+      "partial_ic10": -0.0433,
+      "partial_ic10_2022_present": -0.0328,
+      "component_ablation_delta_pct": -1.103,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "sentiment_event::c3",
+      "family": "sentiment_event",
+      "component": 3,
+      "members": [
+        "market_topic_heat"
+      ],
+      "member_count": 1,
+      "ic5": -0.0335,
+      "ic10": -0.0446,
+      "ic20": -0.0571,
+      "ic10_2017_2019": -0.0185,
+      "ic10_2020_2021": -0.0569,
+      "ic10_2022_present": -0.0537,
+      "above200_ic10": -0.0438,
+      "below200_ic10": 0.0804,
+      "high_vol_ic10": -0.0074,
+      "low_vol_ic10": -0.0311,
+      "q5_minus_q1_10d_pp": 0.0862,
+      "rolling_median_ic10": -0.0387,
+      "rolling_positive_pct10": 33.33,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.554,
+      "partial_ic10": 0.0378,
+      "partial_ic10_2022_present": 0.0344,
+      "component_ablation_delta_pct": 0.458,
+      "component_helps_full_model_if_positive": true
+    },
+    {
+      "key": "fear_volatility::c13",
+      "family": "fear_volatility",
+      "component": 13,
+      "members": [
+        "sector_materials_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.0806,
+      "ic10": -0.1123,
+      "ic20": -0.1315,
+      "ic10_2017_2019": -0.111,
+      "ic10_2020_2021": -0.2251,
+      "ic10_2022_present": -0.0736,
+      "above200_ic10": -0.0307,
+      "below200_ic10": -0.3037,
+      "high_vol_ic10": -0.2865,
+      "low_vol_ic10": -0.0463,
+      "q5_minus_q1_10d_pp": -0.8331,
+      "rolling_median_ic10": -0.1686,
+      "rolling_positive_pct10": 15.38,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.248,
+      "partial_ic10": -0.0367,
+      "partial_ic10_2022_present": -0.0347,
+      "component_ablation_delta_pct": -0.452,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "breadth_participation::c3",
+      "family": "breadth_participation",
+      "component": 3,
+      "members": [
+        "retail_participation"
+      ],
+      "member_count": 1,
+      "ic5": -0.0553,
+      "ic10": -0.0625,
+      "ic20": -0.1322,
+      "ic10_2017_2019": -0.0024,
+      "ic10_2020_2021": -0.0798,
+      "ic10_2022_present": -0.0812,
+      "above200_ic10": -0.0617,
+      "below200_ic10": -0.0364,
+      "high_vol_ic10": -0.1015,
+      "low_vol_ic10": -0.0343,
+      "q5_minus_q1_10d_pp": -0.8954,
+      "rolling_median_ic10": -0.0699,
+      "rolling_positive_pct10": 24.04,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.148,
+      "partial_ic10": 0.0294,
+      "partial_ic10_2022_present": 0.0361,
+      "component_ablation_delta_pct": -0.337,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "breadth_participation::c1",
+      "family": "breadth_participation",
+      "component": 1,
+      "members": [
+        "breadth_concentration",
+        "concentration"
+      ],
+      "member_count": 2,
+      "ic5": 0.052,
+      "ic10": 0.082,
+      "ic20": 0.1114,
+      "ic10_2017_2019": 0.2156,
+      "ic10_2020_2021": 0.1008,
+      "ic10_2022_present": -0.0136,
+      "above200_ic10": 0.101,
+      "below200_ic10": 0.0151,
+      "high_vol_ic10": -0.0173,
+      "low_vol_ic10": 0.1165,
+      "q5_minus_q1_10d_pp": 1.0042,
+      "rolling_median_ic10": 0.1253,
+      "rolling_positive_pct10": 71.57,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.299,
+      "partial_ic10": 0.0287,
+      "partial_ic10_2022_present": 0.0317,
+      "component_ablation_delta_pct": -0.004,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "sentiment_event::c1",
+      "family": "sentiment_event",
+      "component": 1,
+      "members": [
+        "geo_lag_reaction"
+      ],
+      "member_count": 1,
+      "ic5": -0.0585,
+      "ic10": -0.0755,
+      "ic20": -0.0811,
+      "ic10_2017_2019": -0.1075,
+      "ic10_2020_2021": -0.1265,
+      "ic10_2022_present": -0.0299,
+      "above200_ic10": -0.0265,
+      "below200_ic10": -0.2029,
+      "high_vol_ic10": -0.206,
+      "low_vol_ic10": -0.0114,
+      "q5_minus_q1_10d_pp": -0.498,
+      "rolling_median_ic10": -0.1039,
+      "rolling_positive_pct10": 19.05,
+      "phase_same_sign_pct10": 90.0,
+      "univariate_loyo_improvement_pct": 0.355,
+      "partial_ic10": -0.0282,
+      "partial_ic10_2022_present": 0.0072,
+      "component_ablation_delta_pct": -0.416,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "valuation_price_structure::c4",
+      "family": "valuation_price_structure",
+      "component": 4,
+      "members": [
+        "money_making_effect"
+      ],
+      "member_count": 1,
+      "ic5": -0.0305,
+      "ic10": -0.0582,
+      "ic20": -0.0675,
+      "ic10_2017_2019": -0.0919,
+      "ic10_2020_2021": -0.1447,
+      "ic10_2022_present": -0.0235,
+      "above200_ic10": -0.0599,
+      "below200_ic10": -0.061,
+      "high_vol_ic10": -0.0473,
+      "low_vol_ic10": -0.0481,
+      "q5_minus_q1_10d_pp": -0.107,
+      "rolling_median_ic10": -0.1212,
+      "rolling_positive_pct10": 12.5,
+      "phase_same_sign_pct10": 80.0,
+      "univariate_loyo_improvement_pct": -0.27,
+      "partial_ic10": 0.0236,
+      "partial_ic10_2022_present": 0.0698,
+      "component_ablation_delta_pct": 0.015,
+      "component_helps_full_model_if_positive": true
+    },
+    {
+      "key": "breadth_participation::c4",
+      "family": "breadth_participation",
+      "component": 4,
+      "members": [
+        "sme_survival_growth"
+      ],
+      "member_count": 1,
+      "ic5": 0.0,
+      "ic10": -0.008,
+      "ic20": 0.0332,
+      "ic10_2017_2019": 0.0653,
+      "ic10_2020_2021": -0.0121,
+      "ic10_2022_present": -0.0703,
+      "above200_ic10": 0.0831,
+      "below200_ic10": -0.1824,
+      "high_vol_ic10": -0.108,
+      "low_vol_ic10": 0.0462,
+      "q5_minus_q1_10d_pp": 0.4913,
+      "rolling_median_ic10": -0.0677,
+      "rolling_positive_pct10": 32.35,
+      "phase_same_sign_pct10": 60.0,
+      "univariate_loyo_improvement_pct": -0.315,
+      "partial_ic10": -0.0224,
+      "partial_ic10_2022_present": -0.1085,
+      "component_ablation_delta_pct": -1.462,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c5",
+      "family": "fear_volatility",
+      "component": 5,
+      "members": [
+        "retail_panic"
+      ],
+      "member_count": 1,
+      "ic5": -0.0662,
+      "ic10": -0.0945,
+      "ic20": -0.0892,
+      "ic10_2017_2019": -0.1029,
+      "ic10_2020_2021": -0.2013,
+      "ic10_2022_present": -0.0456,
+      "above200_ic10": -0.0651,
+      "below200_ic10": -0.0867,
+      "high_vol_ic10": -0.105,
+      "low_vol_ic10": -0.0573,
+      "q5_minus_q1_10d_pp": -0.4431,
+      "rolling_median_ic10": -0.1376,
+      "rolling_positive_pct10": 5.71,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.349,
+      "partial_ic10": 0.0207,
+      "partial_ic10_2022_present": 0.0377,
+      "component_ablation_delta_pct": 0.227,
+      "component_helps_full_model_if_positive": true
+    },
+    {
+      "key": "fear_volatility::c6",
+      "family": "fear_volatility",
+      "component": 6,
+      "members": [
+        "sector_comm_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.0309,
+      "ic10": -0.0644,
+      "ic20": -0.0942,
+      "ic10_2017_2019": -0.0827,
+      "ic10_2020_2021": -0.2597,
+      "ic10_2022_present": 0.0157,
+      "above200_ic10": 0.0071,
+      "below200_ic10": -0.1232,
+      "high_vol_ic10": -0.1466,
+      "low_vol_ic10": 0.0252,
+      "q5_minus_q1_10d_pp": -0.2111,
+      "rolling_median_ic10": -0.0935,
+      "rolling_positive_pct10": 27.38,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -1.281,
+      "partial_ic10": -0.0169,
+      "partial_ic10_2022_present": 0.0016,
+      "component_ablation_delta_pct": -0.764,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c14",
+      "family": "fear_volatility",
+      "component": 14,
+      "members": [
+        "sector_realestate_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.0732,
+      "ic10": -0.1057,
+      "ic20": -0.1209,
+      "ic10_2017_2019": 0.0655,
+      "ic10_2020_2021": -0.2321,
+      "ic10_2022_present": -0.1232,
+      "above200_ic10": -0.0663,
+      "below200_ic10": -0.1777,
+      "high_vol_ic10": -0.1842,
+      "low_vol_ic10": -0.0496,
+      "q5_minus_q1_10d_pp": -0.4859,
+      "rolling_median_ic10": -0.1534,
+      "rolling_positive_pct10": 25.0,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.866,
+      "partial_ic10": 0.0156,
+      "partial_ic10_2022_present": -0.0719,
+      "component_ablation_delta_pct": -1.191,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c16",
+      "family": "fear_volatility",
+      "component": 16,
+      "members": [
+        "vol_60d_change"
+      ],
+      "member_count": 1,
+      "ic5": -0.0593,
+      "ic10": -0.0903,
+      "ic20": -0.0896,
+      "ic10_2017_2019": -0.1,
+      "ic10_2020_2021": -0.2076,
+      "ic10_2022_present": -0.0459,
+      "above200_ic10": -0.0635,
+      "below200_ic10": -0.0919,
+      "high_vol_ic10": -0.0811,
+      "low_vol_ic10": -0.0549,
+      "q5_minus_q1_10d_pp": -0.1966,
+      "rolling_median_ic10": -0.1578,
+      "rolling_positive_pct10": 13.73,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.57,
+      "partial_ic10": -0.0149,
+      "partial_ic10_2022_present": -0.0577,
+      "component_ablation_delta_pct": -0.859,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c4",
+      "family": "fear_volatility",
+      "component": 4,
+      "members": [
+        "options_anomaly"
+      ],
+      "member_count": 1,
+      "ic5": -0.0743,
+      "ic10": -0.1029,
+      "ic20": -0.0728,
+      "ic10_2017_2019": -0.123,
+      "ic10_2020_2021": -0.1398,
+      "ic10_2022_present": -0.0604,
+      "above200_ic10": -0.0865,
+      "below200_ic10": 0.0036,
+      "high_vol_ic10": -0.1021,
+      "low_vol_ic10": -0.0746,
+      "q5_minus_q1_10d_pp": -0.0794,
+      "rolling_median_ic10": -0.1069,
+      "rolling_positive_pct10": 8.57,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.282,
+      "partial_ic10": -0.0147,
+      "partial_ic10_2022_present": -0.0449,
+      "component_ablation_delta_pct": -0.25,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "valuation_price_structure::c1",
+      "family": "valuation_price_structure",
+      "component": 1,
+      "members": [
+        "valuation_cycle",
+        "valuation_percentile"
+      ],
+      "member_count": 2,
+      "ic5": 0.0808,
+      "ic10": 0.119,
+      "ic20": 0.137,
+      "ic10_2017_2019": 0.1723,
+      "ic10_2020_2021": 0.2732,
+      "ic10_2022_present": 0.0931,
+      "above200_ic10": 0.0733,
+      "below200_ic10": 0.0698,
+      "high_vol_ic10": 0.1298,
+      "low_vol_ic10": 0.0982,
+      "q5_minus_q1_10d_pp": 0.4922,
+      "rolling_median_ic10": 0.2764,
+      "rolling_positive_pct10": 93.68,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -1.344,
+      "partial_ic10": 0.0095,
+      "partial_ic10_2022_present": 0.0029,
+      "component_ablation_delta_pct": -2.89,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c7",
+      "family": "fear_volatility",
+      "component": 7,
+      "members": [
+        "sector_cons_disc_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.0374,
+      "ic10": -0.0568,
+      "ic20": -0.0784,
+      "ic10_2017_2019": -0.0527,
+      "ic10_2020_2021": -0.2086,
+      "ic10_2022_present": -0.0077,
+      "above200_ic10": -0.0026,
+      "below200_ic10": -0.122,
+      "high_vol_ic10": -0.0808,
+      "low_vol_ic10": 0.0092,
+      "q5_minus_q1_10d_pp": 0.1214,
+      "rolling_median_ic10": -0.154,
+      "rolling_positive_pct10": 35.58,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -1.238,
+      "partial_ic10": 0.0082,
+      "partial_ic10_2022_present": 0.0593,
+      "component_ablation_delta_pct": -0.841,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c12",
+      "family": "fear_volatility",
+      "component": 12,
+      "members": [
+        "sector_industrial_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.0807,
+      "ic10": -0.1123,
+      "ic20": -0.1472,
+      "ic10_2017_2019": -0.0769,
+      "ic10_2020_2021": -0.2256,
+      "ic10_2022_present": -0.0843,
+      "above200_ic10": -0.0437,
+      "below200_ic10": -0.2843,
+      "high_vol_ic10": -0.2698,
+      "low_vol_ic10": -0.0303,
+      "q5_minus_q1_10d_pp": -0.7994,
+      "rolling_median_ic10": -0.1644,
+      "rolling_positive_pct10": 8.65,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": 0.01,
+      "partial_ic10": -0.0064,
+      "partial_ic10_2022_present": -0.0766,
+      "component_ablation_delta_pct": -1.394,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "valuation_price_structure::c2",
+      "family": "valuation_price_structure",
+      "component": 2,
+      "members": [
+        "market_overextension"
+      ],
+      "member_count": 1,
+      "ic5": -0.0292,
+      "ic10": -0.0307,
+      "ic20": -0.0292,
+      "ic10_2017_2019": -0.0346,
+      "ic10_2020_2021": 0.0924,
+      "ic10_2022_present": -0.0923,
+      "above200_ic10": 0.0264,
+      "below200_ic10": -0.0843,
+      "high_vol_ic10": -0.0585,
+      "low_vol_ic10": 0.0089,
+      "q5_minus_q1_10d_pp": -0.1299,
+      "rolling_median_ic10": -0.0421,
+      "rolling_positive_pct10": 43.27,
+      "phase_same_sign_pct10": 70.0,
+      "univariate_loyo_improvement_pct": -0.582,
+      "partial_ic10": -0.0047,
+      "partial_ic10_2022_present": -0.0757,
+      "component_ablation_delta_pct": -0.737,
+      "component_helps_full_model_if_positive": false
+    },
+    {
+      "key": "fear_volatility::c11",
+      "family": "fear_volatility",
+      "component": 11,
+      "members": [
+        "sector_health_vol"
+      ],
+      "member_count": 1,
+      "ic5": -0.0473,
+      "ic10": -0.0791,
+      "ic20": -0.1165,
+      "ic10_2017_2019": -0.1141,
+      "ic10_2020_2021": -0.2369,
+      "ic10_2022_present": -0.0364,
+      "above200_ic10": 0.0034,
+      "below200_ic10": -0.2162,
+      "high_vol_ic10": -0.245,
+      "low_vol_ic10": 0.0074,
+      "q5_minus_q1_10d_pp": -0.5372,
+      "rolling_median_ic10": -0.138,
+      "rolling_positive_pct10": 17.31,
+      "phase_same_sign_pct10": 100.0,
+      "univariate_loyo_improvement_pct": -0.402,
+      "partial_ic10": 0.0004,
+      "partial_ic10_2022_present": -0.0308,
+      "component_ablation_delta_pct": -1.226,
+      "component_helps_full_model_if_positive": false
+    }
+  ],
+  "family_cancellation_audit": [
+    {
+      "family": "valuation_price_structure",
+      "family_ic10": -0.0096,
+      "family_partial_ic10": -0.0085,
+      "component_count": 4,
+      "positive_component_count": 1,
+      "negative_component_count": 3,
+      "component_sign_agreement_with_family_pct": 75.0,
+      "strongest_abs_component": {
+        "key": "valuation_price_structure::c1",
+        "members": [
+          "valuation_cycle",
+          "valuation_percentile"
+        ],
+        "ic10": 0.119,
+        "ic10_2022_present": 0.0931,
+        "partial_ic10": 0.0095,
+        "ablation_delta_pct": -2.89
+      },
+      "strongest_abs_partial_component": {
+        "key": "valuation_price_structure::c3",
+        "members": [
+          "market_support"
+        ],
+        "ic10": -0.0819,
+        "partial_ic10": -0.0471,
+        "partial_ic10_2022_present": -0.0957
+      },
+      "max_component_abs_ic_minus_family_abs_ic": 0.1094,
+      "cancellation_flag": true
+    },
+    {
+      "family": "rates_policy",
+      "family_ic10": -0.061,
+      "family_partial_ic10": -0.0308,
+      "component_count": 2,
+      "positive_component_count": 1,
+      "negative_component_count": 1,
+      "component_sign_agreement_with_family_pct": 50.0,
+      "strongest_abs_component": {
+        "key": "rates_policy::c2",
+        "members": [
+          "rate_cycle_sensitivity"
+        ],
+        "ic10": -0.1151,
+        "ic10_2022_present": -0.1501,
+        "partial_ic10": -0.0892,
+        "ablation_delta_pct": 0.229
+      },
+      "strongest_abs_partial_component": {
+        "key": "rates_policy::c2",
+        "members": [
+          "rate_cycle_sensitivity"
+        ],
+        "ic10": -0.1151,
+        "partial_ic10": -0.0892,
+        "partial_ic10_2022_present": -0.0876
+      },
+      "max_component_abs_ic_minus_family_abs_ic": 0.0541,
+      "cancellation_flag": true
+    },
+    {
+      "family": "breadth_participation",
+      "family_ic10": 0.0343,
+      "family_partial_ic10": -0.0463,
+      "component_count": 4,
+      "positive_component_count": 2,
+      "negative_component_count": 2,
+      "component_sign_agreement_with_family_pct": 50.0,
+      "strongest_abs_component": {
+        "key": "breadth_participation::c1",
+        "members": [
+          "breadth_concentration",
+          "concentration"
+        ],
+        "ic10": 0.082,
+        "ic10_2022_present": -0.0136,
+        "partial_ic10": 0.0287,
+        "ablation_delta_pct": -0.004
+      },
+      "strongest_abs_partial_component": {
+        "key": "breadth_participation::c2",
+        "members": [
+          "retail_holdings_concentration"
+        ],
+        "ic10": 0.0363,
+        "partial_ic10": -0.0445,
+        "partial_ic10_2022_present": -0.0755
+      },
+      "max_component_abs_ic_minus_family_abs_ic": 0.0477,
+      "cancellation_flag": false
+    },
+    {
+      "family": "fear_volatility",
+      "family_ic10": -0.102,
+      "family_partial_ic10": 0.0367,
+      "component_count": 16,
+      "positive_component_count": 0,
+      "negative_component_count": 16,
+      "component_sign_agreement_with_family_pct": 100.0,
+      "strongest_abs_component": {
+        "key": "fear_volatility::c15",
+        "members": [
+          "sector_utilities_vol"
+        ],
+        "ic10": -0.1426,
+        "ic10_2022_present": -0.1394,
+        "partial_ic10": -0.1483,
+        "ablation_delta_pct": -0.789
+      },
+      "strongest_abs_partial_component": {
+        "key": "fear_volatility::c15",
+        "members": [
+          "sector_utilities_vol"
+        ],
+        "ic10": -0.1426,
+        "partial_ic10": -0.1483,
+        "partial_ic10_2022_present": -0.0874
+      },
+      "max_component_abs_ic_minus_family_abs_ic": 0.0406,
+      "cancellation_flag": false
+    },
+    {
+      "family": "sentiment_event",
+      "family_ic10": -0.0875,
+      "family_partial_ic10": -0.0536,
+      "component_count": 3,
+      "positive_component_count": 0,
+      "negative_component_count": 3,
+      "component_sign_agreement_with_family_pct": 100.0,
+      "strongest_abs_component": {
+        "key": "sentiment_event::c2",
+        "members": [
+          "geo_news_impact"
+        ],
+        "ic10": -0.0923,
+        "ic10_2022_present": -0.0714,
+        "partial_ic10": -0.0917,
+        "ablation_delta_pct": 0.084
+      },
+      "strongest_abs_partial_component": {
+        "key": "sentiment_event::c2",
+        "members": [
+          "geo_news_impact"
+        ],
+        "ic10": -0.0923,
+        "partial_ic10": -0.0917,
+        "partial_ic10_2022_present": -0.0773
+      },
+      "max_component_abs_ic_minus_family_abs_ic": 0.0048,
+      "cancellation_flag": false
+    },
+    {
+      "family": "cross_asset_commodity",
+      "family_ic10": -0.0813,
+      "family_partial_ic10": -0.0983,
+      "component_count": 1,
+      "positive_component_count": 0,
+      "negative_component_count": 1,
+      "component_sign_agreement_with_family_pct": 100.0,
+      "strongest_abs_component": {
+        "key": "cross_asset_commodity::c1",
+        "members": [
+          "cross_asset_correlation"
+        ],
+        "ic10": -0.0813,
+        "ic10_2022_present": -0.1179,
+        "partial_ic10": -0.0983,
+        "ablation_delta_pct": -0.795
+      },
+      "strongest_abs_partial_component": {
+        "key": "cross_asset_commodity::c1",
+        "members": [
+          "cross_asset_correlation"
+        ],
+        "ic10": -0.0813,
+        "partial_ic10": -0.0983,
+        "partial_ic10_2022_present": -0.1626
+      },
+      "max_component_abs_ic_minus_family_abs_ic": 0.0,
+      "cancellation_flag": false
+    },
+    {
+      "family": "crowding_mega",
+      "family_ic10": 0.0589,
+      "family_partial_ic10": 0.0858,
+      "component_count": 1,
+      "positive_component_count": 1,
+      "negative_component_count": 0,
+      "component_sign_agreement_with_family_pct": 100.0,
+      "strongest_abs_component": {
+        "key": "crowding_mega::c1",
+        "members": [
+          "quant_crowding"
+        ],
+        "ic10": 0.0589,
+        "ic10_2022_present": -0.0259,
+        "partial_ic10": 0.0858,
+        "ablation_delta_pct": -0.323
+      },
+      "strongest_abs_partial_component": {
+        "key": "crowding_mega::c1",
+        "members": [
+          "quant_crowding"
+        ],
+        "ic10": 0.0589,
+        "partial_ic10": 0.0858,
+        "partial_ic10_2022_present": 0.1098
+      },
+      "max_component_abs_ic_minus_family_abs_ic": 0.0,
+      "cancellation_flag": false
+    }
+  ],
+  "multivariate_component_loyo": {
+    "n": 2441,
+    "full_mse": 12.022432,
+    "families": {
+      "breadth_participation::c1": {
+        "without_family_mse": 12.021982,
+        "delta_mse_without_minus_full": -0.00045,
+        "delta_pct_of_full_mse": -0.004,
+        "helps_full_model_if_positive": false
+      },
+      "breadth_participation::c2": {
+        "without_family_mse": 12.018429,
+        "delta_mse_without_minus_full": -0.004003,
+        "delta_pct_of_full_mse": -0.033,
+        "helps_full_model_if_positive": false
+      },
+      "breadth_participation::c3": {
+        "without_family_mse": 11.981976,
+        "delta_mse_without_minus_full": -0.040456,
+        "delta_pct_of_full_mse": -0.337,
+        "helps_full_model_if_positive": false
+      },
+      "breadth_participation::c4": {
+        "without_family_mse": 11.84668,
+        "delta_mse_without_minus_full": -0.175752,
+        "delta_pct_of_full_mse": -1.462,
+        "helps_full_model_if_positive": false
+      },
+      "cross_asset_commodity::c1": {
+        "without_family_mse": 11.926872,
+        "delta_mse_without_minus_full": -0.09556,
+        "delta_pct_of_full_mse": -0.795,
+        "helps_full_model_if_positive": false
+      },
+      "crowding_mega::c1": {
+        "without_family_mse": 11.983589,
+        "delta_mse_without_minus_full": -0.038844,
+        "delta_pct_of_full_mse": -0.323,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c1": {
+        "without_family_mse": 11.994625,
+        "delta_mse_without_minus_full": -0.027807,
+        "delta_pct_of_full_mse": -0.231,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c2": {
+        "without_family_mse": 11.93698,
+        "delta_mse_without_minus_full": -0.085452,
+        "delta_pct_of_full_mse": -0.711,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c3": {
+        "without_family_mse": 11.889799,
+        "delta_mse_without_minus_full": -0.132634,
+        "delta_pct_of_full_mse": -1.103,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c4": {
+        "without_family_mse": 11.992366,
+        "delta_mse_without_minus_full": -0.030067,
+        "delta_pct_of_full_mse": -0.25,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c5": {
+        "without_family_mse": 12.049738,
+        "delta_mse_without_minus_full": 0.027306,
+        "delta_pct_of_full_mse": 0.227,
+        "helps_full_model_if_positive": true
+      },
+      "fear_volatility::c6": {
+        "without_family_mse": 11.930561,
+        "delta_mse_without_minus_full": -0.091872,
+        "delta_pct_of_full_mse": -0.764,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c7": {
+        "without_family_mse": 11.921368,
+        "delta_mse_without_minus_full": -0.101065,
+        "delta_pct_of_full_mse": -0.841,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c8": {
+        "without_family_mse": 11.931056,
+        "delta_mse_without_minus_full": -0.091376,
+        "delta_pct_of_full_mse": -0.76,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c9": {
+        "without_family_mse": 12.054404,
+        "delta_mse_without_minus_full": 0.031972,
+        "delta_pct_of_full_mse": 0.266,
+        "helps_full_model_if_positive": true
+      },
+      "fear_volatility::c10": {
+        "without_family_mse": 12.028001,
+        "delta_mse_without_minus_full": 0.005569,
+        "delta_pct_of_full_mse": 0.046,
+        "helps_full_model_if_positive": true
+      },
+      "fear_volatility::c11": {
+        "without_family_mse": 11.87498,
+        "delta_mse_without_minus_full": -0.147452,
+        "delta_pct_of_full_mse": -1.226,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c12": {
+        "without_family_mse": 11.854833,
+        "delta_mse_without_minus_full": -0.167599,
+        "delta_pct_of_full_mse": -1.394,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c13": {
+        "without_family_mse": 11.968108,
+        "delta_mse_without_minus_full": -0.054324,
+        "delta_pct_of_full_mse": -0.452,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c14": {
+        "without_family_mse": 11.879231,
+        "delta_mse_without_minus_full": -0.143201,
+        "delta_pct_of_full_mse": -1.191,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c15": {
+        "without_family_mse": 11.927628,
+        "delta_mse_without_minus_full": -0.094804,
+        "delta_pct_of_full_mse": -0.789,
+        "helps_full_model_if_positive": false
+      },
+      "fear_volatility::c16": {
+        "without_family_mse": 11.919132,
+        "delta_mse_without_minus_full": -0.1033,
+        "delta_pct_of_full_mse": -0.859,
+        "helps_full_model_if_positive": false
+      },
+      "rates_policy::c1": {
+        "without_family_mse": 11.881814,
+        "delta_mse_without_minus_full": -0.140619,
+        "delta_pct_of_full_mse": -1.17,
+        "helps_full_model_if_positive": false
+      },
+      "rates_policy::c2": {
+        "without_family_mse": 12.050006,
+        "delta_mse_without_minus_full": 0.027573,
+        "delta_pct_of_full_mse": 0.229,
+        "helps_full_model_if_positive": true
+      },
+      "sentiment_event::c1": {
+        "without_family_mse": 11.972449,
+        "delta_mse_without_minus_full": -0.049983,
+        "delta_pct_of_full_mse": -0.416,
+        "helps_full_model_if_positive": false
+      },
+      "sentiment_event::c2": {
+        "without_family_mse": 12.032521,
+        "delta_mse_without_minus_full": 0.010088,
+        "delta_pct_of_full_mse": 0.084,
+        "helps_full_model_if_positive": true
+      },
+      "sentiment_event::c3": {
+        "without_family_mse": 12.07744,
+        "delta_mse_without_minus_full": 0.055008,
+        "delta_pct_of_full_mse": 0.458,
+        "helps_full_model_if_positive": true
+      },
+      "valuation_price_structure::c1": {
+        "without_family_mse": 11.675041,
+        "delta_mse_without_minus_full": -0.347392,
+        "delta_pct_of_full_mse": -2.89,
+        "helps_full_model_if_positive": false
+      },
+      "valuation_price_structure::c2": {
+        "without_family_mse": 11.933768,
+        "delta_mse_without_minus_full": -0.088665,
+        "delta_pct_of_full_mse": -0.737,
+        "helps_full_model_if_positive": false
+      },
+      "valuation_price_structure::c3": {
+        "without_family_mse": 11.937267,
+        "delta_mse_without_minus_full": -0.085166,
+        "delta_pct_of_full_mse": -0.708,
+        "helps_full_model_if_positive": false
+      },
+      "valuation_price_structure::c4": {
+        "without_family_mse": 12.024242,
+        "delta_mse_without_minus_full": 0.001809,
+        "delta_pct_of_full_mse": 0.015,
+        "helps_full_model_if_positive": true
+      }
+    },
+    "folds": [
+      {
+        "year": 2017,
+        "n": 251
+      },
+      {
+        "year": 2018,
+        "n": 251
+      },
+      {
+        "year": 2019,
+        "n": 252
+      },
+      {
+        "year": 2020,
+        "n": 253
+      },
+      {
+        "year": 2021,
+        "n": 252
+      },
+      {
+        "year": 2022,
+        "n": 251
+      },
+      {
+        "year": 2023,
+        "n": 250
+      },
+      {
+        "year": 2024,
+        "n": 252
+      },
+      {
+        "year": 2025,
+        "n": 250
+      },
+      {
+        "year": 2026,
+        "n": 179
+      }
+    ],
+    "ridge_alpha": 10.0
+  },
+  "guardrails": {
+    "may_change_production": false,
+    "may_reweight_model": false,
+    "may_remove_indicator": false,
+    "may_promote_component": false,
+    "note": "Component winners are descriptive historical evidence only; a separate preregistered OOS challenger is required before any production change."
+  }
+}
