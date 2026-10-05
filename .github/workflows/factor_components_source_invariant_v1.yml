@@ -1,0 +1,75 @@
+name: Source-Invariant Factor Component Audit V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - research_factor_components_source_invariant_v1.py
+      - research/factor_components_source_invariant_v1/STUDY_SPEC.md
+      - research_factor_map_v1.py
+      - research_factor_map_source_invariant_v1.py
+      - research_indicator_validation_marketprice_v1.py
+      - research_indicator_validation_v1_sourceaware.py
+      - ablation_runner.py
+      - update_data.py
+      - indicator_config.json
+      - market_model_v2.json
+      - requirements.txt
+      - .github/workflows/factor_components_source_invariant_v1.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: factor-components-source-invariant-v1
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build source-invariant factor component audit
+        run: python research_factor_components_source_invariant_v1.py
+      - name: Validate component audit
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/factor_components_source_invariant_v1.json',encoding='utf-8'))
+          s=json.load(open('docs/data/factor_components_source_invariant_v1_summary.json',encoding='utf-8'))
+          assert d['schema']=='SOURCE-INVARIANT-FACTOR-COMPONENT-AUDIT-V1'
+          assert s['schema']=='SOURCE-INVARIANT-FACTOR-COMPONENT-AUDIT-V1-SUMMARY'
+          assert d['research_only'] is True and d['diagnostic_only'] is True
+          assert d['production_effect']=='none'
+          assert d['weights_changed'] is False and d['thresholds_changed'] is False
+          assert d['coverage']['eligible_directional_indicator_count'] >= 25
+          assert d['coverage']['family_count'] >= 5
+          assert d['coverage']['component_count'] >= d['coverage']['family_count']
+          assert len(d['component_rows']) == d['coverage']['component_count']
+          assert d['guardrails']['may_change_production'] is False
+          assert d['guardrails']['may_reweight_model'] is False
+          assert d['guardrails']['may_remove_indicator'] is False
+          assert d['guardrails']['may_promote_component'] is False
+          print('SOURCE_INVARIANT_FACTOR_COMPONENT_AUDIT_V1_VALID', d['coverage'])
+          PY
+      - name: Commit research data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/factor_components_source_invariant_v1.json docs/data/factor_components_source_invariant_v1_summary.json
+          if git diff --cached --quiet; then
+            echo 'No component-audit change.'
+          else
+            git commit -m 'data: refresh source-invariant factor component audit V1'
+            git restore --worktree --staged .
+            git pull --rebase origin main
+            git push
+          fi
