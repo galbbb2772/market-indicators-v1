@@ -4,7 +4,7 @@
   "runs": [
     {
       "run_date": "2026-10-05",
-      "generated_at": "2026-10-05T13:17:30.295346+00:00",
+      "generated_at": "2026-10-05T13:23:28.394746+00:00",
       "fred_available_count": 0,
       "fred_configured_count": 17,
       "fred_direct_complete": false,
@@ -73,14 +73,53 @@
         "market_bias": "downstream_mixed:market_optimism+market_pessimism"
       },
       "new_revision_count": 0,
-      "errors": {
+      "recovered_by_single_series_retry": [],
+      "unresolved_ids": [
+        "BAA10Y",
+        "BAMLH0A0HYM2",
+        "BUSINV",
+        "DFF",
+        "DGS10",
+        "DGS2",
+        "DTWEXBGS",
+        "ECBDFR",
+        "ICSA",
+        "ISRATIO",
+        "LOANINV",
+        "MTSDS133FMS",
+        "NFCI",
+        "T10Y2Y",
+        "T10Y3M",
+        "UNRATE",
+        "WALCL"
+      ],
+      "initial_chunk_errors": {
         "fred:NFCI,BAMLH0A0HYM2,T10Y2Y,T10Y3M": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
         "fred:DGS2,DGS10,DTWEXBGS,BAA10Y": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
         "fred:ISRATIO,BUSINV,MTSDS133FMS,UNRATE": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
         "fred:ICSA,DFF,ECBDFR,WALCL": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
         "fred:LOANINV": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))"
+      },
+      "single_series_recovery_errors": {
+        "fred:NFCI": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:BAMLH0A0HYM2": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:T10Y2Y": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:T10Y3M": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:DGS2": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:DGS10": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:DTWEXBGS": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:BAA10Y": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:ISRATIO": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:BUSINV": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:MTSDS133FMS": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:UNRATE": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:ICSA": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:DFF": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:ECBDFR": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:WALCL": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
+        "fred:LOANINV": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))"
       }
     }
   ],
-  "updated_at": "2026-10-05T13:17:30.295346+00:00"
+  "updated_at": "2026-10-05T13:23:28.394746+00:00"
 }
