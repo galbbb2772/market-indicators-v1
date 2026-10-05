@@ -1,0 +1,80 @@
+name: Market-Price Indicator Validation V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - research_indicator_validation_v1.py
+      - research_indicator_validation_v1_sourceaware.py
+      - research_indicator_validation_marketprice_v1.py
+      - research/indicator_validation_v1/STUDY_SPEC.md
+      - ablation_runner.py
+      - update_data.py
+      - indicator_config.json
+      - market_model_v2.json
+      - manual_inputs.json
+      - requirements.txt
+      - .github/workflows/indicator_validation_marketprice_v1.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: indicator-validation-marketprice-v1
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run source-invariant market-price validation
+        run: python research_indicator_validation_marketprice_v1.py
+
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          import json
+          p='docs/data/indicator_validation_marketprice_v1.json'
+          d=json.load(open(p,encoding='utf-8'))
+          assert d['schema']=='INDICATOR-VALIDATION-V1'
+          assert d['research_only'] is True and d['diagnostic_only'] is True
+          assert d['production_effect']=='none'
+          m=d['market_price_validation']
+          assert m['official_macro_sources_forced_off'] is True
+          assert m['eligible_invariant_count'] >= 20
+          assert len(m['valid_indicator_ids'])==m['eligible_invariant_count']
+          assert d['decision']['may_change_market_model_v2'] is False
+          print('MARKET_PRICE_INDICATOR_VALIDATION_V1_VALID', {
+              'n':m['eligible_invariant_count'],
+              'roles':m['role_counts'],
+              'phase':m['phase_robustness'],
+              'redundancy_pairs':m['redundancy_pairs_abs_rho_ge085'],
+          })
+          PY
+
+      - name: Commit research data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+galbbb2772@users.noreply.github.com"
+          git restore docs/data/current.json
+          git add docs/data/indicator_validation_marketprice_v1.json
+          if git diff --cached --quiet; then
+            echo "No market-price validation data change."
+          else
+            git commit -m "data: refresh market-price indicator validation V1"
+            git pull --rebase origin main
+            git push
+          fi
