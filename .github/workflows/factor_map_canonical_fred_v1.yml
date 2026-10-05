@@ -1,8 +1,11 @@
 name: Canonical FRED Factor Map V1
 
-# Auto-runs after the official FRED canonical snapshot/readiness files refresh.
+# Auto-runs after official FRED provenance completes, with push as a fallback.
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Source Provenance V1"]
+    types: [completed]
   push:
     branches: [main]
     paths:
@@ -17,10 +20,11 @@ permissions:
 
 concurrency:
   group: canonical-fred-factor-map-v1
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
