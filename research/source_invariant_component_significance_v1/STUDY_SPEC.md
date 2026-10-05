@@ -4,6 +4,10 @@ Status: **research-only / diagnostic-only / post-discovery screening**.
 
 This study does not change production weights, thresholds, indicator formulas, or Market Model V2.
 
+## Historical cutoff
+
+The V1 historical evidence set is frozen through **2026-10-02**, the last fully completed U.S. trading session before this study was frozen. Any partial/intraday 2026-10-05 Yahoo observation is excluded. Forward returns are allowed only when their endpoint is also observable within the frozen historical panel.
+
 ## Universe
 
 Use the exact source-invariant component construction from `research_factor_components_source_invariant_v1.py`:
