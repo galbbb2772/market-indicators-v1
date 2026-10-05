@@ -1,0 +1,93 @@
+{
+  "schema": "SOURCE-INVARIANT-REPRESENTATIVES-OOS-V1",
+  "generated_at": "2026-10-05T14:16:57.524647+00:00",
+  "research_only": true,
+  "observation_only": true,
+  "production_effect": "none",
+  "preregistration": "research/source_invariant_representatives_oos_v1/PREREGISTRATION.md",
+  "frozen_through_market_date": "2026-10-02",
+  "candidates": {
+    "fear_volatility::c15": {
+      "member": "sector_utilities_vol",
+      "expected_ic10_sign": "negative",
+      "historical_ic10": -0.142824,
+      "historical_bh_fdr_q": 0.061938,
+      "observations": [],
+      "source_recompute_discrepancies": []
+    },
+    "fear_volatility::c10": {
+      "member": "sector_fin_vol",
+      "expected_ic10_sign": "negative",
+      "historical_ic10": -0.133312,
+      "historical_bh_fdr_q": 0.077423,
+      "observations": [],
+      "source_recompute_discrepancies": []
+    },
+    "sentiment_event::c2": {
+      "member": "geo_news_impact",
+      "expected_ic10_sign": "negative",
+      "historical_ic10": -0.093116,
+      "historical_bh_fdr_q": 0.030969,
+      "observations": [],
+      "source_recompute_discrepancies": []
+    }
+  },
+  "confirmatory_protocol": {
+    "minimum_matured_daily_observations": 252,
+    "minimum_calendar_months": 12,
+    "block_sessions": 20,
+    "bootstrap_replications": 1000,
+    "circular_shift_replications": 1000,
+    "multiple_testing": "BH-FDR across exactly three preregistered candidates",
+    "automatic_promotion": false
+  },
+  "confirmatory_lock": null,
+  "warnings": [
+    "Historical evidence through 2026-10-02 is excluded from the prospective sample.",
+    "First-seen scores are immutable; later recomputation disagreements are logged separately.",
+    "Adjusted-close forward returns are frozen at first maturity and are not rewritten later."
+  ],
+  "latest_completed_market_date": "2026-10-02",
+  "status": {
+    "counts": {
+      "fear_volatility::c15": {
+        "forward_observation_count": 0,
+        "matured_10d_count": 0,
+        "first_forward_market_date": null,
+        "latest_forward_market_date": null,
+        "discrepancy_count": 0
+      },
+      "fear_volatility::c10": {
+        "forward_observation_count": 0,
+        "matured_10d_count": 0,
+        "first_forward_market_date": null,
+        "latest_forward_market_date": null,
+        "discrepancy_count": 0
+      },
+      "sentiment_event::c2": {
+        "forward_observation_count": 0,
+        "matured_10d_count": 0,
+        "first_forward_market_date": null,
+        "latest_forward_market_date": null,
+        "discrepancy_count": 0
+      }
+    },
+    "minimum_matured_count_across_candidates": 0,
+    "sample_gate_ready": false,
+    "calendar_gate_ready": false,
+    "confirmatory_lock_ready": false,
+    "automatic_promotion": false
+  },
+  "last_run_changes": {
+    "new_observations": {
+      "fear_volatility::c15": 0,
+      "fear_volatility::c10": 0,
+      "sentiment_event::c2": 0
+    },
+    "newly_matured_10d": {
+      "fear_volatility::c15": 0,
+      "fear_volatility::c10": 0,
+      "sentiment_event::c2": 0
+    }
+  }
+}
