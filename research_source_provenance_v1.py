@@ -3,12 +3,14 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
 
 import update_data as ud
+from fred_api_bridge import fetch_fred_api
 from research_indicator_validation_v1_sourceaware import FRED_DEPENDENT
 
 ROOT = Path(__file__).resolve().parent
@@ -46,26 +48,6 @@ def norm_series(s: pd.Series):
 def series_hash(rows):
     raw = "\n".join(f"{d}={format(v, '.15g')}" for d, v in rows).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
-
-
-def fetch_fred_with_single_recovery(ids):
-    initial_errors = {}
-    fs = ud.get_fred(list(ids), initial_errors)
-    recovered = []
-    recovery_errors = {}
-    missing = [sid for sid in ids if sid not in fs]
-    for sid in missing:
-        try:
-            one = ud.fred_chunk([sid])
-            if sid in one and not one[sid].empty:
-                fs[sid] = one[sid]
-                recovered.append(sid)
-            else:
-                recovery_errors[f"fred:{sid}"] = "single-series retry returned no usable observations"
-        except Exception as exc:
-            recovery_errors[f"fred:{sid}"] = repr(exc)
-    unresolved = [sid for sid in ids if sid not in fs]
-    return fs, initial_errors, recovery_errors, recovered, unresolved
 
 
 def formula_modes(avail: set[str]):
@@ -111,8 +93,47 @@ def formula_modes(avail: set[str]):
 
 def main():
     generated = now_iso()
-    fs, initial_errors, recovery_errors, recovered_ids, unresolved_ids = fetch_fred_with_single_recovery(ud.FRED_IDS)
+    api_key_configured = bool((os.getenv("FRED_API_KEY") or "").strip())
+
+    fs: dict[str, pd.Series] = {}
+    series_transport: dict[str, str] = {}
+    api_errors: dict[str, str] = {}
+    initial_chunk_errors: dict[str, str] = {}
+    single_series_recovery_errors: dict[str, str] = {}
+
+    # Priority 1: official keyed FRED API. This is the preferred canonical path.
+    if api_key_configured:
+        api_rows = fetch_fred_api(ud.FRED_IDS, api_errors)
+        for sid, s in api_rows.items():
+            fs[sid] = s
+            series_transport[sid] = "fred_api"
+
+    # Priority 2: official FRED CSV for any series not recovered by the API.
+    missing = [sid for sid in ud.FRED_IDS if sid not in fs]
+    if missing:
+        csv_rows = ud.get_fred(missing, initial_chunk_errors)
+        for sid, s in csv_rows.items():
+            if sid not in fs:
+                fs[sid] = s
+                series_transport[sid] = "fred_csv"
+
+    # Last direct-source recovery: retry unresolved series individually via CSV.
+    unresolved = [sid for sid in ud.FRED_IDS if sid not in fs]
+    recovered_by_single = []
+    for sid in unresolved:
+        try:
+            one = ud.fred_chunk([sid])
+            if sid in one and not one[sid].dropna().empty:
+                fs[sid] = one[sid]
+                series_transport[sid] = "fred_csv_single_retry"
+                recovered_by_single.append(sid)
+            else:
+                single_series_recovery_errors[f"fred:{sid}"] = "single-series retry returned no observations"
+        except Exception as exc:
+            single_series_recovery_errors[f"fred:{sid}"] = repr(exc)
+
     avail = set(fs)
+    unresolved = sorted(set(ud.FRED_IDS) - avail)
 
     current_series = {}
     status = {}
@@ -126,7 +147,8 @@ def main():
             "end": rows[-1][0] if rows else None,
             "latest_value": rows[-1][1] if rows else None,
             "sha256": series_hash(rows) if rows else None,
-            "recovered_by_single_series_retry": sid in recovered_ids,
+            "transport": series_transport.get(sid),
+            "recovered_by_single_series_retry": sid in recovered_by_single,
         }
 
     old_canon = load_json(CANON, {"series": {}})
@@ -165,11 +187,13 @@ def main():
         "generated_at": generated,
         "research_only": True,
         "archive_start_note": "Point-in-time revision reconstruction is only supported from the first V1 archive onward.",
+        "series_transport": series_transport,
         "series": current_series,
     }
 
     modes = formula_modes(avail)
-    direct_complete = len(avail) == len(ud.FRED_IDS)
+    api_available = sum(1 for sid in avail if series_transport.get(sid) == "fred_api")
+    csv_available = len(avail) - api_available
     provenance = {
         "schema": "SOURCE-PROVENANCE-V1",
         "generated_at": generated,
@@ -181,11 +205,17 @@ def main():
             "configured_ids": list(ud.FRED_IDS),
             "available_count": len(avail),
             "configured_count": len(ud.FRED_IDS),
-            "direct_complete": direct_complete,
-            "initial_chunk_errors": {k: v for k, v in initial_errors.items() if str(k).startswith("fred:")},
-            "single_series_recovery_errors": recovery_errors,
-            "recovered_by_single_series_retry": sorted(recovered_ids),
-            "unresolved_ids": sorted(unresolved_ids),
+            "direct_complete": len(avail) == len(ud.FRED_IDS),
+            "api_key_configured": api_key_configured,
+            "api_available_count": api_available,
+            "csv_available_count": csv_available,
+            "api_complete": api_available == len(ud.FRED_IDS),
+            "api_errors": api_errors,
+            "initial_chunk_errors": initial_chunk_errors,
+            "single_series_recovery_errors": single_series_recovery_errors,
+            "recovered_by_single_series_retry": sorted(recovered_by_single),
+            "unresolved_ids": unresolved,
+            "series_transport": series_transport,
             "series_status": status,
             "new_revision_count": len(new_revisions),
         },
@@ -195,7 +225,7 @@ def main():
             "may_change_production": False,
             "may_reweight_model": False,
             "may_change_formula": False,
-            "note": "Fallback modes are provenance labels only and are never relabelled as official-source evidence.",
+            "note": "Official API/CSV transport changes are provenance only. Fallback modes are never relabelled as official-source evidence.",
         },
     }
 
@@ -206,15 +236,18 @@ def main():
         "generated_at": generated,
         "fred_available_count": len(avail),
         "fred_configured_count": len(ud.FRED_IDS),
-        "fred_direct_complete": direct_complete,
+        "fred_direct_complete": provenance["fred"]["direct_complete"],
+        "fred_api_key_configured": api_key_configured,
+        "fred_api_available_count": api_available,
+        "fred_csv_available_count": csv_available,
         "fred_hashes": {sid: status[sid]["sha256"] for sid in ud.FRED_IDS},
         "fred_latest_dates": {sid: status[sid]["end"] for sid in ud.FRED_IDS},
+        "fred_transports": {sid: status[sid]["transport"] for sid in ud.FRED_IDS},
         "formula_modes": modes,
         "new_revision_count": len(new_revisions),
-        "recovered_by_single_series_retry": sorted(recovered_ids),
-        "unresolved_ids": sorted(unresolved_ids),
-        "initial_chunk_errors": provenance["fred"]["initial_chunk_errors"],
-        "single_series_recovery_errors": recovery_errors,
+        "api_errors": api_errors,
+        "initial_chunk_errors": initial_chunk_errors,
+        "single_series_recovery_errors": single_series_recovery_errors,
     }
     runs = history.setdefault("runs", [])
     runs[:] = [x for x in runs if x.get("run_date") != run_key]
@@ -231,9 +264,11 @@ def main():
     print(json.dumps({
         "fred_available": len(avail),
         "fred_configured": len(ud.FRED_IDS),
-        "direct_complete": direct_complete,
-        "recovered_by_single_series_retry": sorted(recovered_ids),
-        "unresolved_ids": sorted(unresolved_ids),
+        "direct_complete": provenance["fred"]["direct_complete"],
+        "api_key_configured": api_key_configured,
+        "api_available": api_available,
+        "csv_available": csv_available,
+        "unresolved": unresolved,
         "new_revisions": len(new_revisions),
         "formula_modes_sample": {k: modes[k] for k in ["liquidity_risk", "high_yield", "treasury_rate_regime", "yield_curve"]},
     }, ensure_ascii=False))
