@@ -19,6 +19,7 @@ SEED = 20261005
 BLOCK = 20
 BOOT_N = 1000
 SHIFT_N = 1000
+FROZEN_THROUGH = pd.Timestamp("2026-10-02")
 
 
 def corr(a: np.ndarray, b: np.ndarray):
@@ -96,6 +97,9 @@ def main():
     prior_rows = {x["key"]: x for x in prior.get("component_rows", [])}
 
     close = mk["SPY"]["Close"].dropna().sort_index()
+    close = close[close.index <= FROZEN_THROUGH]
+    if close.empty or close.index.max() != FROZEN_THROUGH:
+        raise RuntimeError(f"Frozen cutoff {FROZEN_THROUGH.date()} is not present as a completed SPY session")
     frame = fm.forward_frame(close)
     meta = {x["id"]: x for x in ordered}
 
@@ -112,6 +116,7 @@ def main():
             excluded[k] = "non_directional_polarity"
             continue
         ss = pd.Series(s).dropna().sort_index().astype(float)
+        ss = ss[ss.index <= FROZEN_THROUGH]
         aligned = ss.reindex(frame.index).ffill().dropna()
         if len(aligned) < fm.MIN_OBS or ss.nunique() < fm.MIN_UNIQUE:
             excluded[k] = "insufficient_history_or_unique_values"
@@ -144,7 +149,6 @@ def main():
         y = ranks["y"].to_numpy(float)
         observed = corr(x, y)
 
-        # Each component gets an independent deterministic RNG stream.
         rng_boot = np.random.default_rng(SEED + ordinal * 2)
         rng_shift = np.random.default_rng(SEED + ordinal * 2 + 1)
         boots = moving_block_bootstrap(x, y, rng_boot)
@@ -226,6 +230,7 @@ def main():
         "post_discovery_screening": True,
         "production_effect": "none",
         "study_spec": SPEC,
+        "frozen_through_market_date": str(FROZEN_THROUGH.date()),
         "coverage": {
             "spy_start": str(frame.index.min().date()),
             "spy_end": str(frame.index.max().date()),
@@ -257,6 +262,7 @@ def main():
         "schema": "SOURCE-INVARIANT-COMPONENT-SIGNIFICANCE-V1-SUMMARY",
         "generated_at": payload["generated_at"],
         "research_only": True,
+        "frozen_through_market_date": payload["frozen_through_market_date"],
         "coverage": payload["coverage"],
         "forward_oos_priority": priority,
         "regime_or_descriptive": regime,
@@ -266,6 +272,7 @@ def main():
     SUMMARY.write_text(json.dumps(compact, ensure_ascii=False, indent=2), encoding="utf-8")
 
     print(json.dumps({
+        "frozen_through_market_date": payload["frozen_through_market_date"],
         "coverage": payload["coverage"],
         "priority": [[r["key"], r["ic10"], r["ic10_2022_present"], r["bh_fdr_q"], r["block_bootstrap"]["ci95_low"], r["block_bootstrap"]["ci95_high"], r["univariate_loyo_improvement_pct"]] for r in priority],
         "top": [[r["key"], r["screening_label"], r["screening_gate_pass_count"], r["ic10"], r["bh_fdr_q"]] for r in rows[:12]],
