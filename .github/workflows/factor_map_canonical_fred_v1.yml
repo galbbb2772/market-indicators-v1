@@ -1,5 +1,6 @@
 name: Canonical FRED Factor Map V1
 
+# Auto-runs after the official FRED canonical snapshot/readiness files refresh.
 on:
   workflow_dispatch:
   push:
