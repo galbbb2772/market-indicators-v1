@@ -4,7 +4,7 @@
   "runs": [
     {
       "run_date": "2026-10-05",
-      "generated_at": "2026-10-05T14:01:18.411696+00:00",
+      "generated_at": "2026-10-05T15:29:18.885772+00:00",
       "fred_available_count": 0,
       "fred_configured_count": 17,
       "fred_direct_complete": false,
@@ -124,5 +124,5 @@
       }
     }
   ],
-  "updated_at": "2026-10-05T14:01:18.411696+00:00"
+  "updated_at": "2026-10-05T15:29:18.885772+00:00"
 }
