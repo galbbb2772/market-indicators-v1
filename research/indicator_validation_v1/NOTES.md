@@ -1,0 +1,1 @@
+Implementation note: V1 currently uses runtime-captured `series_store` from `ablation_runner.py`; this preserves full reconstructed histories without changing production serialization in `current.json`.
