@@ -1,0 +1,25 @@
+{
+  "schema": "FRED-CANONICAL-V1",
+  "generated_at": "2026-10-05T13:17:30.295346+00:00",
+  "research_only": true,
+  "archive_start_note": "Point-in-time revision reconstruction is only supported from the first V1 archive onward.",
+  "series": {
+    "NFCI": [],
+    "BAMLH0A0HYM2": [],
+    "T10Y2Y": [],
+    "T10Y3M": [],
+    "DGS2": [],
+    "DGS10": [],
+    "DTWEXBGS": [],
+    "BAA10Y": [],
+    "ISRATIO": [],
+    "BUSINV": [],
+    "MTSDS133FMS": [],
+    "UNRATE": [],
+    "ICSA": [],
+    "DFF": [],
+    "ECBDFR": [],
+    "WALCL": [],
+    "LOANINV": []
+  }
+}
