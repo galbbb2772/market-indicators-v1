@@ -2,6 +2,9 @@ name: Market Factor Map V2
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Canonical FRED Factor Map V1"]
+    types: [completed]
   push:
     branches: [main]
     paths:
@@ -13,6 +16,7 @@ on:
       - docs/data/sector_rotation_state_v1_summary.json
       - docs/data/source_provenance_v1.json
       - docs/data/fred_official_readiness_v1.json
+      - docs/data/factor_map_canonical_fred_v1_summary.json
       - .github/workflows/market_factor_map_v2.yml
 
 permissions:
@@ -24,6 +28,7 @@ concurrency:
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -49,6 +54,9 @@ jobs:
           assert len(d['forward_oos_representatives'])==3
           assert d['sector_rotation_context']['status']=='state_context'
           assert d['guardrails']['historical_results_count_as_forward_oos'] is False
+          if d['fred_readiness']['official_factor_map_ready']:
+              assert d['fred_readiness']['canonical_factor_map_available'] is True
+              assert all(x['canonical_evidence_available'] for x in d['source_dependent_official_families'])
           print('MARKET_FACTOR_MAP_V2_VALID', d['status_counts'], d['fred_readiness'])
           PY
       - name: Commit map
