@@ -48,6 +48,26 @@ def series_hash(rows):
     return hashlib.sha256(raw).hexdigest()
 
 
+def fetch_fred_with_single_recovery(ids):
+    initial_errors = {}
+    fs = ud.get_fred(list(ids), initial_errors)
+    recovered = []
+    recovery_errors = {}
+    missing = [sid for sid in ids if sid not in fs]
+    for sid in missing:
+        try:
+            one = ud.fred_chunk([sid])
+            if sid in one and not one[sid].empty:
+                fs[sid] = one[sid]
+                recovered.append(sid)
+            else:
+                recovery_errors[f"fred:{sid}"] = "single-series retry returned no usable observations"
+        except Exception as exc:
+            recovery_errors[f"fred:{sid}"] = repr(exc)
+    unresolved = [sid for sid in ids if sid not in fs]
+    return fs, initial_errors, recovery_errors, recovered, unresolved
+
+
 def formula_modes(avail: set[str]):
     def anyof(*ids): return any(x in avail for x in ids)
     def allof(*ids): return all(x in avail for x in ids)
@@ -84,7 +104,6 @@ def formula_modes(avail: set[str]):
     modes["market_liquidity"] = "inverse_of_liquidity_risk:" + modes["liquidity_risk"]
     modes["mega_liquidity_blowup"] = "downstream_mixed:mag7_volatility+market_fear+liquidity_risk"
     modes["market_bias"] = "downstream_mixed:market_optimism+market_pessimism"
-    # Guarantee the source-aware dependency list is fully represented.
     for k in sorted(FRED_DEPENDENT):
         modes.setdefault(k, "official_source_dependent_unspecified")
     return modes
@@ -92,8 +111,7 @@ def formula_modes(avail: set[str]):
 
 def main():
     generated = now_iso()
-    errors = {}
-    fs = ud.get_fred(list(ud.FRED_IDS), errors)
+    fs, initial_errors, recovery_errors, recovered_ids, unresolved_ids = fetch_fred_with_single_recovery(ud.FRED_IDS)
     avail = set(fs)
 
     current_series = {}
@@ -108,6 +126,7 @@ def main():
             "end": rows[-1][0] if rows else None,
             "latest_value": rows[-1][1] if rows else None,
             "sha256": series_hash(rows) if rows else None,
+            "recovered_by_single_series_retry": sid in recovered_ids,
         }
 
     old_canon = load_json(CANON, {"series": {}})
@@ -149,8 +168,8 @@ def main():
         "series": current_series,
     }
 
-    fred_errors = {k: v for k, v in errors.items() if str(k).startswith("fred:")}
     modes = formula_modes(avail)
+    direct_complete = len(avail) == len(ud.FRED_IDS)
     provenance = {
         "schema": "SOURCE-PROVENANCE-V1",
         "generated_at": generated,
@@ -162,8 +181,11 @@ def main():
             "configured_ids": list(ud.FRED_IDS),
             "available_count": len(avail),
             "configured_count": len(ud.FRED_IDS),
-            "direct_complete": len(avail) == len(ud.FRED_IDS) and not fred_errors,
-            "errors": fred_errors,
+            "direct_complete": direct_complete,
+            "initial_chunk_errors": {k: v for k, v in initial_errors.items() if str(k).startswith("fred:")},
+            "single_series_recovery_errors": recovery_errors,
+            "recovered_by_single_series_retry": sorted(recovered_ids),
+            "unresolved_ids": sorted(unresolved_ids),
             "series_status": status,
             "new_revision_count": len(new_revisions),
         },
@@ -184,15 +206,17 @@ def main():
         "generated_at": generated,
         "fred_available_count": len(avail),
         "fred_configured_count": len(ud.FRED_IDS),
-        "fred_direct_complete": provenance["fred"]["direct_complete"],
+        "fred_direct_complete": direct_complete,
         "fred_hashes": {sid: status[sid]["sha256"] for sid in ud.FRED_IDS},
         "fred_latest_dates": {sid: status[sid]["end"] for sid in ud.FRED_IDS},
         "formula_modes": modes,
         "new_revision_count": len(new_revisions),
-        "errors": fred_errors,
+        "recovered_by_single_series_retry": sorted(recovered_ids),
+        "unresolved_ids": sorted(unresolved_ids),
+        "initial_chunk_errors": provenance["fred"]["initial_chunk_errors"],
+        "single_series_recovery_errors": recovery_errors,
     }
     runs = history.setdefault("runs", [])
-    # One canonical provenance record per UTC date. Re-running on the same day replaces it.
     runs[:] = [x for x in runs if x.get("run_date") != run_key]
     runs.append(run)
     runs.sort(key=lambda x: x.get("generated_at") or "")
@@ -207,7 +231,9 @@ def main():
     print(json.dumps({
         "fred_available": len(avail),
         "fred_configured": len(ud.FRED_IDS),
-        "direct_complete": provenance["fred"]["direct_complete"],
+        "direct_complete": direct_complete,
+        "recovered_by_single_series_retry": sorted(recovered_ids),
+        "unresolved_ids": sorted(unresolved_ids),
         "new_revisions": len(new_revisions),
         "formula_modes_sample": {k: modes[k] for k in ["liquidity_risk", "high_yield", "treasury_rate_regime", "yield_curve"]},
     }, ensure_ascii=False))
