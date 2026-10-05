@@ -4,10 +4,13 @@
   "runs": [
     {
       "run_date": "2026-10-05",
-      "generated_at": "2026-10-05T13:23:28.394746+00:00",
+      "generated_at": "2026-10-05T14:01:18.411696+00:00",
       "fred_available_count": 0,
       "fred_configured_count": 17,
       "fred_direct_complete": false,
+      "fred_api_key_configured": false,
+      "fred_api_available_count": 0,
+      "fred_csv_available_count": 0,
       "fred_hashes": {
         "NFCI": null,
         "BAMLH0A0HYM2": null,
@@ -28,6 +31,25 @@
         "LOANINV": null
       },
       "fred_latest_dates": {
+        "NFCI": null,
+        "BAMLH0A0HYM2": null,
+        "T10Y2Y": null,
+        "T10Y3M": null,
+        "DGS2": null,
+        "DGS10": null,
+        "DTWEXBGS": null,
+        "BAA10Y": null,
+        "ISRATIO": null,
+        "BUSINV": null,
+        "MTSDS133FMS": null,
+        "UNRATE": null,
+        "ICSA": null,
+        "DFF": null,
+        "ECBDFR": null,
+        "WALCL": null,
+        "LOANINV": null
+      },
+      "fred_transports": {
         "NFCI": null,
         "BAMLH0A0HYM2": null,
         "T10Y2Y": null,
@@ -73,26 +95,7 @@
         "market_bias": "downstream_mixed:market_optimism+market_pessimism"
       },
       "new_revision_count": 0,
-      "recovered_by_single_series_retry": [],
-      "unresolved_ids": [
-        "BAA10Y",
-        "BAMLH0A0HYM2",
-        "BUSINV",
-        "DFF",
-        "DGS10",
-        "DGS2",
-        "DTWEXBGS",
-        "ECBDFR",
-        "ICSA",
-        "ISRATIO",
-        "LOANINV",
-        "MTSDS133FMS",
-        "NFCI",
-        "T10Y2Y",
-        "T10Y3M",
-        "UNRATE",
-        "WALCL"
-      ],
+      "api_errors": {},
       "initial_chunk_errors": {
         "fred:NFCI,BAMLH0A0HYM2,T10Y2Y,T10Y3M": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
         "fred:DGS2,DGS10,DTWEXBGS,BAA10Y": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
@@ -121,5 +124,5 @@
       }
     }
   ],
-  "updated_at": "2026-10-05T13:23:28.394746+00:00"
+  "updated_at": "2026-10-05T14:01:18.411696+00:00"
 }

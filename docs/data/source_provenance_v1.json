@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-PROVENANCE-V1",
-  "generated_at": "2026-10-05T13:23:28.394746+00:00",
+  "generated_at": "2026-10-05T14:01:18.411696+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -28,6 +28,11 @@
     "available_count": 0,
     "configured_count": 17,
     "direct_complete": false,
+    "api_key_configured": false,
+    "api_available_count": 0,
+    "csv_available_count": 0,
+    "api_complete": false,
+    "api_errors": {},
     "initial_chunk_errors": {
       "fred:NFCI,BAMLH0A0HYM2,T10Y2Y,T10Y3M": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
       "fred:DGS2,DGS10,DTWEXBGS,BAA10Y": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))",
@@ -74,6 +79,7 @@
       "UNRATE",
       "WALCL"
     ],
+    "series_transport": {},
     "series_status": {
       "NFCI": {
         "available": false,
@@ -82,6 +88,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "BAMLH0A0HYM2": {
@@ -91,6 +98,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "T10Y2Y": {
@@ -100,6 +108,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "T10Y3M": {
@@ -109,6 +118,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "DGS2": {
@@ -118,6 +128,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "DGS10": {
@@ -127,6 +138,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "DTWEXBGS": {
@@ -136,6 +148,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "BAA10Y": {
@@ -145,6 +158,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "ISRATIO": {
@@ -154,6 +168,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "BUSINV": {
@@ -163,6 +178,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "MTSDS133FMS": {
@@ -172,6 +188,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "UNRATE": {
@@ -181,6 +198,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "ICSA": {
@@ -190,6 +208,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "DFF": {
@@ -199,6 +218,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "ECBDFR": {
@@ -208,6 +228,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "WALCL": {
@@ -217,6 +238,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "LOANINV": {
@@ -226,6 +248,7 @@
         "end": null,
         "latest_value": null,
         "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       }
     },
@@ -287,6 +310,6 @@
     "may_change_production": false,
     "may_reweight_model": false,
     "may_change_formula": false,
-    "note": "Fallback modes are provenance labels only and are never relabelled as official-source evidence."
+    "note": "Official API/CSV transport changes are provenance only. Fallback modes are never relabelled as official-source evidence."
   }
 }

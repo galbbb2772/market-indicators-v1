@@ -1,8 +1,9 @@
 {
   "schema": "FRED-CANONICAL-V1",
-  "generated_at": "2026-10-05T13:23:28.394746+00:00",
+  "generated_at": "2026-10-05T14:01:18.411696+00:00",
   "research_only": true,
   "archive_start_note": "Point-in-time revision reconstruction is only supported from the first V1 archive onward.",
+  "series_transport": {},
   "series": {
     "NFCI": [],
     "BAMLH0A0HYM2": [],
