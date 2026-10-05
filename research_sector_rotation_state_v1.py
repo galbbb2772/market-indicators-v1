@@ -16,6 +16,7 @@ SUMMARY = ROOT / "docs" / "data" / "sector_rotation_state_v1_summary.json"
 SPEC = "research/sector_rotation_state_v1/STUDY_SPEC.md"
 FROZEN = pd.Timestamp("2026-10-02")
 SECTORS = sr.SECTORS
+# Study definitions are frozen in the accompanying Study Spec; this line is CI-trigger only.
 
 
 def agg(s: pd.Series):
