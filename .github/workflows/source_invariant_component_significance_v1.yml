@@ -21,7 +21,7 @@ permissions:
 
 concurrency:
   group: source-invariant-component-significance-v1
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -47,6 +47,9 @@ jobs:
           assert s['schema']=='SOURCE-INVARIANT-COMPONENT-SIGNIFICANCE-V1-SUMMARY'
           assert d['research_only'] is True and d['diagnostic_only'] is True
           assert d['post_discovery_screening'] is True and d['production_effect']=='none'
+          assert d['frozen_through_market_date']=='2026-10-02'
+          assert s['frozen_through_market_date']=='2026-10-02'
+          assert d['coverage']['spy_end']=='2026-10-02'
           assert d['coverage']['component_count'] >= 25
           assert len(d['rows']) == d['coverage']['component_count']
           assert d['inference']['block_sessions']==20
@@ -55,6 +58,7 @@ jobs:
           assert d['guardrails']['historical_results_count_as_forward_oos'] is False
           assert all('bh_fdr_q' in r for r in d['rows'])
           print('SOURCE_INVARIANT_COMPONENT_SIGNIFICANCE_V1_VALID', {
+              'frozen':d['frozen_through_market_date'],
               'components':d['coverage']['component_count'],
               'priority':len(d['forward_oos_priority_keys']),
               'regime_or_descriptive':len(d['regime_or_descriptive_keys'])})
