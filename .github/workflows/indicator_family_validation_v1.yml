@@ -1,0 +1,77 @@
+name: Indicator Family Validation V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - research_indicator_family_validation_v1.py
+      - research/indicator_family_validation_v1/STUDY_SPEC.md
+      - research_indicator_validation_v1.py
+      - research_indicator_validation_marketprice_v1.py
+      - research_indicator_validation_v1_sourceaware.py
+      - ablation_runner.py
+      - update_data.py
+      - indicator_config.json
+      - market_model_v2.json
+      - requirements.txt
+      - .github/workflows/indicator_family_validation_v1.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: indicator-family-validation-v1
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run family validation
+        run: python research_indicator_family_validation_v1.py
+
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          import json
+          p='docs/data/indicator_family_validation_v1.json'
+          d=json.load(open(p,encoding='utf-8'))
+          assert d['schema']=='INDICATOR-FAMILY-VALIDATION-V1'
+          assert d['research_only'] is True and d['diagnostic_only'] is True
+          assert d['production_effect']=='none'
+          assert d['weights_changed'] is False and d['membership_changed'] is False
+          assert d['decision']['may_change_market_model_v2'] is False
+          assert d['coverage']['family_count']==6
+          assert len(d['families'])==6
+          for x in d['families']:
+              assert set(x['horizons'])=={'1d','5d','10d','20d','60d'}
+              assert x['observations'] >= 252
+          print('INDICATOR_FAMILY_VALIDATION_V1_VALID', d['summary'])
+          PY
+
+      - name: Commit research data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+galbbb2772@users.noreply.github.com"
+          git restore docs/data/current.json
+          git add docs/data/indicator_family_validation_v1.json
+          if git diff --cached --quiet; then
+            echo "No family-validation data change."
+          else
+            git commit -m "data: refresh indicator family validation V1"
+            git pull --rebase origin main
+            git push
+          fi
