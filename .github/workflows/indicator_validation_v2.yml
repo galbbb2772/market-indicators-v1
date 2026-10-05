@@ -1,0 +1,70 @@
+name: Indicator Validation V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - research_indicator_validation_v2.py
+      - research/indicator_validation_v1/STUDY_SPEC_V2.md
+      - ablation_runner.py
+      - update_data.py
+      - indicator_config.json
+      - market_model_v2.json
+      - requirements.txt
+      - .github/workflows/indicator_validation_v2.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: indicator-validation-v1
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run bottom-level indicator validation
+        run: python research_indicator_validation_v2.py
+      - name: Validate diagnostic outputs
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open('docs/data/indicator_validation_v1.json',encoding='utf-8'))
+          s=json.load(open('docs/data/indicator_validation_v1_summary.json',encoding='utf-8'))
+          assert a['schema']=='INDICATOR-VALIDATION-V1'
+          assert s['schema']=='INDICATOR-VALIDATION-V1-SUMMARY'
+          assert a['research_only'] is True and a['diagnostic_only'] is True
+          assert a['production_effect']=='none'
+          assert a['weights_changed'] is False and a['thresholds_changed'] is False
+          assert a['decision']['may_change_production'] is False
+          assert a['decision']['may_reweight_model'] is False
+          assert a['decision']['may_remove_indicator'] is False
+          assert a['coverage']['eligible_indicator_count'] >= 15
+          assert len(a['indicators']) == a['coverage']['eligible_indicator_count']
+          for x in a['indicators']:
+              assert set(x['full_ic']) == {'1','5','10','20'}
+              assert set(x['oos_2022_present_ic']) == {'1','5','10','20'}
+          print('INDICATOR_VALIDATION_V1_VALID', {'eligible':a['coverage']['eligible_indicator_count'],'captured':a['coverage']['captured_series_count'],'redundancy_pairs':len(a['redundancy']['pairs']),'clusters':len(a['redundancy']['clusters'])})
+          PY
+      - name: Commit research data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/indicator_validation_v1.json docs/data/indicator_validation_v1_summary.json
+          if git diff --cached --quiet; then
+            echo 'No indicator-validation data change.'
+          else
+            git commit -m 'data: refresh Indicator Validation V1'
+            git pull --rebase origin main
+            git push
+          fi
