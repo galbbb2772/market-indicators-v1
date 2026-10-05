@@ -1,0 +1,63 @@
+name: Sector Rotation State V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - research_sector_rotation_state_v1.py
+      - research/sector_rotation_state_v1/STUDY_SPEC.md
+      - research_sector_rotation_stage2_v1.py
+      - update_data.py
+      - requirements.txt
+      - .github/workflows/sector_rotation_state_v1.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sector-rotation-state-v1
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build Rotation State audit
+        run: python research_sector_rotation_state_v1.py
+      - name: Validate result
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/sector_rotation_state_v1.json',encoding='utf-8'))
+          s=json.load(open('docs/data/sector_rotation_state_v1_summary.json',encoding='utf-8'))
+          assert d['schema']=='SECTOR-ROTATION-STATE-V1'
+          assert s['schema']=='SECTOR-ROTATION-STATE-V1-SUMMARY'
+          assert d['research_only'] is True and d['diagnostic_only'] is True
+          assert d['production_effect']=='none'
+          assert d['frozen_through_market_date']=='2026-10-02'
+          assert d['coverage']['sector_count'] >= 9
+          assert d['guardrails']['historical_results_count_as_forward_oos'] is False
+          print('SECTOR_ROTATION_STATE_V1_VALID', d['activity_interaction'])
+          PY
+      - name: Commit research data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/sector_rotation_state_v1.json docs/data/sector_rotation_state_v1_summary.json
+          if git diff --cached --quiet; then
+            echo 'No state-audit change.'
+          else
+            git commit -m 'data: refresh Sector Rotation state V1'
+            git restore --worktree --staged .
+            git pull --rebase origin main
+            git push
+          fi
