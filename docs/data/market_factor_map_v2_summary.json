@@ -1,0 +1,234 @@
+{
+  "schema": "MARKET-FACTOR-MAP-V2-SUMMARY",
+  "generated_at": "2026-10-05T15:30:59.389635+00:00",
+  "research_only": true,
+  "frozen_through_market_date": "2026-10-02",
+  "design": "evidence_registry_not_weighted_score",
+  "status_counts": {
+    "regime_or_descriptive": 5,
+    "historical_factor": 2,
+    "forward_oos_priority": 3,
+    "state_context": 1,
+    "provisional_source_dependent": 2,
+    "external_stage2_context": 1
+  },
+  "fred_readiness": {
+    "status": "blocked_missing_api_key",
+    "official_factor_map_ready": false,
+    "configured_count": 17,
+    "canonical_nonempty_count": null
+  },
+  "forward_oos_representatives": [
+    {
+      "id": "fear_volatility::c15",
+      "family": "fear_volatility",
+      "members": [
+        "sector_utilities_vol"
+      ],
+      "status": "forward_oos_priority",
+      "historical_ic10": -0.142821,
+      "historical_ic10_2022_present": -0.1394,
+      "historical_partial_ic10": -0.1483,
+      "bh_fdr_q": 0.061938,
+      "screening_gate_pass_count": 7,
+      "forward_observation_count": 0,
+      "matured_10d_count": 0,
+      "discrepancy_count": 0,
+      "role": "prospective_return_factor_candidate",
+      "source_stability": "source_invariant"
+    },
+    {
+      "id": "fear_volatility::c10",
+      "family": "fear_volatility",
+      "members": [
+        "sector_fin_vol"
+      ],
+      "status": "forward_oos_priority",
+      "historical_ic10": -0.133317,
+      "historical_ic10_2022_present": -0.0899,
+      "historical_partial_ic10": -0.0673,
+      "bh_fdr_q": 0.077423,
+      "screening_gate_pass_count": 7,
+      "forward_observation_count": 0,
+      "matured_10d_count": 0,
+      "discrepancy_count": 0,
+      "role": "prospective_return_factor_candidate",
+      "source_stability": "source_invariant"
+    },
+    {
+      "id": "sentiment_event::c2",
+      "family": "sentiment_event",
+      "members": [
+        "geo_news_impact"
+      ],
+      "status": "forward_oos_priority",
+      "historical_ic10": -0.093118,
+      "historical_ic10_2022_present": -0.0714,
+      "historical_partial_ic10": -0.0917,
+      "bh_fdr_q": 0.030969,
+      "screening_gate_pass_count": 7,
+      "forward_observation_count": 0,
+      "matured_10d_count": 0,
+      "discrepancy_count": 0,
+      "role": "prospective_return_factor_candidate",
+      "source_stability": "source_invariant"
+    }
+  ],
+  "sector_rotation_context": {
+    "id": "sector_rotation_dispersion",
+    "kind": "market_state_context",
+    "status": "state_context",
+    "role": "cross_sectional_rotation_context",
+    "plain_contrarian_ic10": 0.027481,
+    "activity_weighted_contrarian_ic10": 0.022241,
+    "activity_weight_delta_ic10": -0.00524,
+    "high_dispersion_bottom2_minus_top2_10d_pp": 0.234759,
+    "low_dispersion_bottom2_minus_top2_10d_pp": -0.05823,
+    "high_persistence_bottom2_minus_top2_10d_pp": 0.13643,
+    "low_persistence_bottom2_minus_top2_10d_pp": -0.091862,
+    "interpretation": "Weak sector mean reversion is stronger in high cross-sectional dispersion; activity weighting does not improve the base contrarian IC."
+  },
+  "source_invariant_families": [
+    {
+      "id": "cross_asset_commodity",
+      "kind": "source_invariant_family",
+      "status": "regime_or_descriptive",
+      "style": "mean_reversion",
+      "ic10": -0.0813,
+      "ic10_2022_present": -0.1179,
+      "partial_ic10": -0.0983,
+      "partial_ic10_2022_present": -0.1626,
+      "phase_same_sign_pct10": 100.0,
+      "loyo_univariate_improvement_pct": -0.55,
+      "loyo_ablation_delta_pct": -0.218,
+      "role": "return_state_or_regime",
+      "source_stability": "source_invariant"
+    },
+    {
+      "id": "crowding_mega",
+      "kind": "source_invariant_family",
+      "status": "regime_or_descriptive",
+      "style": "mixed_or_regime_dependent",
+      "ic10": 0.0589,
+      "ic10_2022_present": -0.0259,
+      "partial_ic10": 0.0858,
+      "partial_ic10_2022_present": 0.1098,
+      "phase_same_sign_pct10": 100.0,
+      "loyo_univariate_improvement_pct": -1.244,
+      "loyo_ablation_delta_pct": -0.132,
+      "role": "return_state_or_regime",
+      "source_stability": "source_invariant"
+    },
+    {
+      "id": "sentiment_event",
+      "kind": "source_invariant_family",
+      "status": "historical_factor",
+      "style": "mean_reversion",
+      "ic10": -0.0875,
+      "ic10_2022_present": -0.0641,
+      "partial_ic10": -0.0536,
+      "partial_ic10_2022_present": -0.0186,
+      "phase_same_sign_pct10": 90.0,
+      "loyo_univariate_improvement_pct": 0.053,
+      "loyo_ablation_delta_pct": 0.061,
+      "role": "return_state_or_regime",
+      "source_stability": "source_invariant"
+    },
+    {
+      "id": "breadth_participation",
+      "kind": "source_invariant_family",
+      "status": "regime_or_descriptive",
+      "style": "mixed_or_regime_dependent",
+      "ic10": 0.0343,
+      "ic10_2022_present": -0.072,
+      "partial_ic10": -0.0463,
+      "partial_ic10_2022_present": -0.1456,
+      "phase_same_sign_pct10": 90.0,
+      "loyo_univariate_improvement_pct": -0.267,
+      "loyo_ablation_delta_pct": -0.487,
+      "role": "return_state_or_regime",
+      "source_stability": "source_invariant"
+    },
+    {
+      "id": "fear_volatility",
+      "kind": "source_invariant_family",
+      "status": "regime_or_descriptive",
+      "style": "mean_reversion",
+      "ic10": -0.102,
+      "ic10_2022_present": -0.0379,
+      "partial_ic10": 0.0367,
+      "partial_ic10_2022_present": 0.0609,
+      "phase_same_sign_pct10": 100.0,
+      "loyo_univariate_improvement_pct": -0.523,
+      "loyo_ablation_delta_pct": -0.316,
+      "role": "return_state_or_regime",
+      "source_stability": "source_invariant"
+    },
+    {
+      "id": "rates_policy",
+      "kind": "source_invariant_family",
+      "status": "historical_factor",
+      "style": "mean_reversion",
+      "ic10": -0.061,
+      "ic10_2022_present": -0.0653,
+      "partial_ic10": -0.0308,
+      "partial_ic10_2022_present": 0.0275,
+      "phase_same_sign_pct10": 100.0,
+      "loyo_univariate_improvement_pct": 0.023,
+      "loyo_ablation_delta_pct": -0.407,
+      "role": "return_state_or_regime",
+      "source_stability": "source_invariant"
+    },
+    {
+      "id": "valuation_price_structure",
+      "kind": "source_invariant_family",
+      "status": "regime_or_descriptive",
+      "style": "mixed_or_regime_dependent",
+      "ic10": -0.0096,
+      "ic10_2022_present": -0.0468,
+      "partial_ic10": -0.0085,
+      "partial_ic10_2022_present": -0.0438,
+      "phase_same_sign_pct10": 40.0,
+      "loyo_univariate_improvement_pct": -1.272,
+      "loyo_ablation_delta_pct": -1.351,
+      "role": "return_state_or_regime",
+      "source_stability": "source_invariant"
+    }
+  ],
+  "source_dependent_official_families": [
+    {
+      "id": "liquidity_credit_official",
+      "kind": "official_macro_family",
+      "status": "provisional_source_dependent",
+      "role": "liquidity_and_credit_state",
+      "official_source_ready": false,
+      "readiness_status": "blocked_missing_api_key"
+    },
+    {
+      "id": "official_macro_rates",
+      "kind": "official_macro_family",
+      "status": "provisional_source_dependent",
+      "role": "rates_and_curve_state",
+      "official_source_ready": false,
+      "readiness_status": "blocked_missing_api_key"
+    }
+  ],
+  "external_stage2_context": [
+    {
+      "id": "task14_cross_market_confirmation",
+      "kind": "external_stage2_context",
+      "status": "external_stage2_context",
+      "role": "Task1/4 context only; not a production gate",
+      "source_repo": "galbbb2772/market-structure-lab",
+      "source_path": "docs/data/task14_crossmarket_confirmation_v1.json",
+      "note": "Cross-market confirmation is maintained in Market Structure Lab and is intentionally not imported into this repo calculation."
+    }
+  ],
+  "guardrails": {
+    "may_change_production": false,
+    "may_reweight_model": false,
+    "may_remove_indicator": false,
+    "automatic_promotion": false,
+    "historical_results_count_as_forward_oos": false
+  }
+}
