@@ -6,8 +6,10 @@ on:
     branches: [main]
     paths:
       - research_source_provenance_v1.py
+      - research_fred_official_readiness_v1.py
       - fred_api_bridge.py
       - research/source_provenance_v1/STUDY_SPEC.md
+      - research/fred_official_readiness_v1/STUDY_SPEC.md
       - research_indicator_validation_v1_sourceaware.py
       - update_data.py
       - requirements.txt
@@ -41,7 +43,9 @@ jobs:
         run: pip install -r requirements.txt
       - name: Build source provenance archive
         run: python research_source_provenance_v1.py
-      - name: Validate archive
+      - name: Build official-source readiness gate
+        run: python research_fred_official_readiness_v1.py
+      - name: Validate archive and readiness
         run: |
           python - <<'PY'
           import json
@@ -49,11 +53,14 @@ jobs:
           h=json.load(open('docs/data/source_provenance_history_v1.json',encoding='utf-8'))
           c=json.load(open('docs/data/fred_canonical_v1.json',encoding='utf-8'))
           r=json.load(open('docs/data/fred_revision_ledger_v1.json',encoding='utf-8'))
+          g=json.load(open('docs/data/fred_official_readiness_v1.json',encoding='utf-8'))
           assert p['schema']=='SOURCE-PROVENANCE-V1'
           assert h['schema']=='SOURCE-PROVENANCE-HISTORY-V1'
           assert c['schema']=='FRED-CANONICAL-V1'
           assert r['schema']=='FRED-REVISION-LEDGER-V1'
+          assert g['schema']=='FRED-OFFICIAL-READINESS-V1'
           assert p['research_only'] is True and p['production_effect']=='none'
+          assert g['research_only'] is True and g['production_effect']=='none'
           assert p['guardrails']['may_change_production'] is False
           assert p['guardrails']['may_reweight_model'] is False
           assert p['guardrails']['may_change_formula'] is False
@@ -61,24 +68,26 @@ jobs:
           assert len(h['runs']) >= 1
           assert set(c['series']) == set(p['fred']['configured_ids'])
           assert p['fred']['api_available_count'] + p['fred']['csv_available_count'] == p['fred']['available_count']
-          print('SOURCE_PROVENANCE_V1_VALID', {
+          assert g['official_factor_map_ready'] == (g['status']=='ready')
+          print('SOURCE_PROVENANCE_AND_READINESS_V1_VALID', {
               'available':p['fred']['available_count'],
               'configured':p['fred']['configured_count'],
               'direct_complete':p['fred']['direct_complete'],
               'api_key_configured':p['fred']['api_key_configured'],
               'api_available':p['fred']['api_available_count'],
               'csv_available':p['fred']['csv_available_count'],
-              'new_revisions':p['fred']['new_revision_count']})
+              'readiness':g['status']})
           PY
       - name: Commit archive
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+galbbb2772@users.noreply.github.com'
-          git add docs/data/source_provenance_v1.json docs/data/source_provenance_history_v1.json docs/data/fred_canonical_v1.json docs/data/fred_revision_ledger_v1.json
+          git add docs/data/source_provenance_v1.json docs/data/source_provenance_history_v1.json docs/data/fred_canonical_v1.json docs/data/fred_revision_ledger_v1.json docs/data/fred_official_readiness_v1.json
           if git diff --cached --quiet; then
-            echo 'No provenance change.'
+            echo 'No provenance/readiness change.'
           else
-            git commit -m 'data: archive source provenance and FRED revisions'
+            git commit -m 'data: archive source provenance, revisions and FRED readiness'
+            git restore --worktree --staged .
             git pull --rebase origin main
             git push
           fi
