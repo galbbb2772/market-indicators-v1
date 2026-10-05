@@ -6,7 +6,7 @@ on:
     branches: [main]
     paths:
       - research_indicator_validation_v1.py
-      - research_indicator_validation_v1_robust.py
+      - research_indicator_validation_v1_sourceaware.py
       - research/indicator_validation_v1/STUDY_SPEC.md
       - ablation_runner.py
       - update_data.py
@@ -40,7 +40,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run full indicator validation
-        run: python research_indicator_validation_v1_robust.py
+        run: python research_indicator_validation_v1_sourceaware.py
 
       - name: Validate research output
         run: |
@@ -56,7 +56,8 @@ jobs:
           assert d['decision']['historical_best_selection_allowed'] is False
           assert d['coverage']['eligible_indicator_count'] >= 20
           assert len(d['indicators']) == d['coverage']['eligible_indicator_count']
-          assert 'source_run' in d
+          assert 'source_run' in d and 'source_strata' in d
+          assert d['source_strata']['formula_invariant_market_price_or_derived']['n'] >= 20
           for x in d['indicators']:
               assert set(x['horizons'])=={'1d','5d','10d','20d','60d'}
               assert x['aligned_observations'] >= d['eligibility']['minimum_aligned_observations']
@@ -66,7 +67,7 @@ jobs:
               'stable':d['summary']['primary_phase_same_sign_ge70_count'],
               'redundancy_pairs':d['summary']['redundancy_pairs_abs_rho_ge085'],
               'fred_error_count':d['source_run']['fred_error_count'],
-              'direct_fred_complete':d['source_run']['direct_fred_complete'],
+              'source_strata':d['source_strata'],
           })
           PY
 
@@ -74,8 +75,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+galbbb2772@users.noreply.github.com"
-          # The validation capture rebuilds current.json as a side effect; it is not
-          # part of this research commit and would otherwise block pull --rebase.
           git restore docs/data/current.json
           git add docs/data/indicator_validation_v1.json
           if git diff --cached --quiet; then
