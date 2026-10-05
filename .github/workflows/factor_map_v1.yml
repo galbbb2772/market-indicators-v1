@@ -67,6 +67,10 @@ jobs:
             echo 'No Factor Map change.'
           else
             git commit -m 'data: refresh Factor Map V1'
+            # update_data.py is instrumented during research and can refresh current.json.
+            # Keep this workflow research-only by discarding every uncommitted side effect
+            # after the Factor Map files themselves have been committed.
+            git restore --worktree --staged .
             git pull --rebase origin main
             git push
           fi
