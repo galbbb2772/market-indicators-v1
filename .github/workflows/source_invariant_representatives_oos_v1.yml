@@ -1,0 +1,77 @@
+name: Source-Invariant Representatives OOS V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - build_source_invariant_representatives_oos_v1.py
+      - research/source_invariant_representatives_oos_v1/PREREGISTRATION.md
+      - research_factor_map_source_invariant_v1.py
+      - research_indicator_validation_marketprice_v1.py
+      - research_indicator_validation_v1_sourceaware.py
+      - update_data.py
+      - requirements.txt
+      - .github/workflows/source_invariant_representatives_oos_v1.yml
+  schedule:
+    - cron: '30 18 * * 1-5'
+      timezone: 'America/New_York'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: source-invariant-representatives-oos-v1
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Refresh append-only OOS ledger
+        run: python build_source_invariant_representatives_oos_v1.py
+      - name: Validate ledger
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/source_invariant_representatives_oos_v1.json',encoding='utf-8'))
+          expected={'fear_volatility::c15','fear_volatility::c10','sentiment_event::c2'}
+          assert d['schema']=='SOURCE-INVARIANT-REPRESENTATIVES-OOS-V1'
+          assert d['research_only'] is True and d['observation_only'] is True
+          assert d['production_effect']=='none'
+          assert d['frozen_through_market_date']=='2026-10-02'
+          assert set(d['candidates'])==expected
+          assert d['confirmatory_protocol']['minimum_matured_daily_observations']==252
+          assert d['confirmatory_protocol']['minimum_calendar_months']==12
+          assert d['confirmatory_protocol']['automatic_promotion'] is False
+          assert d['status']['automatic_promotion'] is False
+          for key,b in d['candidates'].items():
+              dates=[x['market_date'] for x in b['observations']]
+              assert dates==sorted(dates)
+              assert len(dates)==len(set(dates))
+              assert all(x>'2026-10-02' for x in dates)
+              for x in b['observations']:
+                  assert x['first_seen_market_date']==x['market_date']
+          print('SOURCE_INVARIANT_REPRESENTATIVES_OOS_V1_VALID', d['status'])
+          PY
+      - name: Commit OOS ledger
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/source_invariant_representatives_oos_v1.json
+          if git diff --cached --quiet; then
+            echo 'No OOS ledger change.'
+          else
+            git commit -m 'data: refresh source-invariant representatives OOS V1'
+            git restore --worktree --staged .
+            git pull --rebase origin main
+            git push
+          fi
