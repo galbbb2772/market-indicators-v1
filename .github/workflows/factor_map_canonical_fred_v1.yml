@@ -1,0 +1,65 @@
+name: Canonical FRED Factor Map V1
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: canonical-fred-factor-map-v1
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Verify canonical FRED gate
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('docs/data/source_provenance_v1.json',encoding='utf-8'))
+          c=json.load(open('docs/data/fred_canonical_v1.json',encoding='utf-8'))
+          ids=p['fred']['configured_ids']
+          missing=[x for x in ids if not (c.get('series',{}).get(x) or [])]
+          if p['fred'].get('direct_complete') is not True or missing:
+              raise SystemExit('CANONICAL_FRED_GATE_BLOCKED direct_complete=%r missing=%r' % (p['fred'].get('direct_complete'), missing))
+          print('CANONICAL_FRED_GATE_READY', len(ids))
+          PY
+      - name: Build canonical FRED Factor Map
+        run: python research_factor_map_canonical_fred_v1.py
+      - name: Validate result
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/factor_map_canonical_fred_v1.json',encoding='utf-8'))
+          s=json.load(open('docs/data/factor_map_canonical_fred_v1_summary.json',encoding='utf-8'))
+          assert d['schema']=='MARKET-FACTOR-MAP-CANONICAL-FRED-V1'
+          assert s['schema']=='MARKET-FACTOR-MAP-CANONICAL-FRED-V1-SUMMARY'
+          assert d['canonical_fred_snapshot']['direct_complete'] is True
+          assert d['canonical_fred_snapshot']['live_fred_network_used_by_factor_map'] is False
+          assert d['guardrails']['may_change_production'] is False
+          assert d['guardrails']['historical_results_count_as_forward_oos'] is False
+          print('CANONICAL_FRED_FACTOR_MAP_V1_VALID', d['coverage'])
+          PY
+      - name: Commit research data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/factor_map_canonical_fred_v1.json docs/data/factor_map_canonical_fred_v1_summary.json
+          if git diff --cached --quiet; then
+            echo 'No canonical Factor Map change.'
+          else
+            git commit -m 'data: refresh canonical FRED Factor Map V1'
+            git restore --worktree --staged .
+            git pull --rebase origin main
+            git push
+          fi
