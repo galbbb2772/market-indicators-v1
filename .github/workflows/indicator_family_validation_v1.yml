@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - research_indicator_family_validation_v1.py
+      - research_indicator_family_validation_v1_fix.py
       - research/indicator_family_validation_v1/STUDY_SPEC.md
       - research_indicator_validation_v1.py
       - research_indicator_validation_marketprice_v1.py
@@ -41,7 +42,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run family validation
-        run: python research_indicator_family_validation_v1.py
+        run: python research_indicator_family_validation_v1_fix.py
 
       - name: Validate output
         run: |
