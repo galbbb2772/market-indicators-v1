@@ -1,0 +1,66 @@
+name: Market Factor Map V2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - research_market_factor_map_v2.py
+      - research/market_factor_map_v2/STUDY_SPEC.md
+      - docs/data/factor_map_source_invariant_v1_summary.json
+      - docs/data/source_invariant_component_significance_v1_summary.json
+      - docs/data/source_invariant_representatives_oos_v1.json
+      - docs/data/sector_rotation_state_v1_summary.json
+      - docs/data/source_provenance_v1.json
+      - docs/data/fred_official_readiness_v1.json
+      - .github/workflows/market_factor_map_v2.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: market-factor-map-v2
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build Market Factor Map V2
+        run: python research_market_factor_map_v2.py
+      - name: Validate map
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/market_factor_map_v2.json',encoding='utf-8'))
+          s=json.load(open('docs/data/market_factor_map_v2_summary.json',encoding='utf-8'))
+          assert d['schema']=='MARKET-FACTOR-MAP-V2'
+          assert s['schema']=='MARKET-FACTOR-MAP-V2-SUMMARY'
+          assert d['research_only'] is True and d['diagnostic_only'] is True
+          assert d['production_effect']=='none'
+          assert d['frozen_through_market_date']=='2026-10-02'
+          assert d['design']=='evidence_registry_not_weighted_score'
+          assert len(d['forward_oos_representatives'])==3
+          assert d['sector_rotation_context']['status']=='state_context'
+          assert d['guardrails']['historical_results_count_as_forward_oos'] is False
+          print('MARKET_FACTOR_MAP_V2_VALID', d['status_counts'], d['fred_readiness'])
+          PY
+      - name: Commit map
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+galbbb2772@users.noreply.github.com'
+          git add docs/data/market_factor_map_v2.json docs/data/market_factor_map_v2_summary.json
+          if git diff --cached --quiet; then
+            echo 'No factor-map V2 change.'
+          else
+            git commit -m 'data: refresh Market Factor Map V2'
+            git restore --worktree --staged .
+            git pull --rebase origin main
+            git push
+          fi
