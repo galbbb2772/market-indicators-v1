@@ -7,6 +7,8 @@ on:
     paths:
       - research_sector_rotation_robustness_v1.py
       - research/sector_rotation_robustness_v1/STUDY_SPEC.md
+      - research_sector_rotation_state_v1.py
+      - research/sector_rotation_state_v1/STUDY_SPEC.md
       - update_data.py
       - requirements.txt
       - .github/workflows/sector_rotation_robustness_v1.yml
@@ -32,12 +34,16 @@ jobs:
         run: pip install -r requirements.txt
       - name: Build robustness audit
         run: python research_sector_rotation_robustness_v1.py
-      - name: Validate result
+      - name: Build Rotation State audit
+        run: python research_sector_rotation_state_v1.py
+      - name: Validate results
         run: |
           python - <<'PY'
           import json
           d=json.load(open('docs/data/sector_rotation_robustness_v1.json',encoding='utf-8'))
           s=json.load(open('docs/data/sector_rotation_robustness_v1_summary.json',encoding='utf-8'))
+          st=json.load(open('docs/data/sector_rotation_state_v1.json',encoding='utf-8'))
+          sts=json.load(open('docs/data/sector_rotation_state_v1_summary.json',encoding='utf-8'))
           assert d['schema']=='SECTOR-ROTATION-ROBUSTNESS-V1'
           assert s['schema']=='SECTOR-ROTATION-ROBUSTNESS-V1-SUMMARY'
           assert d['research_only'] is True and d['diagnostic_only'] is True
@@ -48,17 +54,24 @@ jobs:
           assert set(d['variants_10d'])=={'rel20_only','rel60_only','combo_20_60'}
           assert len(d['leave_one_sector_out_10d'])==d['coverage']['sector_count']
           assert d['guardrails']['historical_results_count_as_forward_oos'] is False
-          print('SECTOR_ROTATION_ROBUSTNESS_V1_VALID', d['coverage'])
+          assert st['schema']=='SECTOR-ROTATION-STATE-V1'
+          assert sts['schema']=='SECTOR-ROTATION-STATE-V1-SUMMARY'
+          assert st['research_only'] is True and st['diagnostic_only'] is True
+          assert st['production_effect']=='none'
+          assert st['frozen_through_market_date']=='2026-10-02'
+          assert st['coverage']['sector_count']>=9
+          assert st['guardrails']['historical_results_count_as_forward_oos'] is False
+          print('SECTOR_ROTATION_ROBUSTNESS_AND_STATE_VALID', d['coverage'], st['activity_interaction'])
           PY
       - name: Commit research data
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+galbbb2772@users.noreply.github.com'
-          git add docs/data/sector_rotation_robustness_v1.json docs/data/sector_rotation_robustness_v1_summary.json
+          git add docs/data/sector_rotation_robustness_v1.json docs/data/sector_rotation_robustness_v1_summary.json docs/data/sector_rotation_state_v1.json docs/data/sector_rotation_state_v1_summary.json
           if git diff --cached --quiet; then
-            echo 'No sector-rotation robustness change.'
+            echo 'No sector-rotation research change.'
           else
-            git commit -m 'data: refresh Sector Rotation Robustness V1'
+            git commit -m 'data: refresh Sector Rotation robustness and state V1'
             git restore --worktree --staged .
             git pull --rebase origin main
             git push
