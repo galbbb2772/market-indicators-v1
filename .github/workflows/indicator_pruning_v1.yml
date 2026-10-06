@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'research/indicator_pruning_v1/run_analysis.py'
+      - 'research/indicator_pruning_v1/score_preservation_ab.py'
       - '.github/workflows/indicator_pruning_v1.yml'
 
 permissions:
@@ -30,6 +31,10 @@ jobs:
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python research/indicator_pruning_v1/run_analysis.py
+      - name: Run score-preservation A/B
+        env:
+          FRED_API_KEY: \${{ secrets.FRED_API_KEY }}
+        run: python research/indicator_pruning_v1/score_preservation_ab.py
       - name: Validate outputs
         run: |
           python - <<'PY'
@@ -41,7 +46,11 @@ jobs:
           assert s['current_active_count'] >= 1
           assert len(s['rows']) == s['current_active_count']
           assert sum(s['proposed_action_counts'].values()) == s['current_active_count']
+          a=json.load(open('docs/data/indicator_pruning_score_ab_v1.json',encoding='utf-8'))
+          assert a['schema']=='INDICATOR-PRUNING-SCORE-PRESERVATION-AB-V1'
+          assert a['pruned_active_count'] == len(s['keep_active'])
           print(s['proposed_action_counts'])
+          print(a['decision_gate'])
           PY
       - name: Commit pruning results
         run: |
@@ -50,6 +59,7 @@ jobs:
           git pull --rebase origin main
           git add docs/data/indicator_pruning_v1.json \
                   docs/data/indicator_pruning_v1_summary.json \
+                  docs/data/indicator_pruning_score_ab_v1.json \
                   research/indicator_pruning_v1/REPORT.md
           if git diff --cached --quiet; then
             echo 'No pruning result change.'
