@@ -514,49 +514,49 @@
     },
     {
       "date": "2026-10-06",
-      "generated_at": "2026-10-06T06:11:59.038713+00:00",
+      "generated_at": "2026-10-06T09:39:35.722523+00:00",
       "signals": {
-        "us_policy_event_sentiment": 1.54,
-        "geopolitical_news_risk": 26.74,
-        "systemic_news_risk": 9.22,
-        "ai_narrative_risk": 0.69,
-        "negative_narrative_density": 6.87
+        "us_policy_event_sentiment": 2.76,
+        "geopolitical_news_risk": 25.73,
+        "systemic_news_risk": 7.25,
+        "ai_narrative_risk": 0.57,
+        "negative_narrative_density": 8.53
       },
       "reaction_adjusted": {
-        "us_policy_event_sentiment": 0.84,
-        "geopolitical_news_risk": 14.02,
-        "systemic_news_risk": 4.97,
-        "ai_narrative_risk": 0.37,
-        "negative_narrative_density": 3.73
+        "us_policy_event_sentiment": 1.45,
+        "geopolitical_news_risk": 14.39,
+        "systemic_news_risk": 4.16,
+        "ai_narrative_risk": 0.28,
+        "negative_narrative_density": 4.57
       },
       "market_confirmation": {
-        "us_policy_event_sentiment": 8.64,
-        "geopolitical_news_risk": 4.89,
-        "systemic_news_risk": 7.76,
-        "ai_narrative_risk": 6.72,
-        "negative_narrative_density": 8.64
+        "us_policy_event_sentiment": 4.76,
+        "geopolitical_news_risk": 11.89,
+        "systemic_news_risk": 14.74,
+        "ai_narrative_risk": 0.0,
+        "negative_narrative_density": 7.13
       },
       "market_assets": {
         "vix": {
-          "close": 15.52,
-          "day_pct": 1.372,
-          "five_day_pct": -3.423,
-          "timestamp": 1791183600,
+          "close": 15.41,
+          "day_pct": -0.709,
+          "five_day_pct": -3.928,
+          "timestamp": 1791270000,
           "label": "VIX",
           "symbol": "^VIX"
         },
         "oil": {
-          "close": 89.41,
-          "day_pct": -0.022,
-          "five_day_pct": 0.034,
+          "close": 87.82,
+          "day_pct": -1.8,
+          "five_day_pct": -1.745,
           "timestamp": 1791259200,
           "label": "WTI原油",
           "symbol": "CL=F"
         },
         "gold": {
-          "close": 4143.1001,
-          "day_pct": -0.33,
-          "five_day_pct": -0.876,
+          "close": 4184.1001,
+          "day_pct": 0.657,
+          "five_day_pct": 0.105,
           "timestamp": 1791259200,
           "label": "黄金",
           "symbol": "GC=F"
@@ -578,10 +578,10 @@
           "sec_press"
         ],
         "query_mode": "market_context_headline_confirmed",
-        "unique_sources_seen": 50,
-        "article_rows_before_classification": 64,
-        "classified_rows": 63,
-        "events_after_dedupe": 59,
+        "unique_sources_seen": 45,
+        "article_rows_before_classification": 58,
+        "classified_rows": 57,
+        "events_after_dedupe": 55,
         "errors": {}
       }
     }
