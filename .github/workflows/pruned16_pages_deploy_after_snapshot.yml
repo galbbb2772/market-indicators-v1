@@ -1,0 +1,44 @@
+name: PRUNED16 Pages Deploy After Snapshot
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["PRUNED16 Snapshot via Validation Engine", "PRUNED16 Snapshot Only"]
+    types: [completed]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pruned16-pages-deploy-after-snapshot
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify committed PRUNED16 snapshot
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/current.json',encoding='utf-8'))
+          m=d.get('market_model_v2') or {}
+          assert m.get('version')=='MARKET-MODEL-V2-PRUNED16-2026-10-06',m
+          assert m.get('active_indicator_count')==16,m
+          print('PAGES_SNAPSHOT_OK')
+          PY
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+      - id: deployment
+        uses: actions/deploy-pages@v5
