@@ -1,0 +1,80 @@
+name: PRUNED16 Lightweight Publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'run_update_resilient.py'
+      - '.github/workflows/pruned16_publish.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pruned16-light-publish
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+      - name: Build PRUNED16 current snapshot
+        run: python run_update_resilient.py
+      - name: Validate PRUNED16 snapshot
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/current.json',encoding='utf-8'))
+          m=d.get('market_model_v2') or {}
+          assert m.get('version')=='MARKET-MODEL-V2-PRUNED16-2026-10-06', m
+          assert m.get('active_indicator_count')==16, m
+          roles={x['id']:x.get('model_v2_role') for x in d.get('indicators',[])}
+          assert roles.get('high_yield')=='archived', roles.get('high_yield')
+          for k in ('employment','geopolitical_risk','volume_speed'):
+              assert roles.get(k)=='context', (k,roles.get(k))
+          assert len((d.get('regime_backtest') or {}).get('history') or []) > 1000
+          print('PRUNED16_SNAPSHOT_VALID', d.get('market_state_score'), d.get('traffic_light'))
+          PY
+      - name: Commit snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp docs/data/current.json /tmp/pruned16-current.json
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/pruned16-current.json docs/data/current.json
+            git add docs/data/current.json
+            if git diff --cached --quiet; then
+              echo 'No current snapshot change.'
+              break
+            fi
+            git commit -m 'data: publish PRUNED16 market model snapshot'
+            if git push origin HEAD:main; then
+              break
+            fi
+          done
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
