@@ -1,0 +1,60 @@
+name: Indicator Pruning V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/indicator_pruning_v1/run_analysis.py'
+      - '.github/workflows/indicator_pruning_v1.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: indicator-pruning-v1
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas scipy requests
+      - name: Run indicator pruning
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python research/indicator_pruning_v1/run_analysis.py
+      - name: Validate outputs
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('docs/data/indicator_pruning_v1_summary.json')
+          s=json.load(open(p,encoding='utf-8'))
+          assert s['schema']=='INDICATOR-PRUNING-V1-SUMMARY'
+          assert s['current_active_count'] >= 1
+          assert len(s['rows']) == s['current_active_count']
+          assert sum(s['proposed_action_counts'].values()) == s['current_active_count']
+          print(s['proposed_action_counts'])
+          PY
+      - name: Commit pruning results
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin main
+          git add docs/data/indicator_pruning_v1.json \
+                  docs/data/indicator_pruning_v1_summary.json \
+                  research/indicator_pruning_v1/REPORT.md
+          if git diff --cached --quiet; then
+            echo 'No pruning result change.'
+          else
+            git commit -m 'research: run indicator pruning v1'
+            git pull --rebase origin main
+            git push
+          fi
