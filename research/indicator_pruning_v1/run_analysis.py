@@ -5,13 +5,16 @@ import math
 from collections import defaultdict, deque
 from datetime import datetime, timezone
 from pathlib import Path
+import sys
 
 import numpy as np
 import pandas as pd
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
 import ablation_runner as abl
 
-ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "docs" / "data"
 OUT = DATA / "indicator_pruning_v1.json"
 SUMMARY = DATA / "indicator_pruning_v1_summary.json"
