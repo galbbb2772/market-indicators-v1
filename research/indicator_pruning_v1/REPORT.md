@@ -1,46 +1,91 @@
-# Indicator Pruning V1
+# Indicator Pruning V1 — Final Research Readout
 
-Frozen evidence through **2026-10-02**. Research-only; no production membership/weight change.
+**Evidence window:** historical validation frozen through 2026-10-02; score-preservation A/B reconstructed through 2026-10-05.  
+**Status:** research-only. No raw indicator history is deleted and production membership is not changed by this report.
 
-Current active directional set: **19**.
-Proposed KEEP_ACTIVE: **11**; Context: **7**; Archive duplicate: **1**.
+## What happened
 
-## KEEP_ACTIVE
+The first statistical screen suggested compressing the 19 directional Active indicators to 11. That aggressive 19→11 version was **rejected** by score-preservation A/B:
 
-| indicator | full IC10 | 2022+ IC10 | phase sign % | component partial IC | component LOYO % | reason |
-|---|---:|---:|---:|---:|---:|---|
-| breadth_concentration | 0.082 | -0.0136 | 100.0 | 0.0287 | 0.299 | source-invariant component retains incremental evidence |
-| global_cb_rhythm | -0.077 | -0.101 | 100.0 | None | None | strong, same-sign, phase-stable historical signal |
-| market_fear | -0.1493 | -0.0883 | 100.0 | None | None | strong, same-sign, phase-stable historical signal |
-| market_liquidity | -0.1394 | -0.0704 | 100.0 | None | None | strong, same-sign, phase-stable historical signal |
-| market_support | -0.0819 | -0.0785 | 80.0 | -0.0471 | -0.184 | source-invariant component retains incremental evidence |
-| options_anomaly | -0.1029 | -0.0604 | 100.0 | -0.0147 | -0.282 | strong, same-sign, phase-stable historical signal |
-| retail_participation | -0.0625 | -0.0812 | 100.0 | 0.0294 | 0.148 | incremental component/LOYO evidence plus stable recent direction |
-| tech100_volatility | -0.0559 | 0.0363 | 90.0 | 0.0485 | -0.594 | source-invariant component retains incremental evidence |
-| treasury_rate_regime | 0.1127 | 0.0517 | 100.0 | None | None | strong, same-sign, phase-stable historical signal |
-| us_loans_speed | -0.1396 | -0.2146 | 100.0 | None | None | strong, same-sign, phase-stable historical signal |
-| valuation_percentile | 0.119 | 0.0931 | 100.0 | 0.0095 | -1.344 | strong, same-sign, phase-stable historical signal |
+- score-series correlation vs current model: **0.769**
+- mean absolute score difference: **5.15 points**
+- OOS objective delta: **-15.43**
+- OOS risk-separation delta: **-2.47 pp**
 
-## CONTEXT
+Therefore the project does **not** adopt the 11-indicator version.
 
-| indicator | proposed action | representative | full IC10 | 2022+ IC10 | reason |
-|---|---|---|---:|---:|---|
-| business_cycle | CONTEXT_WEAK |  | 0.0209 | 0.0109 | weak full/recent IC with limited phase stability |
-| employment | CONTEXT_WEAK |  | -0.0235 | -0.0242 | weak full/recent IC with limited phase stability |
-| geopolitical_risk | CONTEXT_UNSTABLE |  | -0.0884 | 0.0198 | 2022+ direction conflicts with full-sample direction |
-| market_overextension | CONTEXT_LOW_INCREMENTAL |  | -0.0307 | -0.0923 | historically informative but insufficient incremental/stability evidence for active scoring |
-| money_making_effect | CONTEXT_LOW_INCREMENTAL |  | -0.0582 | -0.0235 | historically informative but insufficient incremental/stability evidence for active scoring |
-| sme_survival_growth | CONTEXT_LOW_INCREMENTAL |  | -0.0081 | -0.0703 | historically informative but insufficient incremental/stability evidence for active scoring |
-| yield_curve | CONTEXT_LOW_INCREMENTAL |  | 0.043 | 0.1076 | historically informative but insufficient incremental/stability evidence for active scoring |
+We then switched to conservative pruning: test individual removals and accept cumulative removals only while preserving the current score structure and 2022+ risk behavior.
 
-## ARCHIVE duplicates
+## Conservative result
 
-| indicator | representative | reason |
-|---|---|---|
-| high_yield | market_liquidity | near-identical active signal to market_liquidity (|rho|=1.000) |
+Accepted cumulative removals:
+
+1. **high_yield** → Archive / no independent vote
+2. **employment** → Context
+3. **geopolitical_risk** → Context
+
+Rejected cumulative removals — keep Active for now:
+
+- business_cycle
+- market_overextension
+- money_making_effect
+- sme_survival_growth
+- yield_curve
+
+Also, **volume_speed** has zero directional polarity and should be treated as Context rather than an independent directional vote.
+
+### Final candidate directional Active set
+
+The conservative pass keeps **16 directional Active indicators**:
+
+- market_support
+- money_making_effect
+- market_overextension
+- breadth_concentration
+- options_anomaly
+- tech100_volatility
+- market_fear
+- retail_participation
+- valuation_percentile
+- business_cycle
+- sme_survival_growth
+- yield_curve
+- market_liquidity
+- treasury_rate_regime
+- global_cb_rhythm
+- us_loans_speed
+
+## Preservation test for the 16-indicator candidate
+
+Compared with the current 19-directional-indicator score:
+
+- observations: **2,453**
+- score correlation: **0.991472**
+- mean absolute score difference: **1.0721 points**
+- 95th-percentile absolute score difference: **2.5408 points**
+- full-history objective delta: **-0.6607**
+- 2022+ objective delta: **-0.1783**
+- full-history risk-separation delta: **-0.1386 pp**
+- 2022+ risk-separation delta: **+0.1193 pp**
+- full-history forward-10d IC delta: **-0.0102**
+- 2022+ forward-10d IC delta: **-0.0274**
+
+The conservative preservation gate **passes**.
+
+## Why high_yield is the clearest deletion
+
+Within the current Active set, **high_yield** and **market_liquidity** have an absolute 5-day-change Spearman correlation of **1.000** over about 2,450 aligned observations. They are effectively supplying the same historical vote in opposite score orientation after polarity handling. Retaining both gives the same underlying state more influence than intended.
 
 ## Interpretation
 
-Pruning here means **stop giving redundant/weak indicators an independent vote**. Context indicators remain visible for explanation/regime inspection. Archive indicators retain raw history, but should not independently enter the aggregate score.
+The main lesson is not “fewer is always better.” The data show that several individually weak-looking indicators still matter jointly because the current bucketed score uses them as state anchors. Removing many at once materially changes the model.
 
-A separate score-preservation A/B should be run before changing live role labels: current Active set vs proposed pruned Active set, using the same frozen historical dates and Forward-OOS guardrails.
+So the proper pruning rule is:
+
+> Remove only indicators whose information is redundant **and** whose deletion preserves the aggregate score and OOS risk structure.
+
+Under that rule, the defensible first reduction is **19 directional Active → 16**, not 19→11.
+
+## Guardrail
+
+This report does not delete source histories. Context indicators remain visible for explanation and regime inspection. Archive means “no independent vote,” not “erase the data.”
