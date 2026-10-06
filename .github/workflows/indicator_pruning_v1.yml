@@ -47,10 +47,11 @@ jobs:
           assert len(s['rows']) == s['current_active_count']
           assert sum(s['proposed_action_counts'].values()) == s['current_active_count']
           a=json.load(open('docs/data/indicator_pruning_score_ab_v1.json',encoding='utf-8'))
-          assert a['schema']=='INDICATOR-PRUNING-SCORE-PRESERVATION-AB-V1'
-          assert a['pruned_active_count'] == len(s['keep_active'])
+          assert a['schema']=='INDICATOR-PRUNING-SCORE-PRESERVATION-AB-V2'
+          assert a['final_active_count'] == len(a['final_active_ids'])
+          assert a['final_comparison']['passes'] is True
           print(s['proposed_action_counts'])
-          print(a['decision_gate'])
+          print({'accepted_removals':a['accepted_removals'],'final_active_count':a['final_active_count'],'final_comparison':a['final_comparison']})
           PY
       - name: Commit pruning results
         run: |
