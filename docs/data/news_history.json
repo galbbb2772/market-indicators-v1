@@ -514,33 +514,33 @@
     },
     {
       "date": "2026-10-06",
-      "generated_at": "2026-10-06T09:39:35.722523+00:00",
+      "generated_at": "2026-10-06T10:16:53.186589+00:00",
       "signals": {
-        "us_policy_event_sentiment": 2.76,
-        "geopolitical_news_risk": 25.73,
-        "systemic_news_risk": 7.25,
-        "ai_narrative_risk": 0.57,
-        "negative_narrative_density": 8.53
+        "us_policy_event_sentiment": 2.67,
+        "geopolitical_news_risk": 25.0,
+        "systemic_news_risk": 7.02,
+        "ai_narrative_risk": 0.0,
+        "negative_narrative_density": 8.25
       },
       "reaction_adjusted": {
-        "us_policy_event_sentiment": 1.45,
-        "geopolitical_news_risk": 14.39,
-        "systemic_news_risk": 4.16,
-        "ai_narrative_risk": 0.28,
-        "negative_narrative_density": 4.57
+        "us_policy_event_sentiment": 1.38,
+        "geopolitical_news_risk": 13.66,
+        "systemic_news_risk": 3.97,
+        "ai_narrative_risk": 0.0,
+        "negative_narrative_density": 4.35
       },
       "market_confirmation": {
-        "us_policy_event_sentiment": 4.76,
-        "geopolitical_news_risk": 11.89,
-        "systemic_news_risk": 14.74,
+        "us_policy_event_sentiment": 3.7,
+        "geopolitical_news_risk": 9.26,
+        "systemic_news_risk": 13.16,
         "ai_narrative_risk": 0.0,
-        "negative_narrative_density": 7.13
+        "negative_narrative_density": 5.55
       },
       "market_assets": {
         "vix": {
-          "close": 15.41,
-          "day_pct": -0.709,
-          "five_day_pct": -3.928,
+          "close": 15.43,
+          "day_pct": -0.58,
+          "five_day_pct": -3.803,
           "timestamp": 1791270000,
           "label": "VIX",
           "symbol": "^VIX"
@@ -554,9 +554,9 @@
           "symbol": "CL=F"
         },
         "gold": {
-          "close": 4184.1001,
-          "day_pct": 0.657,
-          "five_day_pct": 0.105,
+          "close": 4178.7998,
+          "day_pct": 0.529,
+          "five_day_pct": -0.022,
           "timestamp": 1791259200,
           "label": "黄金",
           "symbol": "GC=F"
@@ -578,10 +578,10 @@
           "sec_press"
         ],
         "query_mode": "market_context_headline_confirmed",
-        "unique_sources_seen": 45,
-        "article_rows_before_classification": 58,
-        "classified_rows": 57,
-        "events_after_dedupe": 55,
+        "unique_sources_seen": 44,
+        "article_rows_before_classification": 56,
+        "classified_rows": 55,
+        "events_after_dedupe": 53,
         "errors": {}
       }
     }
