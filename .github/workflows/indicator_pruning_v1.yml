@@ -56,6 +56,9 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # update_data.py writes a transient current.json during the A/B capture.
+          # It is not part of the pruning result and must not block rebase/commit.
+          git restore docs/data/current.json || true
           git pull --rebase origin main
           git add docs/data/indicator_pruning_v1.json \
                   docs/data/indicator_pruning_v1_summary.json \
