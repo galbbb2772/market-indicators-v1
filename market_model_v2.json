@@ -1,5 +1,5 @@
 {
-  "version": "MARKET-MODEL-V2-PRUNED20-2026-09-23",
+  "version": "MARKET-MODEL-V2-PRUNED16-2026-10-06",
   "intent": "Mean-reversion oriented market-state monitor. Keep the voting layer compact and independent; redundant composites and slow/context factors remain observable without double-counting in the score.",
   "bucket_weights": {
     "short_market": 0.4,
@@ -30,29 +30,102 @@
     ]
   },
   "active": [
-    {"id":"market_support","bucket":"short_market","multiplier":1.25,"transition_driver":true},
-    {"id":"money_making_effect","bucket":"short_market","multiplier":1.15,"transition_driver":true},
-    {"id":"market_overextension","bucket":"short_market","multiplier":1.0,"transition_driver":true},
-    {"id":"breadth_concentration","bucket":"short_market","multiplier":1.15,"transition_driver":true},
-    {"id":"options_anomaly","bucket":"short_market","multiplier":1.0,"transition_driver":true},
-    {"id":"tech100_volatility","bucket":"short_market","multiplier":0.9,"transition_driver":true},
-    {"id":"volume_speed","bucket":"short_market","multiplier":0.75,"transition_driver":true},
-
-    {"id":"market_fear","bucket":"sentiment_event","multiplier":1.25,"transition_driver":true},
-    {"id":"retail_participation","bucket":"sentiment_event","multiplier":0.8,"transition_driver":true},
-    {"id":"geopolitical_risk","bucket":"sentiment_event","multiplier":1.15,"transition_driver":true},
-
-    {"id":"valuation_percentile","bucket":"long_structure","multiplier":0.85,"transition_driver":false},
-    {"id":"business_cycle","bucket":"long_structure","multiplier":0.95,"transition_driver":false},
-    {"id":"sme_survival_growth","bucket":"long_structure","multiplier":0.85,"transition_driver":true},
-    {"id":"yield_curve","bucket":"long_structure","multiplier":1.1,"transition_driver":true},
-
-    {"id":"market_liquidity","bucket":"macro","multiplier":1.25,"transition_driver":true},
-    {"id":"high_yield","bucket":"macro","multiplier":1.2,"transition_driver":true},
-    {"id":"treasury_rate_regime","bucket":"macro","multiplier":1.0,"transition_driver":true},
-    {"id":"employment","bucket":"macro","multiplier":0.85,"transition_driver":false},
-    {"id":"global_cb_rhythm","bucket":"macro","multiplier":0.85,"transition_driver":false},
-    {"id":"us_loans_speed","bucket":"macro","multiplier":0.8,"transition_driver":false}
+    {
+      "id": "market_support",
+      "bucket": "short_market",
+      "multiplier": 1.25,
+      "transition_driver": true
+    },
+    {
+      "id": "money_making_effect",
+      "bucket": "short_market",
+      "multiplier": 1.15,
+      "transition_driver": true
+    },
+    {
+      "id": "market_overextension",
+      "bucket": "short_market",
+      "multiplier": 1,
+      "transition_driver": true
+    },
+    {
+      "id": "breadth_concentration",
+      "bucket": "short_market",
+      "multiplier": 1.15,
+      "transition_driver": true
+    },
+    {
+      "id": "options_anomaly",
+      "bucket": "short_market",
+      "multiplier": 1,
+      "transition_driver": true
+    },
+    {
+      "id": "tech100_volatility",
+      "bucket": "short_market",
+      "multiplier": 0.9,
+      "transition_driver": true
+    },
+    {
+      "id": "market_fear",
+      "bucket": "sentiment_event",
+      "multiplier": 1.25,
+      "transition_driver": true
+    },
+    {
+      "id": "retail_participation",
+      "bucket": "sentiment_event",
+      "multiplier": 0.8,
+      "transition_driver": true
+    },
+    {
+      "id": "valuation_percentile",
+      "bucket": "long_structure",
+      "multiplier": 0.85,
+      "transition_driver": false
+    },
+    {
+      "id": "business_cycle",
+      "bucket": "long_structure",
+      "multiplier": 0.95,
+      "transition_driver": false
+    },
+    {
+      "id": "sme_survival_growth",
+      "bucket": "long_structure",
+      "multiplier": 0.85,
+      "transition_driver": true
+    },
+    {
+      "id": "yield_curve",
+      "bucket": "long_structure",
+      "multiplier": 1.1,
+      "transition_driver": true
+    },
+    {
+      "id": "market_liquidity",
+      "bucket": "macro",
+      "multiplier": 1.25,
+      "transition_driver": true
+    },
+    {
+      "id": "treasury_rate_regime",
+      "bucket": "macro",
+      "multiplier": 1,
+      "transition_driver": true
+    },
+    {
+      "id": "global_cb_rhythm",
+      "bucket": "macro",
+      "multiplier": 0.85,
+      "transition_driver": false
+    },
+    {
+      "id": "us_loans_speed",
+      "bucket": "macro",
+      "multiplier": 0.8,
+      "transition_driver": false
+    }
   ],
   "context_only": [
     "systemic_risk",
@@ -73,7 +146,10 @@
     "quant_crowding",
     "cross_asset_correlation",
     "rate_cycle_sensitivity",
-    "credit_cycle"
+    "credit_cycle",
+    "employment",
+    "geopolitical_risk",
+    "volume_speed"
   ],
   "archived": [
     "market_topic_heat",
@@ -118,7 +194,8 @@
     "valuation_cycle",
     "market_volume",
     "vol_60d_change",
-    "valuation_speed"
+    "valuation_speed",
+    "high_yield"
   ],
   "planned_event_inputs": [
     {
@@ -135,12 +212,38 @@
     }
   ],
   "range_box": {
-    "indexes": ["SPY", "QQQ", "DIA"],
+    "indexes": [
+      "SPY",
+      "QQQ",
+      "DIA"
+    ],
     "small_window": 20,
     "large_window": 60,
     "formation_threshold": 65,
     "strong_threshold": 75,
     "support_test_horizon_days": 3,
     "description": "Detect nested small/large consolidation boxes; designed for mean-reversion context rather than breakout prediction."
+  },
+  "pruning_2026_10_06": {
+    "evidence": "research/indicator_pruning_v1/REPORT.md",
+    "active_directional_before": 19,
+    "active_directional_after": 16,
+    "moved_to_context": [
+      "employment",
+      "geopolitical_risk",
+      "volume_speed"
+    ],
+    "moved_to_archive": [
+      "high_yield"
+    ],
+    "raw_histories_deleted": false,
+    "score_preservation": {
+      "n": 2453,
+      "score_corr": 0.991472,
+      "mean_abs_score_diff": 1.0721,
+      "oos_objective_delta": -0.1783,
+      "oos_risk_separation_delta_pct": 0.1193,
+      "passed": true
+    }
   }
 }
