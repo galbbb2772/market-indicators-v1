@@ -42,6 +42,8 @@ jobs:
       - name: Run full indicator validation
         run: python research_indicator_validation_v1_sourceaware.py
 
+      - name: Build validation summary in same job
+        run: python summarize_indicator_validation_v1.py
       - name: Validate research output
         run: |
           python - <<'PY'
@@ -76,7 +78,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+galbbb2772@users.noreply.github.com"
           git restore docs/data/current.json
-          git add docs/data/indicator_validation_v1.json
+          git add docs/data/indicator_validation_v1.json docs/data/indicator_validation_v1_summary.json
           if git diff --cached --quiet; then
             echo "No indicator-validation data change."
           else
