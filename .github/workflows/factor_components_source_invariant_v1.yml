@@ -39,6 +39,10 @@ jobs:
         run: pip install -r requirements.txt
       - name: Build source-invariant factor component audit
         run: python research_factor_components_source_invariant_v1.py
+      - name: Build downstream significance and Factor Map V2
+        run: |
+          python research_source_invariant_component_significance_v1.py
+          python research_market_factor_map_v2.py
       - name: Validate component audit
         run: |
           python - <<'PY'
@@ -64,7 +68,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+galbbb2772@users.noreply.github.com'
-          git add docs/data/factor_components_source_invariant_v1.json docs/data/factor_components_source_invariant_v1_summary.json
+          git add docs/data/factor_components_source_invariant_v1.json docs/data/factor_components_source_invariant_v1_summary.json docs/data/source_invariant_component_significance_v1.json docs/data/source_invariant_component_significance_v1_summary.json docs/data/market_factor_map_v2.json docs/data/market_factor_map_v2_summary.json
           if git diff --cached --quiet; then
             echo 'No component-audit change.'
           else
