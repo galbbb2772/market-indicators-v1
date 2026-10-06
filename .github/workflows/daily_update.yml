@@ -146,13 +146,21 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+galbbb2772@users.noreply.github.com"
-          git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/data/sentiment_history.json docs/index.html
+          git add docs/data/current.json docs/data/news_history.json docs/data/fundamental_history.json docs/data/sentiment_history.json docs/index.html docs/sentiment.html
           if git diff --cached --quiet; then
             echo "No dashboard changes"
           else
             git commit -m "chore: refresh indicators, sentiment, fundamentals, Treasury stress, narratives, news and dashboard"
-            git pull --rebase origin main
-            git push
+            for attempt in 1 2 3; do
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                exit 0
+              fi
+              echo "Publish race on attempt ${attempt}; aborting rebase if needed and retrying."
+              git rebase --abort 2>/dev/null || true
+              sleep 2
+            done
+            echo "Failed to publish refreshed dashboard after 3 attempts." >&2
+            exit 1
           fi
 
       - name: Configure Pages
