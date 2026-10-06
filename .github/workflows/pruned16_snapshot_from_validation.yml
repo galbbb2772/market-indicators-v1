@@ -1,0 +1,60 @@
+name: PRUNED16 Snapshot via Validation Engine
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pruned16_snapshot_from_validation.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pruned16-snapshot-validation-engine
+  cancel-in-progress: true
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+      - name: Rebuild through proven validation engine
+        run: python research_indicator_validation_v1_sourceaware.py
+      - name: Validate generated PRUNED16 current
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('docs/data/current.json',encoding='utf-8'))
+          m=d.get('market_model_v2') or {}
+          assert m.get('version')=='MARKET-MODEL-V2-PRUNED16-2026-10-06',m
+          assert m.get('active_indicator_count')==16,m
+          roles={x['id']:x.get('model_v2_role') for x in d.get('indicators',[])}
+          assert roles.get('high_yield')=='archived'
+          assert roles.get('employment')=='context'
+          assert roles.get('geopolitical_risk')=='context'
+          assert roles.get('volume_speed')=='context'
+          assert len((d.get('regime_backtest') or {}).get('history') or [])>1000
+          print('VALIDATION_ENGINE_SNAPSHOT_OK',d.get('market_state_score'),d.get('traffic_light'))
+          PY
+      - name: Commit only current snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp docs/data/current.json /tmp/current.json
+          git fetch origin main
+          git reset --hard origin/main
+          cp /tmp/current.json docs/data/current.json
+          git add docs/data/current.json
+          if git diff --cached --quiet; then
+            echo 'No current change.'
+          else
+            git commit -m 'data: publish PRUNED16 current snapshot via validation engine'
+            git push origin HEAD:main
+          fi
