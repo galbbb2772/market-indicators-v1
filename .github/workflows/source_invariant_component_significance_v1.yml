@@ -8,6 +8,9 @@ on:
       - research_source_invariant_component_significance_v1.py
       - research/source_invariant_component_significance_v1/STUDY_SPEC.md
       - research_factor_components_source_invariant_v1.py
+      - docs/data/factor_components_source_invariant_v1.json
+      - docs/data/factor_components_source_invariant_v1_summary.json
+      - docs/data/factor_map_source_invariant_v1_summary.json
       - research_factor_map_source_invariant_v1.py
       - research_factor_map_v1.py
       - research_indicator_validation_marketprice_v1.py
