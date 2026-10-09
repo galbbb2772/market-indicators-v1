@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-PROVENANCE-V1",
-  "generated_at": "2026-10-08T10:28:54.262046+00:00",
+  "generated_at": "2026-10-09T10:27:36.672901+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -69,51 +69,51 @@
       },
       "BAMLH0A0HYM2": {
         "available": true,
-        "observations": 785,
+        "observations": 786,
         "start": "2023-10-09",
-        "end": "2026-10-06",
-        "latest_value": 3.03,
-        "sha256": "c14fbf42029f8a39685e6b976e401aaa6875868704237c9f071066dafc5c4c58",
+        "end": "2026-10-07",
+        "latest_value": 3.09,
+        "sha256": "3940db21fb046a2d82282b6cf4dc968e6c79eb1cd5ce290b797093fe5f45eb85",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "T10Y2Y": {
         "available": true,
-        "observations": 2943,
+        "observations": 2944,
         "start": "2015-01-02",
-        "end": "2026-10-07",
-        "latest_value": 0.51,
-        "sha256": "6393473e10427c34e3755db118a834ef6d214056b78abcd8094ff822a4a930bb",
+        "end": "2026-10-08",
+        "latest_value": 0.47,
+        "sha256": "47c44ca0b713071198272a6b66e4c34b05f418aa91148b83bebf6cc10099a453",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "T10Y3M": {
         "available": true,
-        "observations": 2943,
+        "observations": 2944,
         "start": "2015-01-02",
-        "end": "2026-10-07",
-        "latest_value": 1.06,
-        "sha256": "98c21f751508fe5fad1070fe74a770746cbdea8a1b4184732aa60d6d211ecfdf",
+        "end": "2026-10-08",
+        "latest_value": 0.99,
+        "sha256": "829575cdff8059beb39029ee4363f4aa90c8cae5b6a241bc856f60c4e354304f",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "DGS2": {
         "available": true,
-        "observations": 2942,
+        "observations": 2943,
         "start": "2015-01-02",
-        "end": "2026-10-06",
-        "latest_value": 4.79,
-        "sha256": "fef843d3e9c6b633c41d4cb47e3dc5abb95f0379f2ecf195de115a228eb9ada0",
+        "end": "2026-10-07",
+        "latest_value": 4.77,
+        "sha256": "730e0063706957e0e946d4a9ee6db357ab22351c842b980c01fd264b01afabcb",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "DGS10": {
         "available": true,
-        "observations": 2942,
+        "observations": 2943,
         "start": "2015-01-02",
-        "end": "2026-10-06",
-        "latest_value": 5.27,
-        "sha256": "ea6ffe074acc91c42d17535d8a2ece9333509374ab13caf4c839791a9e43c7a2",
+        "end": "2026-10-07",
+        "latest_value": 5.28,
+        "sha256": "7452fdc9cd6953c17d29c1cea5a9ee1951c326918317c61c35c16045f856ff0d",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
@@ -129,11 +129,11 @@
       },
       "BAA10Y": {
         "available": true,
-        "observations": 2937,
+        "observations": 2938,
         "start": "2015-01-02",
-        "end": "2026-10-06",
+        "end": "2026-10-07",
         "latest_value": 1.46,
-        "sha256": "51f68e9645687370750b9924100602e6216b79d6cd894359b9d2a2663f03fd6c",
+        "sha256": "7b1f531a5384069d1567a54f799b7b42253905fe2ca7a1381218be3df6a307b5",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
@@ -179,41 +179,41 @@
       },
       "ICSA": {
         "available": true,
-        "observations": 613,
+        "observations": 614,
         "start": "2015-01-03",
-        "end": "2026-09-26",
+        "end": "2026-10-03",
         "latest_value": 197000.0,
-        "sha256": "7cee34540fe737cfc609de52fd86dabef8ccb94e953db209232158d32a8ffc4f",
+        "sha256": "51aadddc936cde47bee09110a58d322767b84c14960fd8e0e06473fd430982ad",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "DFF": {
         "available": true,
-        "observations": 4297,
+        "observations": 4298,
         "start": "2015-01-01",
-        "end": "2026-10-06",
+        "end": "2026-10-07",
         "latest_value": 3.88,
-        "sha256": "146de09d15dde6d338fcffb0d84a80bd2e3a8b4cfe45081b2b80167b64c3bbb4",
+        "sha256": "ab37a4cfc3e1abb7f3f800f5cfbd75689a7e141c45cd089c19a67213ac186986",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "ECBDFR": {
         "available": true,
-        "observations": 4298,
+        "observations": 4299,
         "start": "2015-01-01",
-        "end": "2026-10-07",
+        "end": "2026-10-08",
         "latest_value": 2.5,
-        "sha256": "0fc0d94e50928f9dbcc55ee0a20ae464c669d8f555d736f1da98a3f0731e7861",
+        "sha256": "246d4a70d1860e46b4a6d0ceaaded633218b4221dc7979ecc0e6937462a4af40",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "WALCL": {
         "available": true,
-        "observations": 613,
+        "observations": 614,
         "start": "2015-01-07",
-        "end": "2026-09-30",
-        "latest_value": 6743031.0,
-        "sha256": "ab588e6981a5ef6825803a498d029e66a05f530ee2680e287e049500ddbc8927",
+        "end": "2026-10-07",
+        "latest_value": 6747560.0,
+        "sha256": "7f7e5c36f1373486450a518b36b9ba606db68181df7b7a657dcd0bbf0aa05f85",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
@@ -228,7 +228,7 @@
         "recovered_by_single_series_retry": false
       }
     },
-    "new_revision_count": 590
+    "new_revision_count": 1
   },
   "formula_modes": {
     "global_cb_rhythm": "fred_direct",
