@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-PROVENANCE-V1",
-  "generated_at": "2026-10-09T10:27:36.672901+00:00",
+  "generated_at": "2026-10-10T09:45:13.096874+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -70,50 +70,50 @@
       "BAMLH0A0HYM2": {
         "available": true,
         "observations": 786,
-        "start": "2023-10-09",
-        "end": "2026-10-07",
-        "latest_value": 3.09,
-        "sha256": "3940db21fb046a2d82282b6cf4dc968e6c79eb1cd5ce290b797093fe5f45eb85",
+        "start": "2023-10-10",
+        "end": "2026-10-08",
+        "latest_value": 3.15,
+        "sha256": "0c83a3cb0c194eb41cc5e97a54ba0e1a70b1ec3f460e44c50e265ca5e51c7098",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "T10Y2Y": {
         "available": true,
-        "observations": 2944,
+        "observations": 2945,
         "start": "2015-01-02",
-        "end": "2026-10-08",
-        "latest_value": 0.47,
-        "sha256": "47c44ca0b713071198272a6b66e4c34b05f418aa91148b83bebf6cc10099a453",
+        "end": "2026-10-09",
+        "latest_value": 0.44,
+        "sha256": "906315bdfa14a338bb1ef8735c71258c2aaadedc90c55c1d97e98452a51f4692",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "T10Y3M": {
         "available": true,
-        "observations": 2944,
+        "observations": 2945,
         "start": "2015-01-02",
-        "end": "2026-10-08",
+        "end": "2026-10-09",
         "latest_value": 0.99,
-        "sha256": "829575cdff8059beb39029ee4363f4aa90c8cae5b6a241bc856f60c4e354304f",
+        "sha256": "e745c8dcee269661eed8a8776fd6524001f75dedf3dc17728cae11f36ff699ca",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "DGS2": {
         "available": true,
-        "observations": 2943,
+        "observations": 2944,
         "start": "2015-01-02",
-        "end": "2026-10-07",
-        "latest_value": 4.77,
-        "sha256": "730e0063706957e0e946d4a9ee6db357ab22351c842b980c01fd264b01afabcb",
+        "end": "2026-10-08",
+        "latest_value": 4.75,
+        "sha256": "23a83adaea857145384b2faf2daff9f17a7973fc7393e9ff7a6c98fe2e1041c8",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "DGS10": {
         "available": true,
-        "observations": 2943,
+        "observations": 2944,
         "start": "2015-01-02",
-        "end": "2026-10-07",
-        "latest_value": 5.28,
-        "sha256": "7452fdc9cd6953c17d29c1cea5a9ee1951c326918317c61c35c16045f856ff0d",
+        "end": "2026-10-08",
+        "latest_value": 5.22,
+        "sha256": "ff2f7d3d35fc40b62e2c7b3e30386446d9fde2265fab76985e7b317aa2e8b361",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
@@ -129,11 +129,11 @@
       },
       "BAA10Y": {
         "available": true,
-        "observations": 2938,
+        "observations": 2939,
         "start": "2015-01-02",
-        "end": "2026-10-07",
-        "latest_value": 1.46,
-        "sha256": "7b1f531a5384069d1567a54f799b7b42253905fe2ca7a1381218be3df6a307b5",
+        "end": "2026-10-08",
+        "latest_value": 1.48,
+        "sha256": "508711daf4174ecd0eadce98fe59f8ac085c611a8182fc4783f5e6d84c86446f",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
@@ -189,21 +189,21 @@
       },
       "DFF": {
         "available": true,
-        "observations": 4298,
+        "observations": 4299,
         "start": "2015-01-01",
-        "end": "2026-10-07",
+        "end": "2026-10-08",
         "latest_value": 3.88,
-        "sha256": "ab37a4cfc3e1abb7f3f800f5cfbd75689a7e141c45cd089c19a67213ac186986",
+        "sha256": "0c49a0f07a6161377954c8623dec1c76f3cfcd98029d9900de052e21091c2357",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
       "ECBDFR": {
         "available": true,
-        "observations": 4299,
+        "observations": 4300,
         "start": "2015-01-01",
-        "end": "2026-10-08",
+        "end": "2026-10-09",
         "latest_value": 2.5,
-        "sha256": "246d4a70d1860e46b4a6d0ceaaded633218b4221dc7979ecc0e6937462a4af40",
+        "sha256": "ab2da81c6f34e4f236294de22760fe0a7c4e654aded4790f54ade927b38702ca",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
@@ -219,16 +219,16 @@
       },
       "LOANINV": {
         "available": true,
-        "observations": 140,
+        "observations": 141,
         "start": "2015-01-01",
-        "end": "2026-08-01",
-        "latest_value": 19826.4491,
-        "sha256": "75adc3862e79395474b47e8cda684eb55aadabb2a3f82bee1dd6ecf12a94ed52",
+        "end": "2026-09-01",
+        "latest_value": 19876.3501,
+        "sha256": "640d038ece658557a8348a28c7a14c399698cd71a8d63d89c5d5a1dd4f3e4ec1",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       }
     },
-    "new_revision_count": 1
+    "new_revision_count": 3
   },
   "formula_modes": {
     "global_cb_rhythm": "fred_direct",
