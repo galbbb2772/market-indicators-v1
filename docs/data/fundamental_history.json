@@ -143,6 +143,19 @@
         "mega_debt_capacity": 89.9
       },
       "errors": {}
+    },
+    {
+      "date": "2026-10-10",
+      "generated_at": "2026-10-10T09:14:02.902900+00:00",
+      "asof": "2026-07-31",
+      "source": "Yahoo Finance fundamentals timeseries",
+      "company_count": 9,
+      "signals": {
+        "mega_earnings_health": 86.61,
+        "mega_excess_cash": 73.14,
+        "mega_debt_capacity": 89.9
+      },
+      "errors": {}
     }
   ]
 }
