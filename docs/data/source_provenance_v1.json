@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-PROVENANCE-V1",
-  "generated_at": "2026-10-10T09:45:13.096874+00:00",
+  "generated_at": "2026-10-11T09:55:42.022418+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -228,7 +228,7 @@
         "recovered_by_single_series_retry": false
       }
     },
-    "new_revision_count": 3
+    "new_revision_count": 0
   },
   "formula_modes": {
     "global_cb_rhythm": "fred_direct",
