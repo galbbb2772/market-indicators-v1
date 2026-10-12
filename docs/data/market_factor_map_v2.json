@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2",
-  "generated_at": "2026-10-11T09:57:13.125404+00:00",
+  "generated_at": "2026-10-12T10:42:19.433438+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -493,14 +493,14 @@
       "official_source_ready": true,
       "canonical_evidence_available": true,
       "readiness_status": "ready",
-      "canonical_ic10": -0.1916,
+      "canonical_ic10": -0.1915,
       "canonical_ic10_2022_present": -0.2078,
       "canonical_partial_ic10": -0.1779,
       "canonical_partial_ic10_2022_present": -0.1936,
       "canonical_phase_same_sign_pct10": 100.0,
       "canonical_loyo_univariate_improvement_pct": -1.522,
-      "canonical_loyo_ablation_delta_pct": -1.405,
-      "canonical_snapshot_generated_at": "2026-10-11T09:55:42.022418+00:00",
+      "canonical_loyo_ablation_delta_pct": -1.407,
+      "canonical_snapshot_generated_at": "2026-10-12T10:40:59.731033+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     },
@@ -515,12 +515,12 @@
       "readiness_status": "ready",
       "canonical_ic10": 0.0137,
       "canonical_ic10_2022_present": -0.0057,
-      "canonical_partial_ic10": -0.0353,
-      "canonical_partial_ic10_2022_present": 0.0108,
+      "canonical_partial_ic10": -0.0352,
+      "canonical_partial_ic10_2022_present": 0.0109,
       "canonical_phase_same_sign_pct10": 90.0,
       "canonical_loyo_univariate_improvement_pct": -0.774,
-      "canonical_loyo_ablation_delta_pct": -0.715,
-      "canonical_snapshot_generated_at": "2026-10-11T09:55:42.022418+00:00",
+      "canonical_loyo_ablation_delta_pct": -0.714,
+      "canonical_snapshot_generated_at": "2026-10-12T10:40:59.731033+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     }
@@ -542,7 +542,7 @@
     "canonical_factor_map_available": true,
     "configured_count": 17,
     "canonical_nonempty_count": 17,
-    "canonical_snapshot_generated_at": "2026-10-11T09:55:42.022418+00:00"
+    "canonical_snapshot_generated_at": "2026-10-12T10:40:59.731033+00:00"
   },
   "status_counts": {
     "regime_or_descriptive": 21,
