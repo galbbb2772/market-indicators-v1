@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-PROVENANCE-V1",
-  "generated_at": "2026-10-12T10:40:59.731033+00:00",
+  "generated_at": "2026-10-13T10:28:44.791633+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -199,11 +199,11 @@
       },
       "ECBDFR": {
         "available": true,
-        "observations": 4300,
+        "observations": 4303,
         "start": "2015-01-01",
-        "end": "2026-10-09",
+        "end": "2026-10-12",
         "latest_value": 2.5,
-        "sha256": "ab2da81c6f34e4f236294de22760fe0a7c4e654aded4790f54ade927b38702ca",
+        "sha256": "ecb35493e67897af1e84d6adbb05ff7cb5c4032addfe7f68b58e93ecc57a80be",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },

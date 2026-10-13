@@ -1,6 +1,6 @@
 {
   "schema": "FRED-CANONICAL-V1",
-  "generated_at": "2026-10-12T10:40:59.731033+00:00",
+  "generated_at": "2026-10-13T10:28:44.791633+00:00",
   "research_only": true,
   "archive_start_note": "Point-in-time revision reconstruction is only supported from the first V1 archive onward.",
   "series_transport": {
@@ -115326,6 +115326,18 @@
       ],
       [
         "2026-10-09",
+        2.5
+      ],
+      [
+        "2026-10-10",
+        2.5
+      ],
+      [
+        "2026-10-11",
+        2.5
+      ],
+      [
+        "2026-10-12",
         2.5
       ]
     ],
