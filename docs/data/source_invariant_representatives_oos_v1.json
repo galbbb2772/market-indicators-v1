@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-INVARIANT-REPRESENTATIVES-OOS-V1",
-  "generated_at": "2026-10-13T03:06:24.680806+00:00",
+  "generated_at": "2026-10-14T01:18:43.032590+00:00",
   "research_only": true,
   "observation_only": true,
   "production_effect": "none",
@@ -330,9 +330,9 @@
   },
   "last_run_changes": {
     "new_observations": {
-      "fear_volatility::c15": 1,
-      "fear_volatility::c10": 1,
-      "sentiment_event::c2": 1
+      "fear_volatility::c15": 0,
+      "fear_volatility::c10": 0,
+      "sentiment_event::c2": 0
     },
     "newly_matured_10d": {
       "fear_volatility::c15": 0,
