@@ -4159,7 +4159,1701 @@
       "old_value": 19826.4491,
       "new_value": 19826.7642,
       "detected_at": "2026-10-10T09:45:13.096874+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2015-01-02",
+      "old_value": -0.549,
+      "new_value": -0.548,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2015-01-30",
+      "old_value": -0.504,
+      "new_value": -0.503,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2015-03-13",
+      "old_value": -0.532,
+      "new_value": -0.531,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2015-05-22",
+      "old_value": -0.545,
+      "new_value": -0.544,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2015-06-12",
+      "old_value": -0.543,
+      "new_value": -0.542,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2015-07-03",
+      "old_value": -0.533,
+      "new_value": -0.532,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2015-08-21",
+      "old_value": -0.436,
+      "new_value": -0.435,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2016-05-13",
+      "old_value": -0.38,
+      "new_value": -0.379,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2017-06-09",
+      "old_value": -0.557,
+      "new_value": -0.556,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2017-07-07",
+      "old_value": -0.571,
+      "new_value": -0.57,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2017-07-14",
+      "old_value": -0.574,
+      "new_value": -0.573,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2017-07-21",
+      "old_value": -0.576,
+      "new_value": -0.575,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2017-11-03",
+      "old_value": -0.598,
+      "new_value": -0.597,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2018-01-19",
+      "old_value": -0.614,
+      "new_value": -0.613,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2018-03-02",
+      "old_value": -0.529,
+      "new_value": -0.528,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2018-08-10",
+      "old_value": -0.58,
+      "new_value": -0.579,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2019-01-25",
+      "old_value": -0.506,
+      "new_value": -0.505,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2019-03-08",
+      "old_value": -0.595,
+      "new_value": -0.594,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2019-04-12",
+      "old_value": -0.612,
+      "new_value": -0.611,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2019-05-03",
+      "old_value": -0.61,
+      "new_value": -0.609,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2019-08-09",
+      "old_value": -0.558,
+      "new_value": -0.557,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2019-08-23",
+      "old_value": -0.536,
+      "new_value": -0.535,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-03-20",
+      "old_value": 0.175,
+      "new_value": 0.174,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-03-27",
+      "old_value": 0.267,
+      "new_value": 0.266,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-04-17",
+      "old_value": 0.238,
+      "new_value": 0.237,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-07-03",
+      "old_value": -0.401,
+      "new_value": -0.402,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-12-25",
+      "old_value": -0.604,
+      "new_value": -0.603,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2021-02-26",
+      "old_value": -0.627,
+      "new_value": -0.626,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2021-03-19",
+      "old_value": -0.642,
+      "new_value": -0.641,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2021-06-04",
+      "old_value": -0.695,
+      "new_value": -0.694,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2021-07-16",
+      "old_value": -0.668,
+      "new_value": -0.667,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-03-11",
+      "old_value": -0.391,
+      "new_value": -0.392,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-04-29",
+      "old_value": -0.336,
+      "new_value": -0.337,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-06-03",
+      "old_value": -0.235,
+      "new_value": -0.236,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-06-17",
+      "old_value": -0.187,
+      "new_value": -0.188,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-12-23",
+      "old_value": -0.205,
+      "new_value": -0.206,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-03-24",
+      "old_value": -0.156,
+      "new_value": -0.157,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-06-30",
+      "old_value": -0.227,
+      "new_value": -0.228,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-12-15",
+      "old_value": -0.349,
+      "new_value": -0.348,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-05-10",
+      "old_value": -0.412,
+      "new_value": -0.411,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-05-24",
+      "old_value": -0.411,
+      "new_value": -0.41,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-06-14",
+      "old_value": -0.394,
+      "new_value": -0.393,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-09-06",
+      "old_value": -0.401,
+      "new_value": -0.4,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-09-13",
+      "old_value": -0.411,
+      "new_value": -0.41,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-11-01",
+      "old_value": -0.45,
+      "new_value": -0.449,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-05-16",
+      "old_value": -0.438,
+      "new_value": -0.437,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-05-30",
+      "old_value": -0.465,
+      "new_value": -0.464,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-08-15",
+      "old_value": -0.524,
+      "new_value": -0.523,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-08-22",
+      "old_value": -0.525,
+      "new_value": -0.524,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-09-05",
+      "old_value": -0.526,
+      "new_value": -0.525,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-09-12",
+      "old_value": -0.526,
+      "new_value": -0.525,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-09-19",
+      "old_value": -0.525,
+      "new_value": -0.524,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-10-17",
+      "old_value": -0.518,
+      "new_value": -0.517,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-01-16",
+      "old_value": -0.565,
+      "new_value": -0.564,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-03-06",
+      "old_value": -0.488,
+      "new_value": -0.487,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-06-12",
+      "old_value": -0.505,
+      "new_value": -0.504,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-06-19",
+      "old_value": -0.507,
+      "new_value": -0.506,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-07-24",
+      "old_value": -0.535,
+      "new_value": -0.534,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-07-31",
+      "old_value": -0.54,
+      "new_value": -0.539,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-08-07",
+      "old_value": -0.545,
+      "new_value": -0.544,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-08-14",
+      "old_value": -0.549,
+      "new_value": -0.547,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-08-21",
+      "old_value": -0.551,
+      "new_value": -0.549,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-08-28",
+      "old_value": -0.549,
+      "new_value": -0.547,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-09-04",
+      "old_value": -0.545,
+      "new_value": -0.543,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-09-18",
+      "old_value": -0.524,
+      "new_value": -0.527,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-09-25",
+      "old_value": -0.51,
+      "new_value": -0.517,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-10-02",
+      "old_value": -0.494,
+      "new_value": -0.507,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2018-02-01",
+      "old_value": 1.37,
+      "new_value": 1.36,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2021-02-01",
+      "old_value": 1.34,
+      "new_value": 1.35,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-02-01",
+      "old_value": 1.41,
+      "new_value": 1.42,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-03-01",
+      "old_value": 1.43,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-04-01",
+      "old_value": 1.42,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-05-01",
+      "old_value": 1.42,
+      "new_value": 1.43,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-06-01",
+      "old_value": 1.42,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-07-01",
+      "old_value": 1.41,
+      "new_value": 1.43,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-08-01",
+      "old_value": 1.4,
+      "new_value": 1.42,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-09-01",
+      "old_value": 1.38,
+      "new_value": 1.41,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-10-01",
+      "old_value": 1.4,
+      "new_value": 1.42,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-11-01",
+      "old_value": 1.4,
+      "new_value": 1.43,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2023-12-01",
+      "old_value": 1.4,
+      "new_value": 1.43,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-01-01",
+      "old_value": 1.41,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-02-01",
+      "old_value": 1.4,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-03-01",
+      "old_value": 1.4,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-04-01",
+      "old_value": 1.4,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-05-01",
+      "old_value": 1.41,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-06-01",
+      "old_value": 1.41,
+      "new_value": 1.45,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-07-01",
+      "old_value": 1.4,
+      "new_value": 1.43,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-08-01",
+      "old_value": 1.41,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-09-01",
+      "old_value": 1.4,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-10-01",
+      "old_value": 1.41,
+      "new_value": 1.44,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-11-01",
+      "old_value": 1.4,
+      "new_value": 1.43,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2024-12-01",
+      "old_value": 1.39,
+      "new_value": 1.42,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-01-01",
+      "old_value": 1.4,
+      "new_value": 1.43,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-02-01",
+      "old_value": 1.39,
+      "new_value": 1.42,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-03-01",
+      "old_value": 1.38,
+      "new_value": 1.41,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-04-01",
+      "old_value": 1.38,
+      "new_value": 1.41,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-05-01",
+      "old_value": 1.39,
+      "new_value": 1.42,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-06-01",
+      "old_value": 1.39,
+      "new_value": 1.42,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-07-01",
+      "old_value": 1.37,
+      "new_value": 1.4,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-08-01",
+      "old_value": 1.37,
+      "new_value": 1.4,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-09-01",
+      "old_value": 1.37,
+      "new_value": 1.4,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-10-01",
+      "old_value": 1.38,
+      "new_value": 1.41,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-11-01",
+      "old_value": 1.37,
+      "new_value": 1.4,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2025-12-01",
+      "old_value": 1.36,
+      "new_value": 1.39,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2026-01-01",
+      "old_value": 1.35,
+      "new_value": 1.38,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2026-02-01",
+      "old_value": 1.33,
+      "new_value": 1.37,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2026-03-01",
+      "old_value": 1.32,
+      "new_value": 1.35,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2026-04-01",
+      "old_value": 1.3,
+      "new_value": 1.34,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2026-05-01",
+      "old_value": 1.28,
+      "new_value": 1.31,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2026-06-01",
+      "old_value": 1.3,
+      "new_value": 1.33,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ISRATIO",
+      "observation_date": "2026-07-01",
+      "old_value": 1.3,
+      "new_value": 1.34,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2015-01-01",
+      "old_value": 1777773.0,
+      "new_value": 1777772.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2015-03-01",
+      "old_value": 1787168.0,
+      "new_value": 1787197.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2015-06-01",
+      "old_value": 1808412.0,
+      "new_value": 1808405.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2015-08-01",
+      "old_value": 1812159.0,
+      "new_value": 1812160.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2015-09-01",
+      "old_value": 1815441.0,
+      "new_value": 1815396.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2015-10-01",
+      "old_value": 1818071.0,
+      "new_value": 1818034.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2015-11-01",
+      "old_value": 1814988.0,
+      "new_value": 1815006.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2016-01-01",
+      "old_value": 1810707.0,
+      "new_value": 1810706.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2016-03-01",
+      "old_value": 1812317.0,
+      "new_value": 1812309.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2016-04-01",
+      "old_value": 1817906.0,
+      "new_value": 1817916.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2016-05-01",
+      "old_value": 1823582.0,
+      "new_value": 1823615.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2016-06-01",
+      "old_value": 1823476.0,
+      "new_value": 1823483.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2016-10-01",
+      "old_value": 1829791.0,
+      "new_value": 1829841.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2016-11-01",
+      "old_value": 1841461.0,
+      "new_value": 1841407.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2016-12-01",
+      "old_value": 1845368.0,
+      "new_value": 1845412.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-01-01",
+      "old_value": 1849352.0,
+      "new_value": 1849283.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-02-01",
+      "old_value": 1852213.0,
+      "new_value": 1852262.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-03-01",
+      "old_value": 1855778.0,
+      "new_value": 1855831.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-04-01",
+      "old_value": 1854063.0,
+      "new_value": 1853971.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-05-01",
+      "old_value": 1858714.0,
+      "new_value": 1858695.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-06-01",
+      "old_value": 1866682.0,
+      "new_value": 1866693.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-07-01",
+      "old_value": 1873901.0,
+      "new_value": 1873874.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-08-01",
+      "old_value": 1884335.0,
+      "new_value": 1884381.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-09-01",
+      "old_value": 1887547.0,
+      "new_value": 1887539.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-10-01",
+      "old_value": 1888805.0,
+      "new_value": 1888752.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-11-01",
+      "old_value": 1897677.0,
+      "new_value": 1897640.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2017-12-01",
+      "old_value": 1904773.0,
+      "new_value": 1905083.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-01-01",
+      "old_value": 1914289.0,
+      "new_value": 1914247.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-02-01",
+      "old_value": 1924252.0,
+      "new_value": 1924621.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-03-01",
+      "old_value": 1924441.0,
+      "new_value": 1924912.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-04-01",
+      "old_value": 1930031.0,
+      "new_value": 1930501.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-05-01",
+      "old_value": 1933317.0,
+      "new_value": 1934061.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-06-01",
+      "old_value": 1936068.0,
+      "new_value": 1936730.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-07-01",
+      "old_value": 1948424.0,
+      "new_value": 1949230.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-08-01",
+      "old_value": 1959101.0,
+      "new_value": 1960039.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-09-01",
+      "old_value": 1970647.0,
+      "new_value": 1971983.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-10-01",
+      "old_value": 1981377.0,
+      "new_value": 1982749.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-11-01",
+      "old_value": 1981063.0,
+      "new_value": 1982578.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2018-12-01",
+      "old_value": 1995882.0,
+      "new_value": 1997890.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-01-01",
+      "old_value": 2010864.0,
+      "new_value": 2012435.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-02-01",
+      "old_value": 2017586.0,
+      "new_value": 2019687.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-03-01",
+      "old_value": 2019035.0,
+      "new_value": 2021317.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-04-01",
+      "old_value": 2028974.0,
+      "new_value": 2031388.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-05-01",
+      "old_value": 2033075.0,
+      "new_value": 2035603.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-06-01",
+      "old_value": 2034943.0,
+      "new_value": 2037725.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-07-01",
+      "old_value": 2041461.0,
+      "new_value": 2044367.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-08-01",
+      "old_value": 2041891.0,
+      "new_value": 2044750.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-09-01",
+      "old_value": 2040635.0,
+      "new_value": 2044045.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-10-01",
+      "old_value": 2041358.0,
+      "new_value": 2044783.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-11-01",
+      "old_value": 2041379.0,
+      "new_value": 2044853.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2019-12-01",
+      "old_value": 2040343.0,
+      "new_value": 2044074.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-01-01",
+      "old_value": 2033887.0,
+      "new_value": 2037397.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-02-01",
+      "old_value": 2022505.0,
+      "new_value": 2026484.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-03-01",
+      "old_value": 2015653.0,
+      "new_value": 2020228.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-04-01",
+      "old_value": 1987105.0,
+      "new_value": 1991441.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-05-01",
+      "old_value": 1940682.0,
+      "new_value": 1944329.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-06-01",
+      "old_value": 1917180.0,
+      "new_value": 1920426.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-07-01",
+      "old_value": 1921722.0,
+      "new_value": 1925354.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-08-01",
+      "old_value": 1932615.0,
+      "new_value": 1936495.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-09-01",
+      "old_value": 1945659.0,
+      "new_value": 1950099.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-10-01",
+      "old_value": 1965316.0,
+      "new_value": 1970238.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-11-01",
+      "old_value": 1979283.0,
+      "new_value": 1984854.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2020-12-01",
+      "old_value": 1992588.0,
+      "new_value": 1997956.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-01-01",
+      "old_value": 2010292.0,
+      "new_value": 2015460.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-02-01",
+      "old_value": 2026338.0,
+      "new_value": 2031770.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-03-01",
+      "old_value": 2030053.0,
+      "new_value": 2035286.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-04-01",
+      "old_value": 2033473.0,
+      "new_value": 2038198.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-05-01",
+      "old_value": 2050150.0,
+      "new_value": 2054970.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-06-01",
+      "old_value": 2067735.0,
+      "new_value": 2072609.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-07-01",
+      "old_value": 2094809.0,
+      "new_value": 2099938.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-08-01",
+      "old_value": 2114579.0,
+      "new_value": 2119395.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-09-01",
+      "old_value": 2139149.0,
+      "new_value": 2144339.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-10-01",
+      "old_value": 2172723.0,
+      "new_value": 2178309.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-11-01",
+      "old_value": 2209108.0,
+      "new_value": 2215745.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2021-12-01",
+      "old_value": 2265965.0,
+      "new_value": 2272804.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-01-01",
+      "old_value": 2306732.0,
+      "new_value": 2313509.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-02-01",
+      "old_value": 2349427.0,
+      "new_value": 2356790.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-03-01",
+      "old_value": 2405153.0,
+      "new_value": 2413102.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-04-01",
+      "old_value": 2435750.0,
+      "new_value": 2443649.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-05-01",
+      "old_value": 2478363.0,
+      "new_value": 2486138.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-06-01",
+      "old_value": 2514765.0,
+      "new_value": 2522667.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-07-01",
+      "old_value": 2532783.0,
+      "new_value": 2541117.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-08-01",
+      "old_value": 2552630.0,
+      "new_value": 2561528.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-09-01",
+      "old_value": 2558913.0,
+      "new_value": 2567659.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-10-01",
+      "old_value": 2571649.0,
+      "new_value": 2580850.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-11-01",
+      "old_value": 2580941.0,
+      "new_value": 2591185.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2022-12-01",
+      "old_value": 2593136.0,
+      "new_value": 2602974.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-01-01",
+      "old_value": 2591740.0,
+      "new_value": 2604406.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-02-01",
+      "old_value": 2588252.0,
+      "new_value": 2603067.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-03-01",
+      "old_value": 2585438.0,
+      "new_value": 2603472.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-04-01",
+      "old_value": 2585390.0,
+      "new_value": 2605688.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-05-01",
+      "old_value": 2580863.0,
+      "new_value": 2604184.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-06-01",
+      "old_value": 2577918.0,
+      "new_value": 2603826.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-07-01",
+      "old_value": 2573912.0,
+      "new_value": 2602182.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-08-01",
+      "old_value": 2580885.0,
+      "new_value": 2612548.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-09-01",
+      "old_value": 2587291.0,
+      "new_value": 2621225.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-10-01",
+      "old_value": 2583446.0,
+      "new_value": 2620631.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-11-01",
+      "old_value": 2577995.0,
+      "new_value": 2619592.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2023-12-01",
+      "old_value": 2591108.0,
+      "new_value": 2635608.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-01-01",
+      "old_value": 2585336.0,
+      "new_value": 2629506.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-02-01",
+      "old_value": 2594839.0,
+      "new_value": 2638312.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-03-01",
+      "old_value": 2590962.0,
+      "new_value": 2634486.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-04-01",
+      "old_value": 2599646.0,
+      "new_value": 2641549.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-05-01",
+      "old_value": 2611183.0,
+      "new_value": 2651819.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-06-01",
+      "old_value": 2618815.0,
+      "new_value": 2658593.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-07-01",
+      "old_value": 2628273.0,
+      "new_value": 2666956.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-08-01",
+      "old_value": 2635958.0,
+      "new_value": 2674733.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-09-01",
+      "old_value": 2637086.0,
+      "new_value": 2674777.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-10-01",
+      "old_value": 2640959.0,
+      "new_value": 2677991.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-11-01",
+      "old_value": 2646596.0,
+      "new_value": 2685880.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2024-12-01",
+      "old_value": 2638369.0,
+      "new_value": 2677321.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-01-01",
+      "old_value": 2649512.0,
+      "new_value": 2687443.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-02-01",
+      "old_value": 2653219.0,
+      "new_value": 2690892.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-03-01",
+      "old_value": 2656006.0,
+      "new_value": 2692787.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-04-01",
+      "old_value": 2654533.0,
+      "new_value": 2690464.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-05-01",
+      "old_value": 2654351.0,
+      "new_value": 2689596.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-06-01",
+      "old_value": 2659603.0,
+      "new_value": 2695066.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-07-01",
+      "old_value": 2663019.0,
+      "new_value": 2697987.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-08-01",
+      "old_value": 2663591.0,
+      "new_value": 2695242.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-09-01",
+      "old_value": 2670511.0,
+      "new_value": 2703132.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-10-01",
+      "old_value": 2676595.0,
+      "new_value": 2710258.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-11-01",
+      "old_value": 2677084.0,
+      "new_value": 2716493.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2025-12-01",
+      "old_value": 2676717.0,
+      "new_value": 2714847.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2026-01-01",
+      "old_value": 2676882.0,
+      "new_value": 2715293.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2026-02-01",
+      "old_value": 2686289.0,
+      "new_value": 2726854.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2026-03-01",
+      "old_value": 2712902.0,
+      "new_value": 2753536.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2026-04-01",
+      "old_value": 2728142.0,
+      "new_value": 2768760.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2026-05-01",
+      "old_value": 2739202.0,
+      "new_value": 2779297.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2026-06-01",
+      "old_value": 2742533.0,
+      "new_value": 2782459.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "BUSINV",
+      "observation_date": "2026-07-01",
+      "old_value": 2764708.0,
+      "new_value": 2807083.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
+    },
+    {
+      "source_id": "ICSA",
+      "observation_date": "2026-10-03",
+      "old_value": 197000.0,
+      "new_value": 198000.0,
+      "detected_at": "2026-10-16T08:06:15.343480+00:00"
     }
   ],
-  "updated_at": "2026-10-15T08:13:31.365458+00:00"
+  "updated_at": "2026-10-16T08:06:15.343480+00:00"
 }
