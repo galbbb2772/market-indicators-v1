@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-INVARIANT-REPRESENTATIVES-OOS-V1",
-  "generated_at": "2026-10-15T00:41:36.050437+00:00",
+  "generated_at": "2026-10-16T00:32:03.867439+00:00",
   "research_only": true,
   "observation_only": true,
   "production_effect": "none",
@@ -356,6 +356,12 @@
           "stored_score": 71.03174603174604,
           "recomputed_score": 69.75308641975309,
           "detected_at": "2026-10-13T03:06:24.680806+00:00"
+        },
+        {
+          "market_date": "2026-10-14",
+          "stored_score": 47.70723104056438,
+          "recomputed_score": 43.25396825396825,
+          "detected_at": "2026-10-16T00:32:03.867439+00:00"
         }
       ]
     }
@@ -397,7 +403,7 @@
         "matured_10d_count": 0,
         "first_forward_market_date": "2026-10-05",
         "latest_forward_market_date": "2026-10-14",
-        "discrepancy_count": 2
+        "discrepancy_count": 3
       }
     },
     "minimum_matured_count_across_candidates": 0,
@@ -408,9 +414,9 @@
   },
   "last_run_changes": {
     "new_observations": {
-      "fear_volatility::c15": 2,
-      "fear_volatility::c10": 2,
-      "sentiment_event::c2": 2
+      "fear_volatility::c15": 0,
+      "fear_volatility::c10": 0,
+      "sentiment_event::c2": 0
     },
     "newly_matured_10d": {
       "fear_volatility::c15": 0,
