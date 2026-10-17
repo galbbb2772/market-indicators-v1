@@ -49,6 +49,31 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
         self.assertTrue(v["archive_access_worked"])
         self.assertEqual(v["latest_usable_last_month"], "2021-02")
 
+    def test_forward_freshness_and_release_hardening_are_recorded(self):
+        f = self.data["forward_shadow"]["freshness"]
+        self.assertEqual(f["status"], "PASS")
+        self.assertLessEqual(f["market_lag_days"], f["limits"]["market_days"])
+        self.assertLessEqual(f["dgs2_lag_days"], f["limits"]["dgs2_days"])
+        self.assertGreaterEqual(f["walcl_lag_days"], 2)
+        self.assertLessEqual(f["walcl_lag_days"], f["limits"]["walcl_days"])
+        self.assertIn(
+            "H.4.1 release-aware",
+            self.data["forward_shadow"]["walcl_eod_semantics"],
+        )
+
+    def test_shiller_exact_vintage_gap_and_cross_vintage_pass_are_both_preserved(self):
+        s = self.data["vintage_robustness"]["shiller_wayback"]
+        self.assertFalse(s["exact_2022_01_03_valuation_vintage_recovered"])
+        self.assertEqual(s["latest_usable_last_month"], "2021-09")
+        self.assertGreater(s["route_b_with_official_2022_size"], 85)
+        self.assertGreater(s["route_b_with_lower_current_size"], 85)
+
+        b = self.data["vintage_robustness"]["failure_boundaries"]
+        self.assertGreater(b["actual_policy_shock"], b[
+            "critical_policy_shock_with_archived_valuation_and_lower_current_size"
+        ])
+        self.assertGreater(b["policy_margin"], 0)
+
     def test_2022_dates_are_locked(self):
         x = self.data["frozen_conclusions"]
         self.assertEqual(x["2022_policy_arm_date"], "2022-01-03")
