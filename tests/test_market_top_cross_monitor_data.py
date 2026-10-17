@@ -29,6 +29,8 @@ class MarketTopCrossMonitorDataTests(unittest.TestCase):
             "MASTER-TOP-V2.1.8-FROZEN",
         )
         self.assertTrue(p["master_top_formula_frozen"])
+        self.assertEqual(p["route_b_age_days_at_monitor"], 1)
+        self.assertEqual(p["max_monitor_input_age_days"], 5)
 
     def test_seed_is_not_comparable(self):
         self.assertFalse(self.data["comparable"])
