@@ -204,30 +204,47 @@ def fetch_marketparquet_stock_history(api_key: str, lookback_calendar_days: int 
         frames: list[pd.DataFrame] = []
         for p in paths:
             schema = pq.read_schema(p)
-            cols = [c for c in ["date", "symbol", "close"] if c in schema.names]
+            cols = [x for x in ["date", "symbol", "high", "low"] if x in schema.names]
             table = pq.read_table(p, columns=cols)
             df = table.to_pandas()
-            if "date" not in df.columns or "symbol" not in df.columns or "close" not in df.columns:
+            if not {"date", "symbol", "high", "low"}.issubset(df.columns):
                 continue
-            df = df[["date", "symbol", "close"]].copy()
+            df = df[["date", "symbol", "high", "low"]].copy()
             df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.normalize()
-            df["close"] = pd.to_numeric(df["close"], errors="coerce")
+            df["high"] = pd.to_numeric(df["high"], errors="coerce")
+            df["low"] = pd.to_numeric(df["low"], errors="coerce")
             frames.append(df.dropna())
         if not frames:
-            raise RuntimeError("MarketParquet files had no usable date/symbol/close data")
+            raise RuntimeError("MarketParquet files had no usable date/symbol/high/low data")
         out = pd.concat(frames, ignore_index=True)
     return out.sort_values(["symbol", "date"]).drop_duplicates(["symbol", "date"], keep="last")
 
 
 def reconstruct_hilo(stock: pd.DataFrame) -> pd.DataFrame:
-    df = stock[["date", "symbol", "close"]].copy().sort_values(["symbol", "date"])
-    g = df.groupby("symbol", sort=False)["close"]
-    prev = g.shift(1)
-    prior_hi = prev.groupby(df["symbol"], sort=False).rolling(252, min_periods=252).max().reset_index(level=0, drop=True)
-    prior_lo = prev.groupby(df["symbol"], sort=False).rolling(252, min_periods=252).min().reset_index(level=0, drop=True)
+    """
+    Reconstruct classic 52-week new-high/new-low breadth.
+
+    A new high is based on today's intraday HIGH exceeding the maximum HIGH
+    observed in the symbol's prior 252 trading sessions. A new low is based
+    on today's intraday LOW undercutting the minimum LOW over those prior
+    sessions. The current day is never included in the reference window.
+    """
+    df = stock[["date", "symbol", "high", "low"]].copy().sort_values(["symbol", "date"])
+    df["high"] = pd.to_numeric(df["high"], errors="coerce")
+    df["low"] = pd.to_numeric(df["low"], errors="coerce")
+    df = df.dropna(subset=["date", "symbol", "high", "low"])
+
+    prior_hi = df.groupby("symbol", sort=False)["high"].transform(
+        lambda s: s.shift(1).rolling(252, min_periods=252).max()
+    )
+    prior_lo = df.groupby("symbol", sort=False)["low"].transform(
+        lambda s: s.shift(1).rolling(252, min_periods=252).min()
+    )
+
     df["eligible_hilo"] = prior_hi.notna() & prior_lo.notna()
-    df["new_high"] = df["eligible_hilo"] & (df["close"] >= prior_hi)
-    df["new_low"] = df["eligible_hilo"] & (df["close"] <= prior_lo)
+    df["new_high"] = df["eligible_hilo"] & (df["high"] > prior_hi)
+    df["new_low"] = df["eligible_hilo"] & (df["low"] < prior_lo)
+
     daily = df.groupby("date").agg(
         issues=("symbol", "nunique"),
         hilo_eligible=("eligible_hilo", "sum"),
@@ -241,11 +258,175 @@ def reconstruct_hilo(stock: pd.DataFrame) -> pd.DataFrame:
         np.nan,
     )
     vals = daily["hl_balance"].to_list()
-    scores = []
-    for i in range(len(vals)):
-        scores.append(hl_persistence_score(vals[max(0, i - 19): i + 1]))
-    daily["hl_persistence"] = scores
+    daily["hl_persistence"] = [
+        hl_persistence_score(vals[max(0, i - 19): i + 1])
+        for i in range(len(vals))
+    ]
     return daily
+
+
+TRADINGVIEW_EPOCH = "tradingview_all_us_intraday_v1"
+TRADINGVIEW_LEDGER = "docs/data/master_top_v218_hilo_ledger.csv"
+
+
+def fetch_tradingview_hilo() -> dict:
+    """
+    Secretless delayed fallback for one daily H/L observation.
+
+    Universe: primary NYSE/NASDAQ/AMEX common stocks plus DRs exposed by the
+    TradingView America screener. H/L uses today's intraday high/low versus
+    TradingView's 52-week high/low field. This is deliberately stored as its
+    own source epoch and is never mixed with MarketParquet history inside one
+    persistence window.
+    """
+    from tradingview_screener import Query, col
+
+    cols = [
+        "name", "close", "high", "low",
+        "price_52_week_high", "price_52_week_low",
+        "exchange", "type", "typespecs", "update_mode", "is_primary",
+    ]
+    _, df = (
+        Query()
+        .select(*cols)
+        .where(col("is_primary") == True)
+        .limit(30000)
+        .get_scanner_data()
+    )
+    if df.empty:
+        raise RuntimeError("TradingView screener returned no rows")
+
+    us = df[df["exchange"].isin(["NYSE", "NASDAQ", "AMEX"])].copy()
+
+    def has_common(x: object) -> bool:
+        if isinstance(x, (list, tuple, set)):
+            return "common" in x
+        return "common" in str(x).lower()
+
+    common = us[
+        us["type"].eq("dr")
+        | (us["type"].eq("stock") & us["typespecs"].map(has_common))
+    ].copy()
+    numeric = ["high", "low", "price_52_week_high", "price_52_week_low"]
+    for k in numeric:
+        common[k] = pd.to_numeric(common[k], errors="coerce")
+    common = common.dropna(subset=numeric)
+    if len(common) < 1000:
+        raise RuntimeError(f"TradingView H/L universe unexpectedly small: {len(common)}")
+
+    new_high = common["high"] >= common["price_52_week_high"] * (1.0 - 1e-10)
+    new_low = common["low"] <= common["price_52_week_low"] * (1.0 + 1e-10)
+    nh, nl = int(new_high.sum()), int(new_low.sum())
+    denom = nh + nl
+    balance = (nh - nl) / denom if denom else float("nan")
+    modes = common["update_mode"].dropna().astype(str).value_counts().to_dict()
+
+    return {
+        "source_epoch": TRADINGVIEW_EPOCH,
+        "universe": int(len(common)),
+        "new_highs": nh,
+        "new_lows": nl,
+        "hl_balance": float(balance),
+        "update_modes": modes,
+        "exchanges": {
+            str(ex): int(len(g)) for ex, g in common.groupby("exchange", sort=True)
+        },
+    }
+
+
+def append_hilo_ledger(path: Path, asof: str, obs: dict) -> pd.DataFrame:
+    cols = [
+        "date", "source_epoch", "universe", "new_highs", "new_lows",
+        "hl_balance", "update_modes", "exchanges",
+    ]
+    if path.exists():
+        try:
+            ledger = pd.read_csv(path)
+        except Exception:
+            ledger = pd.DataFrame(columns=cols)
+    else:
+        ledger = pd.DataFrame(columns=cols)
+
+    row = {
+        "date": asof,
+        "source_epoch": obs["source_epoch"],
+        "universe": obs["universe"],
+        "new_highs": obs["new_highs"],
+        "new_lows": obs["new_lows"],
+        "hl_balance": obs["hl_balance"],
+        "update_modes": json.dumps(obs.get("update_modes", {}), sort_keys=True),
+        "exchanges": json.dumps(obs.get("exchanges", {}), sort_keys=True),
+    }
+    ledger = ledger[ledger.get("date", pd.Series(dtype=str)).astype(str) != asof]
+    ledger = pd.concat([ledger, pd.DataFrame([row])], ignore_index=True)
+    ledger["date"] = ledger["date"].astype(str)
+    ledger = ledger.sort_values("date").drop_duplicates(
+        ["date", "source_epoch"], keep="last"
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    ledger.to_csv(path, index=False)
+    return ledger
+
+
+def live_hl_from_ledger(ledger: pd.DataFrame, source_epoch: str) -> tuple[float, int]:
+    same = ledger.loc[ledger["source_epoch"].astype(str) == source_epoch].copy()
+    same = same.sort_values("date").drop_duplicates("date", keep="last").tail(20)
+    warm = int(len(same))
+    if warm < 20:
+        return float("nan"), warm
+    return hl_persistence_score(pd.to_numeric(same["hl_balance"], errors="coerce")), warm
+
+
+def score_from_live_hilo(
+    asof: str,
+    obs: dict,
+    hl_score: float,
+    baseline_trigger: float | None = None,
+) -> tuple[ScoreSnapshot, pd.Series]:
+    score_date = pd.Timestamp(asof)
+    price = fetch_yahoo_close("^GSPC", years=6)
+    p = price.loc[price.index <= score_date]
+    if len(p) < 1260:
+        raise RuntimeError("not enough S&P 500 history for 60M high")
+    close = float(p.iloc[-1])
+    high_60m = float(p.iloc[-1260:].max())
+    top_ratio = close / high_60m
+
+    dgs2 = fetch_dgs2()
+    y = asof_value(dgs2, score_date)
+    y1 = asof_value(dgs2, score_date - pd.DateOffset(months=1))
+    y6 = asof_value(dgs2, score_date - pd.DateOffset(months=6))
+    d1 = (y - y1) * 100.0
+    d6 = (y - y6) * 100.0
+    r1, r6 = rate_shock_1m(d1), rate_shock_6m(d6)
+    pol = math.sqrt(r1 * r6)
+    route = route_score(pol, hl_score, top_ratio)
+    combined = max(float(baseline_trigger), route) if baseline_trigger is not None else None
+
+    snap = ScoreSnapshot(
+        version=VERSION, freeze_date=FREEZE_DATE, asof=asof,
+        price_symbol="^GSPC", price_close=round(close, 4),
+        price_60m_high=round(high_60m, 4), top_ratio=round(top_ratio, 6),
+        top_proximity=round(top_proximity(top_ratio), 6),
+        dgs2=round(y, 4), dgs2_1m=round(y1, 4), dgs2_6m=round(y6, 4),
+        delta_1m_bp=round(d1, 2), delta_6m_bp=round(d6, 2),
+        r1=round(r1, 4), r6=round(r6, 4), policy=round(pol, 4),
+        new_highs=int(obs["new_highs"]), new_lows=int(obs["new_lows"]),
+        hl_balance=round(float(obs["hl_balance"]), 6),
+        hl_persistence=round(float(hl_score), 4),
+        eligible_95=bool(top_ratio >= TOP_ELIGIBLE),
+        hl_gate_75=bool(hl_score >= HL_GATE),
+        supplemental_route=round(route, 4),
+        route_triggered=bool(route >= TRIGGER_THRESHOLD),
+        route_threshold=TRIGGER_THRESHOLD,
+        combined_trigger=round(combined, 4) if combined is not None else None,
+        baseline_trigger=round(float(baseline_trigger), 4) if baseline_trigger is not None else None,
+        breadth_source="TradingView America screener primary common+DR, NYSE/NASDAQ/AMEX, intraday 52-week H/L; source-epoch persistence",
+        rate_source="FRED DGS2 public CSV",
+        price_source="Yahoo Finance ^GSPC daily close",
+        research_status="frozen formula; TradingView source epoch began post-freeze; no threshold changes",
+    )
+    return snap, price
 
 
 def trading_sessions_between(price: pd.Series, start: str, end: str) -> int:
@@ -319,7 +500,7 @@ def build_snapshot(stock: pd.DataFrame, baseline_trigger: float | None = None) -
         route_threshold=TRIGGER_THRESHOLD,
         combined_trigger=round(combined, 4) if combined is not None else None,
         baseline_trigger=round(float(baseline_trigger), 4) if baseline_trigger is not None else None,
-        breadth_source="MarketParquet stock_daily reconstructed 52-week H/L; 252 prior sessions; 20-session persistence",
+        breadth_source="MarketParquet stock_daily reconstructed intraday 52-week H/L; prior 252 sessions; 20-session persistence",
         rate_source="FRED DGS2 public CSV",
         price_source="Yahoo Finance ^GSPC daily close",
         research_status="frozen formula; post-freeze data only may accumulate prospective evidence",
@@ -391,22 +572,82 @@ def update_payload(snapshot: ScoreSnapshot, price: pd.Series, out_path: Path) ->
 
 def main() -> None:
     api_key = os.getenv("MARKETPARQUET_API_KEY", "").strip()
-    if not api_key:
-        print("MARKETPARQUET_API_KEY is not configured; preserving the existing seed/current snapshot.")
-        return
     baseline_env = os.getenv("MASTER_TOP_BASELINE_TRIGGER", "").strip()
     baseline = float(baseline_env) if baseline_env else None
     out = Path(os.getenv("MASTER_TOP_OUTPUT", "docs/data/master_top_v218.json"))
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    stock = fetch_marketparquet_stock_history(api_key)
-    snapshot, breadth, price = build_snapshot(stock, baseline_trigger=baseline)
-    payload = update_payload(snapshot, price, out)
-    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    if api_key:
+        stock = fetch_marketparquet_stock_history(api_key)
+        snapshot, breadth, price = build_snapshot(stock, baseline_trigger=baseline)
+        payload = update_payload(snapshot, price, out)
+        payload["source_transition"] = {
+            "active_source": "marketparquet_intraday_hilo_v1",
+            "warmup": False,
+            "note": "MarketParquet production path; H/L uses daily high/low vs prior 252 sessions.",
+        }
+        out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        breadth.tail(40).reset_index().to_csv(
+            out.with_name("master_top_v218_breadth_tail.csv"), index=False
+        )
+        print(json.dumps(asdict(snapshot), ensure_ascii=False, indent=2))
+        return
 
-    tail = breadth.tail(40).reset_index()
-    tail.to_csv(out.with_name("master_top_v218_breadth_tail.csv"), index=False)
-    print(json.dumps(asdict(snapshot), ensure_ascii=False, indent=2))
+    # Secretless fallback. We intentionally do NOT splice this new H/L universe
+    # into the pre-freeze proxy history. Each source epoch must warm up on its
+    # own before it is allowed to vote in the frozen 20-session persistence.
+    price = fetch_yahoo_close("^GSPC", years=6)
+    asof = str(price.index[-1].date())
+    obs = fetch_tradingview_hilo()
+    ledger_path = Path(os.getenv("MASTER_TOP_HILO_LEDGER", TRADINGVIEW_LEDGER))
+    ledger = append_hilo_ledger(ledger_path, asof, obs)
+    hl_score, warm = live_hl_from_ledger(ledger, TRADINGVIEW_EPOCH)
+
+    payload = load_json(out, {
+        "version": VERSION,
+        "freeze_date": FREEZE_DATE,
+        "formula_frozen": True,
+        "prospective_evidence_start": FREEZE_DATE,
+        "episode_lock_sessions": EPISODE_LOCK_SESSIONS,
+        "events": [],
+        "history": [],
+    })
+    payload["live_observation"] = {
+        "asof": asof,
+        **obs,
+        "hl_persistence_if_ready": round(float(hl_score), 4) if np.isfinite(hl_score) else None,
+        "warmup_sessions": warm,
+        "warmup_required": 20,
+    }
+    payload["source_transition"] = {
+        "active_source": TRADINGVIEW_EPOCH if warm >= 20 else "pre_freeze_seed_score",
+        "candidate_source": TRADINGVIEW_EPOCH,
+        "warmup": bool(warm < 20),
+        "warmup_sessions": warm,
+        "warmup_required": 20,
+        "note": "Do not mix pre-freeze close/proxy history with the post-freeze intraday H/L epoch. Until 20 same-definition sessions exist, the frozen scored snapshot is preserved and only raw live H/L is appended.",
+    }
+
+    if warm >= 20 and np.isfinite(hl_score):
+        snapshot, price = score_from_live_hilo(
+            asof, obs, float(hl_score), baseline_trigger=baseline
+        )
+        payload = update_payload(snapshot, price, out)
+        payload["live_observation"] = {
+            "asof": asof, **obs,
+            "hl_persistence_if_ready": round(float(hl_score), 4),
+            "warmup_sessions": warm, "warmup_required": 20,
+        }
+        payload["source_transition"] = {
+            "active_source": TRADINGVIEW_EPOCH,
+            "candidate_source": TRADINGVIEW_EPOCH,
+            "warmup": False, "warmup_sessions": warm, "warmup_required": 20,
+            "note": "Same-definition 20-session live epoch is warm; source may now vote without changing any frozen threshold.",
+        }
+
+    payload["generated_at_utc"] = datetime.now(timezone.utc).isoformat()
+    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps(payload.get("live_observation", {}), ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
