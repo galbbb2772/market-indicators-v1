@@ -52,11 +52,11 @@ SPY proxy:
 | 2022-01-19 | 5.434% | 437.071 | 59.123 | NO |
 | 2022-01-20 | 6.481% | 437.071 | 73.079 | YES |
 
-Combined with the independently validated PolicyShock route:
+Combined with the conservatively publication-lagged PolicyShock route:
 
 ```
 2022-01-03:
-Route_B = 88.7229415743
+Route_B = 85.3342917569589
 => ARMED
 
 2022-01-20:
