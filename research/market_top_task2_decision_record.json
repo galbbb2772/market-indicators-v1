@@ -97,7 +97,22 @@
       "resolution": "Treasury primary for 2Y; static WALCL mirror primary; FRED retained as fallback"
     },
     "dashboard": "docs/index.html Market Top Shadow Route_B Forward card",
-    "full_pressure_authoritative": false
+    "full_pressure_authoritative": false,
+    "freshness": {
+      "status": "PASS",
+      "market_lag_days": 1,
+      "dgs2_lag_days": 0,
+      "walcl_lag_days": 2,
+      "valuation_signal_month": "2026-09",
+      "ff_factor_month": "2026-08",
+      "limits": {
+        "market_days": 5,
+        "dgs2_days": 7,
+        "walcl_days": 14,
+        "ff_factor_months": 3
+      }
+    },
+    "walcl_eod_semantics": "H.4.1 release-aware; Thursday ~4:30 p.m. ET and federal-holiday shifts are gated to the next eligible market EOD"
   },
   "vintage_robustness": {
     "exact_2022_01_03_monthly_vintage_recovered": false,
@@ -114,7 +129,7 @@
       "route_b_max": 85.65697520162985,
       "all_sampled_variants_pass": true
     },
-    "conclusion": "The 2022 Route_B pass is robust to an official July-2022 Ken French CRSP cut and multiple independent static historical variants. Exact Jan-3-2022 monthly factor vintage remains unresolved.",
+    "conclusion": "The 2022 Route_B pass survives the current conservative reconstruction, the official July-2022 Ken French archive, a genuine pre-cutoff Shiller September-2021 valuation, and the cross-vintage combination of that archived valuation with the lower current SizeWeakness. Exact Jan-3 monthly factor and November-2021 Shiller vintages remain unrecoverable from current Wayback coverage.",
     "wayback": {
       "status": "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
       "cutoff": "2022-01-03T23:59:59Z",
@@ -122,6 +137,26 @@
       "latest_usable_last_month": "2021-02",
       "archive_access_worked": true,
       "conclusion": "Wayback cannot provide the required 2021-11 factor row before the Jan-3-2022 cutoff; exact monthly vintage remains unresolved due to archive coverage."
+    },
+    "shiller_wayback": {
+      "status": "NO_PRE_CUTOFF_SHILLER_SNAPSHOT_WITH_202111",
+      "cutoff": "2022-01-03T23:59:59Z",
+      "exact_2022_01_03_valuation_vintage_recovered": false,
+      "latest_usable_capture": "2021-10-12T12:29:41Z",
+      "latest_usable_last_month": "2021-09",
+      "archived_cape": 38.34227971263208,
+      "archived_valuation": 98.57904085257549,
+      "route_b_with_official_2022_size": 85.56872557898132,
+      "route_b_with_lower_current_size": 85.33380682501917,
+      "parser_guard": "Exact CAPE or canonical column M only; Excess CAPE Yield scale rejected; temporal archive consistency enforced"
+    },
+    "failure_boundaries": {
+      "critical_size_weakness": 83.74488435047371,
+      "critical_valuation_with_official_size": 96.62648331605354,
+      "critical_valuation_with_lower_current_size": 97.4267026395819,
+      "critical_policy_shock_with_archived_valuation_and_lower_current_size": 73.51905461361983,
+      "actual_policy_shock": 74.3886192578,
+      "policy_margin": 0.8695646441801728
     }
   }
 }
