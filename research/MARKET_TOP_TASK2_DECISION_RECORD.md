@@ -182,3 +182,57 @@ Further A/C work must follow one of two routes:
 2. build a newly named, preregistered next-generation model from a genuinely new hypothesis.
 
 Do not keep retuning A1/A2/C1/C2/C3 until they resemble the legacy fixtures.
+
+
+## Forward Shadow operational status
+
+The validated Route_B path is now implemented as a forward research process.
+
+GitHub Actions live dry-run passed end-to-end using real external data.
+
+Current 2026-10-16 output:
+
+```
+2Y Treasury = 4.74%
+6M anchor = 3.78%
+RateShock = 100.00
+
+TaperShock = 6.8606
+PolicyShock = 62.7442
+
+Valuation = 98.9137
+SizeWeakness = 45.4470
+
+Route_B = 65.5810
+top-location gate = TRUE
+Route_B pressure gate = FALSE
+Route_B-only state = IDLE
+
+T_v2.4R = 13.7753
+DD12 = 2.0331%
+Price Breakdown = FALSE
+```
+
+The first direct FRED live attempt timed out from GitHub Actions. That was treated as a provider failure, not a model failure.
+
+The operational source path is now:
+
+- 2Y Treasury: U.S. Treasury official Daily Treasury Par Yield Curve Rates;
+- WALCL: current static FRED WALCL mirror, with direct FRED retained as fallback;
+- Valuation: Robert Shiller / Yale feed;
+- SizeWeakness: Ken French Data Library SMB;
+- SPY: Yahoo Finance unadjusted Close.
+
+The pipeline records the actual provider used in every snapshot.
+
+The initial forward snapshot/history are stored under `docs/data/`, and the existing dashboard now contains a separate **Market Top Shadow · Route_B Forward** card.
+
+The dashboard explicitly preserves:
+
+```
+Route_A = UNRESOLVED
+Route_C = UNRESOLVED
+Full Pressure authoritative = FALSE
+```
+
+so the Route_B-only state cannot be mistaken for the full legacy V2.4 model.
