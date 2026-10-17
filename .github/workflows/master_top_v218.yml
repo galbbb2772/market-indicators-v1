@@ -2,6 +2,13 @@ name: MASTER TOP V2.1.8
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'master_top_v218.py'
+      - 'MASTER_TOP_V2_1_8_SPEC.md'
+      - '.github/workflows/master_top_v218.yml'
   schedule:
     - cron: '35 22 * * 1-5'
 
