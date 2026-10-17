@@ -1,5 +1,5 @@
 {
-  "schema_version": "market-top-shadow-live-1",
+  "schema_version": "market-top-shadow-live-2",
   "research_only": true,
   "production_effect": "none",
   "asof": "2026-10-16",
@@ -8,6 +8,8 @@
     "dgs2_latest_used": "2026-10-15",
     "walcl_latest_observation": "2026-10-14",
     "walcl_release_available": "2026-10-15",
+    "valuation_signal_month": "2026-09",
+    "size_factor_latest_published_month": "2026-08",
     "market_model_proxy_asof": "2026-10-15"
   },
   "policy": {
@@ -36,43 +38,47 @@
     "price_breakdown_v24r": false
   },
   "valuation": {
-    "current_cape": 40.54,
-    "cape_source": "Multpl / Robert Shiller data",
-    "canonical_score": null,
-    "canonical_status": "MISSING_EXACT_SCORING_RECONSTRUCTION",
+    "current_context_cape": 40.54,
+    "signal_month": "2026-09",
+    "signal_cape": 40.58087409538742,
+    "canonical_score": 98.9136649514008,
+    "canonical_status": "RESTORED",
+    "formula": "expanding percentile of Shiller CAPE",
     "diagnostic_proxy": {
       "id": "valuation_percentile",
       "asof": "2026-10-15",
       "score": 47.22,
-      "raw_spy_ma200_ratio": 1.0697,
-      "definition": "5y rolling percentile of SPY/MA200; NOT the canonical CAPE percentile used in the 2022 research case"
+      "raw_spy_ma200_ratio": 1.0697
     }
   },
   "size_weakness": {
-    "canonical_score": null,
-    "canonical_status": "MISSING_EXACT_SCORING_RECONSTRUCTION",
+    "latest_factor_month": "2026-08",
+    "cum_smb_6m_pct": 0.7635365253771065,
+    "b_size": -0.7635365253771065,
+    "canonical_score": 45.4469507101086,
+    "canonical_status": "RESTORED_CURRENT_VINTAGE",
+    "formula": "expanding percentile of -CumSMB_6m",
     "diagnostic_proxy": {
       "source_id": "sme_survival_growth",
       "asof": "2026-10-15",
       "supportive_score": 6.42,
       "raw_iwm_minus_spy_60d_pct": -9.6423,
-      "weakness_score_inverted": 93.58,
-      "definition": "100 - existing supportive small-cap score; diagnostic only"
+      "weakness_score_inverted": 93.58
     }
   },
   "route_b": {
-    "authoritative": null,
-    "authoritative_status": "INPUT_INCOMPLETE",
+    "authoritative": 65.58104271810248,
+    "authoritative_status": "NOT_ARMED",
     "diagnostic_proxy": 65.20701368567535,
-    "theoretical_max_if_valuation_and_size_both_100": 85.61002749958095,
-    "max_if_size_proxy_93_58_and_valuation_100": 83.73730578135553,
     "armed_threshold": 85,
     "proxy_can_change_state": false
   },
   "state": {
-    "authoritative": "INPUT_INCOMPLETE",
-    "policy_component": "ELEVATED_BUT_NOT_2022_LIKE",
+    "overall": "PARTIAL_ROUTE_COVERAGE",
+    "policy_route": "NOT_ARMED",
     "price_breakdown": false,
-    "note": "No authoritative ARMED/IDLE call is made until canonical Valuation and SizeWeakness scoring are restored. Current price-confirmation layer is clearly not in breakdown."
+    "route_a": "UNRESOLVED",
+    "route_c": "UNRESOLVED",
+    "note": "Canonical Route_B is now resolved. Overall Pressure=max(A,B,C) is not yet authoritative until Route_A and Route_C are restored."
   }
 }
