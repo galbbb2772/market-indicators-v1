@@ -10,6 +10,8 @@ from update_market_top_shadow import (
     compute_price,
     compute_size_weakness,
     compute_valuation,
+    parse_fed_assets_mirror,
+    parse_treasury_2y_csv,
 )
 
 
@@ -49,6 +51,33 @@ class MarketTopForwardShadowTests(unittest.TestCase):
         x = compute_size_weakness(ff, asof=pd.Timestamp("2026-10-16"))
         self.assertEqual(x["factor_month"], "2026-08")
         self.assertIsInstance(x["score"], float)
+
+    def test_treasury_2y_csv_parser(self):
+        text = (
+            "Date,1 Mo,3 Mo,6 Mo,1 Yr,2 Yr,3 Yr,5 Yr,7 Yr,10 Yr,20 Yr,30 Yr\n"
+            "10/15/2026,4.60,4.65,4.70,4.75,4.77,4.70,4.60,4.55,4.50,4.80,4.90\n"
+            "04/15/2026,3.60,3.65,3.70,3.72,3.76,3.80,3.90,4.00,4.10,4.50,4.60\n"
+        )
+        s = parse_treasury_2y_csv(text)
+        self.assertEqual(s.index[-1], pd.Timestamp("2026-10-15"))
+        self.assertEqual(float(s.iloc[-1]), 4.77)
+        self.assertEqual(float(s.loc[pd.Timestamp("2026-04-15")]), 3.76)
+
+    def test_fed_assets_static_mirror_parser(self):
+        obj = {
+            "generated_at_utc": "2026-10-17T01:23:07Z",
+            "observations": [
+                {
+                    "date": (pd.Timestamp("2024-01-03") + pd.Timedelta(weeks=i)).date().isoformat(),
+                    "value": 6_000_000 + i,
+                }
+                for i in range(120)
+            ],
+        }
+        s = parse_fed_assets_mirror(obj)
+        self.assertEqual(len(s), 120)
+        self.assertEqual(s.attrs["mirror_generated_at_utc"], "2026-10-17T01:23:07Z")
+        self.assertIn("static GitHub mirror", s.attrs["source"])
 
     def test_current_policy_fingerprint(self):
         dgs2 = pd.Series(
