@@ -80,5 +80,21 @@
     "route_b": "RESOLVED",
     "route_c": "UNRESOLVED",
     "pressure_authoritative": false
+  },
+  "freshness": {
+    "status": "PASS",
+    "market_lag_days": 1,
+    "dgs2_lag_days": 0,
+    "walcl_lag_days": 2,
+    "valuation_signal_month": "2026-09",
+    "valuation_expected_month": "2026-09",
+    "ff_factor_month": "2026-08",
+    "ff_factor_lag_months": 2,
+    "limits": {
+      "market_days": 5,
+      "dgs2_days": 7,
+      "walcl_days": 14,
+      "ff_factor_months": 3
+    }
   }
 }
