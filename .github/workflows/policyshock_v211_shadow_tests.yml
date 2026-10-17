@@ -15,6 +15,11 @@ on:
       - "tests/test_shadow_replay_v24.py"
       - "tests/test_v24_event_matrix.py"
       - "tests/test_t_v24_recovery_contract.py"
+      - "t_v24r.py"
+      - "research/T_V24R_PREREGISTRATION.md"
+      - "research/T_V24R_VALIDATION.md"
+      - "research/t_v24r_validation.json"
+      - "tests/test_t_v24r.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -30,4 +35,5 @@ jobs:
 
       - name: Run frozen PolicyShock and V2.4 shadow contracts
         run: |
-          python -m unittest             tests.test_policyshock_v211             tests.test_shadow_replay_v24             tests.test_v24_event_matrix             tests.test_t_v24_recovery_contract -v
+          python -m unittest             tests.test_policyshock_v211             tests.test_shadow_replay_v24             tests.test_v24_event_matrix             tests.test_t_v24_recovery_contract \
+            tests.test_t_v24r -v
