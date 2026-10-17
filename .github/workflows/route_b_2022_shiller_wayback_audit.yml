@@ -34,10 +34,11 @@ jobs:
 
           x = json.load(open("/tmp/shiller_wayback_202201.json"))
           assert x["cutoff"] == "20220103235959"
-          assert x["status"] in {
-              "RECOVERED_PRE_CUTOFF_SHILLER_WITH_202111",
-              "NO_PRE_CUTOFF_SHILLER_SNAPSHOT_WITH_202111",
-          }
+          assert x["status"] == "NO_PRE_CUTOFF_SHILLER_SNAPSHOT_WITH_202111", (
+              "Wayback Shiller coverage changed; refresh the committed "
+              "valuation-vintage evidence before accepting this PR."
+          )
+          assert x["exact_or_pre_cutoff_vintage"] is False
           assert x.get("errors") == [], (
               "A Wayback query failed, so the Shiller vintage audit is incomplete."
           )
@@ -47,23 +48,18 @@ jobs:
               ts = row.get("timestamp")
               if ts:
                   assert ts <= x["cutoff"]
+          assert not any(r.get("has_target") for r in attempts)
 
-          if x["status"] == "RECOVERED_PRE_CUTOFF_SHILLER_WITH_202111":
-              assert x["exact_or_pre_cutoff_vintage"] is True
-              assert x["target_month"] == "202111"
-              assert x["passes"] is True
-              assert x["route_b"] >= x["threshold"]
-          else:
-              assert x["exact_or_pre_cutoff_vintage"] is False
-              assert not any(r.get("has_target") for r in attempts)
-              latest = x.get("latest_usable_snapshot") or {}
-              assert latest.get("last_month") == "202109"
-              assert latest.get("timestamp") == "20211012122941"
-              assert latest["route_b_using_last_available_valuation"] >= 85
-              assert (
-                  latest["route_b_using_last_available_valuation_and_current_size"]
-                  >= 85
-              )
+          latest = x.get("latest_usable_snapshot") or {}
+          assert latest.get("last_month") == "202109"
+          assert latest.get("timestamp") == "20211012122941"
+          assert abs(latest["last_cape"] - 38.34227971263208) < 1e-8
+          assert abs(latest["last_valuation"] - 98.57904085257549) < 1e-8
+          assert latest["route_b_using_last_available_valuation"] >= 85
+          assert (
+              latest["route_b_using_last_available_valuation_and_current_size"]
+              >= 85
+          )
 
           print(
               "SHILLER_WAYBACK_AUDIT",
