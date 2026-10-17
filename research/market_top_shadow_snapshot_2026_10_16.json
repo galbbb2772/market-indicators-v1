@@ -1,0 +1,78 @@
+{
+  "schema_version": "market-top-shadow-live-1",
+  "research_only": true,
+  "production_effect": "none",
+  "asof": "2026-10-16",
+  "freshness": {
+    "market_close": "2026-10-16",
+    "dgs2_latest_used": "2026-10-15",
+    "walcl_latest_observation": "2026-10-14",
+    "walcl_release_available": "2026-10-15",
+    "market_model_proxy_asof": "2026-10-15"
+  },
+  "policy": {
+    "dgs2_latest_pct": 4.77,
+    "dgs2_anchor_date": "2026-04-15",
+    "dgs2_anchor_pct": 3.76,
+    "delta_6m_bp": 101,
+    "rate_shock": 100,
+    "walcl_26w": 6705696,
+    "walcl_13w": 6743028,
+    "walcl_now": 6755639,
+    "g_prev_pct": 0.5567207341340863,
+    "g_cur_pct": 0.18702280340523458,
+    "decel_pp": 0.3696979307288517,
+    "taper_shock": 6.860616780107296,
+    "policy_shock": 62.744246712042916
+  },
+  "price_confirmation": {
+    "instrument": "SPY",
+    "close": 763.25,
+    "high12_close": 779.09,
+    "dd12_pct": 2.0331,
+    "ma10m_prev": 720.884,
+    "ma_gap_pct": 0,
+    "t_v24r": 13.774666666666668,
+    "price_breakdown_v24r": false
+  },
+  "valuation": {
+    "current_cape": 40.54,
+    "cape_source": "Multpl / Robert Shiller data",
+    "canonical_score": null,
+    "canonical_status": "MISSING_EXACT_SCORING_RECONSTRUCTION",
+    "diagnostic_proxy": {
+      "id": "valuation_percentile",
+      "asof": "2026-10-15",
+      "score": 47.22,
+      "raw_spy_ma200_ratio": 1.0697,
+      "definition": "5y rolling percentile of SPY/MA200; NOT the canonical CAPE percentile used in the 2022 research case"
+    }
+  },
+  "size_weakness": {
+    "canonical_score": null,
+    "canonical_status": "MISSING_EXACT_SCORING_RECONSTRUCTION",
+    "diagnostic_proxy": {
+      "source_id": "sme_survival_growth",
+      "asof": "2026-10-15",
+      "supportive_score": 6.42,
+      "raw_iwm_minus_spy_60d_pct": -9.6423,
+      "weakness_score_inverted": 93.58,
+      "definition": "100 - existing supportive small-cap score; diagnostic only"
+    }
+  },
+  "route_b": {
+    "authoritative": null,
+    "authoritative_status": "INPUT_INCOMPLETE",
+    "diagnostic_proxy": 65.20701368567535,
+    "theoretical_max_if_valuation_and_size_both_100": 85.61002749958095,
+    "max_if_size_proxy_93_58_and_valuation_100": 83.73730578135553,
+    "armed_threshold": 85,
+    "proxy_can_change_state": false
+  },
+  "state": {
+    "authoritative": "INPUT_INCOMPLETE",
+    "policy_component": "ELEVATED_BUT_NOT_2022_LIKE",
+    "price_breakdown": false,
+    "note": "No authoritative ARMED/IDLE call is made until canonical Valuation and SizeWeakness scoring are restored. Current price-confirmation layer is clearly not in breakdown."
+  }
+}
