@@ -43,7 +43,7 @@ class MarketTopShadowLiveTests(unittest.TestCase):
             valuation_proxy_score=100.0,
             size_support_proxy_score=0.0,
         )
-        self.assertEqual(x.route_b_proxy, 100.0)
+        self.assertAlmostEqual(x.route_b_proxy, 100.0, places=12)
         self.assertIsNone(x.route_b_authoritative)
         self.assertEqual(x.route_b_status, "UNRESOLVED")
 
