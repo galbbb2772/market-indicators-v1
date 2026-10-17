@@ -32,6 +32,8 @@
     "master_top_version": "MASTER-TOP-V2.1.8-FROZEN",
     "master_top_formula_frozen": true,
     "master_top_prospective_start": "2026-10-17",
-    "master_top_generated_at_utc": null
+    "master_top_generated_at_utc": null,
+    "route_b_age_days_at_monitor": 1,
+    "max_monitor_input_age_days": 5
   }
 }
