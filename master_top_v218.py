@@ -392,7 +392,8 @@ def update_payload(snapshot: ScoreSnapshot, price: pd.Series, out_path: Path) ->
 def main() -> None:
     api_key = os.getenv("MARKETPARQUET_API_KEY", "").strip()
     if not api_key:
-        raise SystemExit("MARKETPARQUET_API_KEY is required for production breadth reconstruction")
+        print("MARKETPARQUET_API_KEY is not configured; preserving the existing seed/current snapshot.")
+        return
     baseline_env = os.getenv("MASTER_TOP_BASELINE_TRIGGER", "").strip()
     baseline = float(baseline_env) if baseline_env else None
     out = Path(os.getenv("MASTER_TOP_OUTPUT", "docs/data/master_top_v218.json"))
