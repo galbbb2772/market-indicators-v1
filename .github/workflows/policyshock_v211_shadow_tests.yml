@@ -63,6 +63,12 @@ on:
       - "research/ROUTE_B_2022_WAYBACK_VINTAGE_GAP.md"
       - "research/route_b_2022_wayback_vintage_gap.json"
       - "tests/test_route_b_2022_wayback_vintage_gap.py"
+      - "market_top_cross_monitor.py"
+      - "research/MARKET_TOP_CROSS_MODEL_MONITOR.md"
+      - "docs/data/market_top_cross_monitor_current.json"
+      - "docs/data/market_top_cross_monitor_history.json"
+      - "tests/test_market_top_cross_monitor.py"
+      - "tests/test_market_top_cross_monitor_data.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -95,6 +101,8 @@ jobs:
             tests.test_route_b_2022_ff_revision_sensitivity \
             tests.test_route_b_2022_official_archive_contract \
             tests.test_route_b_2022_wayback_vintage_gap \
+            tests.test_market_top_cross_monitor \
+            tests.test_market_top_cross_monitor_data \
             tests.test_shadow_replay_v24 \
             tests.test_v24_event_matrix \
             tests.test_t_v24_recovery_contract \
