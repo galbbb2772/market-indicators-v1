@@ -40,6 +40,15 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
             v["cross_version_static_histories"]["all_sampled_variants_pass"]
         )
 
+    def test_wayback_exact_vintage_gap_is_explicit(self):
+        v = self.data["vintage_robustness"]["wayback"]
+        self.assertEqual(
+            v["status"],
+            "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
+        )
+        self.assertTrue(v["archive_access_worked"])
+        self.assertEqual(v["latest_usable_last_month"], "2021-02")
+
     def test_2022_dates_are_locked(self):
         x = self.data["frozen_conclusions"]
         self.assertEqual(x["2022_policy_arm_date"], "2022-01-03")
