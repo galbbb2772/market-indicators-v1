@@ -51,6 +51,9 @@ on:
       - "docs/data/market_top_shadow_current.json"
       - "docs/data/market_top_shadow_history.json"
       - "tests/test_market_top_shadow_data_contract.py"
+      - "research/MARKET_TOP_CROSS_MODEL_BOUNDARY.md"
+      - "research/market_top_cross_model_boundary.json"
+      - "tests/test_market_top_cross_model_boundary.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -79,6 +82,7 @@ jobs:
             tests.test_market_top_task2_decision_contract \
             tests.test_update_market_top_shadow \
             tests.test_market_top_shadow_data_contract \
+            tests.test_market_top_cross_model_boundary \
             tests.test_shadow_replay_v24 \
             tests.test_v24_event_matrix \
             tests.test_t_v24_recovery_contract \
