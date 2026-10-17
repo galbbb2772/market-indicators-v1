@@ -1,0 +1,29 @@
+{
+  "schema_version": "market-top-cross-monitor-1",
+  "generated_at": "2026-10-17T12:36:15.878488+00:00",
+  "research_only": true,
+  "production_effect": "none",
+  "comparable": false,
+  "status": "NOT_COMPARABLE",
+  "reasons": [
+    "MASTER_TOP_SEED_ONLY",
+    "ASOF_MISMATCH"
+  ],
+  "route_b_shadow": {
+    "asof": "2026-10-16",
+    "score": 65.58104271810248,
+    "threshold": 85,
+    "policy_path_state": "IDLE",
+    "source_status": "ROUTE_B_LIVE"
+  },
+  "master_top_v218": {
+    "asof": "2026-10-09",
+    "score": 99.33,
+    "threshold": 55,
+    "triggered": true,
+    "source_status": "MASTER_TOP_SEED_ONLY",
+    "research_status": "seed snapshot only; production workflow replaces this with ^GSPC + FRED DGS2 + MarketParquet stock_daily"
+  },
+  "comparison": null,
+  "interpretation": "Scores are not combined. The monitor only labels agreement or mechanism disagreement when both models are live on the same as-of date."
+}
