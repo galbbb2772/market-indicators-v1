@@ -17,54 +17,34 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install websocket-client
-      - name: Probe HIGN LOWN chart websocket
+      - run: pip install tradingview-screener
+      - name: Probe NYSE cross-sectional H/L counts
         run: |
           python - <<'PY'
-          import json,re,time,websocket
+          from tradingview_screener import Query, col
           
-          URI='wss://data.tradingview.com/socket.io/websocket?from=chart%2F&type=chart'
-          def frame(m,p):
-              raw=json.dumps({'m':m,'p':p},separators=(',',':'))
-              return f'~m~{len(raw)}~m~{raw}'
-          
-          def probe(symbol):
-              print('=== PROBE',symbol,'===')
-              ws=websocket.create_connection(
-                  URI,timeout=15,
-                  origin='https://www.tradingview.com',
-                  header=['User-Agent: Mozilla/5.0'],
-                  suppress_origin=False,
+          def qbase():
+              return (
+                  Query()
+                  .select('name','close','price_52_week_high','price_52_week_low','exchange','type','typespecs','update_mode')
+                  .where(col('exchange') == 'NYSE', col('is_primary') == True)
+                  .limit(10000)
               )
-              first=ws.recv()
-              print('HANDSHAKE',str(first)[:1000])
-              m=re.search(r'"session_id":"([^"]+)"',str(first))
-              sid='cs_'+(m.group(1) if m else 'v218probe')
-              for method,params in [
-                  ('chart_create_session',[sid]),
-                  ('resolve_symbol',[sid,'s1',symbol]),
-                  ('create_series',[sid,'sds_1','s1','s1','1D',30,'']),
-              ]:
-                  ws.send(frame(method,params))
-              deadline=time.time()+20
-              found=False
-              while time.time()<deadline:
-                  try: msg=ws.recv()
-                  except Exception as e:
-                      print('RECVERR',repr(e));break
-                  s=str(msg)
-                  for ping in re.findall(r'~h~\d+',s):
-                      ws.send(f'~m~{len(ping)}~m~{ping}')
-                  if 'symbol_error' in s or 'critical_error' in s or 'series_error' in s:
-                      print('ERROR_FRAME',s[:5000])
-                  if 'symbol_resolved' in s:
-                      print('RESOLVED',s[:5000])
-                  if 'timescale_update' in s:
-                      print('TIMESCALE',s[:12000]);found=True;break
-              print('FOUND',found)
-              ws.close()
           
-          for symbol in ['INDEX:HIGN','INDEX:LOWN','USI:HIGN','USI:LOWN']:
-              try: probe(symbol)
-              except Exception as e: print('PROBEFAIL',symbol,repr(e))
+          total,df=qbase().get_scanner_data()
+          print('TOTAL',total,'ROWS',len(df))
+          print('UPDATE_MODES')
+          print(df['update_mode'].value_counts(dropna=False).to_string())
+          
+          nh=(df['close'] >= df['price_52_week_high'] * (1-1e-10)).sum()
+          nl=(df['close'] <= df['price_52_week_low'] * (1+1e-10)).sum()
+          print('CLIENT_COUNTS',int(nh),int(nl))
+          print('CLIENT_SAMPLE_HI')
+          print(df.loc[df['close'] >= df['price_52_week_high']*(1-1e-10), ['ticker','close','price_52_week_high']].head(20).to_string(index=False))
+          print('CLIENT_SAMPLE_LO')
+          print(df.loc[df['close'] <= df['price_52_week_low']*(1+1e-10), ['ticker','close','price_52_week_low']].head(20).to_string(index=False))
+          
+          hi_count,_=(qbase().where(col('exchange')=='NYSE',col('is_primary')==True,col('close') >= col('price_52_week_high')).get_scanner_data())
+          lo_count,_=(qbase().where(col('exchange')=='NYSE',col('is_primary')==True,col('close') <= col('price_52_week_low')).get_scanner_data())
+          print('SERVER_COUNTS',hi_count,lo_count)
           PY
