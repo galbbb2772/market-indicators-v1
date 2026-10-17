@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MASTER TOP V2.1.8</title>
+<style>
+:root{color-scheme:dark;background:#090b10;color:#eef2f7;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+body{margin:0}.wrap{max-width:1080px;margin:auto;padding:28px 18px 60px}.top{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}.muted{color:#9ca8b8}.pill{padding:6px 10px;border:1px solid #394454;border-radius:999px;font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:22px 0}.card{background:#11161f;border:1px solid #252d39;border-radius:16px;padding:16px}.big{font-size:34px;font-weight:750;letter-spacing:-.04em}.label{font-size:12px;color:#9ca8b8;text-transform:uppercase;letter-spacing:.08em}.bar{height:10px;background:#202733;border-radius:999px;overflow:hidden;margin-top:10px}.fill{height:100%;background:linear-gradient(90deg,#5f7cff,#ffd166,#ff5a5f);width:0}.row{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid #202733}.row:last-child{border-bottom:0}.ok{color:#ffb3b5}.safe{color:#8ee3a1}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px;border-bottom:1px solid #252d39}.formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;background:#0d1118;padding:14px;border-radius:12px;border:1px solid #252d39}.warn{border-left:3px solid #ffd166;padding-left:12px;color:#d9c68c}.footer{margin-top:32px;font-size:12px;color:#7e8998}
+</style>
+</head>
+<body><div class="wrap">
+<div class="top"><div><div class="label">Frozen supplemental top-risk route</div><h1>MASTER TOP V2.1.8</h1><div class="muted">Policy × persistent H/L breadth × continuous top proximity</div></div><div class="pill" id="freeze">loading</div></div>
+<div class="grid">
+  <div class="card"><div class="label">Route</div><div class="big" id="route">—</div><div class="bar"><div class="fill" id="fill"></div></div><div class="muted">Trigger ≥ 55</div></div>
+  <div class="card"><div class="label">Policy</div><div class="big" id="policy">—</div><div class="muted">sqrt(R6 × R1)</div></div>
+  <div class="card"><div class="label">H/L persistence</div><div class="big" id="hl">—</div><div class="muted">20-session persistence; gate ≥ 75</div></div>
+  <div class="card"><div class="label">Top ratio</div><div class="big" id="topratio">—</div><div class="muted">Price / 60M high</div></div>
+</div>
+<div class="grid">
+ <div class="card"><div class="label">Latest state</div><div id="state"></div></div>
+ <div class="card"><div class="label">Live episode</div><div id="episode"></div></div>
+</div>
+<div class="card"><div class="label">Frozen formula</div><div class="formula">R6 = 100 × clip((Δ2Y_6M − 10bp) / 60bp, 0, 1)
+R1 = 100 × clip(Δ2Y_1M / 20bp, 0, 1)
+Policy = √(R6 × R1)
+TopProx = clip((TopRatio − 0.95) / 0.05, 0, 1)
+Route = Policy × √(HL/100) × √TopProx
+Route = 0 unless TopRatio ≥ .95 and HL ≥ 75</div></div>
+<div class="card" style="margin-top:12px"><div class="label">Retrospective audit anchors</div><table><thead><tr><th>Episode</th><th>Route</th><th>12M MDD</th><th>Class</th></tr></thead><tbody id="audit"></tbody></table></div>
+<p class="warn">2026-09-10 的 signal inputs 在最终冻结前已经看见，因此不是纯净的 signal-generation OOS。2026-10-17 以后只允许累积 prospective evidence，不允许回头调参数。</p>
+<div class="footer" id="source"></div>
+</div>
+<script>
+(async()=>{const r=await fetch('./data/master_top_v218.json?'+Date.now());const d=await r.json();const x=d.latest||{};
+const f=n=>Number.isFinite(Number(n))?Number(n).toFixed(2):'—';
+document.querySelector('#freeze').textContent='FROZEN '+d.freeze_date;
+document.querySelector('#route').textContent=f(x.supplemental_route);document.querySelector('#policy').textContent=f(x.policy);document.querySelector('#hl').textContent=f(x.hl_persistence);document.querySelector('#topratio').textContent=Number.isFinite(Number(x.top_ratio))?(Number(x.top_ratio)*100).toFixed(2)+'%':'—';
+document.querySelector('#fill').style.width=Math.min(100,Number(x.supplemental_route||0))+'%';
+const trig=Number(x.supplemental_route)>=55;document.querySelector('#state').innerHTML=`<div class="big ${trig?'ok':'safe'}">${trig?'TRIGGERED':'NO TRIGGER'}</div><div class="row"><span>As of</span><b>${x.asof||'—'}</b></div><div class="row"><span>Threshold</span><b>55</b></div>`;
+const e=(d.events||[]).slice(-1)[0]||{};document.querySelector('#episode').innerHTML=`<div class="big">${e.status||'—'}</div><div class="row"><span>Start</span><b>${e.start_date||'—'}</b></div><div class="row"><span>Last trigger</span><b>${e.last_trigger_date||'—'}</b></div><div class="row"><span>Type</span><b>${e.type||'—'}</b></div>`;
+document.querySelector('#audit').innerHTML=(d.retrospective_audit||[]).map(a=>`<tr><td>${a.start_date}</td><td>${f(a.route)}</td><td>${f(a.mdd_12m_pct)}%</td><td>${a.class}</td></tr>`).join('');
+document.querySelector('#source').textContent=`Breadth: ${x.breadth_source||'—'} · Rates: ${x.rate_source||'—'} · Price: ${x.price_source||'—'}`;
+})().catch(e=>{document.querySelector('#state').textContent='Data load failed: '+e});
+</script></body></html>

@@ -114,3 +114,17 @@ Ablation V2 不再只看一个样本内目标函数。它逐项移除 Active 因
 ## 在线面板
 
 https://galbbb2772.github.io/market-indicators-v1/
+
+## MASTER TOP V2.1.8
+
+新增一条与 Market Model V2 分离的 **冻结顶部风险补充路线**：
+
+- 公式冻结日：2026-10-17
+- 入口：[`docs/master-top-v218.html`](docs/master-top-v218.html)
+- 日度输入：MarketParquet `stock_daily`、FRED DGS2、Yahoo `^GSPC`
+- Trigger 阈值：55
+- 统计 Episode lock：126 个交易日
+- 自动任务：`.github/workflows/master_top_v218.yml`
+- 自动任务需要仓库 Secret：`MARKETPARQUET_API_KEY`
+
+该模块不会覆盖 Market Model V2，也不会覆盖旧 MASTER TOP V2.1 baseline；如提供 baseline trigger，则总 Trigger 仅取二者最大值。

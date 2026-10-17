@@ -1,0 +1,33 @@
+name: MASTER TOP V2.1.8 CI
+
+on:
+  pull_request:
+    paths:
+      - 'master_top_v218.py'
+      - 'tests/test_master_top_v218.py'
+      - 'MASTER_TOP_V2_1_8_SPEC.md'
+      - '.github/workflows/master_top_v218*.yml'
+  push:
+    branches:
+      - master-top-v2-1-8
+    paths:
+      - 'master_top_v218.py'
+      - 'tests/test_master_top_v218.py'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: pip install pandas numpy requests pytest
+      - name: Compile
+        run: python -m py_compile master_top_v218.py
+      - name: Unit tests
+        run: pytest -q tests/test_master_top_v218.py

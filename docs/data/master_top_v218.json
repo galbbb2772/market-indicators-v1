@@ -1,0 +1,39 @@
+{
+  "version": "MASTER-TOP-V2.1.8-FROZEN",
+  "freeze_date": "2026-10-17",
+  "formula_frozen": true,
+  "prospective_evidence_start": "2026-10-17",
+  "episode_lock_sessions": 126,
+  "latest": {
+    "asof": "2026-10-09",
+    "supplemental_route": 99.33,
+    "route_triggered": true,
+    "route_threshold": 55.0,
+    "policy": 100.0,
+    "hl_persistence": 100.0,
+    "top_ratio": 0.99933,
+    "top_proximity": 0.9866,
+    "price_symbol": "SPY proxy seed",
+    "breadth_source": "MarketParquet reconstructed all-US proxy seed through 2026-10-09",
+    "rate_source": "US 2Y Treasury historical audit",
+    "research_status": "seed snapshot only; production workflow replaces this with ^GSPC + FRED DGS2 + MarketParquet stock_daily"
+  },
+  "events": [
+    {
+      "start_date": "2026-09-10",
+      "last_trigger_date": "2026-10-09",
+      "type": "LIVE_HOLDOUT_PRE_FREEZE_SIGNAL",
+      "status": "open",
+      "note": "Signal inputs were observed before the 2026-10-17 formula freeze; future path after freeze is prospective evidence, not a pure pre-freeze OOS signal-generation test."
+    }
+  ],
+  "retrospective_audit": [
+    {"start_date": "1999-11-29", "route": 76.90, "mdd_12m_pct": -13.43, "class": "CORRECTION", "note": "early supplemental warning; 2000 bubble remains primarily an old-engine event"},
+    {"start_date": "2018-10-05", "route": 66.06, "mdd_12m_pct": -18.52, "class": "SEVERE_NEAR_MISS", "note": "post-top confirmation, not a pre-top hit"},
+    {"start_date": "2021-12-15", "route": 69.42, "mdd_12m_pct": -25.43, "class": "MAJOR_BEAR", "note": "~12 trading sessions before 2022-01-03 top"}
+  ],
+  "history": [
+    {"asof": "2026-09-10", "route": 60.88, "policy": 100.0, "hl_persistence": 76.49, "top_ratio": 0.9742, "triggered": true},
+    {"asof": "2026-10-09", "route": 99.33, "policy": 100.0, "hl_persistence": 100.0, "top_ratio": 0.99933, "triggered": true}
+  ]
+}
