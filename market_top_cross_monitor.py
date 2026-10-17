@@ -175,6 +175,19 @@ def load_history(path: Path) -> list[dict[str, Any]]:
     return list(obj.get("history") or [])
 
 
+def history_key(result: dict[str, Any]) -> str:
+    comparison_label = (result.get("comparison") or {}).get("label")
+    return "|".join(
+        [
+            str(result["route_b_shadow"].get("asof")),
+            str(result["master_top_v218"].get("asof")),
+            str(result["route_b_shadow"].get("source_status")),
+            str(result["master_top_v218"].get("source_status")),
+            str(comparison_label),
+        ]
+    )
+
+
 def write_outputs(result: dict[str, Any]) -> None:
     OUT_CURRENT.parent.mkdir(parents=True, exist_ok=True)
     OUT_CURRENT.write_text(
@@ -184,15 +197,7 @@ def write_outputs(result: dict[str, Any]) -> None:
 
     hist = load_history(OUT_HISTORY)
     comparison_label = (result.get("comparison") or {}).get("label")
-    key = "|".join(
-        [
-            str(result["route_b_shadow"].get("asof")),
-            str(result["master_top_v218"].get("asof")),
-            str(result["route_b_shadow"].get("source_status")),
-            str(result["master_top_v218"].get("source_status")),
-            str(comparison_label),
-        ]
-    )
+    key = history_key(result)
     row = {
         "key": key,
         "generated_at": result["generated_at"],
