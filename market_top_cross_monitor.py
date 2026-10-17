@@ -183,9 +183,15 @@ def write_outputs(result: dict[str, Any]) -> None:
     )
 
     hist = load_history(OUT_HISTORY)
-    key = (
-        f"{result['route_b_shadow'].get('asof')}|"
-        f"{result['master_top_v218'].get('asof')}"
+    comparison_label = (result.get("comparison") or {}).get("label")
+    key = "|".join(
+        [
+            str(result["route_b_shadow"].get("asof")),
+            str(result["master_top_v218"].get("asof")),
+            str(result["route_b_shadow"].get("source_status")),
+            str(result["master_top_v218"].get("source_status")),
+            str(comparison_label),
+        ]
     )
     row = {
         "key": key,
@@ -197,9 +203,10 @@ def write_outputs(result: dict[str, Any]) -> None:
         "route_b_score": result["route_b_shadow"].get("score"),
         "master_top_asof": result["master_top_v218"].get("asof"),
         "master_top_score": result["master_top_v218"].get("score"),
-        "comparison": (
-            (result.get("comparison") or {}).get("label")
-        ),
+        "comparison": comparison_label,
+        "evidence_phase": result.get("evidence_phase"),
+        "route_b_source_status": result["route_b_shadow"].get("source_status"),
+        "master_top_source_status": result["master_top_v218"].get("source_status"),
     }
 
     by_key = {x.get("key"): x for x in hist if x.get("key")}
