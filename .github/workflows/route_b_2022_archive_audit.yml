@@ -1,0 +1,50 @@
+name: Route_B 2022 Official Archive Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_ff_2022_archive.py"
+      - "market_top_canonical_inputs.py"
+      - "policyshock_v211.py"
+      - "tests/test_audit_ff_2022_archive.py"
+      - ".github/workflows/route_b_2022_archive_audit.yml"
+  workflow_dispatch:
+
+jobs:
+  official-archive-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install requests
+
+      - name: Parser contract
+        run: python -m unittest tests.test_audit_ff_2022_archive -v
+
+      - name: Download official July-2022 Ken French archive and audit
+        run: |
+          python audit_ff_2022_archive.py --output /tmp/ff_2022_archive_audit.json
+          python - <<'PY'
+          import json
+          p="/tmp/ff_2022_archive_audit.json"
+          x=json.load(open(p))
+          assert x["archive_cut"] == "July 2022 data / August 2022 release"
+          assert x["target_month"] == "202111"
+          assert x["passes"] is True
+          assert x["route_b"] >= x["threshold"]
+          assert x["exact_2022_01_03_vintage"] is False
+          assert x["route_margin_above_threshold"] > 0
+          print(
+              "OFFICIAL_ARCHIVE_AUDIT",
+              "SizeWeakness=", x["size_weakness"],
+              "Route_B=", x["route_b"],
+              "passes=", x["passes"],
+              "margin=", x["route_margin_above_threshold"],
+          )
+          PY

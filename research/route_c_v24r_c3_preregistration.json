@@ -1,0 +1,29 @@
+{
+  "schema_version": "route-c-v24r-c3-prereg-1",
+  "status": "PREREGISTERED_NOT_VALIDATED",
+  "research_only": true,
+  "original_v24_recovery": false,
+  "formula": {
+    "relative_participation_raw": "1 - count(industry_6m > market_6m) / 12",
+    "relative_participation_score": "expanding_percentile(relative_participation_raw)",
+    "leader_gap_raw": "max(industry_6m) - median(industry_6m)",
+    "leader_gap_score": "expanding_percentile(leader_gap_raw)",
+    "concentration_breadth": "sqrt(relative_participation_score * leader_gap_score)",
+    "valuation": "expanding_percentile(Shiller CAPE)",
+    "route_c": "sqrt(valuation * concentration_breadth)",
+    "breadth_r": "0.50 * size_weakness + 0.50 * relative_participation_score",
+    "size_weakness": "expanding_percentile(-CumSMB_6m)"
+  },
+  "point_in_time": {
+    "monthly_effective_lag_calendar_months": 2,
+    "percentile": "expanding_current_inclusive",
+    "event_specific_adjustments": false
+  },
+  "thresholds": {
+    "route_c_armed": 85,
+    "early_breadth_delta_3m": 10,
+    "armed_within_24m_high_pct": 5,
+    "armed_high_age_months_max": 3
+  },
+  "post_validation_tuning_allowed": false
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": "v24-t-recovery-fingerprints-1",
+  "status": "ORIGINAL_FORMULA_NOT_RECOVERED",
+  "semantics": {
+    "role": "price/trend confirmation only; not part of Pressure",
+    "known_inputs": [
+      "S&P 500 price vs 10-month moving average",
+      "distance/drawdown from 12-month high"
+    ],
+    "trigger_rule": "T >= 70 AND drawdown_from_12m_high >= 4.5%",
+    "armed_retention_months": 6
+  },
+  "top_month_fingerprints": [
+    {
+      "event": "1998",
+      "top_month_t": 73.8,
+      "first_t_ge_70_delay_months": 0
+    },
+    {
+      "event": "2000",
+      "top_month_t": 47.5,
+      "first_t_ge_70_delay_months": 2
+    },
+    {
+      "event": "2007",
+      "top_month_t": 48,
+      "first_t_ge_70_delay_months": 1
+    },
+    {
+      "event": "2011",
+      "top_month_t": 38.3,
+      "first_t_ge_70_delay_months": 3
+    },
+    {
+      "event": "2018",
+      "top_month_t": 39.7,
+      "first_t_ge_70_delay_months": 1
+    },
+    {
+      "event": "2022",
+      "top_month_t": 83.8,
+      "first_t_ge_70_delay_months": 0
+    }
+  ],
+  "recovery_acceptance": {
+    "exact_formula_required_for_original_name": true,
+    "must_reproduce_top_month_scores_tolerance": 0.25,
+    "must_reproduce_first_crossing_delays_exactly": true,
+    "must_use_only_point_in_time_inputs": true,
+    "surrogate_must_receive_new_version_name": true
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "route-b-2022-vintage-robustness-lattice-1",
+  "threshold": 85,
+  "policy_shock": 74.3886192578,
+  "scenarios": [
+    {
+      "id": "CURRENT_CONSERVATIVE",
+      "valuation": 98.5807214666,
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.3342917569589,
+      "margin": 0.3342917569589,
+      "evidence": "current-vintage reconstruction with conservative monthly publication lag"
+    },
+    {
+      "id": "OFFICIAL_FF_2022_CUT",
+      "valuation": 98.5807214666,
+      "size_weakness": 85.43859649122807,
+      "route_b": 85.56921184591258,
+      "margin": 0.5692118459125766,
+      "evidence": "official Ken French July-2022 historical archive"
+    },
+    {
+      "id": "ARCHIVED_SHILLER_SEP_PLUS_OFFICIAL_FF",
+      "valuation": 98.57904085257549,
+      "size_weakness": 85.43859649122807,
+      "route_b": 85.56872557898132,
+      "margin": 0.56872557898132,
+      "evidence": "Wayback Shiller 2021-10-12 workbook through 2021-09 plus official July-2022 FF archive"
+    },
+    {
+      "id": "ARCHIVED_SHILLER_SEP_PLUS_LOWER_CURRENT_SIZE",
+      "valuation": 98.57904085257549,
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.33380682501917,
+      "margin": 0.33380682501917,
+      "evidence": "real pre-cutoff Shiller valuation plus lower current-vintage SizeWeakness"
+    }
+  ],
+  "failure_boundaries": {
+    "size_weakness_at_current_valuation": 83.74488435047371,
+    "valuation_with_official_size": 96.62648331605354,
+    "valuation_with_lower_current_size": 97.4267026395819,
+    "policy_shock_with_archived_valuation_and_lower_current_size": 73.51905461361983,
+    "actual_policy_shock_margin": 0.8695646441801728
+  },
+  "conclusion": "All observed current/official/pre-cutoff valuation-size combinations remain above the frozen Route_B threshold. Exact Jan-3 monthly vintages are still not fully recoverable, but the pass is robust across observed historical revisions without retuning."
+}

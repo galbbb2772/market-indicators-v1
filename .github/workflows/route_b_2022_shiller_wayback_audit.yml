@@ -1,0 +1,70 @@
+name: Route_B 2022 Shiller Wayback Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_shiller_wayback_202201.py"
+      - "policyshock_v211.py"
+      - "tests/test_audit_shiller_wayback_202201.py"
+      - ".github/workflows/route_b_2022_shiller_wayback_audit.yml"
+  workflow_dispatch:
+
+jobs:
+  shiller-wayback-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install pandas requests xlrd
+
+      - name: Static contract
+        run: python -m unittest tests.test_audit_shiller_wayback_202201 -v
+
+      - name: Audit pre-Jan-3-2022 Shiller workbook vintage
+        run: |
+          python audit_shiller_wayback_202201.py --output /tmp/shiller_wayback_202201.json
+          python - <<'PY'
+          import json
+
+          x = json.load(open("/tmp/shiller_wayback_202201.json"))
+          assert x["cutoff"] == "20220103235959"
+          assert x["status"] == "NO_PRE_CUTOFF_SHILLER_SNAPSHOT_WITH_202111", (
+              "Wayback Shiller coverage changed; refresh the committed "
+              "valuation-vintage evidence before accepting this PR."
+          )
+          assert x["exact_or_pre_cutoff_vintage"] is False
+          assert x.get("errors") == [], (
+              "A Wayback query failed, so the Shiller vintage audit is incomplete."
+          )
+          attempts = x.get("attempts") or []
+          assert attempts, "Shiller audit must inspect at least one archived candidate"
+          for row in attempts:
+              ts = row.get("timestamp")
+              if ts:
+                  assert ts <= x["cutoff"]
+          assert not any(r.get("has_target") for r in attempts)
+
+          latest = x.get("latest_usable_snapshot") or {}
+          assert latest.get("last_month") == "202109"
+          assert latest.get("timestamp") == "20211012122941"
+          assert abs(latest["last_cape"] - 38.34227971263208) < 1e-8
+          assert abs(latest["last_valuation"] - 98.57904085257549) < 1e-8
+          assert latest["route_b_using_last_available_valuation"] >= 85
+          assert (
+              latest["route_b_using_last_available_valuation_and_current_size"]
+              >= 85
+          )
+
+          print(
+              "SHILLER_WAYBACK_AUDIT",
+              "status=", x["status"],
+              "snapshots=", x["snapshot_count"],
+              "route_b=", x.get("route_b"),
+          )
+          PY

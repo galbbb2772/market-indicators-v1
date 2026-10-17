@@ -1,0 +1,55 @@
+name: Market Top Cross-Model Monitor
+
+on:
+  pull_request:
+    paths:
+      - "market_top_cross_monitor.py"
+      - "tests/test_market_top_cross_monitor.py"
+      - "docs/data/market_top_shadow_current.json"
+      - "docs/data/master_top_v218.json"
+      - ".github/workflows/market_top_cross_monitor.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "15 2 * * 2-6"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: market-top-cross-monitor
+  cancel-in-progress: false
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Unit contracts
+        run: python -m unittest tests.test_market_top_cross_monitor -v
+
+      - name: Current comparison dry-run
+        if: github.event_name == 'pull_request'
+        run: python market_top_cross_monitor.py --dry-run
+
+      - name: Refresh monitor outputs
+        if: github.event_name != 'pull_request'
+        run: python market_top_cross_monitor.py
+
+      - name: Commit monitor outputs
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/market_top_cross_monitor_current.json docs/data/market_top_cross_monitor_history.json
+          if git diff --cached --quiet; then
+            echo "No cross-monitor change."
+          else
+            git commit -m "data: refresh Market Top cross-model monitor"
+            git push
+          fi
