@@ -1,137 +1,125 @@
 # Market Top Shadow Live Snapshot — 2026-10-16
 
-Status: **INPUT_INCOMPLETE / RESEARCH ONLY**
+Status: **ROUTE_B RESOLVED / FULL PRESSURE PARTIAL / RESEARCH ONLY**
 
-This snapshot deliberately distinguishes components whose live definitions are already frozen from inputs whose original Top Trigger scoring has not yet been recovered.
+## Current canonical Policy Route
 
-## Authoritative components available
+### PolicyShock
 
-### PolicyShock V2.1.1
-
-Strict-lag 2Y Treasury input:
-
-- 2026-10-15: 4.77%
-- 2026-04-15 anchor: 3.76%
-- six-month change: +101 bp
+- 2Y Treasury: 3.76% on 2026-04-15 -> 4.77% on 2026-10-15
+- six-month move: +101 bp
 - RateShock = 100
+- WALCL TaperShock = 6.861
+- PolicyShock = **62.744**
 
-WALCL:
+The rate shock is extreme, but the balance-sheet taper component is weak.
 
-- 2026-04-15: 6,705,696 million USD
-- 2026-07-15: 6,743,028 million USD
-- 2026-10-14: 6,755,639 million USD
+### Canonical Valuation
+
+The original Top Trigger definition has been restored:
+
+```
+Valuation = expanding percentile of Shiller CAPE
+```
+
+For PIT use on 2026-10-16, October's unfinished month is not used. September 2026 is the last completed signal month:
+
+- CAPE = 40.5808741
+- Valuation = **98.913665**
+
+The live current CAPE around 40.54 remains context only.
+
+### Canonical SizeWeakness
+
+The original definition has also been restored:
+
+```
+B_size = -CumSMB_6m
+SizeWeakness = expanding percentile(B_size)
+```
+
+Latest available Fama-French month in this study: August 2026.
+
+- CumSMB_6m = +0.7635365%
+- B_size = -0.7635365%
+- SizeWeakness = **45.446951**
+
+### Route_B
+
+```
+Route_B =
+cbrt(
+  98.913665
+  * 62.744247
+  * 45.446951
+)
+= 65.581043
+```
 
 Therefore:
 
-- prior 13-week expansion ~= +0.557%
-- current 13-week expansion ~= +0.187%
-- deceleration ~= 0.370 percentage points
-- TaperShock ~= 6.861
-- PolicyShock ~= **62.744**
+```
+Route_B = 65.58 < 85
+Policy Route = NOT ARMED
+```
 
-Interpretation: rate repricing is extreme, but the QE/taper-style balance-sheet reversal component is weak.
+The current setup has extreme valuation and extreme 2Y repricing, but not the small-cap weakness or QE-to-taper reversal needed to reproduce the 2022 policy route.
 
-This is not a 2022-like PolicyShock configuration.
+## Price confirmation
 
-### T_v2.4R
-
-SPY, 2026-10-16:
+SPY on 2026-10-16:
 
 - Close = 763.25
-- trailing-252-session highest close = 779.09
-- DD12 = 2.033%
-- prior-completed-10-month MA = 720.884
-- price is above the MA
-- T_v2.4R ~= **13.775**
-
-Therefore:
+- 252-session high close = 779.09
+- drawdown = 2.033%
+- prior-completed 10M MA = 720.884
+- T_v2.4R = **13.775**
 
 ```
 PRICE_BREAKDOWN_v2.4R = FALSE
 ```
 
-The current price structure is not in the frozen breakdown state.
+## 2022 PIT correction retained
 
-## Inputs not yet authoritative
+The old research branch used Route_B≈88.72 as the 2022-01-03 strict-PIT golden value.
 
-### Valuation
+That was too aggressive because it used later monthly SizeWeakness information.
 
-Current Shiller CAPE is 40.54.
+Using November 2021 monthly inputs conservatively:
 
-However the exact historical Top Trigger mapping from CAPE to its 0-100 Valuation score has not yet been restored as a code artifact.
-
-The existing Market Model V2 value:
-
-```
-valuation_percentile = 47.22
-raw SPY/MA200 = 1.0697
-```
-
-is a different proxy and is not substituted silently.
-
-### SizeWeakness
-
-The exact original Top Trigger SizeWeakness scoring is also not yet recovered.
-
-Diagnostic-only existing proxy:
-
-```
-sme_survival_growth supportive score = 6.42
-raw IWM-SPY 60d = -9.6423%
-diagnostic weakness = 100 - 6.42 = 93.58
-```
-
-This looks structurally weak for small caps, but it is not promoted to canonical SizeWeakness.
-
-## Diagnostic Route_B only
-
-Using the two noncanonical Market Model proxies:
-
-```
-Valuation proxy = 47.22
-SizeWeakness proxy = 93.58
-PolicyShock = 62.744
-```
+- Valuation = 98.580721
+- SizeWeakness = 84.736842
+- PolicyShock = 74.388619
 
 gives:
 
 ```
-Route_B_proxy ~= 65.21
+Route_B = 85.334292 > 85
 ```
 
-This cannot alter the state machine.
+So the 2022 Policy route still passes, but only narrowly.
 
-A useful bound:
+## Overall state
 
-```
-PolicyShock = 62.744
-Valuation = 100
-SizeWeakness = 100
-=> Route_B ~= 85.61
-```
+Canonical Route_B is now resolved. However:
 
-So the live PolicyShock is only barely strong enough to make Route_B theoretically cross 85 even under two perfect 100-risk companion inputs.
+- Route_A = unresolved
+- Route_C = unresolved
 
-If the diagnostic size proxy 93.58 were treated only as an upper-bound scenario:
+Therefore the full:
 
 ```
-Valuation = 100
-SizeWeakness = 93.58
-=> Route_B ~= 83.74
+Pressure = max(Route_A, Route_B, Route_C)
 ```
 
-which remains below the ARMED threshold.
+cannot yet be declared authoritative.
 
-## Current research-live conclusion
+Current research-live state:
 
 ```
-PolicyShock: 62.744
-T_v2.4R: 13.775
-Price Breakdown: NO
-Authoritative Route_B: NA
-Authoritative state: INPUT_INCOMPLETE
+Policy Route_B: 65.58 -> NOT ARMED
+T_v2.4R: 13.78 -> NO BREAKDOWN
+Full Pressure: PARTIAL_ROUTE_COVERAGE
 ```
 
-The system intentionally refuses to issue an authoritative ARMED/IDLE call until the exact canonical Valuation and SizeWeakness mappings are restored or separately versioned.
-
-This is a safety property, not a missing-data workaround.
+The next task is to restore Route_A and Route_C from their original definitions rather than substitute Market Model V2 proxies.
