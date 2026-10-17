@@ -21,6 +21,9 @@ on:
       - "research/t_v24r_validation.json"
       - "tests/test_t_v24r.py"
       - "tests/test_t_v24r_validation_contract.py"
+      - "research/T_V24R_SOURCE_INVARIANCE.md"
+      - "research/t_v24r_source_invariance.json"
+      - "tests/test_t_v24r_source_invariance.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -41,4 +44,5 @@ jobs:
         run: |
           python -m unittest             tests.test_policyshock_v211             tests.test_shadow_replay_v24             tests.test_v24_event_matrix             tests.test_t_v24_recovery_contract \
             tests.test_t_v24r \
-            tests.test_t_v24r_validation_contract -v
+            tests.test_t_v24r_validation_contract \
+            tests.test_t_v24r_source_invariance -v
