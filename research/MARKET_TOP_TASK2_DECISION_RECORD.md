@@ -283,3 +283,34 @@ exact Jan-3 monthly vintage = UNRESOLVED
 ```
 
 The official 2022 archive result is slightly stronger than the current canonical reconstructed history, so the 2022 pass is not being created by later CRSP revisions.
+
+
+### Wayback exact-vintage attempt
+
+A separate GitHub Actions audit queried the Internet Archive for the Ken French factor ZIP before the 2022-01-03 cutoff.
+
+Archive access itself worked: the workflow downloaded and parsed historical ZIP files successfully.
+
+However, the newest usable pre-cutoff capture was:
+
+```
+2021-04-13 02:05:42 UTC
+last monthly factor row = 2021-02
+```
+
+No pre-cutoff Wayback ZIP contained the required 2021-11 row.
+
+Therefore:
+
+```
+exact Jan-3-2022 monthly vintage
+= not recoverable from Wayback
+```
+
+This changes the provenance label, not the model result:
+
+```
+official July-2022 archive Route_B = 85.5692 -> PASS
+cross-version revision range = 85.3048 to 85.6570 -> PASS
+exact Jan-3 file = ARCHIVE COVERAGE UNAVAILABLE
+```
