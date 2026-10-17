@@ -1314,6 +1314,79 @@
         "events_after_dedupe": 54,
         "errors": {}
       }
+    },
+    {
+      "date": "2026-10-17",
+      "generated_at": "2026-10-17T07:32:47.758937+00:00",
+      "signals": {
+        "us_policy_event_sentiment": 7.86,
+        "geopolitical_news_risk": 39.77,
+        "systemic_news_risk": 9.1,
+        "ai_narrative_risk": 9.28,
+        "negative_narrative_density": 4.32
+      },
+      "reaction_adjusted": {
+        "us_policy_event_sentiment": 7.53,
+        "geopolitical_news_risk": 35.7,
+        "systemic_news_risk": 8.08,
+        "ai_narrative_risk": 9.27,
+        "negative_narrative_density": 4.05
+      },
+      "market_confirmation": {
+        "us_policy_event_sentiment": 91.63,
+        "geopolitical_news_risk": 79.55,
+        "systemic_news_risk": 77.6,
+        "ai_narrative_risk": 99.69,
+        "negative_narrative_density": 87.58
+      },
+      "market_assets": {
+        "vix": {
+          "close": 19.99,
+          "day_pct": 21.446,
+          "five_day_pct": 34.704,
+          "timestamp": 1792134000,
+          "label": "VIX",
+          "symbol": "^VIX"
+        },
+        "oil": {
+          "close": 101.41,
+          "day_pct": 3.511,
+          "five_day_pct": 10.408,
+          "timestamp": 1792123200,
+          "label": "WTI原油",
+          "symbol": "CL=F"
+        },
+        "gold": {
+          "close": 4181.1001,
+          "day_pct": 0.264,
+          "five_day_pct": -0.835,
+          "timestamp": 1792123200,
+          "label": "黄金",
+          "symbol": "GC=F"
+        },
+        "spy": {
+          "close": 763.25,
+          "day_pct": -1.107,
+          "five_day_pct": -1.968,
+          "timestamp": 1792157400,
+          "label": "SPY",
+          "symbol": "SPY"
+        }
+      },
+      "source_status": {
+        "configured": [
+          "fed_monetary",
+          "gdelt",
+          "google_news",
+          "sec_press"
+        ],
+        "query_mode": "market_context_headline_confirmed",
+        "unique_sources_seen": 54,
+        "article_rows_before_classification": 68,
+        "classified_rows": 67,
+        "events_after_dedupe": 65,
+        "errors": {}
+      }
     }
   ]
 }
