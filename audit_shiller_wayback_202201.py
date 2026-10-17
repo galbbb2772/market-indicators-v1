@@ -20,6 +20,7 @@ TARGET_MONTH = "202111"
 
 POLICY_SHOCK_2022_01_03 = 74.3886192578
 SIZE_WEAKNESS_OFFICIAL_2022_ARCHIVE = 85.43859649122807
+SIZE_WEAKNESS_CURRENT_CONSERVATIVE = 84.73684210526316
 ROUTE_B_THRESHOLD = 85.0
 
 
@@ -192,7 +193,12 @@ def audit_workbook(content: bytes) -> dict[str, Any]:
             POLICY_SHOCK_2022_01_03,
             SIZE_WEAKNESS_OFFICIAL_2022_ARCHIVE,
         )
-        if rb is None:
+        rb_current_size = route_b(
+            valuation,
+            POLICY_SHOCK_2022_01_03,
+            SIZE_WEAKNESS_CURRENT_CONSERVATIVE,
+        )
+        if rb is None or rb_current_size is None:
             raise ValueError("Route_B missing")
         critical_valuation = (
             ROUTE_B_THRESHOLD**3
@@ -201,13 +207,26 @@ def audit_workbook(content: bytes) -> dict[str, Any]:
                 * SIZE_WEAKNESS_OFFICIAL_2022_ARCHIVE
             )
         )
+        critical_valuation_current_size = (
+            ROUTE_B_THRESHOLD**3
+            / (
+                POLICY_SHOCK_2022_01_03
+                * SIZE_WEAKNESS_CURRENT_CONSERVATIVE
+            )
+        )
         return {
             "has_target": False,
             "last_month": str(rows[-1]["ym"]) if rows else None,
             "last_cape": float(rows[-1]["cape"]),
             "last_valuation": float(valuation),
             "route_b_using_last_available_valuation": float(rb),
+            "route_b_using_last_available_valuation_and_current_size": float(
+                rb_current_size
+            ),
             "critical_valuation": float(critical_valuation),
+            "critical_valuation_current_size": float(
+                critical_valuation_current_size
+            ),
             "last_valuation_margin_above_critical": float(
                 valuation - critical_valuation
             ),
@@ -221,7 +240,12 @@ def audit_workbook(content: bytes) -> dict[str, Any]:
         POLICY_SHOCK_2022_01_03,
         SIZE_WEAKNESS_OFFICIAL_2022_ARCHIVE,
     )
-    if rb is None:
+    rb_current_size = route_b(
+        valuation,
+        POLICY_SHOCK_2022_01_03,
+        SIZE_WEAKNESS_CURRENT_CONSERVATIVE,
+    )
+    if rb is None or rb_current_size is None:
         raise ValueError("Route_B missing")
 
     critical_valuation = (
@@ -242,6 +266,7 @@ def audit_workbook(content: bytes) -> dict[str, Any]:
         "policy_shock": POLICY_SHOCK_2022_01_03,
         "size_weakness": SIZE_WEAKNESS_OFFICIAL_2022_ARCHIVE,
         "route_b": float(rb),
+        "route_b_with_current_conservative_size": float(rb_current_size),
         "threshold": ROUTE_B_THRESHOLD,
         "passes": bool(rb >= ROUTE_B_THRESHOLD),
         "critical_valuation": float(critical_valuation),
