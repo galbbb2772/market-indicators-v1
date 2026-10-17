@@ -1,0 +1,84 @@
+{
+  "schema_version": "market-top-shadow-forward-1",
+  "generated_at": "2026-10-17T06:24:27.130882+00:00",
+  "research_only": true,
+  "production_effect": "none",
+  "asof": "2026-10-16",
+  "sources": {
+    "dgs2": "U.S. Treasury Daily Treasury Par Yield Curve Rates",
+    "walcl": "FRED WALCL via market-weather-map static GitHub mirror",
+    "walcl_mirror_generated_at_utc": "2026-10-17T01:23:07Z",
+    "spy": "Yahoo Finance unadjusted close",
+    "shiller": "Robert Shiller - Yale Economics",
+    "shiller_latest_date": "2026-10-01",
+    "fama_french": "Ken French Data Library"
+  },
+  "policy": {
+    "dgs2_latest_date": "2026-10-16",
+    "dgs2_latest_pct": 4.74,
+    "dgs2_anchor_date": "2026-04-16",
+    "dgs2_anchor_pct": 3.78,
+    "delta_6m_bp": 96.00000000000004,
+    "walcl_latest_date": "2026-10-14",
+    "walcl_latest": 6755639,
+    "walcl_13w_date": "2026-07-15",
+    "walcl_13w": 6743028,
+    "walcl_26w_date": "2026-04-15",
+    "walcl_26w": 6705696,
+    "g_prev_pct": 0.5567207341340863,
+    "g_cur_pct": 0.18702280340523458,
+    "deceleration_pp": 0.3696979307288517,
+    "rate_shock": 100,
+    "taper_shock": 6.860616780107296,
+    "policy_shock": 62.744246712042916
+  },
+  "valuation": {
+    "signal_month": "2026-09",
+    "cape": 40.58087409538742,
+    "score": 98.9136649514008,
+    "source_latest_month": "2026-10"
+  },
+  "size_weakness": {
+    "factor_month": "2026-08",
+    "smb_6m_pct": 0.7635365253771065,
+    "b_size": -0.7635365253771065,
+    "score": 45.4469507101086
+  },
+  "route_b": {
+    "score": 65.58104271810248,
+    "threshold": 85,
+    "pressure_pass": false,
+    "top_location_gate": true,
+    "arm_today": false
+  },
+  "price_confirmation": {
+    "asof": "2026-10-16",
+    "close": 763.25,
+    "high12_close": 779.0900268554688,
+    "dd12_pct": 2.0331446058168163,
+    "ma10m_prev": 720.8839965820313,
+    "ma_gap_pct": 0,
+    "t_v24r": 13.775261410890886,
+    "price_breakdown_v24r": false,
+    "high24_close": 779.0900268554688,
+    "high24_date": "2026-10-06",
+    "within_5pct_of_24m_high": true,
+    "high_formed_within_3m": true,
+    "top_location_gate": true
+  },
+  "policy_path": {
+    "state": "IDLE",
+    "armed_at": null,
+    "armed_expires_at": null,
+    "triggered_at": null,
+    "breakdown_today": false,
+    "scope": "Route_B-only shadow path; does not represent unresolved Route_A/Route_C"
+  },
+  "full_legacy_model": {
+    "status": "PARTIAL_ROUTE_COVERAGE",
+    "route_a": "UNRESOLVED",
+    "route_b": "RESOLVED",
+    "route_c": "UNRESOLVED",
+    "pressure_authoritative": false
+  }
+}
