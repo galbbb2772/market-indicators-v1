@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-INVARIANT-REPRESENTATIVES-OOS-V1",
-  "generated_at": "2026-10-16T00:32:03.867439+00:00",
+  "generated_at": "2026-10-17T00:40:21.296928+00:00",
   "research_only": true,
   "observation_only": true,
   "production_effect": "none",
@@ -111,6 +111,19 @@
           "score": 37.03703703703704,
           "impact_polarity": -1,
           "spy_close_first_seen": 769.5999755859375,
+          "outcome_10d_pct": null,
+          "maturity_market_date": null,
+          "outcome_matured_at": null,
+          "entry_close_at_maturity": null,
+          "exit_close_at_maturity": null
+        },
+        {
+          "market_date": "2026-10-15",
+          "first_seen_at": "2026-10-17T00:40:21.296928+00:00",
+          "first_seen_market_date": "2026-10-15",
+          "score": 39.682539682539684,
+          "impact_polarity": -1,
+          "spy_close_first_seen": 771.7899780273438,
           "outcome_10d_pct": null,
           "maturity_market_date": null,
           "outcome_matured_at": null,
@@ -229,6 +242,19 @@
           "outcome_matured_at": null,
           "entry_close_at_maturity": null,
           "exit_close_at_maturity": null
+        },
+        {
+          "market_date": "2026-10-15",
+          "first_seen_at": "2026-10-17T00:40:21.296928+00:00",
+          "first_seen_market_date": "2026-10-15",
+          "score": 58.33333333333333,
+          "impact_polarity": -1,
+          "spy_close_first_seen": 771.7899780273438,
+          "outcome_10d_pct": null,
+          "maturity_market_date": null,
+          "outcome_matured_at": null,
+          "entry_close_at_maturity": null,
+          "exit_close_at_maturity": null
         }
       ],
       "source_recompute_discrepancies": []
@@ -342,6 +368,19 @@
           "outcome_matured_at": null,
           "entry_close_at_maturity": null,
           "exit_close_at_maturity": null
+        },
+        {
+          "market_date": "2026-10-15",
+          "first_seen_at": "2026-10-17T00:40:21.296928+00:00",
+          "first_seen_market_date": "2026-10-15",
+          "score": 37.61022927689595,
+          "impact_polarity": -1,
+          "spy_close_first_seen": 771.7899780273438,
+          "outcome_10d_pct": null,
+          "maturity_market_date": null,
+          "outcome_matured_at": null,
+          "entry_close_at_maturity": null,
+          "exit_close_at_maturity": null
         }
       ],
       "source_recompute_discrepancies": [
@@ -381,28 +420,28 @@
     "First-seen scores are immutable; later recomputation disagreements are logged separately.",
     "Adjusted-close forward returns are frozen at first maturity and are not rewritten later."
   ],
-  "latest_completed_market_date": "2026-10-14",
+  "latest_completed_market_date": "2026-10-15",
   "status": {
     "counts": {
       "fear_volatility::c15": {
-        "forward_observation_count": 8,
+        "forward_observation_count": 9,
         "matured_10d_count": 0,
         "first_forward_market_date": "2026-10-05",
-        "latest_forward_market_date": "2026-10-14",
+        "latest_forward_market_date": "2026-10-15",
         "discrepancy_count": 0
       },
       "fear_volatility::c10": {
-        "forward_observation_count": 8,
+        "forward_observation_count": 9,
         "matured_10d_count": 0,
         "first_forward_market_date": "2026-10-05",
-        "latest_forward_market_date": "2026-10-14",
+        "latest_forward_market_date": "2026-10-15",
         "discrepancy_count": 0
       },
       "sentiment_event::c2": {
-        "forward_observation_count": 8,
+        "forward_observation_count": 9,
         "matured_10d_count": 0,
         "first_forward_market_date": "2026-10-05",
-        "latest_forward_market_date": "2026-10-14",
+        "latest_forward_market_date": "2026-10-15",
         "discrepancy_count": 3
       }
     },
@@ -414,9 +453,9 @@
   },
   "last_run_changes": {
     "new_observations": {
-      "fear_volatility::c15": 0,
-      "fear_volatility::c10": 0,
-      "sentiment_event::c2": 0
+      "fear_volatility::c15": 1,
+      "fear_volatility::c10": 1,
+      "sentiment_event::c2": 1
     },
     "newly_matured_10d": {
       "fear_volatility::c15": 0,
