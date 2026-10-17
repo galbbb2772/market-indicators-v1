@@ -23,6 +23,26 @@ class MarketTopShadowDataContractTests(unittest.TestCase):
         self.assertEqual(x["full_legacy_model"]["route_a"], "UNRESOLVED")
         self.assertEqual(x["full_legacy_model"]["route_c"], "UNRESOLVED")
 
+    def test_seed_freshness_contract_is_explicit_and_passing(self):
+        f = self.current["freshness"]
+        self.assertEqual(f["status"], "PASS")
+        self.assertEqual(f["market_lag_days"], 1)
+        self.assertEqual(f["dgs2_lag_days"], 0)
+        self.assertEqual(f["walcl_lag_days"], 2)
+        self.assertEqual(f["valuation_signal_month"], "2026-09")
+        self.assertEqual(f["valuation_expected_month"], "2026-09")
+        self.assertEqual(f["ff_factor_month"], "2026-08")
+        self.assertEqual(f["ff_factor_lag_months"], 2)
+        self.assertEqual(
+            f["limits"],
+            {
+                "market_days": 5,
+                "dgs2_days": 7,
+                "walcl_days": 14,
+                "ff_factor_months": 3,
+            },
+        )
+
     def test_seed_route_b_and_price_state_match_live_dry_run(self):
         x = self.current
         self.assertEqual(x["asof"], "2026-10-16")
