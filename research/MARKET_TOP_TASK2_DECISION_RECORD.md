@@ -314,3 +314,59 @@ official July-2022 archive Route_B = 85.5692 -> PASS
 cross-version revision range = 85.3048 to 85.6570 -> PASS
 exact Jan-3 file = ARCHIVE COVERAGE UNAVAILABLE
 ```
+
+
+## Source freshness and H.4.1 PIT hardening
+
+The forward shadow now fails closed when any live source is stale:
+
+- market as-of lag > 5 calendar days;
+- 2Y Treasury lag > 7 days;
+- WALCL lag outside 2–14 days;
+- Shiller signal month is not exactly the prior completed month;
+- Fama-French factor lag > 3 months.
+
+H.4.1 is now release-aware rather than observation-date-only. A Wednesday observation is not usable at Thursday's equity close because the Federal Reserve normally publishes H.4.1 around 4:30 p.m. ET. Federal-holiday release shifts are also respected before the observation may enter an EOD state.
+
+The live 2026-10-16 run passes all freshness checks.
+
+## Shiller pre-cutoff Valuation audit
+
+Wayback did not capture a Shiller workbook containing the November-2021 CAPE row before 2022-01-03.
+
+The latest clean pre-cutoff workbook is:
+
+```
+capture = 2021-10-12
+last month = 2021-09
+CAPE = 38.3422797126
+Valuation = 98.5790408526
+```
+
+The audit parser explicitly prevents `Excess CAPE Yield` from being misread as CAPE and rejects temporally inconsistent Wayback payloads.
+
+Using that genuine archived Valuation:
+
+```
+with official July-2022 SizeWeakness:
+Route_B = 85.5687255790
+
+with lower current-vintage SizeWeakness:
+Route_B = 85.3338068250
+```
+
+Both remain above 85.
+
+The most conservative observed cross-vintage combination would fail only if:
+
+```
+PolicyShock < 73.5190546
+```
+
+versus the frozen:
+
+```
+PolicyShock = 74.3886193
+```
+
+So the 2022 pass remains positive under every observed current/official/pre-cutoff Valuation-Size combination, while exact January-3 monthly vintages remain explicitly unresolved.
