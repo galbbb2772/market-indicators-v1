@@ -10,15 +10,23 @@ Frozen behavior represented here:
 - Price Breakdown requires an existing ARMED state plus T >= 70 and drawdown from the 12-month high >= 4.5%.
 - Accepted Early Breadth behavior is a direct trigger: Pressure >= 85, Route_C >= 85, and delta Breadth_3m >= 10.
 
-## Important limitation
+## Original T limitation
 
-The exact historical daily formula for V2.4 T was not preserved in the prior research record. The shadow replay therefore accepts t_score as an upstream PIT-safe input and does not invent a replacement formula.
-
-This harness can validate PolicyShock -> Route_B -> ARMED wiring, state ordering, six-month retention, Early Breadth behavior, and Price Breakdown thresholds once a frozen T score is supplied.
+The exact historical daily formula for original V2.4 T was not preserved. It is not re-invented here. A separately versioned T_v2.4R has been preregistered and validated as a new research confirmation model.
 
 ## 2022 shadow path
 
-- 2022-01-03 strict-PIT Route_B = 88.7229415743, so the policy route can independently ARM the system in the top zone.
-- 2022-01-03 S&P 500 close = 4796.56; the 4.5% line is 4580.71.
-- 2022-01-18 close = 4577.11, so this is the earliest possible price-breakdown date from the drawdown condition alone.
-- The exact formal Price Trigger date remains conditional on upstream frozen T >= 70.
+Conservative publication-lag policy route:
+
+- 2022-01-03 Route_B = **85.3342917570**
+- monthly Valuation and SizeWeakness inputs are restricted to 2021-11
+- Policy Route independently ARMS the system in the top zone
+
+Price path:
+
+- 2022-01-03 S&P 500 close = 4796.56
+- 4.5% line = 4580.71
+- 2022-01-18 close = 4577.11, the earliest known drawdown-gate crossing
+- T_v2.4R on the SPY proxy first confirms on 2022-01-20
+
+The earlier ~88.72 Route_B value used later monthly SizeWeakness information and is no longer labeled strict PIT.
