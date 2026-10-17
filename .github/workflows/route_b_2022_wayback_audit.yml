@@ -1,0 +1,27 @@
+name: Route_B 2022 Wayback Vintage Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_ff_wayback_202201.py"
+      - "audit_ff_2022_archive.py"
+      - "tests/test_audit_ff_wayback_202201.py"
+      - ".github/workflows/route_b_2022_wayback_audit.yml"
+  workflow_dispatch:
+
+jobs:
+  wayback-vintage-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install requests
+      - name: Static contract
+        run: python -m unittest tests.test_audit_ff_wayback_202201 -v
+      - name: Attempt pre-Jan-3-2022 Wayback factor ZIP recovery
+        run: python audit_ff_wayback_202201.py --output /tmp/ff_wayback_202201.json
