@@ -1,0 +1,132 @@
+from __future__ import annotations
+
+import unittest
+
+import pandas as pd
+
+from update_market_top_shadow import (
+    _prior_policy_state,
+    compute_policy,
+    compute_price,
+    compute_size_weakness,
+    compute_valuation,
+)
+
+
+class MarketTopForwardShadowTests(unittest.TestCase):
+    def test_valuation_excludes_unfinished_current_month(self):
+        shiller = pd.DataFrame(
+            {
+                "date": pd.to_datetime(
+                    ["2026-07-01", "2026-08-01", "2026-09-01", "2026-10-01"]
+                ),
+                "cape": [30.0, 35.0, 40.0, 80.0],
+            }
+        )
+        x = compute_valuation(shiller, asof=pd.Timestamp("2026-10-16"))
+        self.assertEqual(x["signal_month"], "2026-09")
+        self.assertEqual(x["cape"], 40.0)
+        self.assertEqual(x["score"], 100.0)
+
+    def test_size_weakness_uses_latest_published_completed_factor_month(self):
+        ff = pd.DataFrame(
+            {
+                "date": pd.to_datetime(
+                    [
+                        "2026-01-01",
+                        "2026-02-01",
+                        "2026-03-01",
+                        "2026-04-01",
+                        "2026-05-01",
+                        "2026-06-01",
+                        "2026-07-01",
+                        "2026-08-01",
+                    ]
+                ),
+                "smb": [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 1.0],
+            }
+        )
+        x = compute_size_weakness(ff, asof=pd.Timestamp("2026-10-16"))
+        self.assertEqual(x["factor_month"], "2026-08")
+        self.assertIsInstance(x["score"], float)
+
+    def test_current_policy_fingerprint(self):
+        dgs2 = pd.Series(
+            [3.76, 4.77],
+            index=pd.to_datetime(["2026-04-15", "2026-10-15"]),
+        )
+        walcl = pd.Series(
+            [6705696.0, 6743028.0, 6755639.0],
+            index=pd.to_datetime(["2026-04-15", "2026-07-15", "2026-10-14"]),
+        )
+        x = compute_policy(dgs2, walcl, asof=pd.Timestamp("2026-10-16"))
+        self.assertAlmostEqual(x["rate_shock"], 100.0, places=10)
+        self.assertAlmostEqual(x["taper_shock"], 6.860616780107296, places=8)
+        self.assertAlmostEqual(x["policy_shock"], 62.744246712042916, places=8)
+        self.assertEqual(x["walcl_latest_date"], "2026-10-14")
+
+    def test_24m_high_is_calendar_based(self):
+        idx = pd.bdate_range("2024-01-02", "2026-10-16")
+        spy = pd.Series(150.0, index=idx)
+        # This very old high is outside the trailing 24 calendar months.
+        old = idx[idx <= pd.Timestamp("2024-08-15")][-1]
+        spy.loc[old] = 999.0
+        recent = idx[idx <= pd.Timestamp("2026-09-15")][-1]
+        spy.loc[recent] = 200.0
+        spy.iloc[-1] = 195.0
+
+        x = compute_price(spy)
+        self.assertEqual(x["high24_close"], 200.0)
+        self.assertEqual(x["high24_date"], recent.date().isoformat())
+        self.assertTrue(x["within_5pct_of_24m_high"])
+        self.assertTrue(x["high_formed_within_3m"])
+        self.assertTrue(x["top_location_gate"])
+
+    def test_arm_clock_is_not_renewed_by_daily_armed_rows(self):
+        history = [
+            {
+                "asof": "2026-01-03",
+                "policy_path_state": "ARMED",
+                "armed_at": "2026-01-03",
+            },
+            {
+                "asof": "2026-02-03",
+                "policy_path_state": "ARMED",
+                "armed_at": "2026-01-03",
+            },
+            {
+                "asof": "2026-03-03",
+                "policy_path_state": "ARMED",
+                "armed_at": "2026-01-03",
+            },
+        ]
+        active = _prior_policy_state(history, asof=pd.Timestamp("2026-07-03"))
+        self.assertEqual(active["state"], "ARMED")
+        self.assertEqual(active["armed_at"], "2026-01-03")
+
+        expired = _prior_policy_state(history, asof=pd.Timestamp("2026-07-04"))
+        self.assertEqual(expired["state"], "IDLE")
+        self.assertIsNone(expired["armed_at"])
+
+    def test_triggered_state_is_terminal_like_frozen_replay(self):
+        history = [
+            {
+                "asof": "2022-01-03",
+                "policy_path_state": "ARMED",
+                "armed_at": "2022-01-03",
+            },
+            {
+                "asof": "2022-01-20",
+                "policy_path_state": "TRIGGERED",
+                "armed_at": "2022-01-03",
+                "triggered_at": "2022-01-20",
+            },
+        ]
+        x = _prior_policy_state(history, asof=pd.Timestamp("2022-02-01"))
+        self.assertEqual(x["state"], "TRIGGERED")
+        self.assertEqual(x["armed_at"], "2022-01-03")
+        self.assertEqual(x["triggered_at"], "2022-01-20")
+
+
+if __name__ == "__main__":
+    unittest.main()
