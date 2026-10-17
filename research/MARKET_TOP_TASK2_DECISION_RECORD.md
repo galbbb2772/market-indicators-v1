@@ -236,3 +236,50 @@ Full Pressure authoritative = FALSE
 ```
 
 so the Route_B-only state cannot be mistaken for the full legacy V2.4 model.
+
+
+## 2022 Fama–French vintage robustness
+
+Because the conservative 2022 Route_B score is close to the 85 threshold, the historical SizeWeakness input was tested for database-revision sensitivity.
+
+### Official 2022 archive
+
+A dedicated GitHub Actions job downloaded the official Kenneth R. French **July 2022 data cut / August 2022 release** and recomputed the frozen 2021-11 SizeWeakness input.
+
+Official archive result:
+
+```
+SizeWeakness = 85.43859649
+Route_B = 85.56921185
+Route_B - 85 = +0.56921185
+```
+
+Therefore the 2022 Route_B pass survives an official 2022-era CRSP data cut.
+
+### Independent historical variants
+
+Several independently stored Fama–French histories with different 2021 SMB revisions were also replayed.
+
+Observed range:
+
+```
+SizeWeakness = 84.6491 to 85.7018
+Route_B = 85.3048 to 85.6570
+```
+
+All sampled variants remain above 85.
+
+### Remaining limitation
+
+The exact monthly factor file available on **2022-01-03** has not been recovered.
+
+Therefore the evidence status is:
+
+```
+conservative publication-lag replay = PASS
+official July-2022 annual-cut robustness = PASS
+cross-version revision sensitivity = PASS
+exact Jan-3 monthly vintage = UNRESOLVED
+```
+
+The official 2022 archive result is slightly stronger than the current canonical reconstructed history, so the 2022 pass is not being created by later CRSP revisions.
