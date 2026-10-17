@@ -18,36 +18,33 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install tradingview-screener
-      - name: Probe NYSE cross-sectional H/L counts
+      - name: Probe secretless US H/L universe
         run: |
           python - <<'PY'
+          import pandas as pd
           from tradingview_screener import Query, col
           
-          def qbase():
-              return (
-                  Query()
-                  .select('name','close','high','low','price_52_week_high','price_52_week_low','exchange','type','typespecs','update_mode')
-                  .where(col('exchange') == 'NYSE', col('is_primary') == True)
-                  .limit(10000)
-              )
+          cols=['name','close','high','low','price_52_week_high','price_52_week_low',
+                'exchange','type','typespecs','update_mode','is_primary']
+          total,df=(Query().select(*cols).where(col('is_primary')==True).limit(30000).get_scanner_data())
+          print('RAW_TOTAL',total,'ROWS',len(df))
+          print('EXCHANGES',df['exchange'].value_counts().head(15).to_dict())
+          print('TYPES',df['type'].value_counts(dropna=False).to_dict())
           
-          total,df=qbase().get_scanner_data()
-          print('TOTAL',total,'ROWS',len(df))
-          print('UPDATE_MODES')
-          print(df['update_mode'].value_counts(dropna=False).to_string())
-          
-          nh_close=(df['close'] >= df['price_52_week_high'] * (1-1e-10)).sum()
-          nl_close=(df['close'] <= df['price_52_week_low'] * (1+1e-10)).sum()
-          nh_intra=(df['high'] >= df['price_52_week_high'] * (1-1e-10)).sum()
-          nl_intra=(df['low'] <= df['price_52_week_low'] * (1+1e-10)).sum()
-          print('CLIENT_CLOSE_COUNTS',int(nh_close),int(nl_close))
-          print('CLIENT_INTRADAY_COUNTS',int(nh_intra),int(nl_intra))
-          print('CLIENT_SAMPLE_HI')
-          print(df.loc[df['high'] >= df['price_52_week_high']*(1-1e-10), ['ticker','high','close','price_52_week_high']].head(20).to_string(index=False))
-          print('CLIENT_SAMPLE_LO')
-          print(df.loc[df['low'] <= df['price_52_week_low']*(1+1e-10), ['ticker','low','close','price_52_week_low']].head(20).to_string(index=False))
-          
-          hi_count,_=(qbase().where(col('exchange')=='NYSE',col('is_primary')==True,col('high') >= col('price_52_week_high')).get_scanner_data())
-          lo_count,_=(qbase().where(col('exchange')=='NYSE',col('is_primary')==True,col('low') <= col('price_52_week_low')).get_scanner_data())
-          print('SERVER_INTRADAY_COUNTS',hi_count,lo_count)
+          def has_common(x):
+              if isinstance(x,(list,tuple,set)): return 'common' in x
+              return 'common' in str(x).lower()
+          us=df[df['exchange'].isin(['NYSE','NASDAQ','AMEX'])].copy()
+          common=us[(us['type'].eq('dr')) | (us['type'].eq('stock') & us['typespecs'].map(has_common))].copy()
+          valid=common[['high','low','price_52_week_high','price_52_week_low']].notna().all(axis=1)
+          common=common[valid]
+          nh=(common['high'] >= common['price_52_week_high']*(1-1e-10))
+          nl=(common['low'] <= common['price_52_week_low']*(1+1e-10))
+          print('COMMON_ADR_UNIVERSE',len(common))
+          print('COMMON_ADR_COUNTS',int(nh.sum()),int(nl.sum()),'NET',int(nh.sum()-nl.sum()))
+          for ex,g in common.groupby('exchange'):
+              h=(g['high']>=g['price_52_week_high']*(1-1e-10)).sum()
+              l=(g['low']<=g['price_52_week_low']*(1+1e-10)).sum()
+              print('EX',ex,'N',len(g),'H',int(h),'L',int(l),'NET',int(h-l))
+          print('UPDATE_MODES',common['update_mode'].value_counts(dropna=False).to_dict())
           PY
