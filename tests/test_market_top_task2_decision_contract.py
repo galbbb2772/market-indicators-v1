@@ -28,6 +28,18 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
         self.assertEqual(f["policy_path_state"], "IDLE")
         self.assertFalse(f["full_pressure_authoritative"])
 
+    def test_2022_vintage_robustness(self):
+        v = self.data["vintage_robustness"]
+        self.assertFalse(v["exact_2022_01_03_monthly_vintage_recovered"])
+        self.assertEqual(v["official_july_2022_archive"]["status"], "PASS")
+        self.assertGreater(
+            v["official_july_2022_archive"]["route_b"],
+            v["official_july_2022_archive"]["threshold"],
+        )
+        self.assertTrue(
+            v["cross_version_static_histories"]["all_sampled_variants_pass"]
+        )
+
     def test_2022_dates_are_locked(self):
         x = self.data["frozen_conclusions"]
         self.assertEqual(x["2022_policy_arm_date"], "2022-01-03")
