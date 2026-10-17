@@ -56,21 +56,23 @@
       "evidence_level": "mixed",
       "shadow_policy_result": {
         "asof": "2022-01-03",
-        "route_b_strict_pit": 88.7229415743,
+        "route_b_strict_pit": 85.3342917569589,
         "state": "ARMED",
         "earliest_drawdown_gate_date": "2022-01-18",
         "formal_price_trigger_date": "UNRESOLVED_UNTIL_FROZEN_T_SCORE_IS_SUPPLIED",
-        "computation_status": "freshly_recomputed_policy_route_plus_known_price_gate"
+        "computation_status": "freshly_recomputed_policy_route_with_conservative_monthly_publication_lag_plus_known_price_gate",
+        "monthly_input_asof": "2021-11"
       },
       "shadow_v24r_result": {
         "armed_at": "2022-01-03",
-        "route_b_strict_pit": 88.7229415743,
+        "route_b_strict_pit": 85.3342917569589,
         "price_confirmation_proxy": "SPY",
         "price_breakdown_v24r_at": "2022-01-20",
         "t_v24r": 73.079,
         "dd12_pct": 6.481,
         "status": "FRESH_RESEARCH_REPLAY",
-        "note": "New T_v2.4R path; does not replace the accepted historical 2021-10 Early Breadth label."
+        "note": "New T_v2.4R path; does not replace the accepted historical 2021-10 Early Breadth label.",
+        "monthly_input_asof": "2021-11"
       }
     }
   ],
