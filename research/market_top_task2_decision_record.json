@@ -114,6 +114,14 @@
       "route_b_max": 85.65697520162985,
       "all_sampled_variants_pass": true
     },
-    "conclusion": "The 2022 Route_B pass is robust to an official July-2022 Ken French CRSP cut and multiple independent static historical variants. Exact Jan-3-2022 monthly factor vintage remains unresolved."
+    "conclusion": "The 2022 Route_B pass is robust to an official July-2022 Ken French CRSP cut and multiple independent static historical variants. Exact Jan-3-2022 monthly factor vintage remains unresolved.",
+    "wayback": {
+      "status": "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
+      "cutoff": "2022-01-03T23:59:59Z",
+      "latest_usable_capture": "2021-04-13T02:05:42Z",
+      "latest_usable_last_month": "2021-02",
+      "archive_access_worked": true,
+      "conclusion": "Wayback cannot provide the required 2021-11 factor row before the Jan-3-2022 cutoff; exact monthly vintage remains unresolved due to archive coverage."
+    }
   }
 }
