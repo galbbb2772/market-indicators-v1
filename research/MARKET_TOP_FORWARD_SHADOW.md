@@ -34,16 +34,38 @@ The history is keyed by market as-of date so a rerun replaces that date rather t
 
 ## Data-source policy
 
-### 2Y Treasury and WALCL
+### 2Y Treasury
 
-FRED public CSV endpoints are used.
+Primary source:
 
-For DGS2:
+- U.S. Treasury Daily Treasury Par Yield Curve Rates CSV;
+- the `2 Yr` column is used directly.
+
+Fallback:
+
+- FRED DGS2 if the Treasury endpoint is unavailable.
+
+For the live calculation:
 
 - use the latest observation on or before the latest SPY close;
-- the six-month anchor is the last released observation on or before the calendar six-month anchor date.
+- the six-month anchor is the last observation on or before the calendar six-month anchor date.
 
-For WALCL:
+The actual source used on each run is written into the snapshot.
+
+### WALCL / Federal Reserve total assets
+
+Primary operational source:
+
+- `market-weather-map` static GitHub mirror of FRED WALCL;
+- the mirror records its own generation timestamp and FRED source URL.
+
+Fallback:
+
+- direct FRED WALCL CSV.
+
+The mirror was introduced because the direct FRED CSV endpoint timed out from GitHub Actions during live dry-run, while the mirror was current through 2026-10-14 and reproduced the already verified WALCL values exactly.
+
+For the signal:
 
 - use the latest observation at least one calendar day older than the market as-of date;
 - this conservatively respects the normal Wednesday-observation / Thursday-release pattern;
@@ -144,3 +166,39 @@ On pull requests it:
 If the workflow is later merged to the default branch, the scheduled path is prepared to run after U.S. market closes and commit only the two research shadow JSON outputs.
 
 No production Market Model V2 score is modified.
+
+
+## Live source validation
+
+GitHub Actions live dry-run on 2026-10-17 passed end-to-end with:
+
+- 2Y source: U.S. Treasury Daily Treasury Par Yield Curve Rates;
+- WALCL source: FRED WALCL via the static GitHub mirror;
+- Shiller source: Robert Shiller / Yale feed;
+- Fama-French source: Ken French Data Library;
+- SPY source: Yahoo Finance unadjusted Close.
+
+The live 2026-10-16 snapshot produced:
+
+```
+DGS2 = 4.74%
+6M anchor = 3.78%
+RateShock = 100.00
+
+TaperShock = 6.8606
+PolicyShock = 62.7442
+
+Valuation = 98.9137
+SizeWeakness = 45.4470
+Route_B = 65.5810
+
+top-location gate = TRUE
+Route_B pressure gate = FALSE
+Route_B-only state = IDLE
+
+T_v2.4R = 13.7753
+DD12 = 2.0331%
+Price Breakdown = FALSE
+```
+
+This live run validates both the calculation path and the current provider failover design.
