@@ -1,5 +1,7 @@
 import math
 import sys
+
+import pandas as pd
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -8,6 +10,7 @@ from master_top_v218 import (
     policy_score,
     rate_shock_1m,
     rate_shock_6m,
+    reconstruct_hilo,
     route_score,
     top_proximity,
 )
@@ -50,3 +53,16 @@ def test_hl_persistence_definition():
     neg_frac = 15 / 20
     expected = 100 * math.sqrt(min(1, max(0, -mean / 0.30)) * neg_frac)
     assert math.isclose(score, expected, rel_tol=1e-12)
+
+
+def test_reconstruct_hilo_requires_252_prior_sessions():
+    dates = pd.bdate_range("2025-01-01", periods=253)
+    rows = []
+    for symbol in ("AAA", "BBB"):
+        for i, dt in enumerate(dates):
+            rows.append({"date": dt, "symbol": symbol, "close": float(i + 1)})
+    out = reconstruct_hilo(pd.DataFrame(rows))
+    assert int(out.iloc[-2]["hilo_eligible"]) == 0
+    assert int(out.iloc[-1]["hilo_eligible"]) == 2
+    assert int(out.iloc[-1]["new_highs"]) == 2
+    assert int(out.iloc[-1]["new_lows"]) == 0
