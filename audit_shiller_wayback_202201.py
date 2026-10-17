@@ -114,15 +114,27 @@ def parse_shiller_xls(content: bytes) -> list[dict[str, float | str]]:
                 engine="xlrd",
             )
             bio.seek(0)
-            cols = {str(c).strip().lower(): c for c in df.columns}
-            cape_col = next(
-                (
-                    original
-                    for key, original in cols.items()
-                    if key == "cape" or "cape" in key
-                ),
-                None,
-            )
+            normalized = {
+                str(col).strip().lower(): col
+                for col in df.columns
+            }
+            cape_col = normalized.get("cape")
+
+            # Historical ie_data.xls workbooks can have merged/multi-row
+            # headers where CAPE does not survive as the literal column name.
+            # In the canonical Shiller workbook CAPE is Excel column M,
+            # i.e. zero-based dataframe column 12. Never use a generic
+            # substring match because "Excess CAPE Yield" is a different
+            # series and is roughly 1/CAPE in scale.
+            if cape_col is None and len(df.columns) > 12:
+                candidate = df.columns[12]
+                if "yield" not in str(candidate).strip().lower():
+                    cape_col = candidate
+                else:
+                    # Even when the header text is shifted, column M remains
+                    # the canonical workbook location.
+                    cape_col = df.columns[12]
+
             if cape_col is None:
                 raise ValueError(f"CAPE column not found: {list(df.columns)}")
 
@@ -139,6 +151,18 @@ def parse_shiller_xls(content: bytes) -> list[dict[str, float | str]]:
                 raise ValueError(
                     f"parsed Shiller CAPE history too short: {len(rows)}"
                 )
+
+            tail = [float(x["cape"]) for x in rows[-24:]]
+            finite_tail = [x for x in tail if pd.notna(x)]
+            if not finite_tail:
+                raise ValueError("parsed CAPE tail is empty")
+            median_tail = float(pd.Series(finite_tail).median())
+            if not (5.0 <= median_tail <= 100.0):
+                raise ValueError(
+                    "parsed CAPE scale is implausible; likely wrong workbook "
+                    f"column (tail median={median_tail})"
+                )
+
             return rows
         except Exception as exc:
             last_error = exc
