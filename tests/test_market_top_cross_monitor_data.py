@@ -13,6 +13,23 @@ class MarketTopCrossMonitorDataTests(unittest.TestCase):
     def setUpClass(cls):
         cls.data = json.loads(CURRENT.read_text(encoding="utf-8"))
 
+    def test_schema_and_provenance_are_current(self):
+        self.assertEqual(
+            self.data["schema_version"],
+            "market-top-cross-monitor-2",
+        )
+        self.assertIsNone(self.data["evidence_phase"])
+        p = self.data["input_provenance"]
+        self.assertEqual(
+            p["route_b_schema_version"],
+            "market-top-shadow-forward-1",
+        )
+        self.assertEqual(
+            p["master_top_version"],
+            "MASTER-TOP-V2.1.8-FROZEN",
+        )
+        self.assertTrue(p["master_top_formula_frozen"])
+
     def test_seed_is_not_comparable(self):
         self.assertFalse(self.data["comparable"])
         self.assertEqual(self.data["status"], "NOT_COMPARABLE")
