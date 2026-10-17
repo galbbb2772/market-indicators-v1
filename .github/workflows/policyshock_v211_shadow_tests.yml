@@ -43,6 +43,9 @@ on:
       - "research/v24_legacy_early_breadth_provenance_gap.json"
       - "tests/test_route_a_c_replacement_screen.py"
       - "tests/test_v24_legacy_early_breadth_provenance.py"
+      - "research/MARKET_TOP_TASK2_DECISION_RECORD.md"
+      - "research/market_top_task2_decision_record.json"
+      - "tests/test_market_top_task2_decision_contract.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -68,6 +71,7 @@ jobs:
             tests.test_route_a_c_recovery_contract \
             tests.test_route_a_c_replacement_screen \
             tests.test_v24_legacy_early_breadth_provenance \
+            tests.test_market_top_task2_decision_contract \
             tests.test_shadow_replay_v24 \
             tests.test_v24_event_matrix \
             tests.test_t_v24_recovery_contract \
