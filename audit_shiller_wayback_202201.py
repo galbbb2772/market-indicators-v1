@@ -161,9 +161,32 @@ def audit_workbook(content: bytes) -> dict[str, Any]:
         None,
     )
     if target_i is None:
+        values = [float(x["cape"]) for x in rows]
+        valuation = expanding_percentile_current(values)
+        rb = route_b(
+            valuation,
+            POLICY_SHOCK_2022_01_03,
+            SIZE_WEAKNESS_OFFICIAL_2022_ARCHIVE,
+        )
+        if rb is None:
+            raise ValueError("Route_B missing")
+        critical_valuation = (
+            ROUTE_B_THRESHOLD**3
+            / (
+                POLICY_SHOCK_2022_01_03
+                * SIZE_WEAKNESS_OFFICIAL_2022_ARCHIVE
+            )
+        )
         return {
             "has_target": False,
             "last_month": str(rows[-1]["ym"]) if rows else None,
+            "last_cape": float(rows[-1]["cape"]),
+            "last_valuation": float(valuation),
+            "route_b_using_last_available_valuation": float(rb),
+            "critical_valuation": float(critical_valuation),
+            "last_valuation_margin_above_critical": float(
+                valuation - critical_valuation
+            ),
         }
 
     truncated = rows[: target_i + 1]
@@ -218,6 +241,15 @@ def download_snapshot(snapshot: dict[str, str]) -> tuple[bytes, dict[str, Any]]:
             f"archived Shiller workbook unexpectedly small: {len(content)}"
         )
     parsed = audit_workbook(content)
+
+    last_month = parsed.get("last_month")
+    capture_month = str(ts)[:6]
+    if last_month and str(last_month) > capture_month:
+        raise ValueError(
+            "Wayback temporal inconsistency: workbook last month "
+            f"{last_month} is later than capture month {capture_month}"
+        )
+
     return content, parsed
 
 
