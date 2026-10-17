@@ -11,6 +11,7 @@ def rb(asof="2026-10-16", score=65.58):
         "research_only": True,
         "asof": asof,
         "route_b": {"score": score},
+        "freshness": {"status": "PASS"},
         "policy_path": {"state": "IDLE"},
         "full_legacy_model": {"route_b": "RESOLVED"},
     }
@@ -106,6 +107,7 @@ class MarketTopCrossMonitorTests(unittest.TestCase):
         pre = classify(
             rb(asof="2026-10-16"),
             mt(asof="2026-10-16"),
+            generated_at="2026-10-17T00:00:00+00:00",
         )
         self.assertTrue(pre["comparable"])
         self.assertEqual(pre["evidence_phase"], "PRE_FREEZE_ASOF_DIAGNOSTIC")
@@ -113,6 +115,7 @@ class MarketTopCrossMonitorTests(unittest.TestCase):
         post = classify(
             rb(asof="2026-10-19"),
             mt(asof="2026-10-19"),
+            generated_at="2026-10-20T00:00:00+00:00",
         )
         self.assertTrue(post["comparable"])
         self.assertEqual(post["evidence_phase"], "POST_FREEZE_PROSPECTIVE")
@@ -120,6 +123,27 @@ class MarketTopCrossMonitorTests(unittest.TestCase):
             post["comparison"]["evidence_phase"],
             "POST_FREEZE_PROSPECTIVE",
         )
+
+    def test_route_b_freshness_failure_blocks_comparison(self):
+        payload = rb()
+        payload["freshness"]["status"] = "FAIL"
+        x = classify(
+            payload,
+            mt(),
+            generated_at="2026-10-17T00:00:00+00:00",
+        )
+        self.assertFalse(x["comparable"])
+        self.assertIn("ROUTE_B_FRESHNESS_NOT_PASS", x["reasons"])
+
+    def test_stale_same_day_snapshots_do_not_become_comparable(self):
+        x = classify(
+            rb(asof="2026-10-01", score=90),
+            mt(asof="2026-10-01", score=70),
+            generated_at="2026-10-17T00:00:00+00:00",
+        )
+        self.assertFalse(x["comparable"])
+        self.assertIn("ROUTE_B_SNAPSHOT_STALE_FOR_MONITOR", x["reasons"])
+        self.assertIsNone(x["comparison"])
 
     def test_history_key_preserves_seed_to_live_transition_same_asof(self):
         seed = classify(
