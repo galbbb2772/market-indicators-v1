@@ -16,10 +16,17 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
     def test_core_task_pass_is_not_full_legacy_recovery(self):
         self.assertEqual(
             self.data["status"],
-            "CORE_TASK_PASS_WITH_LEGACY_PROVENANCE_GAPS",
+            "CORE_TASK_PASS_FORWARD_SHADOW_OPERATIONAL_WITH_LEGACY_PROVENANCE_GAPS",
         )
         self.assertTrue(self.data["frozen_conclusions"]["2022_policy_route_repaired"])
         self.assertFalse(self.data["frozen_conclusions"]["current_full_pressure_authoritative"])
+
+    def test_forward_shadow_is_operational_but_not_full_pressure(self):
+        f = self.data["forward_shadow"]
+        self.assertEqual(f["status"], "LIVE_DRY_RUN_PASS")
+        self.assertAlmostEqual(f["route_b"], 65.58104271810248, places=8)
+        self.assertEqual(f["policy_path_state"], "IDLE")
+        self.assertFalse(f["full_pressure_authoritative"])
 
     def test_2022_dates_are_locked(self):
         x = self.data["frozen_conclusions"]
