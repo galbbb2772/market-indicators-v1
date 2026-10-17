@@ -15,7 +15,7 @@ from policyshock_v211 import route_b
 class CanonicalRouteBInputTests(unittest.TestCase):
     def test_expanding_percentile_is_current_inclusive(self):
         self.assertEqual(expanding_percentile_current([1, 2, 3, 4]), 100.0)
-        self.assertEqual(expanding_percentile_current([1, 3, 2]), 2 / 3 * 100)
+        self.assertAlmostEqual(expanding_percentile_current([1, 3, 2]), 2 / 3 * 100, places=12)
 
     def test_smb_block_is_negative_compounded_smb(self):
         smb = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
@@ -33,7 +33,7 @@ class CanonicalRouteBInputTests(unittest.TestCase):
         self.assertIsNotNone(out[6])
 
     def test_valuation_history_is_expanding(self):
-        self.assertEqual(valuation_history([10, 20, 15]), [100.0, 100.0, 2/3*100])
+        got = valuation_history([10, 20, 15])\n        self.assertEqual(got[:2], [100.0, 100.0])\n        self.assertAlmostEqual(got[2], 2/3*100, places=12)
 
     def test_2022_conservative_publication_lag_route_b(self):
         rb = route_b(
