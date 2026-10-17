@@ -1,5 +1,5 @@
 {
-  "schema_version": "market-top-cross-monitor-1",
+  "schema_version": "market-top-cross-monitor-2",
   "generated_at": "2026-10-17T12:36:15.878488+00:00",
   "research_only": true,
   "production_effect": "none",
@@ -25,5 +25,13 @@
     "research_status": "seed snapshot only; production workflow replaces this with ^GSPC + FRED DGS2 + MarketParquet stock_daily"
   },
   "comparison": null,
-  "interpretation": "Scores are not combined. The monitor only labels agreement or mechanism disagreement when both models are live on the same as-of date."
+  "interpretation": "Scores are not combined. The monitor only labels agreement or mechanism disagreement when both models are live on the same as-of date.",
+  "evidence_phase": null,
+  "input_provenance": {
+    "route_b_schema_version": "market-top-shadow-forward-1",
+    "master_top_version": "MASTER-TOP-V2.1.8-FROZEN",
+    "master_top_formula_frozen": true,
+    "master_top_prospective_start": "2026-10-17",
+    "master_top_generated_at_utc": null
+  }
 }
