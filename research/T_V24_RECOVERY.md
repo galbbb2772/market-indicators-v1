@@ -103,7 +103,7 @@ PolicyShock -> Route_B -> Pressure -> ARMED
 For 2022:
 
 ```
-2022-01-03 strict-PIT Route_B = 88.7229415743 -> ARMED
+2022-01-03 conservative publication-lag Route_B = 85.3342917569589 -> ARMED
 ```
 
 The 4.5% drawdown gate is first known to be crossed on 2022-01-18.
