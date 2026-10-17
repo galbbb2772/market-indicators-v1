@@ -13,7 +13,6 @@ jobs:
   wayback-vintage-audit:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,4 +23,32 @@ jobs:
       - name: Static contract
         run: python -m unittest tests.test_audit_ff_wayback_202201 -v
       - name: Attempt pre-Jan-3-2022 Wayback factor ZIP recovery
-        run: python audit_ff_wayback_202201.py --output /tmp/ff_wayback_202201.json
+        run: |
+          python audit_ff_wayback_202201.py --output /tmp/ff_wayback_202201.json
+          python - <<'PY'
+          import json
+          x = json.load(open("/tmp/ff_wayback_202201.json"))
+          assert x["cutoff"] == "20220103235959"
+          assert x["status"] in {
+              "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
+              "RECOVERED_PRE_CUTOFF_SNAPSHOT_WITH_202111",
+          }
+          attempts = x.get("attempts") or []
+          assert attempts, "Wayback audit must inspect at least one archived candidate"
+          for row in attempts:
+              ts = row.get("timestamp")
+              if ts:
+                  assert ts <= x["cutoff"]
+          if x["status"] == "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111":
+              assert x["exact_or_pre_cutoff_vintage"] is False
+              assert not any(r.get("has_202111") for r in attempts)
+          else:
+              assert x["exact_or_pre_cutoff_vintage"] is True
+              assert x["passes"] is True
+              assert x["route_b"] >= x["threshold"]
+          print(
+              "WAYBACK_VINTAGE_AUDIT",
+              "status=", x["status"],
+              "candidates=", len(attempts),
+          )
+          PY
