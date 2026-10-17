@@ -1,7 +1,7 @@
 {
   "schema_version": "market-top-task2-decision-record-1",
   "task": "Repair the 2022 Market Top Trigger miss without retuning the rest of V2.4",
-  "status": "CORE_TASK_PASS_WITH_LEGACY_PROVENANCE_GAPS",
+  "status": "CORE_TASK_PASS_FORWARD_SHADOW_OPERATIONAL_WITH_LEGACY_PROVENANCE_GAPS",
   "production_effect": "none",
   "passed": [
     {
@@ -75,5 +75,28 @@
     "Recover an authentic original Route_A/Route_C artifact if one later becomes available",
     "Otherwise design a separately named next-generation A/C model from a fresh preregistered hypothesis rather than tuning failed V2.4R candidates",
     "Keep the validated Route_B + T_v2.4R shadow path running independently"
-  ]
+  ],
+  "forward_shadow": {
+    "status": "LIVE_DRY_RUN_PASS",
+    "asof": "2026-10-16",
+    "route_b": 65.58104271810248,
+    "route_b_state": "NOT_ARMED",
+    "top_location_gate": true,
+    "t_v24r": 13.775261410890886,
+    "price_breakdown": false,
+    "policy_path_state": "IDLE",
+    "sources": {
+      "two_year": "U.S. Treasury Daily Treasury Par Yield Curve Rates",
+      "walcl": "FRED WALCL via market-weather-map static GitHub mirror",
+      "valuation": "Robert Shiller / Yale",
+      "size_factor": "Ken French Data Library",
+      "price": "Yahoo Finance unadjusted SPY Close"
+    },
+    "provider_failover": {
+      "fred_direct_issue": "GitHub Actions read timeout on FRED CSV",
+      "resolution": "Treasury primary for 2Y; static WALCL mirror primary; FRED retained as fallback"
+    },
+    "dashboard": "docs/index.html Market Top Shadow Route_B Forward card",
+    "full_pressure_authoritative": false
+  }
 }
