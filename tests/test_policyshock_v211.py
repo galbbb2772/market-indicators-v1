@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 import unittest
 
 from policyshock_v211 import (
@@ -20,11 +19,10 @@ class PolicyShockV211Tests(unittest.TestCase):
         self.assertEqual(rate_shock(0.95, 0.25), 100.0) # +70 bp
 
     def test_taper_shock_2022_strict_pit(self):
-        # Released observations available for the 2022-01-03 strict-PIT test.
         t = taper_shock(8.757460, 8.447981, 8.078544)
         self.assertAlmostEqual(t, 90.9715481444, places=8)
 
-    def test_2022_strict_pit_golden(self):
+    def test_2022_strict_publication_lag_golden(self):
         out = compute_policy_shock(
             dgs2_latest_pct=0.73,
             dgs2_6m_ago_pct=0.25,
@@ -36,8 +34,12 @@ class PolicyShockV211Tests(unittest.TestCase):
         self.assertAlmostEqual(out.taper_shock, 90.9715481444, places=8)
         self.assertAlmostEqual(out.policy_shock, 74.3886192578, places=8)
 
-        rb = route_b(97.9, out.policy_shock, 95.9)
-        self.assertAlmostEqual(rb, 88.7229415743, places=8)
+        # Conservative 2022-01-03 replay:
+        # use 2021-11 CAPE/SMB-derived scores rather than later monthly data.
+        valuation = 98.58072146658782
+        size_weakness = 84.73684210526316
+        rb = route_b(valuation, out.policy_shock, size_weakness)
+        self.assertAlmostEqual(rb, 85.3342917569589, places=8)
         self.assertGreater(rb, ARMED_THRESHOLD)
 
     def test_pure_rate_shock_cannot_arm_route_b(self):
@@ -57,7 +59,6 @@ class PolicyShockV211Tests(unittest.TestCase):
         self.assertLess(rb, ARMED_THRESHOLD)
 
     def test_continuing_qt_is_not_taper(self):
-        # Previously contracting balance sheet => no expansion gate.
         self.assertEqual(taper_shock(7.0, 7.2, 7.5), 0.0)
 
     def test_pre_walcl_history_is_zero_taper(self):
