@@ -98,5 +98,22 @@
     },
     "dashboard": "docs/index.html Market Top Shadow Route_B Forward card",
     "full_pressure_authoritative": false
+  },
+  "vintage_robustness": {
+    "exact_2022_01_03_monthly_vintage_recovered": false,
+    "official_july_2022_archive": {
+      "status": "PASS",
+      "size_weakness": 85.43859649122807,
+      "route_b": 85.56921184591258,
+      "threshold": 85,
+      "route_margin": 0.5692118459125766
+    },
+    "cross_version_static_histories": {
+      "status": "PASS",
+      "route_b_min": 85.30483566495808,
+      "route_b_max": 85.65697520162985,
+      "all_sampled_variants_pass": true
+    },
+    "conclusion": "The 2022 Route_B pass is robust to an official July-2022 Ken French CRSP cut and multiple independent static historical variants. Exact Jan-3-2022 monthly factor vintage remains unresolved."
   }
 }
