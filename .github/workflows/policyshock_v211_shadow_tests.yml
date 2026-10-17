@@ -48,6 +48,9 @@ on:
       - "tests/test_market_top_task2_decision_contract.py"
       - "update_market_top_shadow.py"
       - "tests/test_update_market_top_shadow.py"
+      - "docs/data/market_top_shadow_current.json"
+      - "docs/data/market_top_shadow_history.json"
+      - "tests/test_market_top_shadow_data_contract.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -75,6 +78,7 @@ jobs:
             tests.test_v24_legacy_early_breadth_provenance \
             tests.test_market_top_task2_decision_contract \
             tests.test_update_market_top_shadow \
+            tests.test_market_top_shadow_data_contract \
             tests.test_shadow_replay_v24 \
             tests.test_v24_event_matrix \
             tests.test_t_v24_recovery_contract \
