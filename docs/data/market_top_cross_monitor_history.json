@@ -1,0 +1,21 @@
+{
+  "schema_version": "market-top-cross-monitor-history-1",
+  "research_only": true,
+  "history": [
+    {
+      "key": "2026-10-16|2026-10-09",
+      "generated_at": "2026-10-17T12:36:15.878488+00:00",
+      "comparable": false,
+      "status": "NOT_COMPARABLE",
+      "reasons": [
+        "MASTER_TOP_SEED_ONLY",
+        "ASOF_MISMATCH"
+      ],
+      "route_b_asof": "2026-10-16",
+      "route_b_score": 65.58104271810248,
+      "master_top_asof": "2026-10-09",
+      "master_top_score": 99.33,
+      "comparison": null
+    }
+  ]
+}
