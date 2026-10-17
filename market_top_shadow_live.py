@@ -3,35 +3,30 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 from typing import Optional
 
-from policyshock_v211 import route_b
+from policyshock_v211 import ARMED_THRESHOLD, route_b
 
 
 @dataclass(frozen=True)
 class ShadowLiveSnapshot:
     asof: str
-
     rate_shock: float
     taper_shock: float
     policy_shock: float
-
     spy_close: float
     spy_high12_close: float
     dd12_pct: float
     ma10m_prev: float
     t_v24r: float
     price_breakdown_v24r: bool
-
     cape_current: Optional[float]
-
     valuation_proxy_score: Optional[float]
     size_support_proxy_score: Optional[float]
     size_weakness_proxy_score: Optional[float]
     route_b_proxy: Optional[float]
-
     valuation_canonical_score: Optional[float]
     size_weakness_canonical_score: Optional[float]
     route_b_authoritative: Optional[float]
-
+    route_b_status: str
     status: str
     note: str
 
@@ -60,10 +55,7 @@ def build_shadow_snapshot(
     )
 
     rb_proxy = None
-    if (
-        valuation_proxy_score is not None
-        and size_weakness_proxy is not None
-    ):
+    if valuation_proxy_score is not None and size_weakness_proxy is not None:
         rb_proxy = route_b(
             float(valuation_proxy_score),
             float(policy_shock),
@@ -71,10 +63,7 @@ def build_shadow_snapshot(
         )
 
     rb_authoritative = None
-    if (
-        valuation_canonical_score is not None
-        and size_weakness_canonical_score is not None
-    ):
+    if valuation_canonical_score is not None and size_weakness_canonical_score is not None:
         rb_authoritative = route_b(
             float(valuation_canonical_score),
             float(policy_shock),
@@ -82,17 +71,19 @@ def build_shadow_snapshot(
         )
 
     if rb_authoritative is None:
+        route_b_status = "UNRESOLVED"
         status = "INPUT_INCOMPLETE"
         note = (
             "PolicyShock and T_v2.4R are valid research-live components, "
-            "but canonical Valuation/SizeWeakness inputs are not yet restored; "
-            "proxy Route_B is diagnostic only and cannot change state."
+            "but canonical Route_B inputs are incomplete. Proxy Route_B is "
+            "diagnostic only and cannot change state."
         )
     else:
-        status = "READY_FOR_SHADOW_STATE_MACHINE"
+        route_b_status = "ARMED" if rb_authoritative >= ARMED_THRESHOLD else "NOT_ARMED"
+        status = "ROUTE_B_RESOLVED"
         note = (
-            "Canonical Route_B inputs supplied. This remains research-only "
-            "until separately promoted."
+            "Canonical Policy Route_B is resolved. Full Market Top state still "
+            "requires canonical Route_A and Route_C; this remains research-only."
         )
 
     return ShadowLiveSnapshot(
@@ -114,6 +105,7 @@ def build_shadow_snapshot(
         valuation_canonical_score=None if valuation_canonical_score is None else float(valuation_canonical_score),
         size_weakness_canonical_score=None if size_weakness_canonical_score is None else float(size_weakness_canonical_score),
         route_b_authoritative=rb_authoritative,
+        route_b_status=route_b_status,
         status=status,
         note=note,
     )
