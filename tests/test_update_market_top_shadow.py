@@ -13,6 +13,7 @@ from update_market_top_shadow import (
     parse_fed_assets_mirror,
     parse_treasury_2y_csv,
     validate_source_freshness,
+    walcl_actionable_eod_date,
 )
 
 
@@ -161,6 +162,20 @@ class MarketTopForwardShadowTests(unittest.TestCase):
                 valuation={"signal_month": "2026-09"},
                 size_weakness={"factor_month": "2026-08"},
             )
+
+    def test_walcl_normal_week_is_not_actionable_at_thursday_close(self):
+        obs = pd.Timestamp("2026-10-14")  # Wednesday
+        self.assertEqual(
+            walcl_actionable_eod_date(obs),
+            pd.Timestamp("2026-10-16"),   # Friday EOD
+        )
+
+    def test_walcl_thanksgiving_release_shift_is_not_actionable_friday(self):
+        obs = pd.Timestamp("2026-11-25")  # Wednesday before Thanksgiving
+        self.assertEqual(
+            walcl_actionable_eod_date(obs),
+            pd.Timestamp("2026-11-30"),   # Monday after Friday 4:30 release
+        )
 
     def test_current_policy_fingerprint(self):
         dgs2 = pd.Series(
