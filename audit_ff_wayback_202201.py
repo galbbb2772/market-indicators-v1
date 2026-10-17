@@ -24,7 +24,7 @@ def session() -> requests.Session:
     return s
 
 
-def find_latest_snapshot() -> dict:
+def find_snapshots() -> tuple[list[dict], list[str]]:
     s = session()
     candidates: list[dict] = []
     errors: list[str] = []
@@ -55,9 +55,8 @@ def find_latest_snapshot() -> dict:
                     candidates.append(x)
         except Exception as exc:
             errors.append(f"{original}: {exc!r}")
-    if not candidates:
-        raise RuntimeError("No pre-2022-01-03 Wayback snapshot found; " + "; ".join(errors))
-    return max(candidates, key=lambda x: x["timestamp"])
+    candidates = sorted(candidates, key=lambda x: x["timestamp"], reverse=True)
+    return candidates, errors
 
 
 def download_snapshot(snapshot: dict) -> tuple[str, str]:
@@ -89,26 +88,75 @@ def main() -> None:
     ap.add_argument("--output")
     args = ap.parse_args()
 
-    snap = find_latest_snapshot()
-    member, text = download_snapshot(snap)
-    result = audit(text)
-    result.update(
-        {
+    snaps, errors = find_snapshots()
+    attempts = []
+    recovered = None
+
+    for snap in snaps:
+        try:
+            member, text = download_snapshot(snap)
+            rows = parse_ff3_monthly_csv(text)
+            last_month = str(rows[-1]["ym"]) if rows else None
+            has_target = any(str(x["ym"]) == "202111" for x in rows)
+            attempts.append(
+                {
+                    "timestamp": snap["timestamp"],
+                    "original": snap["original"],
+                    "last_month": last_month,
+                    "has_202111": has_target,
+                    "zip_member": member,
+                }
+            )
+            if has_target:
+                recovered = (snap, member, text)
+                break
+        except Exception as exc:
+            attempts.append(
+                {
+                    "timestamp": snap.get("timestamp"),
+                    "original": snap.get("original"),
+                    "error": repr(exc),
+                }
+            )
+
+    if recovered is not None:
+        snap, member, text = recovered
+        result = audit(text)
+        result.update(
+            {
+                "schema_version": "route-b-2022-wayback-vintage-audit-1",
+                "status": "RECOVERED_PRE_CUTOFF_SNAPSHOT_WITH_202111",
+                "wayback_timestamp": snap["timestamp"],
+                "wayback_original": snap["original"],
+                "wayback_mimetype": snap.get("mimetype"),
+                "wayback_digest": snap.get("digest"),
+                "zip_member": member,
+                "exact_or_pre_cutoff_vintage": True,
+                "cutoff": CUTOFF,
+                "attempts": attempts,
+                "errors": errors,
+                "interpretation": (
+                    "Wayback snapshot of the Ken French factor ZIP captured no later "
+                    "than 2022-01-03 23:59:59 UTC and containing 2021-11."
+                ),
+            }
+        )
+    else:
+        result = {
             "schema_version": "route-b-2022-wayback-vintage-audit-1",
-            "wayback_timestamp": snap["timestamp"],
-            "wayback_original": snap["original"],
-            "wayback_mimetype": snap.get("mimetype"),
-            "wayback_digest": snap.get("digest"),
-            "zip_member": member,
-            "exact_or_pre_cutoff_vintage": True,
+            "status": "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
             "cutoff": CUTOFF,
+            "exact_or_pre_cutoff_vintage": False,
+            "snapshot_count": len(snaps),
+            "attempts": attempts,
+            "errors": errors,
             "interpretation": (
-                "Wayback snapshot of the Ken French factor ZIP captured no later "
-                "than 2022-01-03 23:59:59 UTC. This is the closest recoverable "
-                "web-published vintage evidence."
+                "Wayback snapshots of the Ken French ZIP were reachable, but no "
+                "snapshot captured on/before 2022-01-03 contained the 2021-11 "
+                "monthly row required by the frozen publication-lag replay."
             ),
         }
-    )
+
     print(json.dumps(result, indent=2))
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
