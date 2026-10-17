@@ -53,6 +53,12 @@ FF_MIRROR = (
 )
 
 UA = "market-top-shadow-research/1.0"
+
+MAX_MARKET_STALENESS_DAYS = 5
+MAX_DGS2_LAG_DAYS = 7
+MAX_WALCL_LAG_DAYS = 14
+MAX_FF_FACTOR_LAG_MONTHS = 3
+
 HTTP = requests.Session()
 HTTP.headers.update({"User-Agent": UA})
 
@@ -306,6 +312,80 @@ def previous_month_start(d: pd.Timestamp) -> pd.Timestamp:
     return month_start(d) - pd.offsets.MonthBegin(1)
 
 
+def calendar_month_lag(later: pd.Timestamp, earlier: pd.Timestamp) -> int:
+    later = month_start(pd.Timestamp(later))
+    earlier = month_start(pd.Timestamp(earlier))
+    return (later.year - earlier.year) * 12 + (later.month - earlier.month)
+
+
+def validate_source_freshness(
+    *,
+    generated_at: datetime,
+    market_asof: pd.Timestamp,
+    policy: dict[str, Any],
+    valuation: dict[str, Any],
+    size_weakness: dict[str, Any],
+) -> dict[str, Any]:
+    gen_date = pd.Timestamp(generated_at.astimezone(timezone.utc).date())
+    market_asof = pd.Timestamp(market_asof).normalize()
+
+    market_lag_days = int((gen_date - market_asof).days)
+    if market_lag_days < 0 or market_lag_days > MAX_MARKET_STALENESS_DAYS:
+        raise ValueError(
+            f"market as-of freshness failure: lag={market_lag_days} days"
+        )
+
+    dgs2_date = pd.Timestamp(policy["dgs2_latest_date"])
+    dgs2_lag_days = int((market_asof - dgs2_date).days)
+    if dgs2_lag_days < 0 or dgs2_lag_days > MAX_DGS2_LAG_DAYS:
+        raise ValueError(
+            f"DGS2 freshness failure: lag={dgs2_lag_days} days"
+        )
+
+    walcl_date = pd.Timestamp(policy["walcl_latest_date"])
+    walcl_lag_days = int((market_asof - walcl_date).days)
+    if walcl_lag_days < 1 or walcl_lag_days > MAX_WALCL_LAG_DAYS:
+        raise ValueError(
+            f"WALCL freshness failure: lag={walcl_lag_days} days"
+        )
+
+    expected_valuation_month = previous_month_start(market_asof)
+    valuation_month = pd.Timestamp(f"{valuation['signal_month']}-01")
+    valuation_lag_months = calendar_month_lag(
+        expected_valuation_month,
+        valuation_month,
+    )
+    if valuation_lag_months != 0:
+        raise ValueError(
+            "CAPE freshness failure: signal month must equal the last "
+            f"completed calendar month; lag={valuation_lag_months}"
+        )
+
+    factor_month = pd.Timestamp(f"{size_weakness['factor_month']}-01")
+    factor_lag_months = calendar_month_lag(market_asof, factor_month)
+    if factor_lag_months < 1 or factor_lag_months > MAX_FF_FACTOR_LAG_MONTHS:
+        raise ValueError(
+            f"Fama-French freshness failure: lag={factor_lag_months} months"
+        )
+
+    return {
+        "status": "PASS",
+        "market_lag_days": market_lag_days,
+        "dgs2_lag_days": dgs2_lag_days,
+        "walcl_lag_days": walcl_lag_days,
+        "valuation_signal_month": valuation["signal_month"],
+        "valuation_expected_month": expected_valuation_month.strftime("%Y-%m"),
+        "ff_factor_month": size_weakness["factor_month"],
+        "ff_factor_lag_months": factor_lag_months,
+        "limits": {
+            "market_days": MAX_MARKET_STALENESS_DAYS,
+            "dgs2_days": MAX_DGS2_LAG_DAYS,
+            "walcl_days": MAX_WALCL_LAG_DAYS,
+            "ff_factor_months": MAX_FF_FACTOR_LAG_MONTHS,
+        },
+    }
+
+
 def compute_valuation(
     shiller: pd.DataFrame,
     *,
@@ -495,6 +575,13 @@ def build_snapshot(
     policy = compute_policy(dgs2, walcl, asof=asof)
     valuation = compute_valuation(shiller, asof=asof)
     size = compute_size_weakness(ff, asof=asof)
+    freshness = validate_source_freshness(
+        generated_at=generated,
+        market_asof=asof,
+        policy=policy,
+        valuation=valuation,
+        size_weakness=size,
+    )
 
     rb = route_b(valuation["score"], policy["policy_shock"], size["score"])
     if rb is None:
@@ -552,6 +639,7 @@ def build_snapshot(
             "shiller_latest_date": shiller_meta.get("latest_date"),
             "fama_french": ff_source,
         },
+        "freshness": freshness,
         "policy": policy,
         "valuation": valuation,
         "size_weakness": size,
