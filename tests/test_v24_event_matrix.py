@@ -44,6 +44,23 @@ class V24EventMatrixContractTests(unittest.TestCase):
         for x in self.data["events"]:
             self.assertIn(x["evidence_level"], {"accepted_historical_output", "mixed", "fresh_recompute"})
 
+    def test_new_t_v24r_path_is_additive(self):
+        x = self.by_id["2022"]
+        self.assertEqual(x["accepted_trigger_type"], "EARLY_BREADTH")
+        r = x["shadow_v24r_result"]
+        self.assertEqual(r["status"], "FRESH_RESEARCH_REPLAY")
+        self.assertEqual(r["armed_at"], "2022-01-03")
+        self.assertEqual(r["price_breakdown_v24r_at"], "2022-01-20")
+        self.assertGreater(r["route_b_strict_pit"], 85.0)
+        self.assertGreaterEqual(r["t_v24r"], 70.0)
+        self.assertGreaterEqual(r["dd12_pct"], 4.5)
+
+    def test_new_t_v24r_event_dates_are_versioned_separately(self):
+        x = self.data["new_price_confirmation_candidate"]
+        self.assertEqual(x["model"], "T_v2.4R")
+        self.assertEqual(x["status"], "research_only")
+        self.assertEqual(x["known_event_first_confirmations"]["2022"], "2022-01-20")
+
 
 if __name__ == "__main__":
     unittest.main()
