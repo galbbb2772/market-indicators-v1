@@ -9,14 +9,14 @@ from t_v24r import t_v24r
 
 class ShadowReplayV24Tests(unittest.TestCase):
     def test_pressure_is_max_route(self):
-        x = Snapshot(date(2022,1,3), 70, 88.7229415743, 80, True, True)
-        self.assertAlmostEqual(pressure(x), 88.7229415743)
+        x = Snapshot(date(2022,1,3), 70, 85.3342917569589, 80, True, True)
+        self.assertAlmostEqual(pressure(x), 85.3342917569589)
 
     def test_2022_policy_route_arms_then_price_breakdown_triggers(self):
         armed = Snapshot(
             date(2022,1,3),
             route_a=0.0,
-            route_b=88.7229415743,
+            route_b=85.3342917569589,
             route_c=0.0,
             within_5pct_of_24m_high=True,
             high_formed_within_3m=True,
@@ -94,7 +94,7 @@ class ShadowReplayV24Tests(unittest.TestCase):
         armed = Snapshot(
             date(2022,1,3),
             route_a=0.0,
-            route_b=88.7229415743,
+            route_b=85.3342917569589,
             route_c=0.0,
             within_5pct_of_24m_high=True,
             high_formed_within_3m=True,
