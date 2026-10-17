@@ -4,6 +4,7 @@ import unittest
 from datetime import date
 
 from shadow_replay_v24 import ReplayState, Snapshot, State, pressure, replay, step
+from t_v24r import t_v24r
 
 
 class ShadowReplayV24Tests(unittest.TestCase):
@@ -88,6 +89,32 @@ class ShadowReplayV24Tests(unittest.TestCase):
         )
         s = step(s, late_break)
         self.assertEqual(s.state, State.IDLE)
+
+    def test_2022_end_to_end_with_new_t_v24r(self):
+        armed = Snapshot(
+            date(2022,1,3),
+            route_a=0.0,
+            route_b=88.7229415743,
+            route_c=0.0,
+            within_5pct_of_24m_high=True,
+            high_formed_within_3m=True,
+        )
+        score = float(t_v24r(6.481, 446.75, 437.071))
+        breakdown = Snapshot(
+            date(2022,1,20),
+            route_a=0.0,
+            route_b=0.0,
+            route_c=0.0,
+            within_5pct_of_24m_high=False,
+            high_formed_within_3m=True,
+            t_score=score,
+            drawdown_from_12m_high_pct=6.481,
+        )
+        out = replay([armed, breakdown])
+        self.assertEqual(out.state, State.TRIGGERED)
+        self.assertEqual(out.armed_at, date(2022,1,3))
+        self.assertEqual(out.triggered_at, date(2022,1,20))
+        self.assertEqual(out.trigger_reason, "PRICE_BREAKDOWN")
 
 
 if __name__ == "__main__":
