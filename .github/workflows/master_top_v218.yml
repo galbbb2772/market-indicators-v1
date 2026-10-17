@@ -30,7 +30,7 @@ jobs:
           python-version: '3.12'
           cache: pip
       - name: Install dependencies
-        run: pip install pandas numpy requests pyarrow pytest
+        run: pip install pandas numpy requests pyarrow pytest tradingview-screener
       - name: Unit tests
         run: pytest -q tests/test_master_top_v218.py
       - name: Score frozen V2.1.8
@@ -44,6 +44,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/data/master_top_v218.json
           if [ -f docs/data/master_top_v218_breadth_tail.csv ]; then git add docs/data/master_top_v218_breadth_tail.csv; fi
+          if [ -f docs/data/master_top_v218_hilo_ledger.csv ]; then git add docs/data/master_top_v218_hilo_ledger.csv; fi
           if git diff --cached --quiet; then
             echo 'No changes'
           else
