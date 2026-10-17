@@ -64,7 +64,6 @@ def _get(url: str, *, timeout: int = 30) -> requests.Response:
 
 
 def fetch_fred_series(series_id: str, start: str) -> pd.Series:
-    r = _get(FRED_CSV, timeout=30)
     # Use params separately so requests encodes the query safely.
     r = HTTP.get(
         FRED_CSV,
@@ -303,11 +302,13 @@ def compute_price(spy: pd.Series) -> dict[str, Any]:
     row = t.dropna(subset=["dd12_pct", "ma10m_prev", "t_v24r"]).iloc[-1]
     asof = pd.Timestamp(row.name)
 
-    # 24M high-location gate for the policy Route_B arm path.
+    # 24 calendar-month high-location gate for the policy Route_B arm path.
     s = spy.loc[:asof]
-    last_504 = s.iloc[-504:] if len(s) >= 504 else s
-    high24 = float(last_504.max())
-    high24_date = pd.Timestamp(last_504.idxmax())
+    last_24m = s.loc[asof - pd.DateOffset(months=24):asof]
+    if last_24m.empty:
+        raise ValueError("no SPY observations in trailing 24 calendar months")
+    high24 = float(last_24m.max())
+    high24_date = pd.Timestamp(last_24m.idxmax())
     within_5pct = float(row["close"]) >= 0.95 * high24
     recent_cutoff = asof - pd.DateOffset(months=3)
     high_recent = high24_date >= recent_cutoff
@@ -338,31 +339,38 @@ def _load_history(path: Path) -> list[dict[str, Any]]:
     return list(obj)
 
 
-def _active_arm_from_history(
+def _prior_policy_state(
     history: list[dict[str, Any]],
     *,
     asof: pd.Timestamp,
-) -> str | None:
-    arms = []
-    triggers = []
-    for x in history:
-        state = x.get("policy_path_state")
-        d = x.get("asof")
-        if not d:
-            continue
-        if state == "ARMED":
-            arms.append(pd.Timestamp(d))
-        elif state == "TRIGGERED":
-            triggers.append(pd.Timestamp(d))
-    if not arms:
-        return None
-    armed_at = max(arms)
-    if triggers and max(triggers) >= armed_at:
-        return None
-    if asof > armed_at + pd.DateOffset(months=6):
-        return None
-    return armed_at.date().isoformat()
+) -> dict[str, str | None]:
+    """Recover the Route_B-only shadow state without resetting the arm clock."""
+    triggered = [x for x in history if x.get("policy_path_state") == "TRIGGERED"]
+    if triggered:
+        last = sorted(triggered, key=lambda x: x.get("asof") or "")[-1]
+        return {
+            "state": "TRIGGERED",
+            "armed_at": last.get("armed_at"),
+            "triggered_at": last.get("triggered_at") or last.get("asof"),
+        }
 
+    armed_dates = [
+        pd.Timestamp(x["armed_at"])
+        for x in history
+        if x.get("armed_at")
+    ]
+    if not armed_dates:
+        return {"state": "IDLE", "armed_at": None, "triggered_at": None}
+
+    armed_at = max(armed_dates)
+    expires = armed_at + pd.DateOffset(months=6)
+    if asof > expires:
+        return {"state": "IDLE", "armed_at": None, "triggered_at": None}
+    return {
+        "state": "ARMED",
+        "armed_at": armed_at.date().isoformat(),
+        "triggered_at": None,
+    }
 
 def build_snapshot(
     *,
@@ -390,26 +398,37 @@ def build_snapshot(
     arm_today = pressure_pass and price["top_location_gate"]
 
     prior_history = prior_history or []
-    prior_arm = _active_arm_from_history(prior_history, asof=asof)
+    prior_state = _prior_policy_state(prior_history, asof=asof)
 
-    if prior_arm is None and arm_today:
-        armed_at = price["asof"]
+    armed_at = prior_state["armed_at"]
+    triggered_at = prior_state["triggered_at"]
+
+    if prior_state["state"] == "TRIGGERED":
+        policy_path_state = "TRIGGERED"
     else:
-        armed_at = prior_arm
+        if armed_at is None and arm_today:
+            armed_at = price["asof"]
 
+        if armed_at is not None:
+            expires_ts = pd.Timestamp(armed_at) + pd.DateOffset(months=6)
+            expires = expires_ts.date().isoformat()
+            active_arm = asof <= expires_ts
+        else:
+            expires = None
+            active_arm = False
+
+        if active_arm and price["price_breakdown_v24r"]:
+            policy_path_state = "TRIGGERED"
+            triggered_at = price["asof"]
+        elif active_arm:
+            policy_path_state = "ARMED"
+        else:
+            policy_path_state = "IDLE"
+            armed_at = None
     if armed_at is not None:
         expires = (pd.Timestamp(armed_at) + pd.DateOffset(months=6)).date().isoformat()
-        active_arm = asof <= pd.Timestamp(expires)
     else:
         expires = None
-        active_arm = False
-
-    if active_arm and price["price_breakdown_v24r"]:
-        policy_path_state = "TRIGGERED"
-    elif active_arm:
-        policy_path_state = "ARMED"
-    else:
-        policy_path_state = "IDLE"
 
     snap = {
         "schema_version": "market-top-shadow-forward-1",
@@ -440,7 +459,11 @@ def build_snapshot(
             "state": policy_path_state,
             "armed_at": armed_at,
             "armed_expires_at": expires,
-            "breakdown_today": bool(active_arm and price["price_breakdown_v24r"]),
+            "triggered_at": triggered_at,
+            "breakdown_today": bool(
+                policy_path_state == "TRIGGERED"
+                and triggered_at == price["asof"]
+            ),
             "scope": "Route_B-only shadow path; does not represent unresolved Route_A/Route_C",
         },
         "full_legacy_model": {
@@ -471,6 +494,7 @@ def history_row(snapshot: dict[str, Any]) -> dict[str, Any]:
         "price_breakdown_v24r": snapshot["price_confirmation"]["price_breakdown_v24r"],
         "policy_path_state": snapshot["policy_path"]["state"],
         "armed_at": snapshot["policy_path"]["armed_at"],
+        "triggered_at": snapshot["policy_path"]["triggered_at"],
     }
 
 
