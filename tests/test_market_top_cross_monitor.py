@@ -7,6 +7,7 @@ from market_top_cross_monitor import classify
 
 def rb(asof="2026-10-16", score=65.58):
     return {
+        "schema_version": "market-top-shadow-forward-1",
         "research_only": True,
         "asof": asof,
         "route_b": {"score": score},
@@ -23,12 +24,16 @@ def mt(
     symbol="^GSPC",
 ):
     return {
+        "version": "MASTER-TOP-V2.1.8-FROZEN",
+        "formula_frozen": True,
+        "prospective_evidence_start": "2026-10-17",
         "latest": {
             "asof": asof,
             "supplemental_route": score,
             "route_triggered": score >= 55,
             "research_status": research_status,
             "price_symbol": symbol,
+            "breadth_source": "MarketParquet stock_daily reconstructed 52-week H/L; 252 prior sessions; 20-session persistence",
         }
     }
 
@@ -69,6 +74,52 @@ class MarketTopCrossMonitorTests(unittest.TestCase):
     def test_same_day_both_low(self):
         x = classify(rb(score=65), mt(score=40))
         self.assertEqual(x["comparison"]["label"], "BOTH_LOW")
+
+    def test_wrong_master_version_is_not_comparable(self):
+        payload = mt()
+        payload["version"] = "MASTER-TOP-OLD"
+        x = classify(rb(), payload)
+        self.assertFalse(x["comparable"])
+        self.assertIn("MASTER_TOP_WRONG_VERSION", x["reasons"])
+
+    def test_noncanonical_master_sources_are_not_live(self):
+        payload = mt()
+        payload["latest"]["price_symbol"] = "SPY"
+        x = classify(rb(), payload)
+        self.assertFalse(x["comparable"])
+        self.assertIn("MASTER_TOP_NONCANONICAL_PRICE_SOURCE", x["reasons"])
+
+        payload = mt()
+        payload["latest"]["breadth_source"] = "manual proxy"
+        x = classify(rb(), payload)
+        self.assertFalse(x["comparable"])
+        self.assertIn("MASTER_TOP_NONCANONICAL_BREADTH_SOURCE", x["reasons"])
+
+    def test_wrong_route_b_schema_is_not_comparable(self):
+        payload = rb()
+        payload["schema_version"] = "unknown"
+        x = classify(payload, mt())
+        self.assertFalse(x["comparable"])
+        self.assertIn("ROUTE_B_WRONG_SCHEMA", x["reasons"])
+
+    def test_evidence_phase_marks_pre_and_post_freeze(self):
+        pre = classify(
+            rb(asof="2026-10-16"),
+            mt(asof="2026-10-16"),
+        )
+        self.assertTrue(pre["comparable"])
+        self.assertEqual(pre["evidence_phase"], "PRE_FREEZE_ASOF_DIAGNOSTIC")
+
+        post = classify(
+            rb(asof="2026-10-19"),
+            mt(asof="2026-10-19"),
+        )
+        self.assertTrue(post["comparable"])
+        self.assertEqual(post["evidence_phase"], "POST_FREEZE_PROSPECTIVE")
+        self.assertEqual(
+            post["comparison"]["evidence_phase"],
+            "POST_FREEZE_PROSPECTIVE",
+        )
 
     def test_asof_mismatch_blocks_comparison_even_when_both_live(self):
         x = classify(rb(asof="2026-10-16"), mt(asof="2026-10-15"))
