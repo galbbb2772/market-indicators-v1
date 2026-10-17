@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from market_top_cross_monitor import classify
+from market_top_cross_monitor import classify, history_key
 
 
 def rb(asof="2026-10-16", score=65.58):
@@ -120,6 +120,25 @@ class MarketTopCrossMonitorTests(unittest.TestCase):
             post["comparison"]["evidence_phase"],
             "POST_FREEZE_PROSPECTIVE",
         )
+
+    def test_history_key_preserves_seed_to_live_transition_same_asof(self):
+        seed = classify(
+            rb(asof="2026-10-16"),
+            mt(
+                asof="2026-10-16",
+                score=99.33,
+                research_status="seed snapshot only",
+                symbol="SPY proxy seed",
+            ),
+        )
+        live = classify(
+            rb(asof="2026-10-16"),
+            mt(asof="2026-10-16", score=70.0),
+        )
+        self.assertNotEqual(history_key(seed), history_key(live))
+        self.assertIn("MASTER_TOP_SEED_ONLY", history_key(seed))
+        self.assertIn("MASTER_TOP_LIVE", history_key(live))
+        self.assertIn("MASTER_TOP_ONLY", history_key(live))
 
     def test_asof_mismatch_blocks_comparison_even_when_both_live(self):
         x = classify(rb(asof="2026-10-16"), mt(asof="2026-10-15"))
