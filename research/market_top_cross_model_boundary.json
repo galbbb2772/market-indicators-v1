@@ -1,0 +1,69 @@
+{
+  "schema_version": "market-top-cross-model-boundary-1",
+  "status": "FROZEN_BOUNDARY",
+  "research_only": true,
+  "models": {
+    "route_b_shadow": {
+      "name": "Market Top V2.4R Route_B Shadow",
+      "current_data_status": "LIVE_DRY_RUN_VALIDATED",
+      "asof": "2026-10-16",
+      "score": 65.58104271810248,
+      "threshold": 85,
+      "state": "IDLE",
+      "mechanism": [
+        "Shiller CAPE valuation percentile",
+        "PolicyShock V2.1.1 = 60% RateShock + 40% TaperShock",
+        "Fama-French SMB SizeWeakness",
+        "T_v2.4R price confirmation"
+      ],
+      "full_legacy_pressure_authoritative": false
+    },
+    "master_top_v218": {
+      "name": "MASTER TOP V2.1.8",
+      "freeze_date": "2026-10-17",
+      "latest_repository_payload_status": "SEED_SNAPSHOT_ONLY",
+      "seed_asof": "2026-10-09",
+      "seed_score": 99.33,
+      "threshold": 55,
+      "seed_triggered": true,
+      "mechanism": [
+        "2Y 6M rate shock",
+        "2Y 1M rate shock",
+        "20-session 52-week New High/New Low persistence",
+        "60-month top proximity"
+      ],
+      "prospective_route_requires": "MarketParquet stock_daily + official workflow refresh"
+    }
+  },
+  "historical_overlap": [
+    {
+      "episode": "2000",
+      "master_top_v218": "1999-11-29 route 76.90; classified correction; spec says 2000 bubble remains primarily old-engine event",
+      "route_b_shadow": "pure rate repricing cannot arm Route_B by design; legacy V2.4 concentration path remains unresolved"
+    },
+    {
+      "episode": "2018",
+      "master_top_v218": "2018-10-05 route 66.06; post-top severe-near-miss confirmation",
+      "route_b_shadow": "2018 RateShock alone insufficient; policy Route_B does not arm"
+    },
+    {
+      "episode": "2022",
+      "master_top_v218": "2021-12-15 route 69.42; roughly 12 sessions before 2022-01-03 top",
+      "route_b_shadow": "2022-01-03 Route_B 85.3343 -> ARMED; 2022-01-20 T_v2.4R -> price breakdown"
+    },
+    {
+      "episode": "2026",
+      "master_top_v218": "2026-10-09 repository value 99.33 is explicitly a seed snapshot; not proven same-day live output",
+      "route_b_shadow": "2026-10-16 live validated Route_B 65.5810, top-location true, policy path IDLE"
+    }
+  ],
+  "non_equivalence_rules": {
+    "do_not_max_across_models": true,
+    "do_not_average_scores": true,
+    "do_not_compare_seed_to_live_as_same_day": true,
+    "do_not_call_route_b_shadow_master_top_v218": true,
+    "do_not_call_master_top_v218_legacy_v24_route_c": true,
+    "independent_research_routes": true
+  },
+  "interpretation": "The two models answer different questions. MASTER TOP V2.1.8 is a breadth-plus-short-rate supplemental warning route. Route_B Shadow is a dual-policy/valuation/size route with a separate price-confirmation state machine. Agreement is corroboration; disagreement is diagnostic information, not automatically an error."
+}
