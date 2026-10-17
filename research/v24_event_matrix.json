@@ -61,7 +61,29 @@
         "earliest_drawdown_gate_date": "2022-01-18",
         "formal_price_trigger_date": "UNRESOLVED_UNTIL_FROZEN_T_SCORE_IS_SUPPLIED",
         "computation_status": "freshly_recomputed_policy_route_plus_known_price_gate"
+      },
+      "shadow_v24r_result": {
+        "armed_at": "2022-01-03",
+        "route_b_strict_pit": 88.7229415743,
+        "price_confirmation_proxy": "SPY",
+        "price_breakdown_v24r_at": "2022-01-20",
+        "t_v24r": 73.079,
+        "dd12_pct": 6.481,
+        "status": "FRESH_RESEARCH_REPLAY",
+        "note": "New T_v2.4R path; does not replace the accepted historical 2021-10 Early Breadth label."
       }
     }
-  ]
+  ],
+  "new_price_confirmation_candidate": {
+    "model": "T_v2.4R",
+    "status": "research_only",
+    "known_event_first_confirmations": {
+      "1998": "1998-08-04",
+      "2000": "2000-04-14",
+      "2007": "2007-11-09",
+      "2011": "2011-06-10",
+      "2018": "2018-10-11",
+      "2022": "2022-01-20"
+    }
+  }
 }
