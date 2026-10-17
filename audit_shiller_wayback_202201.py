@@ -241,9 +241,13 @@ def main() -> None:
                 **parsed,
             }
             attempts.append(row)
+
+            # The Shiller workbook is cumulative monthly history. Once the
+            # newest usable pre-cutoff workbook is parsed, an older workbook
+            # cannot contain a later monthly row that this one lacks.
             if parsed.get("has_target"):
                 recovered = row
-                break
+            break
         except Exception as exc:
             attempts.append(
                 {
