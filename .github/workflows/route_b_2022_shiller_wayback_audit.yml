@@ -56,6 +56,14 @@ jobs:
           else:
               assert x["exact_or_pre_cutoff_vintage"] is False
               assert not any(r.get("has_target") for r in attempts)
+              latest = x.get("latest_usable_snapshot") or {}
+              assert latest.get("last_month") == "202109"
+              assert latest.get("timestamp") == "20211012122941"
+              assert latest["route_b_using_last_available_valuation"] >= 85
+              assert (
+                  latest["route_b_using_last_available_valuation_and_current_size"]
+                  >= 85
+              )
 
           print(
               "SHILLER_WAYBACK_AUDIT",
