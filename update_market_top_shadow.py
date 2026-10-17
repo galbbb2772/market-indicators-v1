@@ -25,6 +25,15 @@ OUT_CURRENT = Path("docs/data/market_top_shadow_current.json")
 OUT_HISTORY = Path("docs/data/market_top_shadow_history.json")
 
 FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+TREASURY_2Y_CSV = (
+    "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
+    "daily-treasury-rates.csv/{year}/all"
+    "?_format=csv&field_tdr_date_value={year}&page=&type=daily_treasury_yield_curve"
+)
+FED_ASSETS_MIRROR = (
+    "https://raw.githubusercontent.com/zifanzhou1024/market-weather-map/"
+    "main/public/data/series/fed_assets.json"
+)
 YAHOO_SPY = (
     "https://query1.finance.yahoo.com/v8/finance/chart/SPY"
     "?range=5y&interval=1d&events=history&includeAdjustedClose=false"
@@ -64,11 +73,12 @@ def _get(url: str, *, timeout: int = 30) -> requests.Response:
 
 
 def fetch_fred_series(series_id: str, start: str) -> pd.Series:
-    # Use params separately so requests encodes the query safely.
+    # FRED is a fallback in the forward path because its CSV endpoint can
+    # intermittently time out from GitHub Actions.
     r = HTTP.get(
         FRED_CSV,
         params={"id": series_id, "cosd": start},
-        timeout=30,
+        timeout=12,
     )
     r.raise_for_status()
     df = pd.read_csv(io.StringIO(r.text))
@@ -80,7 +90,102 @@ def fetch_fred_series(series_id: str, start: str) -> pd.Series:
     s = pd.Series(vals.to_numpy(), index=idx, name=series_id).dropna().sort_index()
     if s.empty:
         raise ValueError(f"FRED {series_id} is empty")
+    s.attrs["source"] = f"FRED {series_id}"
     return s
+
+
+def parse_treasury_2y_csv(text: str) -> pd.Series:
+    df = pd.read_csv(io.StringIO(text))
+    date_candidates = ["Date", "date", "DATE"]
+    value_candidates = ["2 Yr", "2-Year", "2 Year", "2 YR"]
+    dcol = next((x for x in date_candidates if x in df.columns), None)
+    vcol = next((x for x in value_candidates if x in df.columns), None)
+    if dcol is None or vcol is None:
+        raise ValueError(
+            f"Treasury CSV missing Date/2 Yr columns: {list(df.columns)}"
+        )
+    idx = pd.to_datetime(df[dcol], errors="coerce")
+    vals = pd.to_numeric(df[vcol], errors="coerce")
+    s = pd.Series(vals.to_numpy(), index=idx, name="DGS2").dropna().sort_index()
+    s = s[~s.index.duplicated(keep="last")]
+    if s.empty:
+        raise ValueError("Treasury 2Y series is empty")
+    return s
+
+
+def fetch_treasury_2y(start: str, end: pd.Timestamp) -> pd.Series:
+    start_ts = pd.Timestamp(start)
+    years = range(start_ts.year, end.year + 1)
+    parts = []
+    errors = []
+    for year in years:
+        try:
+            url = TREASURY_2Y_CSV.format(year=year)
+            parts.append(parse_treasury_2y_csv(_get(url, timeout=20).text))
+        except Exception as exc:
+            errors.append(f"{year}={exc!r}")
+    if not parts:
+        raise RuntimeError("Treasury 2Y download failed: " + "; ".join(errors))
+    s = pd.concat(parts).sort_index()
+    s = s[~s.index.duplicated(keep="last")]
+    s = s.loc[start_ts:end].dropna()
+    if s.empty:
+        raise ValueError("Treasury 2Y has no observations in requested range")
+    s.attrs["source"] = "U.S. Treasury Daily Treasury Par Yield Curve Rates"
+    return s
+
+
+def fetch_two_year_series(start: str, end: pd.Timestamp) -> pd.Series:
+    errors = []
+    try:
+        return fetch_treasury_2y(start, end)
+    except Exception as exc:
+        errors.append(f"treasury={exc!r}")
+    try:
+        s = fetch_fred_series("DGS2", start)
+        s = s.loc[:end]
+        return s
+    except Exception as exc:
+        errors.append(f"fred={exc!r}")
+    raise RuntimeError("2Y Treasury sources failed: " + "; ".join(errors))
+
+
+def parse_fed_assets_mirror(obj: dict[str, Any]) -> pd.Series:
+    rows = obj.get("observations") or []
+    pts = {}
+    for row in rows:
+        try:
+            d = pd.Timestamp(row["date"])
+            v = float(row["value"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        pts[d] = v
+    if len(pts) < 100:
+        raise ValueError(f"fed-assets mirror too short: {len(pts)} rows")
+    s = pd.Series(pts, dtype=float, name="WALCL").sort_index()
+    s.attrs["source"] = (
+        "FRED WALCL via market-weather-map static GitHub mirror"
+    )
+    s.attrs["mirror_generated_at_utc"] = obj.get("generated_at_utc")
+    return s
+
+
+def fetch_walcl_series(start: str, end: pd.Timestamp) -> pd.Series:
+    errors = []
+    try:
+        obj = _get(FED_ASSETS_MIRROR, timeout=20).json()
+        s = parse_fed_assets_mirror(obj).loc[pd.Timestamp(start):end]
+        if len(s) < 27:
+            raise ValueError(f"fed-assets mirror range too short: {len(s)}")
+        return s
+    except Exception as exc:
+        errors.append(f"mirror={exc!r}")
+    try:
+        s = fetch_fred_series("WALCL", start).loc[:end]
+        return s
+    except Exception as exc:
+        errors.append(f"fred={exc!r}")
+    raise RuntimeError("WALCL sources failed: " + "; ".join(errors))
 
 
 def fetch_spy_close() -> pd.Series:
@@ -437,8 +542,11 @@ def build_snapshot(
         "production_effect": "none",
         "asof": price["asof"],
         "sources": {
-            "dgs2": "FRED DGS2",
-            "walcl": "FRED WALCL",
+            "dgs2": dgs2.attrs.get("source", "unknown"),
+            "walcl": walcl.attrs.get("source", "unknown"),
+            "walcl_mirror_generated_at_utc": walcl.attrs.get(
+                "mirror_generated_at_utc"
+            ),
             "spy": "Yahoo Finance unadjusted close",
             "shiller": shiller_meta.get("source") or "Robert Shiller feed mirror",
             "shiller_latest_date": shiller_meta.get("latest_date"),
@@ -535,8 +643,8 @@ def main() -> None:
     latest_market_date = pd.Timestamp(spy.index[-1])
     fred_start = (latest_market_date - pd.DateOffset(years=2)).date().isoformat()
 
-    dgs2 = fetch_fred_series("DGS2", fred_start)
-    walcl = fetch_fred_series("WALCL", fred_start)
+    dgs2 = fetch_two_year_series(fred_start, latest_market_date)
+    walcl = fetch_walcl_series(fred_start, latest_market_date)
     shiller, shiller_meta = fetch_shiller()
     ff, ff_source = fetch_ff_monthly()
 
