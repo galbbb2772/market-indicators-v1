@@ -94,3 +94,39 @@ NOT_COMPARABLE
 not `MASTER_TOP_ONLY`.
 
 A real cross-model label will begin only after MASTER TOP V2.1.8 produces a non-seed snapshot on the same market date.
+
+
+## Hardened live provenance gate
+
+A same-date comparison is not sufficient by itself.
+
+Route_B must also provide:
+
+```
+schema_version = market-top-shadow-forward-1
+research_only = true
+full_legacy_model.route_b = RESOLVED
+```
+
+MASTER TOP must provide:
+
+```
+version = MASTER-TOP-V2.1.8-FROZEN
+formula_frozen = true
+price_symbol = ^GSPC
+breadth_source contains MarketParquet stock_daily
+research_status contains frozen formula
+```
+
+Seed/proxy payloads remain blocked even if they happen to share an `asof` date.
+
+The monitor also records an evidence phase:
+
+```
+PRE_FREEZE_ASOF_DIAGNOSTIC
+POST_FREEZE_PROSPECTIVE
+```
+
+A same-day mechanical comparison can therefore exist without being mislabeled as prospective evidence.
+
+The MASTER TOP payload currently lives on the base/default branch rather than the Route_B research head. Pull-request Actions use the merge ref, so the comparison sees the base payload. This cross-branch provenance dependency is now explicit rather than implicit.
