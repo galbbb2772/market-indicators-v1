@@ -130,3 +130,41 @@ POST_FREEZE_PROSPECTIVE
 A same-day mechanical comparison can therefore exist without being mislabeled as prospective evidence.
 
 The MASTER TOP payload currently lives on the base/default branch rather than the Route_B research head. Pull-request Actions use the merge ref, so the comparison sees the base payload. This cross-branch provenance dependency is now explicit rather than implicit.
+
+
+## Stale-input rejection
+
+Same-date equality is necessary but not sufficient for comparison.
+
+Route_B input must also satisfy:
+
+```
+freshness.status = PASS
+monitor_generated_date - Route_B_asof <= 5 calendar days
+```
+
+If the upstream forward workflow fails and leaves an old JSON file behind, the monitor returns:
+
+```
+NOT_COMPARABLE
+ROUTE_B_FRESHNESS_NOT_PASS
+```
+
+or:
+
+```
+NOT_COMPARABLE
+ROUTE_B_SNAPSHOT_STALE_FOR_MONITOR
+```
+
+rather than generating a stale same-day comparison.
+
+The monitor records:
+
+- Route_B age in days at comparison time;
+- maximum allowed age;
+- Route_B schema;
+- MASTER TOP frozen version / formula provenance;
+- evidence phase.
+
+This makes upstream refresh failures visible instead of silently reusing stale model states.
