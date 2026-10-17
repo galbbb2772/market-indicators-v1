@@ -1,0 +1,33 @@
+name: PolicyShock V2.1.1 Shadow Tests
+
+on:
+  pull_request:
+    paths:
+      - "policyshock_v211.py"
+      - "shadow_replay_v24.py"
+      - "research/POLICYSHOCK_V2_1_1_FROZEN.md"
+      - "research/V2_4_SHADOW_REPLAY.md"
+      - "research/V2_4_EVENT_MATRIX.md"
+      - "research/v24_event_matrix.json"
+      - "research/T_V24_RECOVERY.md"
+      - "research/t_v24_recovery_fingerprints.json"
+      - "tests/test_policyshock_v211.py"
+      - "tests/test_shadow_replay_v24.py"
+      - "tests/test_v24_event_matrix.py"
+      - "tests/test_t_v24_recovery_contract.py"
+      - ".github/workflows/policyshock_v211_shadow_tests.yml"
+  workflow_dispatch:
+
+jobs:
+  frozen-shadow-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run frozen PolicyShock and V2.4 shadow contracts
+        run: |
+          python -m unittest             tests.test_policyshock_v211             tests.test_shadow_replay_v24             tests.test_v24_event_matrix             tests.test_t_v24_recovery_contract -v
