@@ -1,0 +1,50 @@
+{
+  "schema_version": "route-b-2022-official-archive-audit-1",
+  "status": "PASS_OFFICIAL_NEAR_VINTAGE_EXACT_JAN3_VINTAGE_UNRESOLVED",
+  "source": "Kenneth R. French official historical archive",
+  "archive_cut": "July 2022 data / August 2022 release",
+  "target_month": "202111",
+  "monthly_rows_through_target": 1145,
+  "smb_202106_to_202111": [
+    {
+      "ym": "202106",
+      "smb": 1.7
+    },
+    {
+      "ym": "202107",
+      "smb": -3.99
+    },
+    {
+      "ym": "202108",
+      "smb": -0.43
+    },
+    {
+      "ym": "202109",
+      "smb": 0.72
+    },
+    {
+      "ym": "202110",
+      "smb": -2.35
+    },
+    {
+      "ym": "202111",
+      "smb": -1.32
+    }
+  ],
+  "size_weakness": 85.43859649122807,
+  "valuation": 98.5807214666,
+  "policy_shock": 74.3886192578,
+  "route_b": 85.56921184591258,
+  "threshold": 85,
+  "passes": true,
+  "critical_size_weakness": 83.74488435047371,
+  "size_margin_above_critical": 1.6937121407543572,
+  "route_margin_above_threshold": 0.5692118459125766,
+  "exact_2022_01_03_vintage": false,
+  "evidence": {
+    "github_actions_live_download_passed": true,
+    "workflow": "Route_B 2022 Official Archive Audit",
+    "zip_member": "Historical_Archives/08 2022 Update/ftp/F-F_Research_Data_Factors.CSV"
+  },
+  "interpretation": "The official July-2022 CRSP data cut independently preserves the 2022 Route_B pass. This is strong near-vintage robustness evidence, but it is not the exact factor file available on 2022-01-03."
+}
