@@ -35,6 +35,14 @@ on:
       - "tests/test_t_v24r.py"
       - "tests/test_t_v24r_validation_contract.py"
       - "tests/test_t_v24r_source_invariance.py"
+      - "research/ROUTE_C_V24R_C3_PREREGISTRATION.md"
+      - "research/route_c_v24r_c3_preregistration.json"
+      - "research/ROUTE_A_C_REPLACEMENT_SCREEN.md"
+      - "research/route_a_c_replacement_screen.json"
+      - "research/V2_4_LEGACY_EARLY_BREADTH_PROVENANCE.md"
+      - "research/v24_legacy_early_breadth_provenance_gap.json"
+      - "tests/test_route_a_c_replacement_screen.py"
+      - "tests/test_v24_legacy_early_breadth_provenance.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -58,6 +66,8 @@ jobs:
             tests.test_market_top_canonical_inputs \
             tests.test_market_top_shadow_live \
             tests.test_route_a_c_recovery_contract \
+            tests.test_route_a_c_replacement_screen \
+            tests.test_v24_legacy_early_breadth_provenance \
             tests.test_shadow_replay_v24 \
             tests.test_v24_event_matrix \
             tests.test_t_v24_recovery_contract \
