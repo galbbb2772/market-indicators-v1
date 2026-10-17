@@ -13,6 +13,8 @@ OUT_HISTORY = Path("docs/data/market_top_cross_monitor_history.json")
 
 ROUTE_B_THRESHOLD = 85.0
 MASTER_TOP_THRESHOLD = 55.0
+ROUTE_B_SCHEMA = "market-top-shadow-forward-1"
+MASTER_TOP_VERSION = "MASTER-TOP-V2.1.8-FROZEN"
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -22,9 +24,15 @@ def load_json(path: Path) -> dict[str, Any]:
 def master_top_live_status(payload: dict[str, Any]) -> tuple[bool, str]:
     latest = payload.get("latest") or {}
     status = str(latest.get("research_status") or "").lower()
-    symbol = str(latest.get("price_symbol") or "").lower()
+    symbol = str(latest.get("price_symbol") or "")
+    breadth_source = str(latest.get("breadth_source") or "")
 
-    if "seed snapshot" in status or "proxy seed" in symbol:
+    if payload.get("version") != MASTER_TOP_VERSION:
+        return False, "MASTER_TOP_WRONG_VERSION"
+    if payload.get("formula_frozen") is not True:
+        return False, "MASTER_TOP_FORMULA_NOT_FROZEN"
+
+    if "seed snapshot" in status or "proxy seed" in symbol.lower():
         return False, "MASTER_TOP_SEED_ONLY"
 
     asof = latest.get("asof")
@@ -32,10 +40,19 @@ def master_top_live_status(payload: dict[str, Any]) -> tuple[bool, str]:
     if not asof or route is None:
         return False, "MASTER_TOP_MISSING_LIVE_FIELDS"
 
+    if symbol != "^GSPC":
+        return False, "MASTER_TOP_NONCANONICAL_PRICE_SOURCE"
+    if "MarketParquet stock_daily" not in breadth_source:
+        return False, "MASTER_TOP_NONCANONICAL_BREADTH_SOURCE"
+    if "frozen formula" not in status:
+        return False, "MASTER_TOP_NONCANONICAL_RESEARCH_STATUS"
+
     return True, "MASTER_TOP_LIVE"
 
 
 def route_b_live_status(payload: dict[str, Any]) -> tuple[bool, str]:
+    if payload.get("schema_version") != ROUTE_B_SCHEMA:
+        return False, "ROUTE_B_WRONG_SCHEMA"
     if payload.get("research_only") is not True:
         return False, "ROUTE_B_NOT_MARKED_RESEARCH_ONLY"
 
@@ -77,12 +94,28 @@ def classify(
     rb_score = (route_b_payload.get("route_b") or {}).get("score")
     mt_score = mt_latest.get("supplemental_route")
 
+    prospective_start = payload_start = master_payload.get("prospective_evidence_start")
+    evidence_phase = None
+    if comparable and rb_asof:
+        if prospective_start and str(rb_asof) >= str(prospective_start):
+            evidence_phase = "POST_FREEZE_PROSPECTIVE"
+        else:
+            evidence_phase = "PRE_FREEZE_ASOF_DIAGNOSTIC"
+
     out: dict[str, Any] = {
-        "schema_version": "market-top-cross-monitor-1",
+        "schema_version": "market-top-cross-monitor-2",
         "generated_at": generated_at or datetime.now(timezone.utc).isoformat(),
         "research_only": True,
         "production_effect": "none",
         "comparable": comparable,
+        "evidence_phase": evidence_phase,
+        "input_provenance": {
+            "route_b_schema_version": route_b_payload.get("schema_version"),
+            "master_top_version": master_payload.get("version"),
+            "master_top_formula_frozen": master_payload.get("formula_frozen"),
+            "master_top_prospective_start": prospective_start,
+            "master_top_generated_at_utc": master_payload.get("generated_at_utc"),
+        },
         "status": "COMPARABLE" if comparable else "NOT_COMPARABLE",
         "reasons": reasons,
         "route_b_shadow": {
@@ -127,6 +160,7 @@ def classify(
             "route_b_high": rb_high,
             "master_top_high": mt_high,
             "same_asof": rb_asof,
+            "evidence_phase": evidence_phase,
             "ensemble_score": None,
             "action_signal": None,
         }
