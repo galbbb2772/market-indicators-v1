@@ -15,6 +15,7 @@ ROUTE_B_THRESHOLD = 85.0
 MASTER_TOP_THRESHOLD = 55.0
 ROUTE_B_SCHEMA = "market-top-shadow-forward-1"
 MASTER_TOP_VERSION = "MASTER-TOP-V2.1.8-FROZEN"
+MAX_MONITOR_INPUT_AGE_DAYS = 5
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -56,6 +57,10 @@ def route_b_live_status(payload: dict[str, Any]) -> tuple[bool, str]:
     if payload.get("research_only") is not True:
         return False, "ROUTE_B_NOT_MARKED_RESEARCH_ONLY"
 
+    freshness = payload.get("freshness") or {}
+    if freshness.get("status") != "PASS":
+        return False, "ROUTE_B_FRESHNESS_NOT_PASS"
+
     asof = payload.get("asof")
     route = (payload.get("route_b") or {}).get("score")
     live_status = (
@@ -77,6 +82,11 @@ def classify(
     rb_ok, rb_reason = route_b_live_status(route_b_payload)
     mt_ok, mt_reason = master_top_live_status(master_payload)
 
+    generated = generated_at or datetime.now(timezone.utc).isoformat()
+    generated_date = datetime.fromisoformat(
+        generated.replace("Z", "+00:00")
+    ).date()
+
     rb_asof = route_b_payload.get("asof")
     mt_latest = master_payload.get("latest") or {}
     mt_asof = mt_latest.get("asof")
@@ -86,10 +96,24 @@ def classify(
         reasons.append(rb_reason)
     if not mt_ok:
         reasons.append(mt_reason)
+
+    rb_age_days = None
+    if rb_asof:
+        rb_date = datetime.fromisoformat(str(rb_asof)).date()
+        rb_age_days = (generated_date - rb_date).days
+        if rb_age_days < 0 or rb_age_days > MAX_MONITOR_INPUT_AGE_DAYS:
+            reasons.append("ROUTE_B_SNAPSHOT_STALE_FOR_MONITOR")
+
     if rb_asof and mt_asof and rb_asof != mt_asof:
         reasons.append("ASOF_MISMATCH")
 
-    comparable = rb_ok and mt_ok and rb_asof == mt_asof
+    comparable = (
+        rb_ok
+        and mt_ok
+        and rb_asof == mt_asof
+        and rb_age_days is not None
+        and 0 <= rb_age_days <= MAX_MONITOR_INPUT_AGE_DAYS
+    )
 
     rb_score = (route_b_payload.get("route_b") or {}).get("score")
     mt_score = mt_latest.get("supplemental_route")
@@ -104,7 +128,7 @@ def classify(
 
     out: dict[str, Any] = {
         "schema_version": "market-top-cross-monitor-2",
-        "generated_at": generated_at or datetime.now(timezone.utc).isoformat(),
+        "generated_at": generated,
         "research_only": True,
         "production_effect": "none",
         "comparable": comparable,
@@ -115,6 +139,8 @@ def classify(
             "master_top_formula_frozen": master_payload.get("formula_frozen"),
             "master_top_prospective_start": prospective_start,
             "master_top_generated_at_utc": master_payload.get("generated_at_utc"),
+            "route_b_age_days_at_monitor": rb_age_days,
+            "max_monitor_input_age_days": MAX_MONITOR_INPUT_AGE_DAYS,
         },
         "status": "COMPARABLE" if comparable else "NOT_COMPARABLE",
         "reasons": reasons,
