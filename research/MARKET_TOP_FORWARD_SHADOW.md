@@ -202,3 +202,51 @@ Price Breakdown = FALSE
 ```
 
 This live run validates both the calculation path and the current provider failover design.
+
+
+## Source freshness contract
+
+The forward updater now fails closed when an input is stale.
+
+Frozen operational limits:
+
+```
+SPY market as-of lag <= 5 calendar days
+2Y Treasury lag versus market as-of <= 7 calendar days
+WALCL observation lag = at least 2 and at most 14 calendar days
+Shiller signal month = exactly the prior completed calendar month
+Fama-French factor lag <= 3 calendar months
+```
+
+A stale source does not silently reuse its last value.
+
+The generated snapshot contains a `freshness` block with the observed lags and limits.
+
+## H.4.1 release-aware EOD semantics
+
+WALCL/H.4.1 is not gated by observation date alone.
+
+The Federal Reserve normally publishes H.4.1 on Thursday at about 4:30 p.m. ET, after the regular U.S. equity close. Publication can shift to the next federal business day when Thursday is a federal holiday.
+
+For each WALCL observation the updater therefore computes:
+
+```
+observation date
+  -> next federal business day = release date
+  -> next federal business day = first EOD state date allowed to use it
+```
+
+Examples covered by regression tests:
+
+```
+2026-10-14 Wednesday observation
+-> Thursday 2026-10-15 4:30 p.m. release
+-> Friday 2026-10-16 first allowed market EOD
+
+2026-11-25 Wednesday observation
+-> Thanksgiving Thursday blocks regular release
+-> Friday 2026-11-27 4:30 p.m. shifted release
+-> Monday 2026-11-30 first allowed market EOD
+```
+
+This removes the prior small Thursday-close lookahead risk.
