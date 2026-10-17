@@ -13,6 +13,8 @@ on:
       - "research/market_top_canonical_route_b_inputs.json"
       - "research/MARKET_TOP_SHADOW_LIVE_2026_10_16.md"
       - "research/market_top_shadow_snapshot_2026_10_16.json"
+      - "research/ROUTE_A_C_RECOVERY_STATUS.md"
+      - "research/route_a_c_recovery_status.json"
       - "research/V2_4_SHADOW_REPLAY.md"
       - "research/V2_4_EVENT_MATRIX.md"
       - "research/v24_event_matrix.json"
@@ -26,6 +28,7 @@ on:
       - "tests/test_policyshock_v211.py"
       - "tests/test_market_top_canonical_inputs.py"
       - "tests/test_market_top_shadow_live.py"
+      - "tests/test_route_a_c_recovery_contract.py"
       - "tests/test_shadow_replay_v24.py"
       - "tests/test_v24_event_matrix.py"
       - "tests/test_t_v24_recovery_contract.py"
@@ -54,6 +57,7 @@ jobs:
             tests.test_policyshock_v211 \
             tests.test_market_top_canonical_inputs \
             tests.test_market_top_shadow_live \
+            tests.test_route_a_c_recovery_contract \
             tests.test_shadow_replay_v24 \
             tests.test_v24_event_matrix \
             tests.test_t_v24_recovery_contract \
