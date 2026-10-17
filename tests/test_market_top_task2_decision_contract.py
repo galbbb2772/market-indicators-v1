@@ -1,0 +1,41 @@
+from __future__ import annotations
+
+import json
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+PATH = ROOT / "research" / "market_top_task2_decision_record.json"
+
+
+class MarketTopTask2DecisionContractTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.data = json.loads(PATH.read_text(encoding="utf-8"))
+
+    def test_core_task_pass_is_not_full_legacy_recovery(self):
+        self.assertEqual(
+            self.data["status"],
+            "CORE_TASK_PASS_WITH_LEGACY_PROVENANCE_GAPS",
+        )
+        self.assertTrue(self.data["frozen_conclusions"]["2022_policy_route_repaired"])
+        self.assertFalse(self.data["frozen_conclusions"]["current_full_pressure_authoritative"])
+
+    def test_2022_dates_are_locked(self):
+        x = self.data["frozen_conclusions"]
+        self.assertEqual(x["2022_policy_arm_date"], "2022-01-03")
+        self.assertEqual(x["2022_price_breakdown_v24r_date"], "2022-01-20")
+        self.assertEqual(
+            x["accepted_historical_2022_label_remains"],
+            "2021-10 EARLY_BREADTH",
+        )
+
+    def test_route_a_and_c_remain_unresolved(self):
+        by_component = {x["component"]: x for x in self.data["unresolved"]}
+        self.assertEqual(by_component["Original Route_A"]["status"], "UNRESOLVED")
+        self.assertEqual(by_component["Original Route_C"]["status"], "UNRESOLVED")
+        self.assertTrue(self.data["frozen_conclusions"]["do_not_tune_failed_ac_candidates"])
+
+
+if __name__ == "__main__":
+    unittest.main()
