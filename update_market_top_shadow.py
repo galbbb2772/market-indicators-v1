@@ -11,6 +11,8 @@ from typing import Any
 
 import pandas as pd
 import requests
+from pandas.tseries.holiday import USFederalHolidayCalendar
+from pandas.tseries.offsets import CustomBusinessDay
 
 from market_top_canonical_inputs import (
     size_block_from_smb_6m,
@@ -304,6 +306,41 @@ def last_on_or_before(s: pd.Series, when: pd.Timestamp) -> tuple[pd.Timestamp, f
     return pd.Timestamp(x.index[-1]), float(x.iloc[-1])
 
 
+FED_BUSINESS_DAY = CustomBusinessDay(calendar=USFederalHolidayCalendar())
+
+
+def walcl_actionable_eod_date(observation_date: pd.Timestamp) -> pd.Timestamp:
+    """First market EOD that may use an H.4.1 observation without lookahead.
+
+    H.4.1 is normally released Thursday at 4:30 p.m. ET, after the U.S.
+    equity close, and may shift to the next federal business day on holidays.
+
+    We therefore:
+      1. move from the observation date to the next federal business day
+         (the release date);
+      2. move one additional federal business day before allowing an EOD
+         state update.
+    """
+    obs = pd.Timestamp(observation_date).normalize()
+    release_date = obs + FED_BUSINESS_DAY
+    return pd.Timestamp(release_date + FED_BUSINESS_DAY).normalize()
+
+
+def last_released_walcl_for_eod(
+    walcl: pd.Series,
+    asof: pd.Timestamp,
+) -> tuple[pd.Timestamp, float]:
+    asof = pd.Timestamp(asof).normalize()
+    candidates = []
+    for idx, value in walcl.dropna().sort_index().items():
+        obs = pd.Timestamp(idx).normalize()
+        if walcl_actionable_eod_date(obs) <= asof:
+            candidates.append((obs, float(value)))
+    if not candidates:
+        raise ValueError(f"no H.4.1 observation actionable by {asof.date()}")
+    return candidates[-1]
+
+
 def month_start(d: pd.Timestamp) -> pd.Timestamp:
     return pd.Timestamp(year=d.year, month=d.month, day=1)
 
@@ -344,7 +381,7 @@ def validate_source_freshness(
 
     walcl_date = pd.Timestamp(policy["walcl_latest_date"])
     walcl_lag_days = int((market_asof - walcl_date).days)
-    if walcl_lag_days < 1 or walcl_lag_days > MAX_WALCL_LAG_DAYS:
+    if walcl_lag_days < 2 or walcl_lag_days > MAX_WALCL_LAG_DAYS:
         raise ValueError(
             f"WALCL freshness failure: lag={walcl_lag_days} days"
         )
@@ -441,10 +478,11 @@ def compute_policy(
     anchor_target = d_date - pd.DateOffset(months=6)
     a_date, d_anchor = last_on_or_before(dgs2, anchor_target)
 
-    # WALCL observations are Wednesday snapshots normally released Thursday.
-    # A one-calendar-day release lag is a conservative live gate.
-    walcl_cutoff = asof - pd.Timedelta(days=1)
-    w0_date, w0 = last_on_or_before(walcl, walcl_cutoff)
+    # H.4.1 observations are normally published Thursday at 4:30 p.m. ET,
+    # after the equity close. Holiday releases can shift to the next federal
+    # business day. Use the release-aware EOD gate rather than observation
+    # date alone.
+    w0_date, w0 = last_released_walcl_for_eod(walcl, asof)
     w13_date, w13 = last_on_or_before(walcl, w0_date - pd.Timedelta(weeks=13))
     w26_date, w26 = last_on_or_before(walcl, w0_date - pd.Timedelta(weeks=26))
 
