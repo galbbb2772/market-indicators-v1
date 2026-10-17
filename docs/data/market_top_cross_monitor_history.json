@@ -1,9 +1,9 @@
 {
-  "schema_version": "market-top-cross-monitor-history-1",
+  "schema_version": "market-top-cross-monitor-history-2",
   "research_only": true,
   "history": [
     {
-      "key": "2026-10-16|2026-10-09",
+      "key": "2026-10-16|2026-10-09|ROUTE_B_LIVE|MASTER_TOP_SEED_ONLY|null",
       "generated_at": "2026-10-17T12:36:15.878488+00:00",
       "comparable": false,
       "status": "NOT_COMPARABLE",
@@ -15,7 +15,10 @@
       "route_b_score": 65.58104271810248,
       "master_top_asof": "2026-10-09",
       "master_top_score": 99.33,
-      "comparison": null
+      "comparison": null,
+      "route_b_source_status": "ROUTE_B_LIVE",
+      "master_top_source_status": "MASTER_TOP_SEED_ONLY",
+      "evidence_phase": null
     }
   ]
 }
