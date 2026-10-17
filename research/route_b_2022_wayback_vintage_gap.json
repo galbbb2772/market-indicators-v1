@@ -1,0 +1,27 @@
+{
+  "schema_version": "route-b-2022-wayback-vintage-gap-1",
+  "status": "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
+  "cutoff": "20220103235959",
+  "exact_or_pre_cutoff_vintage": false,
+  "snapshot_count": 6,
+  "latest_usable_snapshot": {
+    "timestamp": "20210413020542",
+    "original": "http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
+    "last_month": "202102",
+    "has_202111": false,
+    "zip_member": "F-F_Research_Data_Factors.CSV"
+  },
+  "older_snapshots": [
+    {
+      "timestamp": "20200714125505",
+      "last_month": "202005"
+    },
+    {
+      "timestamp": "20200503165317",
+      "last_month": "202003"
+    }
+  ],
+  "errors": [],
+  "conclusion": "Wayback successfully served historical Ken French ZIP bytes, but its latest pre-2022-01-03 capture only contains data through 2021-02. Therefore Wayback cannot supply the 2021-11 monthly factor vintage required for an exact Jan-3-2022 replay.",
+  "research_effect": "Exact Jan-3 monthly vintage remains unresolved due to archive coverage, while official July-2022 annual-cut robustness and cross-version sensitivity remain PASS."
+}
