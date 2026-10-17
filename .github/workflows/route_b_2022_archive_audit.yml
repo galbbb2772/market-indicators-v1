@@ -36,6 +36,10 @@ jobs:
           x=json.load(open(p))
           assert x["archive_cut"] == "July 2022 data / August 2022 release"
           assert x["target_month"] == "202111"
+          assert x["passes"] is True
+          assert x["route_b"] >= x["threshold"]
+          assert x["exact_2022_01_03_vintage"] is False
+          assert x["route_margin_above_threshold"] > 0
           print(
               "OFFICIAL_ARCHIVE_AUDIT",
               "SizeWeakness=", x["size_weakness"],
