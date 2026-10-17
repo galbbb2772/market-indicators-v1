@@ -1,0 +1,537 @@
+from __future__ import annotations
+
+import argparse
+import io
+import json
+import math
+import zipfile
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+import requests
+
+from market_top_canonical_inputs import (
+    size_block_from_smb_6m,
+    size_weakness_history,
+    valuation_history,
+)
+from policyshock_v211 import ARMED_THRESHOLD, compute_policy_shock, route_b
+from t_v24r import compute_t_v24r_series
+
+
+OUT_CURRENT = Path("docs/data/market_top_shadow_current.json")
+OUT_HISTORY = Path("docs/data/market_top_shadow_history.json")
+
+FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+YAHOO_SPY = (
+    "https://query1.finance.yahoo.com/v8/finance/chart/SPY"
+    "?range=5y&interval=1d&events=history&includeAdjustedClose=false"
+)
+SHILLER_FEED = (
+    "https://raw.githubusercontent.com/adambnash-afk/shiller-data/"
+    "main/data/stock_market_data.json"
+)
+FF_OFFICIAL = (
+    "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/"
+    "F-F_Research_Data_Factors_CSV.zip"
+)
+FF_MIRROR = (
+    "https://raw.githubusercontent.com/engineerinvestor/summitward-research/"
+    "main/cliff-asness-investing-pet-peeves/data/"
+    "F-F_Research_Data_Factors.csv"
+)
+
+UA = "market-top-shadow-research/1.0"
+HTTP = requests.Session()
+HTTP.headers.update({"User-Agent": UA})
+
+
+def _get(url: str, *, timeout: int = 30) -> requests.Response:
+    last: Exception | None = None
+    candidates = [url]
+    if "query1.finance.yahoo.com" in url:
+        candidates.append(url.replace("query1.finance.yahoo.com", "query2.finance.yahoo.com"))
+    for candidate in candidates:
+        try:
+            r = HTTP.get(candidate, timeout=timeout)
+            r.raise_for_status()
+            return r
+        except Exception as exc:
+            last = exc
+    raise RuntimeError(f"request failed for {url}: {last!r}")
+
+
+def fetch_fred_series(series_id: str, start: str) -> pd.Series:
+    r = _get(FRED_CSV, timeout=30)
+    # Use params separately so requests encodes the query safely.
+    r = HTTP.get(
+        FRED_CSV,
+        params={"id": series_id, "cosd": start},
+        timeout=30,
+    )
+    r.raise_for_status()
+    df = pd.read_csv(io.StringIO(r.text))
+    if df.empty or series_id not in df.columns:
+        raise ValueError(f"FRED returned no {series_id} column")
+    dcol = df.columns[0]
+    idx = pd.to_datetime(df[dcol], errors="coerce")
+    vals = pd.to_numeric(df[series_id], errors="coerce")
+    s = pd.Series(vals.to_numpy(), index=idx, name=series_id).dropna().sort_index()
+    if s.empty:
+        raise ValueError(f"FRED {series_id} is empty")
+    return s
+
+
+def fetch_spy_close() -> pd.Series:
+    obj = _get(YAHOO_SPY, timeout=20).json()
+    results = ((obj.get("chart") or {}).get("result") or [])
+    if not results:
+        raise ValueError(f"Yahoo SPY returned no result: {(obj.get('chart') or {}).get('error')}")
+    x = results[0]
+    ts = x.get("timestamp") or []
+    q = (((x.get("indicators") or {}).get("quote") or [{}])[0])
+    close = q.get("close") or []
+    if not ts or len(ts) != len(close):
+        raise ValueError("Yahoo SPY timestamp/close mismatch")
+    idx = pd.to_datetime(ts, unit="s", utc=True).tz_convert(None).normalize()
+    s = pd.Series(pd.to_numeric(close, errors="coerce"), index=idx, name="SPY").dropna()
+    s = s[~s.index.duplicated(keep="last")].sort_index()
+    if len(s) < 600:
+        raise ValueError(f"SPY history too short: {len(s)} rows")
+    return s
+
+
+def parse_shiller_feed(obj: dict[str, Any]) -> pd.DataFrame:
+    rows = obj.get("data") or []
+    out = []
+    for row in rows:
+        cape = row.get("cape")
+        year = row.get("year")
+        month = row.get("month")
+        if cape is None or year is None or month is None:
+            continue
+        try:
+            out.append(
+                {
+                    "date": pd.Timestamp(year=int(year), month=int(month), day=1),
+                    "cape": float(cape),
+                }
+            )
+        except Exception:
+            continue
+    df = pd.DataFrame(out).dropna().sort_values("date")
+    if len(df) < 1500:
+        raise ValueError(f"Shiller feed too short: {len(df)} rows")
+    return df
+
+
+def fetch_shiller() -> tuple[pd.DataFrame, dict[str, Any]]:
+    obj = _get(SHILLER_FEED, timeout=30).json()
+    return parse_shiller_feed(obj), (obj.get("metadata") or {})
+
+
+def parse_ff_monthly(text: str) -> pd.DataFrame:
+    rows = []
+    started = False
+    for raw in text.splitlines():
+        p = [x.strip() for x in raw.split(",")]
+        if p and p[0].isdigit() and len(p[0]) == 6:
+            started = True
+            if len(p) < 5:
+                continue
+            try:
+                rows.append(
+                    {
+                        "ym": p[0],
+                        "date": pd.Timestamp(
+                            year=int(p[0][:4]), month=int(p[0][4:6]), day=1
+                        ),
+                        "mkt_rf": float(p[1]),
+                        "smb": float(p[2]),
+                        "hml": float(p[3]),
+                        "rf": float(p[4]),
+                    }
+                )
+            except ValueError:
+                continue
+        elif started and rows:
+            # First non-monthly line after the monthly block ends that block.
+            break
+    df = pd.DataFrame(rows)
+    if len(df) < 1000:
+        raise ValueError(f"Fama-French monthly history too short: {len(df)} rows")
+    return df.sort_values("date").reset_index(drop=True)
+
+
+def fetch_ff_monthly() -> tuple[pd.DataFrame, str]:
+    errors: list[str] = []
+    try:
+        raw = _get(FF_OFFICIAL, timeout=45).content
+        with zipfile.ZipFile(io.BytesIO(raw)) as z:
+            names = [n for n in z.namelist() if n.lower().endswith(".csv")]
+            if not names:
+                raise ValueError("official FF ZIP contains no CSV")
+            text = z.read(names[0]).decode("utf-8", "replace")
+        return parse_ff_monthly(text), "Ken French Data Library"
+    except Exception as exc:
+        errors.append(f"official={exc!r}")
+
+    try:
+        text = _get(FF_MIRROR, timeout=30).text
+        return parse_ff_monthly(text), "GitHub mirror of Ken French factors"
+    except Exception as exc:
+        errors.append(f"mirror={exc!r}")
+
+    raise RuntimeError("Fama-French download failed: " + "; ".join(errors))
+
+
+def last_on_or_before(s: pd.Series, when: pd.Timestamp) -> tuple[pd.Timestamp, float]:
+    x = s.loc[:when].dropna()
+    if x.empty:
+        raise ValueError(f"no observation on/before {when.date()}")
+    return pd.Timestamp(x.index[-1]), float(x.iloc[-1])
+
+
+def month_start(d: pd.Timestamp) -> pd.Timestamp:
+    return pd.Timestamp(year=d.year, month=d.month, day=1)
+
+
+def previous_month_start(d: pd.Timestamp) -> pd.Timestamp:
+    return month_start(d) - pd.offsets.MonthBegin(1)
+
+
+def compute_valuation(
+    shiller: pd.DataFrame,
+    *,
+    asof: pd.Timestamp,
+) -> dict[str, Any]:
+    # A live day may never use the unfinished current calendar month.
+    latest_allowed = previous_month_start(asof)
+    x = shiller.loc[shiller["date"] <= latest_allowed].copy()
+    if x.empty:
+        raise ValueError("no completed-month CAPE data available")
+    scores = valuation_history(x["cape"].tolist())
+    row = x.iloc[-1]
+    return {
+        "signal_month": pd.Timestamp(row["date"]).strftime("%Y-%m"),
+        "cape": float(row["cape"]),
+        "score": float(scores[-1]),
+        "source_latest_month": pd.Timestamp(shiller.iloc[-1]["date"]).strftime("%Y-%m"),
+    }
+
+
+def compute_size_weakness(
+    ff: pd.DataFrame,
+    *,
+    asof: pd.Timestamp,
+) -> dict[str, Any]:
+    # Factor rows are used only when they actually exist in the downloaded
+    # published dataset. Do not synthesize the current month.
+    latest_allowed = previous_month_start(asof)
+    x = ff.loc[ff["date"] <= latest_allowed].copy()
+    if len(x) < 6:
+        raise ValueError("not enough published SMB history")
+    scores = size_weakness_history(x["smb"].tolist())
+    score = scores[-1]
+    if score is None:
+        raise ValueError("latest SizeWeakness score is missing")
+    six = x["smb"].iloc[-6:].tolist()
+    block = size_block_from_smb_6m(six)
+    return {
+        "factor_month": pd.Timestamp(x.iloc[-1]["date"]).strftime("%Y-%m"),
+        "smb_6m_pct": float(-block),
+        "b_size": float(block),
+        "score": float(score),
+    }
+
+
+def compute_policy(
+    dgs2: pd.Series,
+    walcl: pd.Series,
+    *,
+    asof: pd.Timestamp,
+) -> dict[str, Any]:
+    d_date, d_now = last_on_or_before(dgs2, asof)
+    anchor_target = d_date - pd.DateOffset(months=6)
+    a_date, d_anchor = last_on_or_before(dgs2, anchor_target)
+
+    # WALCL observations are Wednesday snapshots normally released Thursday.
+    # A one-calendar-day release lag is a conservative live gate.
+    walcl_cutoff = asof - pd.Timedelta(days=1)
+    w0_date, w0 = last_on_or_before(walcl, walcl_cutoff)
+    w13_date, w13 = last_on_or_before(walcl, w0_date - pd.Timedelta(weeks=13))
+    w26_date, w26 = last_on_or_before(walcl, w0_date - pd.Timedelta(weeks=26))
+
+    out = compute_policy_shock(
+        dgs2_latest_pct=d_now,
+        dgs2_6m_ago_pct=d_anchor,
+        walcl_now=w0,
+        walcl_13w_ago=w13,
+        walcl_26w_ago=w26,
+    )
+    if out.policy_shock is None:
+        raise ValueError("PolicyShock is missing")
+
+    g_prev = w13 / w26 - 1.0
+    g_cur = w0 / w13 - 1.0
+
+    return {
+        "dgs2_latest_date": d_date.date().isoformat(),
+        "dgs2_latest_pct": d_now,
+        "dgs2_anchor_date": a_date.date().isoformat(),
+        "dgs2_anchor_pct": d_anchor,
+        "delta_6m_bp": (d_now - d_anchor) * 100.0,
+        "walcl_latest_date": w0_date.date().isoformat(),
+        "walcl_latest": w0,
+        "walcl_13w_date": w13_date.date().isoformat(),
+        "walcl_13w": w13,
+        "walcl_26w_date": w26_date.date().isoformat(),
+        "walcl_26w": w26,
+        "g_prev_pct": g_prev * 100.0,
+        "g_cur_pct": g_cur * 100.0,
+        "deceleration_pp": (g_prev - g_cur) * 100.0,
+        "rate_shock": float(out.rate_shock),
+        "taper_shock": float(out.taper_shock),
+        "policy_shock": float(out.policy_shock),
+    }
+
+
+def compute_price(spy: pd.Series) -> dict[str, Any]:
+    t = compute_t_v24r_series(spy)
+    row = t.dropna(subset=["dd12_pct", "ma10m_prev", "t_v24r"]).iloc[-1]
+    asof = pd.Timestamp(row.name)
+
+    # 24M high-location gate for the policy Route_B arm path.
+    s = spy.loc[:asof]
+    last_504 = s.iloc[-504:] if len(s) >= 504 else s
+    high24 = float(last_504.max())
+    high24_date = pd.Timestamp(last_504.idxmax())
+    within_5pct = float(row["close"]) >= 0.95 * high24
+    recent_cutoff = asof - pd.DateOffset(months=3)
+    high_recent = high24_date >= recent_cutoff
+
+    return {
+        "asof": asof.date().isoformat(),
+        "close": float(row["close"]),
+        "high12_close": float(row["high12_close"]),
+        "dd12_pct": float(row["dd12_pct"]),
+        "ma10m_prev": float(row["ma10m_prev"]),
+        "ma_gap_pct": float(row["ma_gap_pct"]),
+        "t_v24r": float(row["t_v24r"]),
+        "price_breakdown_v24r": bool(row["price_breakdown_v24r"]),
+        "high24_close": high24,
+        "high24_date": high24_date.date().isoformat(),
+        "within_5pct_of_24m_high": bool(within_5pct),
+        "high_formed_within_3m": bool(high_recent),
+        "top_location_gate": bool(within_5pct and high_recent),
+    }
+
+
+def _load_history(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    obj = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(obj, dict):
+        return list(obj.get("history") or [])
+    return list(obj)
+
+
+def _active_arm_from_history(
+    history: list[dict[str, Any]],
+    *,
+    asof: pd.Timestamp,
+) -> str | None:
+    arms = []
+    triggers = []
+    for x in history:
+        state = x.get("policy_path_state")
+        d = x.get("asof")
+        if not d:
+            continue
+        if state == "ARMED":
+            arms.append(pd.Timestamp(d))
+        elif state == "TRIGGERED":
+            triggers.append(pd.Timestamp(d))
+    if not arms:
+        return None
+    armed_at = max(arms)
+    if triggers and max(triggers) >= armed_at:
+        return None
+    if asof > armed_at + pd.DateOffset(months=6):
+        return None
+    return armed_at.date().isoformat()
+
+
+def build_snapshot(
+    *,
+    now: datetime | None = None,
+    dgs2: pd.Series,
+    walcl: pd.Series,
+    spy: pd.Series,
+    shiller: pd.DataFrame,
+    shiller_meta: dict[str, Any],
+    ff: pd.DataFrame,
+    ff_source: str,
+    prior_history: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    generated = now or datetime.now(timezone.utc)
+    price = compute_price(spy)
+    asof = pd.Timestamp(price["asof"])
+    policy = compute_policy(dgs2, walcl, asof=asof)
+    valuation = compute_valuation(shiller, asof=asof)
+    size = compute_size_weakness(ff, asof=asof)
+
+    rb = route_b(valuation["score"], policy["policy_shock"], size["score"])
+    if rb is None:
+        raise ValueError("Route_B is missing")
+    pressure_pass = rb >= ARMED_THRESHOLD
+    arm_today = pressure_pass and price["top_location_gate"]
+
+    prior_history = prior_history or []
+    prior_arm = _active_arm_from_history(prior_history, asof=asof)
+
+    if prior_arm is None and arm_today:
+        armed_at = price["asof"]
+    else:
+        armed_at = prior_arm
+
+    if armed_at is not None:
+        expires = (pd.Timestamp(armed_at) + pd.DateOffset(months=6)).date().isoformat()
+        active_arm = asof <= pd.Timestamp(expires)
+    else:
+        expires = None
+        active_arm = False
+
+    if active_arm and price["price_breakdown_v24r"]:
+        policy_path_state = "TRIGGERED"
+    elif active_arm:
+        policy_path_state = "ARMED"
+    else:
+        policy_path_state = "IDLE"
+
+    snap = {
+        "schema_version": "market-top-shadow-forward-1",
+        "generated_at": generated.astimezone(timezone.utc).isoformat(),
+        "research_only": True,
+        "production_effect": "none",
+        "asof": price["asof"],
+        "sources": {
+            "dgs2": "FRED DGS2",
+            "walcl": "FRED WALCL",
+            "spy": "Yahoo Finance unadjusted close",
+            "shiller": shiller_meta.get("source") or "Robert Shiller feed mirror",
+            "shiller_latest_date": shiller_meta.get("latest_date"),
+            "fama_french": ff_source,
+        },
+        "policy": policy,
+        "valuation": valuation,
+        "size_weakness": size,
+        "route_b": {
+            "score": float(rb),
+            "threshold": ARMED_THRESHOLD,
+            "pressure_pass": bool(pressure_pass),
+            "top_location_gate": bool(price["top_location_gate"]),
+            "arm_today": bool(arm_today),
+        },
+        "price_confirmation": price,
+        "policy_path": {
+            "state": policy_path_state,
+            "armed_at": armed_at,
+            "armed_expires_at": expires,
+            "breakdown_today": bool(active_arm and price["price_breakdown_v24r"]),
+            "scope": "Route_B-only shadow path; does not represent unresolved Route_A/Route_C",
+        },
+        "full_legacy_model": {
+            "status": "PARTIAL_ROUTE_COVERAGE",
+            "route_a": "UNRESOLVED",
+            "route_b": "RESOLVED",
+            "route_c": "UNRESOLVED",
+            "pressure_authoritative": False,
+        },
+    }
+    return snap
+
+
+def history_row(snapshot: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "asof": snapshot["asof"],
+        "generated_at": snapshot["generated_at"],
+        "policy_shock": snapshot["policy"]["policy_shock"],
+        "rate_shock": snapshot["policy"]["rate_shock"],
+        "taper_shock": snapshot["policy"]["taper_shock"],
+        "valuation": snapshot["valuation"]["score"],
+        "size_weakness": snapshot["size_weakness"]["score"],
+        "route_b": snapshot["route_b"]["score"],
+        "route_b_pressure_pass": snapshot["route_b"]["pressure_pass"],
+        "top_location_gate": snapshot["route_b"]["top_location_gate"],
+        "t_v24r": snapshot["price_confirmation"]["t_v24r"],
+        "dd12_pct": snapshot["price_confirmation"]["dd12_pct"],
+        "price_breakdown_v24r": snapshot["price_confirmation"]["price_breakdown_v24r"],
+        "policy_path_state": snapshot["policy_path"]["state"],
+        "armed_at": snapshot["policy_path"]["armed_at"],
+    }
+
+
+def write_outputs(snapshot: dict[str, Any]) -> None:
+    OUT_CURRENT.parent.mkdir(parents=True, exist_ok=True)
+    history = _load_history(OUT_HISTORY)
+    row = history_row(snapshot)
+
+    by_date = {x.get("asof"): x for x in history if x.get("asof")}
+    by_date[row["asof"]] = row
+    ordered = [by_date[k] for k in sorted(by_date)]
+
+    OUT_CURRENT.write_text(
+        json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    OUT_HISTORY.write_text(
+        json.dumps(
+            {
+                "schema_version": "market-top-shadow-forward-history-1",
+                "research_only": True,
+                "history": ordered,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--dry-run", action="store_true")
+    args = ap.parse_args()
+
+    spy = fetch_spy_close()
+    latest_market_date = pd.Timestamp(spy.index[-1])
+    fred_start = (latest_market_date - pd.DateOffset(years=2)).date().isoformat()
+
+    dgs2 = fetch_fred_series("DGS2", fred_start)
+    walcl = fetch_fred_series("WALCL", fred_start)
+    shiller, shiller_meta = fetch_shiller()
+    ff, ff_source = fetch_ff_monthly()
+
+    prior = _load_history(OUT_HISTORY)
+    snapshot = build_snapshot(
+        dgs2=dgs2,
+        walcl=walcl,
+        spy=spy,
+        shiller=shiller,
+        shiller_meta=shiller_meta,
+        ff=ff,
+        ff_source=ff_source,
+        prior_history=prior,
+    )
+
+    print(json.dumps(snapshot, ensure_ascii=False, indent=2))
+    if not args.dry_run:
+        write_outputs(snapshot)
+
+
+if __name__ == "__main__":
+    main()
