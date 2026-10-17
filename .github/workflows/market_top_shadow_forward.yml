@@ -62,6 +62,11 @@ jobs:
 
           assert x["research_only"] is True
           assert x["production_effect"] == "none"
+          assert x["freshness"]["status"] == "PASS"
+          assert x["freshness"]["market_lag_days"] <= 5
+          assert x["freshness"]["dgs2_lag_days"] <= 7
+          assert 2 <= x["freshness"]["walcl_lag_days"] <= 14
+          assert x["freshness"]["ff_factor_lag_months"] <= 3
           assert x["full_legacy_model"]["pressure_authoritative"] is False
           assert x["full_legacy_model"]["route_a"] == "UNRESOLVED"
           assert x["full_legacy_model"]["route_c"] == "UNRESOLVED"
