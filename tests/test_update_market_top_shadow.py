@@ -12,6 +12,7 @@ from update_market_top_shadow import (
     compute_valuation,
     parse_fed_assets_mirror,
     parse_treasury_2y_csv,
+    validate_source_freshness,
 )
 
 
@@ -78,6 +79,88 @@ class MarketTopForwardShadowTests(unittest.TestCase):
         self.assertEqual(len(s), 120)
         self.assertEqual(s.attrs["mirror_generated_at_utc"], "2026-10-17T01:23:07Z")
         self.assertIn("static GitHub mirror", s.attrs["source"])
+
+    def test_freshness_contract_accepts_current_fixture(self):
+        out = validate_source_freshness(
+            generated_at=pd.Timestamp(
+                "2026-10-17T06:24:27Z"
+            ).to_pydatetime(),
+            market_asof=pd.Timestamp("2026-10-16"),
+            policy={
+                "dgs2_latest_date": "2026-10-16",
+                "walcl_latest_date": "2026-10-14",
+            },
+            valuation={"signal_month": "2026-09"},
+            size_weakness={"factor_month": "2026-08"},
+        )
+        self.assertEqual(out["status"], "PASS")
+        self.assertEqual(out["market_lag_days"], 1)
+        self.assertEqual(out["dgs2_lag_days"], 0)
+        self.assertEqual(out["walcl_lag_days"], 2)
+        self.assertEqual(out["ff_factor_lag_months"], 2)
+
+    def test_freshness_contract_rejects_stale_daily_and_weekly_inputs(self):
+        with self.assertRaisesRegex(ValueError, "DGS2 freshness"):
+            validate_source_freshness(
+                generated_at=pd.Timestamp("2026-10-17T06:24:27Z").to_pydatetime(),
+                market_asof=pd.Timestamp("2026-10-16"),
+                policy={
+                    "dgs2_latest_date": "2026-10-01",
+                    "walcl_latest_date": "2026-10-14",
+                },
+                valuation={"signal_month": "2026-09"},
+                size_weakness={"factor_month": "2026-08"},
+            )
+
+        with self.assertRaisesRegex(ValueError, "WALCL freshness"):
+            validate_source_freshness(
+                generated_at=pd.Timestamp("2026-10-17T06:24:27Z").to_pydatetime(),
+                market_asof=pd.Timestamp("2026-10-16"),
+                policy={
+                    "dgs2_latest_date": "2026-10-16",
+                    "walcl_latest_date": "2026-09-20",
+                },
+                valuation={"signal_month": "2026-09"},
+                size_weakness={"factor_month": "2026-08"},
+            )
+
+    def test_freshness_contract_rejects_stale_monthly_inputs(self):
+        with self.assertRaisesRegex(ValueError, "CAPE freshness"):
+            validate_source_freshness(
+                generated_at=pd.Timestamp("2026-10-17T06:24:27Z").to_pydatetime(),
+                market_asof=pd.Timestamp("2026-10-16"),
+                policy={
+                    "dgs2_latest_date": "2026-10-16",
+                    "walcl_latest_date": "2026-10-14",
+                },
+                valuation={"signal_month": "2026-08"},
+                size_weakness={"factor_month": "2026-08"},
+            )
+
+        with self.assertRaisesRegex(ValueError, "Fama-French freshness"):
+            validate_source_freshness(
+                generated_at=pd.Timestamp("2026-10-17T06:24:27Z").to_pydatetime(),
+                market_asof=pd.Timestamp("2026-10-16"),
+                policy={
+                    "dgs2_latest_date": "2026-10-16",
+                    "walcl_latest_date": "2026-10-14",
+                },
+                valuation={"signal_month": "2026-09"},
+                size_weakness={"factor_month": "2026-06"},
+            )
+
+    def test_freshness_contract_rejects_stale_market_snapshot(self):
+        with self.assertRaisesRegex(ValueError, "market as-of freshness"):
+            validate_source_freshness(
+                generated_at=pd.Timestamp("2026-10-17T06:24:27Z").to_pydatetime(),
+                market_asof=pd.Timestamp("2026-10-01"),
+                policy={
+                    "dgs2_latest_date": "2026-10-01",
+                    "walcl_latest_date": "2026-09-30",
+                },
+                valuation={"signal_month": "2026-09"},
+                size_weakness={"factor_month": "2026-08"},
+            )
 
     def test_current_policy_fingerprint(self):
         dgs2 = pd.Series(
