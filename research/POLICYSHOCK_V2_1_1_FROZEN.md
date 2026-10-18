@@ -68,9 +68,21 @@ Route_B > 85 => PASS
 
 The earlier research value Route_B≈88.72 used later monthly size information and must not be labeled the 2022-01-03 strict-PIT golden result.
 
-## Vintage caveat
+## Vintage evidence status
 
-The 2022 SizeWeakness reconstruction above uses the current Fama-French/CRSP history. Ken French maintains historical data archives and CRSP historical research returns can change across data vintages. A true 2022-vintage replay remains a separate validation task.
+The macro PolicyShock leg is now independently primary-source validated for the 2022-01-03 replay:
+
+- U.S. Treasury historical 2Y values reproduce 2021-12-31 = 0.73% and 2021-06-30 = 0.25%;
+- dated Federal Reserve H.4.1 releases directly establish the 2021-06-30, 2021-09-29, and 2021-12-29 total-assets observations before the 2022-01-03 cutoff;
+- these inputs reproduce PolicyShock = 74.38861926.
+
+The remaining vintage limitation is monthly Valuation / SizeWeakness source bytes, not the PolicyShock macro leg.
+
+For Valuation, a genuine pre-cutoff Shiller workbook through 2021-09 gives 98.57904085 and still preserves Route_B > 85.
+
+For SizeWeakness, the exact Ken French monthly file visible on 2022-01-03 has not been recovered. Official July-2022 and later historical archive cuts plus the lower current-vintage reconstruction all preserve Route_B > 85. This must be described as revision-robust evidence, not exact Jan-3 factor-byte recovery.
+
+The Treasury rate evidence uses the current official historical table; archived Jan-3 Treasury page bytes were not recovered. That provenance distinction remains explicit.
 
 ## Negative controls
 
