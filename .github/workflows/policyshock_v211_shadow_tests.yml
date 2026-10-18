@@ -55,6 +55,11 @@ on:
       - "research/market_top_cross_model_boundary.json"
       - "tests/test_market_top_cross_model_boundary.py"
       - "research/ROUTE_B_2022_FF_REVISION_SENSITIVITY.md"
+      - "research/ROUTE_B_2022_FF_REVISION_LATTICE.md"
+      - "research/route_b_2022_ff_revision_lattice.json"
+      - "tests/test_route_b_2022_ff_revision_lattice.py"
+      - "audit_ff_revision_lattice.py"
+      - "tests/test_audit_ff_revision_lattice.py"
       - "research/route_b_2022_ff_revision_sensitivity.json"
       - "research/ROUTE_B_2022_OFFICIAL_ARCHIVE_AUDIT.md"
       - "research/route_b_2022_official_archive_audit.json"
@@ -107,6 +112,8 @@ jobs:
             tests.test_route_b_2022_vintage_robustness \
             tests.test_market_top_cross_model_boundary \
             tests.test_route_b_2022_ff_revision_sensitivity \
+            tests.test_route_b_2022_ff_revision_lattice \
+            tests.test_audit_ff_revision_lattice \
             tests.test_route_b_2022_official_archive_contract \
             tests.test_route_b_2022_wayback_vintage_gap \
             tests.test_market_top_cross_monitor \
