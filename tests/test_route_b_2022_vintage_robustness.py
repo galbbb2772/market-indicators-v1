@@ -46,6 +46,14 @@ class RouteB2022VintageRobustnessTests(unittest.TestCase):
                 for x in self.lattice["scenarios"])
         )
 
+    def test_official_2022_to_2026_revision_lattice_all_passes(self):
+        x = self.lattice["ff_official_revision_lattice"]
+        self.assertEqual(x["archive_count"], 5)
+        self.assertTrue(x["all_archives_pass"])
+        self.assertGreaterEqual(x["route_b_min"], self.lattice["threshold"])
+        self.assertGreater(x["minimum_margin_above_threshold"], 0)
+        self.assertLess(x["route_b_range"], 0.4)
+
     def test_policy_margin_is_positive_in_most_conservative_cross_vintage_case(self):
         b = self.lattice["failure_boundaries"]
         self.assertGreater(b["actual_policy_shock_margin"], 0)
