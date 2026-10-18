@@ -57,6 +57,16 @@ class PolicyShock2022PrimarySourceAuditTests(unittest.TestCase):
         self.assertIn("Total assets", match)
         self.assertIn("8,447,981", match)
 
+    def test_local_match_handles_malformed_legacy_markup(self):
+        html = (
+            "<div>Total assets</div><broken><td>(0)</td>"
+            "<td>8,447,981</td><div>-41,843</div>"
+        )
+        match = find_local_total_assets_match(html, "8,447,981")
+        self.assertIsNotNone(match)
+        self.assertIn("Total assets", match)
+        self.assertIn("8,447,981", match)
+
     def test_local_match_does_not_accept_page_wide_coincidence(self):
         filler = "X" * 2500
         html = f"<div><span>Total assets</span>{filler}<span>8,447,981</span></div>"
