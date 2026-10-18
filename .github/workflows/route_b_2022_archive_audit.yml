@@ -6,6 +6,8 @@ on:
       - "audit_ff_2022_archive.py"
       - "audit_ff_revision_lattice.py"
       - "tests/test_audit_ff_revision_lattice.py"
+      - "tests/test_route_b_2022_ff_revision_lattice.py"
+      - "research/route_b_2022_ff_revision_lattice.json"
       - "market_top_canonical_inputs.py"
       - "policyshock_v211.py"
       - "tests/test_audit_ff_2022_archive.py"
@@ -30,7 +32,8 @@ jobs:
         run: |
           python -m unittest \
             tests.test_audit_ff_2022_archive \
-            tests.test_audit_ff_revision_lattice -v
+            tests.test_audit_ff_revision_lattice \
+            tests.test_route_b_2022_ff_revision_lattice -v
 
       - name: Download official July-2022 Ken French archive and audit
         run: |
