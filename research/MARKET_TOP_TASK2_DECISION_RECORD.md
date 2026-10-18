@@ -489,3 +489,31 @@ H.4.1 balance-sheet values
 ```
 
 Therefore PolicyShock itself is now primary-source reproducible without claiming source bytes that were not recovered.
+
+
+## PR scope audit
+
+The final changed-file review found no edits to the Market Model V2 production scoring core and no edit to its production `docs/data/current.json`.
+
+The one intentional shared-surface change is:
+
+```
+docs/index.html
+```
+
+which adds the Market Top Route_B Shadow research card.
+
+Therefore the precise scope statement is:
+
+```
+production scoring effect = NONE
+dashboard presentation effect if merged = YES
+```
+
+The research card does not feed Market Model V2 scoring and continues to disclose:
+
+```
+Route_A = UNRESOLVED
+Route_C = UNRESOLVED
+Full Pressure authoritative = FALSE
+```
