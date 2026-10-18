@@ -1,5 +1,5 @@
 {
-  "schema_version": "route-b-2022-vintage-robustness-lattice-1",
+  "schema_version": "route-b-2022-vintage-robustness-lattice-2",
   "threshold": 85,
   "policy_shock": 74.3886192578,
   "scenarios": [
@@ -43,5 +43,23 @@
     "policy_shock_with_archived_valuation_and_lower_current_size": 73.51905461361983,
     "actual_policy_shock_margin": 0.8695646441801728
   },
-  "conclusion": "All observed current/official/pre-cutoff valuation-size combinations remain above the frozen Route_B threshold. Exact Jan-3 monthly vintages are still not fully recoverable, but the pass is robust across observed historical revisions without retuning."
+  "conclusion": "All observed current, official annual 2022-2026, and genuine pre-cutoff Shiller vintage combinations remain above the frozen Route_B threshold. Exact Jan-3 monthly bytes are still not fully recoverable, but observed Fama-French revisions never erase the pass and no parameter retuning is used.",
+  "ff_official_revision_lattice": {
+    "archive_count": 5,
+    "archive_ids": [
+      "JULY_2022",
+      "JULY_2023",
+      "JULY_2024",
+      "JULY_2025",
+      "AUGUST_2026"
+    ],
+    "all_archives_pass": true,
+    "size_weakness_min": 84.73684210526316,
+    "size_weakness_max": 85.70175438596492,
+    "size_weakness_range": 0.9649122807017534,
+    "route_b_min": 85.33429175696243,
+    "route_b_max": 85.65697520162983,
+    "route_b_range": 0.32268344466740473,
+    "minimum_margin_above_threshold": 0.3342917569624291
+  }
 }
