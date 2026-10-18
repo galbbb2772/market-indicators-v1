@@ -6,6 +6,7 @@ from audit_policyshock_20220103_primary_sources import (
     H41_RELEASES,
     RATE_ANCHOR_TARGET,
     STRICT_LAG_LATEST,
+    find_local_total_assets_match,
     normalize_text,
     parse_treasury_2y_csv,
 )
@@ -39,17 +40,33 @@ class PolicyShock2022PrimarySourceAuditTests(unittest.TestCase):
         x = normalize_text("<tr><td>Total   assets</td><td>8,757,460</td></tr>")
         self.assertEqual(x, "Total assets 8,757,460")
 
-    def test_preformatted_h41_visible_line_shape(self):
-        from bs4 import BeautifulSoup
-        import re
-
+    def test_preformatted_h41_local_match(self):
         html = "<pre>Other assets  31,827\nTotal assets  (0)  8,078,544  - 23,401</pre>"
-        soup = BeautifulSoup(html, "html.parser")
-        lines = [
-            re.sub(r"\s+", " ", line).strip()
-            for line in soup.get_text("\n").splitlines()
-        ]
-        self.assertIn("Total assets (0) 8,078,544 - 23,401", lines)
+        match = find_local_total_assets_match(html, "8,078,544")
+        self.assertIsNotNone(match)
+        self.assertIn("Total assets", match)
+        self.assertIn("8,078,544", match)
+
+    def test_table_h41_local_match_across_cells(self):
+        html = (
+            "<table><tr><td>Total assets</td><td>(0)</td>"
+            "<td>8,447,981</td><td>-41,843</td></tr></table>"
+        )
+        match = find_local_total_assets_match(html, "8,447,981")
+        self.assertIsNotNone(match)
+        self.assertIn("Total assets", match)
+        self.assertIn("8,447,981", match)
+
+    def test_local_match_does_not_accept_page_wide_coincidence(self):
+        filler = "X" * 2500
+        html = f"<div><span>Total assets</span>{filler}<span>8,447,981</span></div>"
+        self.assertIsNone(
+            find_local_total_assets_match(
+                html,
+                "8,447,981",
+                max_local_chars=2000,
+            )
+        )
 
 
 if __name__ == "__main__":
