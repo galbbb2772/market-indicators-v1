@@ -120,13 +120,13 @@ def verify_h41_release(spec: dict[str, Any]) -> dict[str, Any]:
 
     soup = BeautifulSoup(r.text, "html.parser")
     visible_lines = [
-        re.sub(r"\\s+", " ", line).strip()
-        for line in soup.get_text("\\n").splitlines()
+        re.sub(r"\s+", " ", line).strip()
+        for line in soup.get_text("\n").splitlines()
     ]
     matching_lines = [
         line
         for line in visible_lines
-        if re.search(r"\\bTotal\\s+assets\\b", line, flags=re.I)
+        if re.search(r"\bTotal\s+assets\b", line, flags=re.I)
         and formatted in line
     ]
     if not matching_lines:
