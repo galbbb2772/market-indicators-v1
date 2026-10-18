@@ -277,5 +277,37 @@
     "production_market_model_current_json_modified": false,
     "presentation_effect_if_merged": "docs/index.html adds the Market Top Route_B Shadow research card",
     "interpretation": "The PR does not alter Market Model V2 production scoring, but merge would intentionally change the dashboard presentation."
+  },
+  "route_b_2022_evidence_closure": {
+    "status": "NUMERICAL_INPUT_CHAIN_CLOSED_DELIVERY_TIMESTAMP_GAP",
+    "valuation": {
+      "content": "REAL_PRE_CUTOFF_SHILLER_ARCHIVE",
+      "source_month": "2021-09",
+      "score": 98.57904085257549
+    },
+    "policy_shock": {
+      "content": "PRIMARY_SOURCE_REPRODUCED",
+      "score": 74.38861925775049,
+      "h41_pre_cutoff_release_pages": true,
+      "treasury_official_historical_series": true
+    },
+    "size_weakness": {
+      "content": "OFFICIAL_DEC2021_FF_VINTAGE_RECOVERED",
+      "crsp_database": "202111",
+      "score": 84.73684210526316,
+      "zip_sha256": "e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86"
+    },
+    "route_b": {
+      "score": 85.33380682500024,
+      "threshold": 85,
+      "pass": true,
+      "margin": 0.33380682500023795
+    },
+    "unresolved_delivery_provenance": {
+      "exact_jan3_ff_archive_wayback_capture": false,
+      "exact_jan3_ff_archive_snapshot_count": 0,
+      "exact_jan3_treasury_page_bytes": false
+    },
+    "interpretation": "The 2022 Route_B numerical input chain is now reproduced from historically appropriate official/pre-cutoff content. Remaining gaps concern independent web-delivery timestamps for exact Jan-3 bytes, not the factor/valuation/policy values used in the replay."
   }
 }
