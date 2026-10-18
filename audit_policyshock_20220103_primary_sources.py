@@ -135,6 +135,22 @@ def find_local_total_assets_match(
                 return local
             cur = getattr(cur, "parent", None)
 
+    # Some legacy Federal Reserve pages contain malformed table markup that
+    # browsers repair differently. Fall back to a bounded raw-HTML window
+    # beginning at the label; this still forbids a page-wide coincidence.
+    lower = html.lower()
+    needle = "total assets"
+    start = 0
+    while True:
+        i = lower.find(needle, start)
+        if i < 0:
+            break
+        raw_local = html[i : i + max_local_chars]
+        local = normalize_text(raw_local)
+        if label_re.search(local) and formatted_value in local:
+            return local
+        start = i + len(needle)
+
     return None
 
 
