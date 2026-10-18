@@ -15,7 +15,11 @@ import requests
 FF25_URL = "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/25_Portfolios_5x5_CSV.zip"
 FF12_URL = "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/12_Industry_Portfolios_CSV.zip"
 FF3_URL = "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"
-FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+FED_DDP = "https://www.federalreserve.gov/datadownload/Output.aspx"
+FED_BAA_SERIES_ID = "H15/H15/RIMLPBAAR_N.M"
+FED_GS10_SERIES_ID = "H15/H15/RIFLGFCY10_N.M"
+FED_BAA_HASH = "ccd455e753647ae509d6cb29970c6b1b"
+FED_GS10_HASH = "0809abf197c17f1ff0b2180fe7015cc3"
 TARGET_FF_MONTH = "200709"
 TARGET_SPREAD_MONTH = "200710"
 EFFECTIVE_MONTH = "200711"
@@ -154,18 +158,48 @@ def ff_scores():
     }
 
 
-def fred_series(series_id: str) -> pd.Series:
-    r = get(FRED_CSV, params={"id": series_id})
-    df = pd.read_csv(io.StringIO(r.text))
-    dcol = df.columns[0]
-    vals = pd.to_numeric(df[series_id], errors="coerce")
-    idx = pd.to_datetime(df[dcol], errors="coerce")
-    return pd.Series(vals.to_numpy(), index=idx).dropna().sort_index()
+def parse_fed_ddp_monthly(text: str) -> pd.Series:
+    import csv
+    import re
 
+    pts = {}
+    for row in csv.reader(io.StringIO(text)):
+        if len(row) < 2:
+            continue
+        ym = str(row[0]).strip()
+        raw = str(row[1]).strip()
+        if not re.fullmatch(r"\d{4}-\d{2}", ym):
+            continue
+        if raw in {"", ".", "NA", "N/A"}:
+            continue
+        try:
+            pts[pd.Timestamp(ym + "-01")] = float(raw)
+        except ValueError:
+            continue
+    if len(pts) < 500:
+        raise ValueError(f"Federal Reserve DDP monthly history too short: {len(pts)}")
+    return pd.Series(pts, dtype=float).sort_index()
+
+
+def fed_ddp_monthly(series_hash: str) -> pd.Series:
+    r = get(
+        FED_DDP,
+        params={
+            "rel": "H15",
+            "series": series_hash,
+            "lastObs": "",
+            "from": "",
+            "to": "",
+            "filetype": "csv",
+            "label": "include",
+            "layout": "seriescolumn",
+        },
+    )
+    return parse_fed_ddp_monthly(r.text)
 
 def spread_score():
-    baa = fred_series("BAA")
-    gs10 = fred_series("GS10")
+    baa = fed_ddp_monthly(FED_BAA_HASH)
+    gs10 = fed_ddp_monthly(FED_GS10_HASH)
     common = sorted(set(baa.index) & set(gs10.index))
     rows = [(d.strftime("%Y%m"), float(baa.loc[d] - gs10.loc[d])) for d in common]
     shock = []
@@ -265,8 +299,14 @@ def audit():
         "top_location": gate,
         "sources": {
             **source,
-            "baa": "FRED BAA live historical CSV",
-            "gs10": "FRED GS10 live historical CSV",
+            "baa": (
+                "Federal Reserve H.15 DDP monthly "
+                + FED_BAA_SERIES_ID
+            ),
+            "gs10": (
+                "Federal Reserve H.15 DDP monthly "
+                + FED_GS10_SERIES_ID
+            ),
             "spy": "Yahoo Finance SPY unadjusted close",
         },
         "generated_at": datetime.now(timezone.utc).isoformat(),
