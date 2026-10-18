@@ -1,0 +1,46 @@
+name: Route_B 2022 FF Dec-2021 Vintage Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_ff_dec2021_vintage.py"
+      - "audit_ff_2022_archive.py"
+      - "market_top_canonical_inputs.py"
+      - "policyshock_v211.py"
+      - "tests/test_audit_ff_dec2021_vintage.py"
+      - ".github/workflows/route_b_2022_ff_dec2021_vintage_audit.yml"
+  workflow_dispatch:
+
+jobs:
+  dec2021-vintage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install requests pandas
+      - name: Static contract
+        run: python -m unittest tests.test_audit_ff_dec2021_vintage -v
+      - name: Download and score official December-2021 FF vintage
+        run: |
+          python audit_ff_dec2021_vintage.py --output /tmp/ff_dec2021.json
+          python - <<'PY'
+          import json
+          x=json.load(open("/tmp/ff_dec2021.json"))
+          assert x["status"] == "PASS_OFFICIAL_DEC2021_VINTAGE"
+          assert x["last_month"] == "202111"
+          assert x["passes"] is True
+          assert x["route_b"] >= x["threshold"]
+          assert x["size_margin_above_critical"] > 0
+          assert x["route_margin_above_threshold"] > 0
+          print(
+              "FF_DEC2021_VINTAGE",
+              "SizeWeakness=", x["size_weakness"],
+              "Route_B=", x["route_b"],
+              "margin=", x["route_margin_above_threshold"],
+              "Last-Modified=", x["http_headers"].get("last_modified"),
+          )
+          PY
