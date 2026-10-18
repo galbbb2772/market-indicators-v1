@@ -517,3 +517,34 @@ Route_A = UNRESOLVED
 Route_C = UNRESOLVED
 Full Pressure authoritative = FALSE
 ```
+
+
+## PIT uncertainty budget
+
+The 2022 Route_B pass survives every observed vintage combination, but the minimum reconstructed margin is narrow.
+
+Most conservative observed combination:
+
+```
+Valuation = 98.5790408526
+PolicyShock = 74.3886192578
+SizeWeakness = 84.7368421053
+
+Route_B = 85.3338068250
+threshold = 85
+margin = +0.3338068250
+```
+
+Failure sensitivity:
+
+- one input alone: about **1.1689%** deterioration;
+- two inputs equally: about **0.5862% each**;
+- all three inputs equally: about **0.3912% each**.
+
+Therefore the evidence label is:
+
+```
+NARROW_BUT_OBSERVED_VINTAGE_ROBUST_PASS
+```
+
+This is stronger than a single-vintage pass but weaker than a wide-margin result. Exact Jan-3 monthly source bytes remain partly unrecovered, so no large-safety-cushion claim is allowed.
