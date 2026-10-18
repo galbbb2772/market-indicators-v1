@@ -98,6 +98,11 @@ on:
       - "research/market_top_ng1_a_extra_episode_cases.json"
       - "tests/test_market_top_ng1_a_independent_evidence.py"
       - "tests/test_market_top_ng1_a_extra_episode_cases.py"
+      - "research/MARKET_TOP_NG1_A_POST2022_HOLDOUT_PREREG.md"
+      - "research/market_top_ng1_a_post2022_holdout_prereg.json"
+      - "research/MARKET_TOP_NG1_A_POST2022_HOLDOUT.md"
+      - "research/market_top_ng1_a_post2022_holdout.json"
+      - "tests/test_market_top_ng1_a_post2022_holdout.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -132,6 +137,7 @@ jobs:
             tests.test_market_top_ng1_ac_screen \
             tests.test_market_top_ng1_a_independent_evidence \
             tests.test_market_top_ng1_a_extra_episode_cases \
+            tests.test_market_top_ng1_a_post2022_holdout \
             tests.test_market_top_cross_model_boundary \
             tests.test_route_b_2022_ff_revision_sensitivity \
             tests.test_route_b_2022_ff_revision_lattice \
