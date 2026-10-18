@@ -103,5 +103,15 @@
     "minimum_margin_above_route_threshold": 0.30483566495808,
     "minimum_size_weakness_margin_above_critical": 0.90423845654384
   },
-  "conclusion": "The exact publication-time Jan-3-2022 Fama-French monthly vintage remains unresolved. However, multiple independent static historical variants with materially different 2021 SMB values all keep the reconstructed 2022 Route_B above 85. This supports revision robustness but is not a substitute for exact vintage proof."
+  "conclusion": "Third-party static historical variants independently support the same revision-robustness conclusion, but the preferred evidence is now the live-audited Ken French official 2022-2026 archive lattice. Exact Jan-3-2022 monthly vintage remains unresolved.",
+  "evidence_tier": "SUPPLEMENTAL_THIRD_PARTY_STATIC_CROSSCHECK",
+  "preferred_revision_evidence": "research/route_b_2022_ff_revision_lattice.json",
+  "official_lattice_summary": {
+    "source": "Kenneth R. French official historical archives",
+    "archive_count": 5,
+    "years": "2022-2026",
+    "route_b_min": 85.33429175696243,
+    "route_b_max": 85.65697520162983,
+    "all_pass": true
+  }
 }
