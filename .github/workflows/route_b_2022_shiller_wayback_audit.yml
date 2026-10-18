@@ -6,6 +6,8 @@ on:
       - "audit_shiller_wayback_202201.py"
       - "policyshock_v211.py"
       - "tests/test_audit_shiller_wayback_202201.py"
+      - "tests/test_route_b_2022_shiller_wayback_evidence.py"
+      - "research/route_b_2022_shiller_wayback_audit.json"
       - ".github/workflows/route_b_2022_shiller_wayback_audit.yml"
   workflow_dispatch:
 
@@ -23,8 +25,11 @@ jobs:
       - name: Install dependencies
         run: python -m pip install pandas requests xlrd
 
-      - name: Static contract
-        run: python -m unittest tests.test_audit_shiller_wayback_202201 -v
+      - name: Static contracts
+        run: |
+          python -m unittest \
+            tests.test_audit_shiller_wayback_202201 \
+            tests.test_route_b_2022_shiller_wayback_evidence -v
 
       - name: Audit pre-Jan-3-2022 Shiller workbook vintage
         run: |
