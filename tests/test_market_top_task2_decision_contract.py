@@ -118,6 +118,14 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
         self.assertFalse(s["production_market_model_current_json_modified"])
         self.assertIn("docs/index.html", s["presentation_effect_if_merged"])
 
+    def test_pit_uncertainty_budget_is_narrow_pass(self):
+        x = self.data["vintage_robustness"]["pit_uncertainty_budget"]
+        self.assertEqual(x["status"], "PASS_BUT_NARROW_MARGIN")
+        self.assertGreater(x["conservative_route_b"], x["threshold"])
+        self.assertLess(x["score_margin"], 0.5)
+        self.assertLess(x["three_inputs_equal_failure_drop_pct_each"], 0.5)
+        self.assertGreater(x["one_input_failure_drop_pct"], 1.0)
+
     def test_route_a_and_c_remain_unresolved(self):
         by_component = {x["component"]: x for x in self.data["unresolved"]}
         self.assertEqual(by_component["Original Route_A"]["status"], "UNRESOLVED")
