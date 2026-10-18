@@ -12,7 +12,8 @@
     "fama_french_effective_lag_months": 2,
     "credit_spread_effective_lag_months": 1,
     "percentiles": "expanding_current_inclusive",
-    "event_specific_lags": false
+    "event_specific_lags": false,
+    "shiller_cape_effective_lag_months": 1
   },
   "route_c_ng1": {
     "portfolio_universe": "Fama-French 25 Size x Book-to-Market value-weighted portfolios",
