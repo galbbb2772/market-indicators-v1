@@ -46,8 +46,8 @@ class PolicyShock2022PrimarySourceAuditTests(unittest.TestCase):
         html = "<pre>Other assets  31,827\nTotal assets  (0)  8,078,544  - 23,401</pre>"
         soup = BeautifulSoup(html, "html.parser")
         lines = [
-            re.sub(r"\\s+", " ", line).strip()
-            for line in soup.get_text("\\n").splitlines()
+            re.sub(r"\s+", " ", line).strip()
+            for line in soup.get_text("\n").splitlines()
         ]
         self.assertIn("Total assets (0) 8,078,544 - 23,401", lines)
 
