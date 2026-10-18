@@ -104,7 +104,7 @@ def normalize_text(html: str) -> str:
     text = re.sub(r"<style\b[^>]*>.*?</style>", " ", text, flags=re.I | re.S)
     text = re.sub(r"<[^>]+>", " ", text)
     text = text.replace("&nbsp;", " ").replace("&#160;", " ")
-    return re.sub(r"\s+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def verify_h41_release(spec: dict[str, Any]) -> dict[str, Any]:
