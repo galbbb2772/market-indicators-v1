@@ -126,6 +126,25 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
         self.assertLess(x["three_inputs_equal_failure_drop_pct_each"], 0.5)
         self.assertGreater(x["one_input_failure_drop_pct"], 1.0)
 
+    def test_2022_numerical_input_chain_is_closed(self):
+        x = self.data["route_b_2022_evidence_closure"]
+        self.assertEqual(
+            x["status"],
+            "NUMERICAL_INPUT_CHAIN_CLOSED_DELIVERY_TIMESTAMP_GAP",
+        )
+        self.assertTrue(x["route_b"]["pass"])
+        self.assertGreater(x["route_b"]["score"], x["route_b"]["threshold"])
+        self.assertEqual(
+            x["size_weakness"]["content"],
+            "OFFICIAL_DEC2021_FF_VINTAGE_RECOVERED",
+        )
+        self.assertEqual(x["size_weakness"]["crsp_database"], "202111")
+        self.assertFalse(
+            x["unresolved_delivery_provenance"][
+                "exact_jan3_ff_archive_wayback_capture"
+            ]
+        )
+
     def test_route_a_and_c_remain_unresolved(self):
         by_component = {x["component"]: x for x in self.data["unresolved"]}
         self.assertEqual(by_component["Original Route_A"]["status"], "UNRESOLVED")
