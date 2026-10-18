@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "audit_ff_2022_archive.py"
+      - "audit_ff_revision_lattice.py"
+      - "tests/test_audit_ff_revision_lattice.py"
       - "market_top_canonical_inputs.py"
       - "policyshock_v211.py"
       - "tests/test_audit_ff_2022_archive.py"
@@ -24,8 +26,11 @@ jobs:
       - name: Install dependencies
         run: python -m pip install requests
 
-      - name: Parser contract
-        run: python -m unittest tests.test_audit_ff_2022_archive -v
+      - name: Parser and revision-lattice contracts
+        run: |
+          python -m unittest \
+            tests.test_audit_ff_2022_archive \
+            tests.test_audit_ff_revision_lattice -v
 
       - name: Download official July-2022 Ken French archive and audit
         run: |
@@ -46,5 +51,34 @@ jobs:
               "Route_B=", x["route_b"],
               "passes=", x["passes"],
               "margin=", x["route_margin_above_threshold"],
+          )
+          PY
+
+      - name: Audit official annual revision lattice
+        run: |
+          python audit_ff_revision_lattice.py --output /tmp/ff_revision_lattice.json
+          python - <<'PY'
+          import json
+
+          x = json.load(open("/tmp/ff_revision_lattice.json"))
+          assert x["archive_count"] == 5
+          assert x["all_archives_pass"] is True
+          assert [r["id"] for r in x["archives"]] == [
+              "JULY_2022",
+              "JULY_2023",
+              "JULY_2024",
+              "JULY_2025",
+              "AUGUST_2026",
+          ]
+          assert all(r["passes"] for r in x["archives"])
+          assert x["route_b"]["min"] >= x["threshold"]
+          assert x["route_b"]["minimum_margin_above_threshold"] > 0
+          print(
+              "FF_REVISION_LATTICE",
+              "size_min=", x["size_weakness"]["min"],
+              "size_max=", x["size_weakness"]["max"],
+              "route_min=", x["route_b"]["min"],
+              "route_max=", x["route_b"]["max"],
+              "min_margin=", x["route_b"]["minimum_margin_above_threshold"],
           )
           PY
