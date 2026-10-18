@@ -158,5 +158,36 @@
       "actual_policy_shock": 74.3886192578,
       "policy_margin": 0.8695646441801728
     }
+  },
+  "route_b_2022_vintage_robustness": {
+    "exact_2022_01_03_monthly_bytes_recovered": false,
+    "shiller_pre_cutoff_archive": {
+      "capture": "2021-10-12",
+      "last_month": "2021-09",
+      "valuation": 98.57904085257549,
+      "route_b_with_lower_current_size": 85.33380682501917,
+      "pass": true
+    },
+    "official_fama_french_revision_lattice": {
+      "source": "Kenneth R. French official annual historical archives",
+      "cuts": [
+        "JULY_2022",
+        "JULY_2023",
+        "JULY_2024",
+        "JULY_2025",
+        "AUGUST_2026"
+      ],
+      "all_pass": true,
+      "size_weakness_min": 84.73684210526316,
+      "size_weakness_max": 85.70175438596492,
+      "route_b_min": 85.33429175696243,
+      "route_b_max": 85.65697520162983,
+      "minimum_margin_above_85": 0.3342917569624291
+    },
+    "supplemental_static_variants": {
+      "status": "PASS",
+      "evidence_tier": "SUPPLEMENTAL_THIRD_PARTY_STATIC_CROSSCHECK"
+    },
+    "conclusion": "Exact Jan-3-2022 monthly source bytes remain unavailable, but every observed official 2022-2026 Fama-French archive revision and the genuine pre-cutoff Shiller valuation preserve Route_B > 85 without retuning."
   }
 }
