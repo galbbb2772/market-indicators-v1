@@ -35,6 +35,10 @@ class PolicyShock2022PrimarySourceAuditTests(unittest.TestCase):
         self.assertIn("Total assets", x)
         self.assertIn("8,757,460", x)
 
+    def test_html_normalizer_collapses_table_spacing(self):
+        x = normalize_text("<tr><td>Total   assets</td><td>8,757,460</td></tr>")
+        self.assertEqual(x, "Total assets 8,757,460")
+
 
 if __name__ == "__main__":
     unittest.main()
