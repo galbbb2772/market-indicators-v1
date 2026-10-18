@@ -84,6 +84,9 @@ on:
       - "research/POLICYSHOCK_2022_PRIMARY_SOURCE_PIT_AUDIT.md"
       - "research/policyshock_2022_primary_source_pit_audit.json"
       - "tests/test_policyshock_2022_primary_source_evidence.py"
+      - "research/ROUTE_B_2022_PIT_UNCERTAINTY_BUDGET.md"
+      - "research/route_b_2022_pit_uncertainty_budget.json"
+      - "tests/test_route_b_2022_pit_uncertainty_budget.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -114,6 +117,7 @@ jobs:
             tests.test_market_top_shadow_data_contract \
             tests.test_policyshock_2022_primary_source_evidence \
             tests.test_route_b_2022_vintage_robustness \
+            tests.test_route_b_2022_pit_uncertainty_budget \
             tests.test_market_top_cross_model_boundary \
             tests.test_route_b_2022_ff_revision_sensitivity \
             tests.test_route_b_2022_ff_revision_lattice \
