@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import io
 import json
 import zipfile
@@ -79,6 +80,7 @@ def audit(content: bytes, headers: dict[str, str] | None = None) -> dict:
         "target_month": TARGET_MONTH,
         "last_month": last_month,
         "zip_member": member,
+        "zip_sha256": hashlib.sha256(content).hexdigest(),
         "http_headers": headers or {},
         "smb_202106_to_202111": [
             {"ym": str(x["ym"]), "smb": float(x["smb"])} for x in six
