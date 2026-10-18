@@ -61,6 +61,17 @@ jobs:
               >= 85
           )
 
+          proof = x.get("early_stop_proof") or {}
+          assert proof.get("proof_complete") is True
+          assert proof.get("candidate_order") == "timestamp_descending"
+          assert proof.get("temporal_consistency_rule") == (
+              "workbook_last_month <= capture_month"
+          )
+          assert proof.get("target_month") == "202111"
+          assert proof.get("newest_usable_capture_month") == "202110"
+          assert proof.get("older_candidates_can_legitimately_contain_target") is False
+          assert proof.get("older_candidates_skipped", 0) >= 1
+
           print(
               "SHILLER_WAYBACK_AUDIT",
               "status=", x["status"],
