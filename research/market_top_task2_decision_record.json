@@ -157,6 +157,16 @@
       "critical_policy_shock_with_archived_valuation_and_lower_current_size": 73.51905461361983,
       "actual_policy_shock": 74.3886192578,
       "policy_margin": 0.8695646441801728
+    },
+    "pit_uncertainty_budget": {
+      "status": "PASS_BUT_NARROW_MARGIN",
+      "conservative_route_b": 85.33380682500024,
+      "threshold": 85,
+      "score_margin": 0.33380682500024,
+      "one_input_failure_drop_pct": 1.1689484934753858,
+      "two_inputs_equal_failure_drop_pct_each": 0.5861923541178204,
+      "three_inputs_equal_failure_drop_pct_each": 0.3911777025075169,
+      "interpretation": "Observed vintages all pass, but the minimum reconstructed Route_B margin is narrow. Exact PIT bytes remain partly unresolved; do not describe the 2022 pass as a large-cushion result."
     }
   },
   "route_b_2022_vintage_robustness": {
