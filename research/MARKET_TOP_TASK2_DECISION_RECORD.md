@@ -370,3 +370,58 @@ PolicyShock = 74.3886193
 ```
 
 So the 2022 pass remains positive under every observed current/official/pre-cutoff Valuation-Size combination, while exact January-3 monthly vintages remain explicitly unresolved.
+
+
+## 2022 vintage-robustness evidence hierarchy
+
+The exact monthly source files visible on 2022-01-03 remain incompletely recoverable, so the evidence is ranked rather than overstated.
+
+### Tier 1 — genuine pre-cutoff Shiller evidence
+
+A Wayback-captured Shiller workbook from **2021-10-12**, with data through **2021-09**, gives:
+
+```
+Valuation = 98.5790408526
+```
+
+Paired with the lower current-vintage SizeWeakness:
+
+```
+Route_B = 85.3338068250
+```
+
+which remains above 85.
+
+### Tier 1 — official Fama-French annual archive lattice
+
+Five official Ken French historical cuts were live-downloaded and recomputed:
+
+```
+July 2022
+July 2023
+July 2024
+July 2025
+August 2026
+```
+
+Observed range:
+
+```
+SizeWeakness = 84.736842 to 85.701754
+Route_B = 85.334292 to 85.656975
+minimum margin = +0.334292
+```
+
+All five official archive cuts preserve the pass.
+
+### Tier 2 — third-party static historical variants
+
+Several independently stored Fama-French histories also preserve Route_B > 85. These are retained only as supplemental cross-checks because their provenance is weaker than the official archive lattice.
+
+### Decision
+
+It is still not valid to claim the exact Jan-3-2022 factor/CAPE bytes were recovered.
+
+It is now well supported to claim:
+
+> Across every observed official historical revision and the genuine pre-cutoff Shiller valuation, the frozen 2022 Route_B remains above 85 without threshold or weight retuning.
