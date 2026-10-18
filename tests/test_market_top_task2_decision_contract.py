@@ -74,6 +74,34 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
         ])
         self.assertGreater(b["policy_margin"], 0)
 
+    def test_policyshock_primary_source_pit_chain(self):
+        p = self.data["policyshock_primary_source_pit"]
+        self.assertEqual(p["status"], "PASS_PRIMARY_SOURCE_PIT_CHAIN")
+        self.assertTrue(p["strict_live_verification_passed"])
+        self.assertEqual(p["treasury"]["latest_2y_pct"], 0.73)
+        self.assertEqual(p["treasury"]["anchor_2y_pct"], 0.25)
+        self.assertIn(
+            "NOT_ARCHIVED_JAN3_BYTES",
+            p["treasury"]["evidence_level"],
+        )
+        self.assertEqual(
+            p["h41"]["evidence_level"],
+            "DATED_OFFICIAL_RELEASE_PAGES",
+        )
+        self.assertEqual(
+            [x["total_assets_millions"] for x in p["h41"]["releases"]],
+            [8078544.0, 8447981.0, 8757460.0],
+        )
+        self.assertAlmostEqual(
+            p["policy_shock"],
+            74.38861925775049,
+            places=10,
+        )
+        c = p["conservative_cross_vintage_route_b"]
+        self.assertTrue(c["pass"])
+        self.assertGreater(c["route_b"], c["threshold"])
+        self.assertGreater(c["policy_margin"], 0)
+
     def test_2022_dates_are_locked(self):
         x = self.data["frozen_conclusions"]
         self.assertEqual(x["2022_policy_arm_date"], "2022-01-03")
