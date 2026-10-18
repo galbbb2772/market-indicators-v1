@@ -129,14 +129,14 @@
       "route_b_max": 85.65697520162985,
       "all_sampled_variants_pass": true
     },
-    "conclusion": "The 2022 Route_B pass survives the current conservative reconstruction, the official July-2022 Ken French archive, a genuine pre-cutoff Shiller September-2021 valuation, and the cross-vintage combination of that archived valuation with the lower current SizeWeakness. Exact Jan-3 monthly factor and November-2021 Shiller vintages remain unrecoverable from current Wayback coverage.",
+    "conclusion": "The 2022 Route_B pass now survives a direct official December-2021 Ken French factor vintage built from the 202111 CRSP database, a genuine pre-cutoff Shiller valuation, and the primary-source PolicyShock chain. The factor-vintage content gap is closed. Exact Jan-3 web-delivery bytes remain unproven because Wayback lacks a recent capture and current HTTP Last-Modified metadata is later.",
     "wayback": {
       "status": "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
       "cutoff": "2022-01-03T23:59:59Z",
       "latest_usable_capture": "2021-04-13T02:05:42Z",
       "latest_usable_last_month": "2021-02",
       "archive_access_worked": true,
-      "conclusion": "Wayback cannot provide the required 2021-11 factor row before the Jan-3-2022 cutoff; exact monthly vintage remains unresolved due to archive coverage."
+      "conclusion": "Wayback cannot prove the exact Jan-3 web-delivery bytes. This no longer blocks the factor-vintage content replay because the official December-2021 Historical_Archives vintage has been recovered directly."
     },
     "shiller_wayback": {
       "status": "NO_PRE_CUTOFF_SHILLER_SNAPSHOT_WITH_202111",
@@ -167,6 +167,21 @@
       "two_inputs_equal_failure_drop_pct_each": 0.5861923541178204,
       "three_inputs_equal_failure_drop_pct_each": 0.3911777025075169,
       "interpretation": "Observed vintages all pass, but the minimum reconstructed Route_B margin is narrow. Exact PIT bytes remain partly unresolved; do not describe the 2022 pass as a large-cushion result."
+    },
+    "official_december_2021_monthly_vintage": {
+      "status": "PASS_OFFICIAL_DEC2021_VINTAGE_CONTENT",
+      "factor_vintage_content_recovered": true,
+      "exact_jan3_url_bytes_proven": false,
+      "last_month": "202111",
+      "crsp_database": "202111",
+      "size_weakness": 84.73684210526316,
+      "valuation_pre_cutoff": 98.57904085257549,
+      "policy_shock_primary_pit": 74.38861925775049,
+      "route_b": 85.33380682500024,
+      "threshold": 85,
+      "route_margin": 0.33380682500023795,
+      "zip_sha256": "e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86",
+      "server_last_modified": "Tue, 29 Nov 2022 17:09:26 GMT"
     }
   },
   "route_b_2022_vintage_robustness": {
@@ -198,7 +213,15 @@
       "status": "PASS",
       "evidence_tier": "SUPPLEMENTAL_THIRD_PARTY_STATIC_CROSSCHECK"
     },
-    "conclusion": "Exact Jan-3-2022 monthly source bytes remain unavailable, but every observed official 2022-2026 Fama-French archive revision and the genuine pre-cutoff Shiller valuation preserve Route_B > 85 without retuning."
+    "conclusion": "Official December-2021 Fama-French vintage content is now recovered and preserves Route_B > 85 together with the genuine pre-cutoff Shiller valuation and primary-source PolicyShock. Only exact Jan-3 web-delivery byte provenance remains unresolved.",
+    "official_dec2021_monthly_vintage": {
+      "factor_vintage_content_recovered": true,
+      "exact_jan3_web_bytes_recovered": false,
+      "last_month": "202111",
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.33380682500024,
+      "pass": true
+    }
   },
   "policyshock_primary_source_pit": {
     "status": "PASS_PRIMARY_SOURCE_PIT_CHAIN",
@@ -245,7 +268,7 @@
       "critical_policy_shock": 73.51905461360154,
       "policy_margin": 0.8695646441489515
     },
-    "remaining_gap": "Exact archived Jan-3 Treasury page bytes and exact Jan-3 Ken French monthly factor bytes remain unrecovered."
+    "remaining_gap": "Exact archived Jan-3 Treasury page bytes and exact Jan-3 web-delivery bytes for the Ken French file remain unrecovered. The official December-2021 factor-vintage content itself is recovered and passes."
   },
   "scope_audit": {
     "status": "PASS_WITH_PRESENTATION_EFFECT",
