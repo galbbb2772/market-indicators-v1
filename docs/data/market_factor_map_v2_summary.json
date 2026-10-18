@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2-SUMMARY",
-  "generated_at": "2026-10-17T07:45:41.810164+00:00",
+  "generated_at": "2026-10-18T08:00:25.673817+00:00",
   "research_only": true,
   "frozen_through_market_date": "2026-10-02",
   "design": "evidence_registry_not_weighted_score",
@@ -17,7 +17,7 @@
     "canonical_factor_map_available": true,
     "configured_count": 17,
     "canonical_nonempty_count": 17,
-    "canonical_snapshot_generated_at": "2026-10-17T07:43:32.940955+00:00"
+    "canonical_snapshot_generated_at": "2026-10-18T07:58:05.224823+00:00"
   },
   "forward_oos_representatives": [
     {
@@ -508,11 +508,11 @@
       "canonical_ic10": -0.1949,
       "canonical_ic10_2022_present": -0.209,
       "canonical_partial_ic10": -0.1781,
-      "canonical_partial_ic10_2022_present": -0.1932,
+      "canonical_partial_ic10_2022_present": -0.1931,
       "canonical_phase_same_sign_pct10": 100.0,
       "canonical_loyo_univariate_improvement_pct": -1.525,
-      "canonical_loyo_ablation_delta_pct": -1.221,
-      "canonical_snapshot_generated_at": "2026-10-17T07:43:32.940955+00:00",
+      "canonical_loyo_ablation_delta_pct": -1.222,
+      "canonical_snapshot_generated_at": "2026-10-18T07:58:05.224823+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     },
@@ -527,12 +527,12 @@
       "readiness_status": "ready",
       "canonical_ic10": 0.0134,
       "canonical_ic10_2022_present": -0.0062,
-      "canonical_partial_ic10": -0.0358,
+      "canonical_partial_ic10": -0.0359,
       "canonical_partial_ic10_2022_present": 0.011,
       "canonical_phase_same_sign_pct10": 80.0,
-      "canonical_loyo_univariate_improvement_pct": -0.744,
+      "canonical_loyo_univariate_improvement_pct": -0.743,
       "canonical_loyo_ablation_delta_pct": -0.673,
-      "canonical_snapshot_generated_at": "2026-10-17T07:43:32.940955+00:00",
+      "canonical_snapshot_generated_at": "2026-10-18T07:58:05.224823+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     }
