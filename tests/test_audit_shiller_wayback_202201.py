@@ -6,6 +6,8 @@ from unittest.mock import patch
 import pandas as pd
 
 from audit_shiller_wayback_202201 import (
+    can_older_snapshot_contain_target,
+    capture_month,
     CUTOFF,
     ORIGINAL_URLS,
     TARGET_MONTH,
@@ -13,6 +15,33 @@ from audit_shiller_wayback_202201 import (
     expanding_percentile_current,
     parse_shiller_xls,
 )
+
+
+class ShillerWaybackEarlyStopTests(unittest.TestCase):
+    def test_capture_month_parser(self):
+        self.assertEqual(capture_month("20211012122941"), "202110")
+
+    def test_older_snapshots_cannot_recover_future_target(self):
+        self.assertFalse(
+            can_older_snapshot_contain_target(
+                newest_usable_timestamp="20211012122941",
+                target_month="202111",
+            )
+        )
+
+    def test_same_or_later_capture_month_requires_continued_search(self):
+        self.assertTrue(
+            can_older_snapshot_contain_target(
+                newest_usable_timestamp="20211130235959",
+                target_month="202111",
+            )
+        )
+        self.assertTrue(
+            can_older_snapshot_contain_target(
+                newest_usable_timestamp="20211201000000",
+                target_month="202111",
+            )
+        )
 
 
 class ShillerWaybackAuditTests(unittest.TestCase):
