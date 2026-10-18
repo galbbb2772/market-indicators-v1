@@ -81,6 +81,9 @@ on:
       - "tests/test_route_b_2022_vintage_robustness.py"
       - "audit_shiller_wayback_202201.py"
       - "tests/test_audit_shiller_wayback_202201.py"
+      - "research/POLICYSHOCK_2022_PRIMARY_SOURCE_PIT_AUDIT.md"
+      - "research/policyshock_2022_primary_source_pit_audit.json"
+      - "tests/test_policyshock_2022_primary_source_evidence.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -109,6 +112,7 @@ jobs:
             tests.test_market_top_task2_decision_contract \
             tests.test_update_market_top_shadow \
             tests.test_market_top_shadow_data_contract \
+            tests.test_policyshock_2022_primary_source_evidence \
             tests.test_route_b_2022_vintage_robustness \
             tests.test_market_top_cross_model_boundary \
             tests.test_route_b_2022_ff_revision_sensitivity \
