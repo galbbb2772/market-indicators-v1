@@ -137,3 +137,14 @@ We still do **not** claim:
 - exact Jan-3 Ken French monthly factor bytes were recovered.
 
 Those provenance gaps remain separately labeled.
+
+
+## Strict H.4.1 page verification
+
+The source verifier was deliberately hardened after the first successful value audit.
+
+The final live check does not accept a target number merely because it appears somewhere on a Federal Reserve page. It starts from a `Total assets` label and requires the expected value inside a bounded local DOM container. Legacy H.4.1 markup is inconsistent, so a bounded raw-HTML window is allowed only as a local fallback.
+
+A page-wide coincidence is rejected.
+
+The hardened live workflow passed all three dated official releases.
