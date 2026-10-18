@@ -653,3 +653,67 @@ Route_B > 85 = PASS
 ```
 
 No parameter, threshold, lag, or weight was changed.
+
+
+## 2022 Route_B evidence closure
+
+The 2022 Route_B reconstruction now has a clear final evidence boundary.
+
+### Numerical input chain
+
+```
+Valuation
+= 98.5790408526
+= real pre-cutoff Shiller archive
+
+PolicyShock
+= 74.3886192578
+= official Treasury history + dated pre-cutoff H.4.1 pages
+
+SizeWeakness
+= 84.7368421053
+= official Ken French Dec-2021 vintage
+= internally marked 202111 CRSP database
+```
+
+Therefore:
+
+```
+Route_B = 85.3338068250
+threshold = 85
+PASS
+margin = +0.3338068250
+```
+
+This numerical input chain is now considered **closed** for research replay purposes.
+
+### Remaining provenance caveat
+
+Wayback contains no pre-cutoff capture of the exact official Dec-2021 Historical_Archives URL:
+
+```
+snapshots = 0
+```
+
+and the current server's `Last-Modified` metadata is later than the historical cutoff.
+
+Therefore the remaining limitation is:
+
+```
+exact Jan-3 web-delivery timestamp proof = unavailable
+```
+
+not:
+
+```
+factor vintage content = unknown
+```
+
+The correct closure label is:
+
+```
+NUMERICAL_INPUT_CHAIN_CLOSED
+DELIVERY_TIMESTAMP_GAP_REMAINS
+```
+
+This distinction is now frozen. Future work must not downgrade the recovered official Dec-2021 factor vintage back to "unknown," and must not upgrade the missing Wayback capture into an unsupported exact-byte timestamp claim.
