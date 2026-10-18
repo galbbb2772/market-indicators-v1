@@ -1,0 +1,47 @@
+name: Route_B 2022 FF Monthly Archive Probe
+
+on:
+  pull_request:
+    paths:
+      - "audit_ff_monthly_archive_probe.py"
+      - "audit_ff_2022_archive.py"
+      - "tests/test_audit_ff_monthly_archive_probe.py"
+      - ".github/workflows/route_b_2022_ff_monthly_archive_probe.yml"
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install requests
+      - name: Static contract
+        run: python -m unittest tests.test_audit_ff_monthly_archive_probe -v
+      - name: Probe official monthly archive directories
+        run: |
+          python audit_ff_monthly_archive_probe.py --output /tmp/ff_monthly_probe.json
+          python - <<'PY'
+          import json
+          x=json.load(open("/tmp/ff_monthly_probe.json"))
+          assert x["positive_control_2022_08_valid"] is True, (
+              "Known 2022-08 archive did not resolve; probe is inconclusive."
+          )
+          print(
+              "FF_MONTHLY_ARCHIVE_PROBE",
+              "pre_cutoff_hit=",
+              x["pre_cutoff_official_snapshot_with_202111_found"],
+          )
+          for row in x["candidate_directories"]:
+              print(
+                  row["year"], row["month"],
+                  "status=", row["http_status"],
+                  "zip=", row["valid_zip"],
+                  "last=", row["last_month"],
+                  "has_202111=", row["has_202111"],
+              )
+          PY
