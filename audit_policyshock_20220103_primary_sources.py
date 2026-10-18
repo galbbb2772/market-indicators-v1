@@ -107,6 +107,37 @@ def normalize_text(html: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def find_local_total_assets_match(
+    html: str,
+    formatted_value: str,
+    *,
+    max_local_chars: int = 2000,
+) -> str | None:
+    """Find a local DOM container pairing Total assets with the target value.
+
+    Legacy H.4.1 pages vary between preformatted and table-like markup. We do
+    not accept a page-wide coincidence: starting from a text node containing
+    "Total assets", only a nearby ancestor whose visible text stays below a
+    bounded size may establish the value pairing.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    label_re = re.compile(r"\bTotal\s+assets\b", flags=re.I)
+
+    for node in soup.find_all(string=label_re):
+        cur = getattr(node, "parent", None)
+        for _ in range(7):
+            if cur is None:
+                break
+            local = re.sub(r"\s+", " ", cur.get_text(" ", strip=True)).strip()
+            if len(local) > max_local_chars:
+                break
+            if label_re.search(local) and formatted_value in local:
+                return local
+            cur = getattr(cur, "parent", None)
+
+    return None
+
+
 def verify_h41_release(spec: dict[str, Any]) -> dict[str, Any]:
     r = http().get(spec["url"], timeout=30)
     r.raise_for_status()
@@ -118,21 +149,11 @@ def verify_h41_release(spec: dict[str, Any]) -> dict[str, Any]:
     release_dt = pd.Timestamp(spec["release_date"])
     obs_dt = pd.Timestamp(spec["observation_date"])
 
-    soup = BeautifulSoup(r.text, "html.parser")
-    visible_lines = [
-        re.sub(r"\s+", " ", line).strip()
-        for line in soup.get_text("\n").splitlines()
-    ]
-    matching_lines = [
-        line
-        for line in visible_lines
-        if re.search(r"\bTotal\s+assets\b", line, flags=re.I)
-        and formatted in line
-    ]
-    if not matching_lines:
+    local_match = find_local_total_assets_match(r.text, formatted)
+    if local_match is None:
         raise ValueError(
-            f"H.4.1 {spec['release_date']} has no visible text line pairing "
-            f"Total assets with {formatted}"
+            f"H.4.1 {spec['release_date']} has no bounded local DOM container "
+            f"pairing Total assets with {formatted}"
         )
 
     # The historical H.4.1 page must identify both its release date and the
