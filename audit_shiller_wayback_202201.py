@@ -302,6 +302,30 @@ def download_snapshot(snapshot: dict[str, str]) -> tuple[bytes, dict[str, Any]]:
     return content, parsed
 
 
+def capture_month(timestamp: str) -> str:
+    ts = str(timestamp)
+    if len(ts) < 6 or not ts[:6].isdigit():
+        raise ValueError(f"invalid Wayback timestamp: {timestamp!r}")
+    return ts[:6]
+
+
+def can_older_snapshot_contain_target(
+    *,
+    newest_usable_timestamp: str,
+    target_month: str,
+) -> bool:
+    """Whether an older snapshot could still legitimately contain target_month.
+
+    Candidate snapshots are sorted newest-to-oldest. Every parsed workbook is
+    independently required to satisfy last_month <= capture_month.
+
+    Therefore, once the newest usable capture month is strictly earlier than
+    the target month, every remaining older capture is also earlier than the
+    target month and cannot legitimately contain that target row.
+    """
+    return capture_month(newest_usable_timestamp) >= str(target_month)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output")
@@ -323,12 +347,20 @@ def main() -> None:
             }
             attempts.append(row)
 
-            # The Shiller workbook is cumulative monthly history. Once the
-            # newest usable pre-cutoff workbook is parsed, an older workbook
-            # cannot contain a later monthly row that this one lacks.
             if parsed.get("has_target"):
                 recovered = row
-            break
+                break
+
+            # Candidates are sorted newest-to-oldest and every workbook is
+            # already forced to satisfy last_month <= capture_month.
+            # If this newest usable capture is itself earlier than TARGET_MONTH,
+            # all remaining older captures are mathematically incapable of
+            # containing TARGET_MONTH without failing temporal consistency.
+            if not can_older_snapshot_contain_target(
+                newest_usable_timestamp=str(snap["timestamp"]),
+                target_month=TARGET_MONTH,
+            ):
+                break
         except Exception as exc:
             attempts.append(
                 {
@@ -374,8 +406,24 @@ def main() -> None:
             key=lambda x: str(x.get("timestamp")),
             default=None,
         )
+        stop_ts = (
+            str(newest.get("timestamp"))
+            if newest and newest.get("timestamp")
+            else None
+        )
+        older_candidates = [
+            x for x in snaps
+            if stop_ts is not None and str(x.get("timestamp")) < stop_ts
+        ]
+        early_stop_proven = bool(
+            stop_ts
+            and not can_older_snapshot_contain_target(
+                newest_usable_timestamp=stop_ts,
+                target_month=TARGET_MONTH,
+            )
+        )
         result = {
-            "schema_version": "route-b-2022-shiller-wayback-audit-1",
+            "schema_version": "route-b-2022-shiller-wayback-audit-2",
             "status": "NO_PRE_CUTOFF_SHILLER_SNAPSHOT_WITH_202111",
             "cutoff": CUTOFF,
             "exact_or_pre_cutoff_vintage": False,
@@ -383,6 +431,19 @@ def main() -> None:
             "attempts": attempts,
             "errors": errors,
             "latest_usable_snapshot": newest,
+            "early_stop_proof": {
+                "candidate_order": "timestamp_descending",
+                "temporal_consistency_rule": "workbook_last_month <= capture_month",
+                "target_month": TARGET_MONTH,
+                "newest_usable_capture_month": (
+                    capture_month(stop_ts) if stop_ts else None
+                ),
+                "older_candidates_skipped": len(older_candidates),
+                "older_candidates_can_legitimately_contain_target": (
+                    not early_stop_proven
+                ),
+                "proof_complete": early_stop_proven,
+            },
             "interpretation": (
                 "Wayback did not provide a usable pre-2022-01-03 Shiller "
                 "workbook containing the 2021-11 CAPE row. The exact "
