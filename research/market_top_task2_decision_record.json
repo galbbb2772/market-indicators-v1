@@ -236,5 +236,13 @@
       "policy_margin": 0.8695646441489515
     },
     "remaining_gap": "Exact archived Jan-3 Treasury page bytes and exact Jan-3 Ken French monthly factor bytes remain unrecovered."
+  },
+  "scope_audit": {
+    "status": "PASS_WITH_PRESENTATION_EFFECT",
+    "production_scoring_effect": "none",
+    "market_model_v2_core_modified": false,
+    "production_market_model_current_json_modified": false,
+    "presentation_effect_if_merged": "docs/index.html adds the Market Top Route_B Shadow research card",
+    "interpretation": "The PR does not alter Market Model V2 production scoring, but merge would intentionally change the dashboard presentation."
   }
 }
