@@ -170,6 +170,7 @@ Route_A_NG1 uses the same 85 threshold and the same 24M top-location gate as Rou
 ## Point-in-time convention
 
 - monthly Fama-French observations: +2 calendar-month effective lag;
+- monthly Shiller CAPE observations: +1 calendar-month effective lag;
 - monthly credit-spread observations: +1 calendar-month effective lag;
 - percentiles: expanding, current-inclusive;
 - SPY top-location gate: trailing 24 calendar months;
