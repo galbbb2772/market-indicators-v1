@@ -189,5 +189,52 @@
       "evidence_tier": "SUPPLEMENTAL_THIRD_PARTY_STATIC_CROSSCHECK"
     },
     "conclusion": "Exact Jan-3-2022 monthly source bytes remain unavailable, but every observed official 2022-2026 Fama-French archive revision and the genuine pre-cutoff Shiller valuation preserve Route_B > 85 without retuning."
+  },
+  "policyshock_primary_source_pit": {
+    "status": "PASS_PRIMARY_SOURCE_PIT_CHAIN",
+    "asof": "2022-01-03",
+    "workflow_run_id": 39114505423,
+    "strict_live_verification_passed": true,
+    "treasury": {
+      "latest_date": "2021-12-31",
+      "latest_2y_pct": 0.73,
+      "anchor_date": "2021-06-30",
+      "anchor_2y_pct": 0.25,
+      "evidence_level": "OFFICIAL_HISTORICAL_SERIES_NOT_ARCHIVED_JAN3_BYTES"
+    },
+    "h41": {
+      "evidence_level": "DATED_OFFICIAL_RELEASE_PAGES",
+      "releases": [
+        {
+          "release_date": "2021-07-01",
+          "observation_date": "2021-06-30",
+          "total_assets_millions": 8078544
+        },
+        {
+          "release_date": "2021-09-30",
+          "observation_date": "2021-09-29",
+          "total_assets_millions": 8447981
+        },
+        {
+          "release_date": "2021-12-30",
+          "observation_date": "2021-12-29",
+          "total_assets_millions": 8757460
+        }
+      ],
+      "verification_method": "bounded local DOM match with bounded raw-HTML fallback; page-wide coincidence rejected"
+    },
+    "rate_shock": 63.33333333333333,
+    "taper_shock": 90.97154814437624,
+    "policy_shock": 74.38861925775049,
+    "conservative_cross_vintage_route_b": {
+      "valuation_pre_cutoff": 98.5790408526,
+      "size_weakness_lower_observed": 84.73684210526316,
+      "route_b": 85.33380682500731,
+      "threshold": 85,
+      "pass": true,
+      "critical_policy_shock": 73.51905461360154,
+      "policy_margin": 0.8695646441489515
+    },
+    "remaining_gap": "Exact archived Jan-3 Treasury page bytes and exact Jan-3 Ken French monthly factor bytes remain unrecovered."
   }
 }
