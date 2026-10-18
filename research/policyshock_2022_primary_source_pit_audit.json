@@ -59,7 +59,10 @@
     "primary_source_chain": {
       "treasury": "official U.S. Treasury historical daily par-yield table",
       "walcl": "dated Federal Reserve H.4.1 historical release pages"
-    }
+    },
+    "workflow_run_id": 39114505423,
+    "strict_h41_live_verification_passed": true,
+    "h41_verification_method": "bounded local DOM match with bounded raw-HTML fallback; page-wide coincidence rejected"
   },
   "caveat": "The H.4.1 balance-sheet values are directly established by dated pre-cutoff official release pages. The Treasury rate values are validated against the current official historical table, not archived Jan-3 page bytes."
 }
