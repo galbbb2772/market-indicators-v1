@@ -114,3 +114,32 @@ We can now claim something stronger than before:
 > A real pre-cutoff Shiller workbook captured on 2021-10-12 already places Valuation high enough that the 2022 Route_B pass survives both the official 2022-era SizeWeakness archive and the lower current-vintage SizeWeakness reconstruction.
 
 No threshold or weight was changed after observing the archived workbook.
+
+
+## Why the audit can stop at the October-2021 capture
+
+The Wayback candidate list is sorted newest to oldest.
+
+Every successfully parsed workbook must independently satisfy:
+
+```
+workbook last_month <= Wayback capture_month
+```
+
+The newest temporally valid usable capture is:
+
+```
+capture month = 2021-10
+target month  = 2021-11
+```
+
+Therefore every remaining candidate is captured no later than October 2021. Under the temporal-consistency rule, none of those older captures can legitimately contain a November 2021 row.
+
+This is now an executable CI invariant:
+
+```
+proof_complete = TRUE
+older_candidates_can_legitimately_contain_target = FALSE
+```
+
+If the newest usable capture changes to November 2021 or later, the audit must continue searching rather than early-stop.
