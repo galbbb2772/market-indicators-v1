@@ -8,6 +8,7 @@ from typing import Any
 
 import pandas as pd
 import requests
+from bs4 import BeautifulSoup
 
 from policyshock_v211 import compute_policy_shock, route_b
 
@@ -117,14 +118,16 @@ def verify_h41_release(spec: dict[str, Any]) -> dict[str, Any]:
     release_dt = pd.Timestamp(spec["release_date"])
     obs_dt = pd.Timestamp(spec["observation_date"])
 
-    total_assets_match = re.search(
-        rf"Total assets.{0,120}{re.escape(formatted)}",
-        text,
-        flags=re.I,
-    )
-    if total_assets_match is None:
+    soup = BeautifulSoup(r.text, "html.parser")
+    matching_rows = []
+    for tr in soup.find_all("tr"):
+        row_text = re.sub(r"\\s+", " ", tr.get_text(" ", strip=True))
+        if re.search(r"\\bTotal\\s+assets\\b", row_text, flags=re.I) and formatted in row_text:
+            matching_rows.append(row_text)
+    if not matching_rows:
         raise ValueError(
-            f"H.4.1 {spec['release_date']} does not pair Total assets with {formatted}"
+            f"H.4.1 {spec['release_date']} has no table row pairing "
+            f"Total assets with {formatted}"
         )
 
     # The historical H.4.1 page must identify both its release date and the
