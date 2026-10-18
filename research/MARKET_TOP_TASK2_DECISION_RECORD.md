@@ -425,3 +425,67 @@ It is still not valid to claim the exact Jan-3-2022 factor/CAPE bytes were recov
 It is now well supported to claim:
 
 > Across every observed official historical revision and the genuine pre-cutoff Shiller valuation, the frozen 2022 Route_B remains above 85 without threshold or weight retuning.
+
+
+## 2022 PolicyShock primary-source PIT chain
+
+The PolicyShock leg now has its own fail-closed primary-source audit.
+
+The live GitHub Actions audit downloads the U.S. Treasury historical 2Y table and the three dated Federal Reserve H.4.1 release pages.
+
+Strict rate inputs:
+
+```
+2021-12-31 2Y = 0.73%
+2021-06-30 2Y = 0.25%
+delta = +48 bp
+RateShock = 63.33333333
+```
+
+Dated H.4.1 evidence:
+
+```
+release 2021-07-01 / observation 2021-06-30 / total assets 8,078,544
+release 2021-09-30 / observation 2021-09-29 / total assets 8,447,981
+release 2021-12-30 / observation 2021-12-29 / total assets 8,757,460
+```
+
+These reproduce:
+
+```
+TaperShock = 90.97154814
+PolicyShock = 74.38861926
+```
+
+Using the genuine pre-cutoff Shiller valuation and the lower observed SizeWeakness:
+
+```
+Valuation = 98.5790408526
+SizeWeakness = 84.7368421053
+Route_B = 85.3338068250
+```
+
+so the conservative cross-vintage combination still passes 85.
+
+The PolicyShock failure boundary for that pair is:
+
+```
+Critical PolicyShock = 73.51905461
+Observed PolicyShock = 74.38861926
+Margin = +0.86956464
+```
+
+The H.4.1 validator is intentionally local rather than page-wide: it requires each target total-assets value to be associated with a nearby `Total assets` block using a bounded DOM match with a bounded raw-HTML fallback for malformed legacy Fed markup.
+
+Evidence labels remain asymmetric and explicit:
+
+```
+H.4.1 balance-sheet values
+= DATED PRE-CUTOFF OFFICIAL RELEASE PAGES
+
+2Y Treasury values
+= CURRENT OFFICIAL HISTORICAL SERIES
+!= ARCHIVED JAN-3 PAGE BYTES
+```
+
+Therefore PolicyShock itself is now primary-source reproducible without claiming source bytes that were not recovered.
