@@ -39,6 +39,18 @@ class PolicyShock2022PrimarySourceAuditTests(unittest.TestCase):
         x = normalize_text("<tr><td>Total   assets</td><td>8,757,460</td></tr>")
         self.assertEqual(x, "Total assets 8,757,460")
 
+    def test_preformatted_h41_visible_line_shape(self):
+        from bs4 import BeautifulSoup
+        import re
+
+        html = "<pre>Other assets  31,827\nTotal assets  (0)  8,078,544  - 23,401</pre>"
+        soup = BeautifulSoup(html, "html.parser")
+        lines = [
+            re.sub(r"\\s+", " ", line).strip()
+            for line in soup.get_text("\\n").splitlines()
+        ]
+        self.assertIn("Total assets (0) 8,078,544 - 23,401", lines)
+
 
 if __name__ == "__main__":
     unittest.main()
