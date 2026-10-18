@@ -65,3 +65,27 @@ What is established:
 - observed historical revisions therefore do not explain or create the Route_B > 85 result.
 
 No parameter tuning is authorized by this robustness study.
+
+
+## Official Fama-French revision lattice, 2022–2026
+
+The SMB-derived SizeWeakness was recomputed from every currently available official annual Fama-French 3-factor archive cut covering the 2021-11 target month:
+
+| Cut | SizeWeakness | Route_B | Margin |
+|---|---:|---:|---:|
+| July 2022 | 85.4386 | 85.5692 | +0.5692 |
+| July 2023 | 85.3509 | 85.5399 | +0.5399 |
+| July 2024 | 85.7018 | 85.6570 | +0.6570 |
+| July 2025 | 84.7368 | 85.3343 | +0.3343 |
+| August 2026 | 84.7368 | 85.3343 | +0.3343 |
+
+Across all five official revisions:
+
+```
+SizeWeakness range = 0.964912 points
+Route_B range = 0.322683 points
+minimum Route_B = 85.334292
+minimum margin = +0.334292
+```
+
+Thus every observed official CRSP/Fama-French revision preserves the frozen 85 threshold pass.
