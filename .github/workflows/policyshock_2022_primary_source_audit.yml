@@ -21,7 +21,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: python -m pip install pandas requests
+        run: python -m pip install pandas requests beautifulsoup4
 
       - name: Static contracts
         run: python -m unittest tests.test_audit_policyshock_20220103_primary_sources -v
