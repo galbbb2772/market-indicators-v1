@@ -548,3 +548,108 @@ NARROW_BUT_OBSERVED_VINTAGE_ROBUST_PASS
 ```
 
 This is stronger than a single-vintage pass but weaker than a wide-margin result. Exact Jan-3 monthly source bytes remain partly unrecovered, so no large-safety-cushion claim is allowed.
+
+
+## Official December-2021 Fama–French vintage recovered
+
+A direct probe of the Kenneth French official Historical Archives found the monthly archive that had previously been missed by search indexing:
+
+```
+Historical_Archives/12 2021 Update/ftp/
+F-F_Research_Data_Factors_CSV.zip
+```
+
+The ZIP is valid and its factor table ends at:
+
+```
+202111
+```
+
+More importantly, the file identifies itself internally as:
+
+```
+This file was created by CMPT_ME_BEME_RETS using the 202111 CRSP database.
+```
+
+This is a genuine old factor vintage, not merely a current history copied under an old directory. The old-vintage SMB observations differ from later revisions:
+
+```
+2021-06  +1.80
+2021-07  -3.96
+2021-08  -0.48
+2021-09  +0.80
+2021-10  -2.28
+2021-11  -1.35
+```
+
+The frozen SizeWeakness rule gives:
+
+```
+SizeWeakness = 84.7368421053
+```
+
+Using:
+
+```
+Valuation = 98.5790408526
+(real pre-cutoff Shiller archive)
+
+PolicyShock = 74.3886192578
+(primary-source PIT audit)
+
+SizeWeakness = 84.7368421053
+(official Dec-2021 FF vintage)
+```
+
+produces:
+
+```
+Route_B = 85.3338068250
+threshold = 85
+margin = +0.3338068250
+```
+
+The ZIP fingerprint is:
+
+```
+SHA-256
+e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86
+```
+
+### Revised evidence status
+
+The previous phrase:
+
+```
+exact Jan-3 factor vintage = unresolved
+```
+
+is now too broad.
+
+The correct split is:
+
+```
+official Dec-2021 factor-vintage content = RECOVERED
+exact Jan-3 web-delivery bytes = NOT INDEPENDENTLY PROVEN
+```
+
+Wayback still lacks a sufficiently recent pre-cutoff capture, and the current server reports:
+
+```
+Last-Modified: Tue, 29 Nov 2022 17:09:26 GMT
+```
+
+so HTTP metadata cannot prove when the exact current bytes were first served.
+
+That remaining caveat concerns **delivery provenance**, not the numerical SizeWeakness replay.
+
+Therefore the 2022 policy-route evidence is now materially stronger:
+
+```
+pre-cutoff Shiller valuation = recovered
+primary-source PolicyShock = reproduced
+official Dec-2021 SizeWeakness vintage = recovered
+Route_B > 85 = PASS
+```
+
+No parameter, threshold, lag, or weight was changed.
