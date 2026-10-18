@@ -1,0 +1,87 @@
+{
+  "schema_version": "market-top-ng1-ac-preregistration-1",
+  "status": "PREREGISTERED_NOT_VALIDATED",
+  "research_only": true,
+  "legacy_recovery": false,
+  "thresholds": {
+    "route": 85,
+    "within_24m_high_pct": 5,
+    "high_age_months_max": 3
+  },
+  "point_in_time": {
+    "fama_french_effective_lag_months": 2,
+    "credit_spread_effective_lag_months": 1,
+    "percentiles": "expanding_current_inclusive",
+    "event_specific_lags": false
+  },
+  "route_c_ng1": {
+    "portfolio_universe": "Fama-French 25 Size x Book-to-Market value-weighted portfolios",
+    "portfolio_exhaustion": "expanding_pct(1-count(portfolio_6m>market_6m)/25)",
+    "leader_gap": "expanding_pct(max(portfolio_6m)-median(portfolio_6m))",
+    "big_growth_gap": "expanding_pct(BIG_LoBM_6m-median(portfolio_6m))",
+    "concentration_breadth": "cbrt(portfolio_exhaustion*leader_gap*big_growth_gap)",
+    "formula": "sqrt(Valuation*ConcentrationBreadth_NG1)",
+    "positive_windows": [
+      [
+        "2000-01",
+        "2000-04"
+      ],
+      [
+        "2021-10",
+        "2022-01"
+      ]
+    ],
+    "negative_windows": [
+      [
+        "1998-06",
+        "1998-10"
+      ],
+      [
+        "2004-01",
+        "2005-12"
+      ],
+      [
+        "2011-03",
+        "2011-07"
+      ],
+      [
+        "2018-08",
+        "2018-12"
+      ],
+      [
+        "2020-01",
+        "2020-04"
+      ]
+    ]
+  },
+  "route_a_ng1": {
+    "spread_shock": "expanding_pct(max(delta3m(BAA10Y),delta6m(BAA10Y)))",
+    "finance_weakness": "expanding_pct(-(Finance6M-Market6M))",
+    "credit_market_stress": "sqrt(SpreadShockScore*FinanceWeaknessScore)",
+    "breadth_stress": "sqrt(SizeWeakness*PortfolioExhaustionScore)",
+    "formula": "sqrt(CreditMarketStress_NG1*BreadthStress_NG1)",
+    "positive_windows": [
+      [
+        "2007-05",
+        "2007-11"
+      ]
+    ],
+    "negative_windows": [
+      [
+        "2000-01",
+        "2000-04"
+      ],
+      [
+        "2011-03",
+        "2011-07"
+      ],
+      [
+        "2018-08",
+        "2018-12"
+      ]
+    ],
+    "max_additional_armed_episodes": 2
+  },
+  "direct_trigger_authorized": false,
+  "post_validation_tuning_allowed": false
+}
