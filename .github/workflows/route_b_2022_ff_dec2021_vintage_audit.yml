@@ -35,6 +35,7 @@ jobs:
           assert x["passes"] is True
           assert x["route_b"] >= x["threshold"]
           assert len(x["zip_sha256"]) == 64
+          assert any("202111" in line and "CRSP" in line for line in x["vintage_header_lines"])
           assert x["size_margin_above_critical"] > 0
           assert x["route_margin_above_threshold"] > 0
           print(
@@ -43,6 +44,7 @@ jobs:
               "Route_B=", x["route_b"],
               "margin=", x["route_margin_above_threshold"],
               "sha256=", x["zip_sha256"],
+              "header=", x["vintage_header_lines"],
               "Last-Modified=", x["http_headers"].get("last_modified"),
           )
           PY
