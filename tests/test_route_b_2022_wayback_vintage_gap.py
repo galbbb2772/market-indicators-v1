@@ -16,9 +16,16 @@ class RouteB2022WaybackVintageGapTests(unittest.TestCase):
     def test_gap_is_archive_coverage_not_access_failure(self):
         self.assertEqual(
             self.data["status"],
-            "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
+            "WAYBACK_CAPTURE_GAP_FACTOR_VINTAGE_CONTENT_RECOVERED_ELSEWHERE",
         )
         self.assertEqual(self.data["errors"], [])
+        recovered = self.data["official_dec2021_factor_vintage"]
+        self.assertEqual(
+            recovered["status"],
+            "RECOVERED_OFFICIAL_DEC2021_VINTAGE_CONTENT",
+        )
+        self.assertEqual(recovered["last_month"], "202111")
+        self.assertTrue(recovered["pass"])
 
     def test_latest_wayback_snapshot_is_too_old(self):
         x = self.data["latest_usable_snapshot"]
