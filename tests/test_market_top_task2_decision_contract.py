@@ -111,6 +111,13 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
             "2021-10 EARLY_BREADTH",
         )
 
+    def test_scope_audit_separates_scoring_from_presentation(self):
+        s = self.data["scope_audit"]
+        self.assertEqual(s["production_scoring_effect"], "none")
+        self.assertFalse(s["market_model_v2_core_modified"])
+        self.assertFalse(s["production_market_model_current_json_modified"])
+        self.assertIn("docs/index.html", s["presentation_effect_if_merged"])
+
     def test_route_a_and_c_remain_unresolved(self):
         by_component = {x["component"]: x for x in self.data["unresolved"]}
         self.assertEqual(by_component["Original Route_A"]["status"], "UNRESOLVED")
