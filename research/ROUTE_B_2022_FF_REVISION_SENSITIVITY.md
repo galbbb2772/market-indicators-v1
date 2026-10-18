@@ -107,3 +107,26 @@ exact monthly vintage proof = NO
 ```
 
 No PolicyShock weight, Route_B threshold, or SizeWeakness formula was changed during this test.
+
+
+## Evidence hierarchy
+
+This file is now treated as a **supplemental third-party static cross-check**.
+
+The preferred revision evidence is:
+
+```
+research/route_b_2022_ff_revision_lattice.json
+```
+
+which live-downloads five official Kenneth R. French historical archive cuts from 2022 through 2026.
+
+Official lattice result:
+
+```
+minimum Route_B = 85.334291757
+maximum Route_B = 85.656975202
+all five official archive cuts pass
+```
+
+The static variants in this file remain useful because they were independently stored in unrelated repositories, but they no longer carry the primary provenance weight.
