@@ -1,0 +1,75 @@
+name: PolicyShock 2022 Primary Source PIT Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_policyshock_20220103_primary_sources.py"
+      - "policyshock_v211.py"
+      - "tests/test_audit_policyshock_20220103_primary_sources.py"
+      - ".github/workflows/policyshock_2022_primary_source_audit.yml"
+  workflow_dispatch:
+
+jobs:
+  primary-source-pit-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install pandas requests
+
+      - name: Static contracts
+        run: python -m unittest tests.test_audit_policyshock_20220103_primary_sources -v
+
+      - name: Audit Treasury and Federal Reserve primary sources
+        run: |
+          python audit_policyshock_20220103_primary_sources.py --output /tmp/policyshock_2022_pit.json
+          python - <<'PY'
+          import json
+
+          x = json.load(open("/tmp/policyshock_2022_pit.json"))
+          assert x["status"] == "PASS_PRIMARY_SOURCE_PIT_CHAIN"
+          assert x["asof"] == "2022-01-03"
+          assert x["strict_same_day_market_input_excluded"] is True
+
+          t = x["treasury"]
+          assert t["latest_date"] == "2021-12-31"
+          assert abs(t["latest_2y_pct"] - 0.73) < 1e-12
+          assert t["anchor_date"] == "2021-06-30"
+          assert abs(t["anchor_2y_pct"] - 0.25) < 1e-12
+
+          h = x["h41"]
+          assert [z["observation_date"] for z in h] == [
+              "2021-06-30", "2021-09-29", "2021-12-29"
+          ]
+          assert [z["total_assets_millions"] for z in h] == [
+              8078544.0, 8447981.0, 8757460.0
+          ]
+          assert all(z["verified_in_official_release_page"] for z in h)
+
+          assert x["walcl_spacing_days"] == {
+              "w0_minus_w13": 91,
+              "w13_minus_w26": 91,
+          }
+
+          assert abs(x["rate_shock"] - 63.33333333333333) < 1e-9
+          assert abs(x["taper_shock"] - 90.9715481444) < 1e-8
+          assert abs(x["policy_shock"] - 74.3886192578) < 1e-8
+
+          c = x["conservative_route_b_check"]
+          assert c["passes"] is True
+          assert c["route_b"] >= 85
+          assert c["policy_margin_above_critical"] > 0
+
+          print(
+              "POLICYSHOCK_PRIMARY_SOURCE_PIT",
+              "PolicyShock=", x["policy_shock"],
+              "Route_B_conservative=", c["route_b"],
+              "PolicyMargin=", c["policy_margin_above_critical"],
+          )
+          PY
