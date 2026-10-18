@@ -47,6 +47,11 @@ def audit(content: bytes, headers: dict[str, str] | None = None) -> dict:
         member = names[0]
         text = z.read(member).decode("utf-8", "replace")
 
+    header_lines = [
+        line.strip()
+        for line in text.splitlines()[:20]
+        if "CRSP database" in line or "Copyright" in line
+    ]
     rows = parse_ff3_monthly_csv(text)
     last_month = str(rows[-1]["ym"])
     if last_month != TARGET_MONTH:
@@ -80,6 +85,7 @@ def audit(content: bytes, headers: dict[str, str] | None = None) -> dict:
         "target_month": TARGET_MONTH,
         "last_month": last_month,
         "zip_member": member,
+        "vintage_header_lines": header_lines,
         "zip_sha256": hashlib.sha256(content).hexdigest(),
         "http_headers": headers or {},
         "smb_202106_to_202111": [
