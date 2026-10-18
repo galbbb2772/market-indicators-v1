@@ -106,6 +106,9 @@ on:
       - "research/MARKET_TOP_NG1_DECISION_RECORD.md"
       - "research/market_top_ng1_decision_record.json"
       - "tests/test_market_top_ng1_decision_record.py"
+      - "research/ROUTE_B_2022_FF_DEC2021_VINTAGE.md"
+      - "research/route_b_2022_ff_dec2021_vintage_evidence.json"
+      - "tests/test_route_b_2022_ff_dec2021_vintage_evidence.py"
       - ".github/workflows/policyshock_v211_shadow_tests.yml"
   workflow_dispatch:
 
@@ -148,6 +151,7 @@ jobs:
             tests.test_audit_ff_revision_lattice \
             tests.test_route_b_2022_official_archive_contract \
             tests.test_route_b_2022_wayback_vintage_gap \
+            tests.test_route_b_2022_ff_dec2021_vintage_evidence \
             tests.test_market_top_cross_monitor \
             tests.test_market_top_cross_monitor_data \
             tests.test_shadow_replay_v24 \
