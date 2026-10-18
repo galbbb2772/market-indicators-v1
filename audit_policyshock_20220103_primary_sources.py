@@ -119,14 +119,19 @@ def verify_h41_release(spec: dict[str, Any]) -> dict[str, Any]:
     obs_dt = pd.Timestamp(spec["observation_date"])
 
     soup = BeautifulSoup(r.text, "html.parser")
-    matching_rows = []
-    for tr in soup.find_all("tr"):
-        row_text = re.sub(r"\\s+", " ", tr.get_text(" ", strip=True))
-        if re.search(r"\\bTotal\\s+assets\\b", row_text, flags=re.I) and formatted in row_text:
-            matching_rows.append(row_text)
-    if not matching_rows:
+    visible_lines = [
+        re.sub(r"\\s+", " ", line).strip()
+        for line in soup.get_text("\\n").splitlines()
+    ]
+    matching_lines = [
+        line
+        for line in visible_lines
+        if re.search(r"\\bTotal\\s+assets\\b", line, flags=re.I)
+        and formatted in line
+    ]
+    if not matching_lines:
         raise ValueError(
-            f"H.4.1 {spec['release_date']} has no table row pairing "
+            f"H.4.1 {spec['release_date']} has no visible text line pairing "
             f"Total assets with {formatted}"
         )
 
