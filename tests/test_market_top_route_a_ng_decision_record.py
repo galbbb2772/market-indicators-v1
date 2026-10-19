@@ -27,6 +27,20 @@ class RouteANGDecisionRecordTests(unittest.TestCase):
         self.assertEqual(x["status"],"PROSPECTIVE_VALIDATION_PENDING")
         self.assertFalse(x["historical_validation_authorized"])
         self.assertEqual(x["prospective_start_effective_month"],"202612")
+        self.assertEqual(
+            x["evidence_protocol"],
+            "market-top-route-a-ng3-evidence-protocol-2",
+        )
+        self.assertEqual(
+            x[
+                "promotion_review_minimum_complete_252_session_episodes_without_continuity_gaps"
+            ],
+            4,
+        )
+        self.assertIn(
+            "one episode",
+            x["continuity_gap_policy"]["rule"],
+        )
         self.assertFalse(
             x["current_snapshot"]["counts_toward_prospective_validation"]
         )
@@ -59,6 +73,16 @@ class RouteANGDecisionRecordTests(unittest.TestCase):
         self.assertFalse(
             self.x["evidence_governance"][
                 "silent_later_vintage_backfill_allowed"
+            ]
+        )
+        self.assertTrue(
+            self.x["evidence_governance"][
+                "episode_count_inflation_from_missing_months_forbidden"
+            ]
+        )
+        self.assertTrue(
+            self.x["evidence_governance"][
+                "promotion_review_uses_clean_episode_count"
             ]
         )
 
