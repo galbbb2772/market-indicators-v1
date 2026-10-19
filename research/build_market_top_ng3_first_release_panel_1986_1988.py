@@ -88,24 +88,40 @@ def movement_segment(text: str, year: int, month: int) -> str:
     return y[:12000]
 
 
-UP = ("moved up","rose","increased","advanced","climbed","edged up","turned up","surged","jumped")
-DOWN = ("moved down","fell","decreased","declined","dropped","edged down","turned down")
-ZERO = ("showed no change","was unchanged","remained unchanged","virtually unchanged","was virtually unchanged")
+UP = (
+    "moved up","rose","increased","advanced","climbed","edged up","turned up",
+    "surged","jumped","was up","were up","gained",
+)
+DOWN = (
+    "moved down","fell","fall","decreased","declined","dropped","edged down",
+    "turned down","was down","were down","slipped","eased",
+)
+ZERO = (
+    "showed no change","was unchanged","remained unchanged",
+    "virtually unchanged","was virtually unchanged","no change",
+)
 
 
 def signed_first_percent(body: str) -> float | None:
     b = body.lower()
-    zero_pos = min([b.find(z) for z in ZERO if b.find(z) >= 0] or [10**9])
-    m = re.search(r"(\d+(?:\.\d+)?)\s*(?:-| )?percent", b)
+    first_sentence = re.split(r"(?<=[.!?])\s+", b, maxsplit=1)[0]
+    # A headline zero-change sentence must win over a later sentence that
+    # describes the previous month (for example, "fell 0.2 percent in October").
+    if any(z in first_sentence for z in ZERO):
+        return 0.0
+
+    m = re.search(r"(\d+(?:\.\d+)?)\s*(?:-| )?percent", first_sentence)
+    search_text = first_sentence
     if not m:
-        return 0.0 if zero_pos < 10**9 else None
+        m = re.search(r"(\d+(?:\.\d+)?)\s*(?:-| )?percent", b)
+        search_text = b
+    if not m:
+        return None
+
     n = float(m.group(1))
-    prefix = b[:m.start()]
-    # nearest directional phrase before the first percentage
+    prefix = search_text[:m.start()]
     up_pos = max([prefix.rfind(v) for v in UP])
     down_pos = max([prefix.rfind(v) for v in DOWN])
-    if zero_pos < m.start() and zero_pos > max(up_pos, down_pos):
-        return 0.0
     if down_pos > up_pos:
         return -n
     if up_pos >= 0:
@@ -139,14 +155,27 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
         for match in re.finditer(pat, seg, flags=re.I):
             body = match.group("body")
             context = body[:350].lower()
+            annual_context = bool(
+                re.search(
+                    r"(?:12 months|over the year|year earlier|"
+                    r"from\s+[a-z]+\s+\d{4}\s+to\s+[a-z]+\s+\d{4})",
+                    context[:260],
+                    flags=re.I,
+                )
+            )
+            # The stage-of-processing headline paragraph is the first portion of
+            # Price Movements. Its first intermediate-goods statement is a
+            # current-month observation even when the month name is omitted.
+            lead_statement = match.start() < 1800
             temporal_match = (
                 current_month_name in context
                 or "over the month" in context
                 or ("from " in context and " to " in context)
                 or "this month" in context
+                or lead_statement
             )
             value = signed_first_percent(body)
-            if value is not None and temporal_match:
+            if value is not None and temporal_match and not annual_context:
                 im_candidates.append((match.start(), value, match.group(0)[:500]))
     im_candidates.sort(key=lambda x: x[0])
     im = im_candidates[0][1] if im_candidates else None
@@ -271,38 +300,38 @@ def resolve_first_publication(narrative: dict, table_a: dict) -> dict:
     table_complete = tfg is not None and tim is not None
     narrative_complete = nfg is not None and nim is not None
 
-    if table_complete:
+    if narrative_complete:
         fg_conflict = (
-            nfg is not None
+            table_complete
             and abs(float(nfg) - float(tfg)) > 0.051
         )
         im_conflict = (
-            nim is not None
+            table_complete
             and abs(float(nim) - float(tim)) > 0.051
         )
-        if narrative_complete and not fg_conflict and not im_conflict:
+        if table_complete and not fg_conflict and not im_conflict:
             status = "VERIFIED_DUAL_PATH"
-        elif fg_conflict or im_conflict:
-            status = "TABLE_A_RECOVERED_NARRATIVE_CONFLICT"
+        elif table_complete and (fg_conflict or im_conflict):
+            status = "NARRATIVE_PRIMARY_TABLE_OCR_CONFLICT"
         else:
-            status = "TABLE_A_RECOVERED"
+            status = "NARRATIVE_RECOVERED"
         return {
             "status": status,
-            "finished_goods_mom_sa_pct": float(tfg),
-            "intermediate_goods_mom_sa_pct": float(tim),
-            "fg_conflict": bool(fg_conflict),
-            "im_conflict": bool(im_conflict),
-            "primary_source_path": "TABLE_A_CURRENT_MONTH_ROW",
-        }
-
-    if narrative_complete:
-        return {
-            "status": "NARRATIVE_RECOVERED",
             "finished_goods_mom_sa_pct": float(nfg),
             "intermediate_goods_mom_sa_pct": float(nim),
+            "fg_conflict": bool(fg_conflict),
+            "im_conflict": bool(im_conflict),
+            "primary_source_path": "CURRENT_REPORT_HEADLINE_NARRATIVE",
+        }
+
+    if table_complete:
+        return {
+            "status": "TABLE_A_ONLY_PROVISIONAL",
+            "finished_goods_mom_sa_pct": float(tfg),
+            "intermediate_goods_mom_sa_pct": float(tim),
             "fg_conflict": False,
             "im_conflict": False,
-            "primary_source_path": "CURRENT_REPORT_NARRATIVE",
+            "primary_source_path": "TABLE_A_CURRENT_MONTH_ROW",
         }
 
     return {
@@ -412,7 +441,7 @@ def main() -> None:
         for r in rows
     )
     narrative_conflicts = sum(
-        r["first_publication"]["status"] == "TABLE_A_RECOVERED_NARRATIVE_CONFLICT"
+        r["first_publication"]["status"] == "NARRATIVE_PRIMARY_TABLE_OCR_CONFLICT"
         for r in rows
     )
 
@@ -438,6 +467,11 @@ def main() -> None:
                 bool(r["release"]["release_date"]) for r in rows
             ),
             "table_a_values_complete": bool(table_complete),
+            "narrative_values_complete": all(
+                r["narrative_extraction"].get("finished_goods_mom_sa_pct") is not None
+                and r["narrative_extraction"].get("intermediate_goods_mom_sa_pct") is not None
+                for r in rows
+            ),
             "first_values_resolved": sum(
                 r["first_publication"].get("finished_goods_mom_sa_pct") is not None
                 and r["first_publication"].get("intermediate_goods_mom_sa_pct") is not None
