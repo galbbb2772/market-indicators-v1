@@ -92,15 +92,32 @@ def extract_factor_page_evidence(html: str) -> dict[str, Any]:
         lower,
     )
     terminal = None
+    terminal_ym = None
     if monthly_match:
-        terminal = f"{monthly_match.group(1).title()} {monthly_match.group(2)}"
+        month_name = monthly_match.group(1).lower()
+        year = int(monthly_match.group(2))
+        month_map = {
+            "january": 1,
+            "february": 2,
+            "march": 3,
+            "april": 4,
+            "may": 5,
+            "june": 6,
+            "july": 7,
+            "august": 8,
+            "september": 9,
+            "october": 10,
+            "november": 11,
+            "december": 12,
+        }
+        month = month_map.get(month_name)
+        if month is not None:
+            terminal = f"{month_name.title()} {year}"
+            terminal_ym = f"{year:04d}{month:02d}"
 
     target_visible = bool(
-        re.search(
-            r"monthly\s+returns.{0,120}november\s+2021",
-            lower,
-            flags=re.S,
-        )
+        terminal_ym is not None
+        and terminal_ym >= TARGET_MONTH
     )
 
     has_factor_identity = (
@@ -123,6 +140,7 @@ def extract_factor_page_evidence(html: str) -> dict[str, Any]:
     return {
         "has_factor_identity": has_factor_identity,
         "monthly_returns_terminal": terminal,
+        "monthly_returns_terminal_ym": terminal_ym,
         "target_202111_publication_visible": target_visible,
         "dec2021_archive_link_visible": archive_link_visible,
     }
