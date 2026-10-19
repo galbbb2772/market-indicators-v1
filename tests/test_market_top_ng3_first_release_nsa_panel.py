@@ -139,6 +139,38 @@ class MarketTopNG3FirstReleaseNSAPanelTests(unittest.TestCase):
         self.assertEqual(x["yoy_nsa_pct"], 2.6)
 
 
+    def test_missing_finished_label_uses_top_100_percent_stage_row(self):
+        spans = [
+            {"text": "garbled label", "x": 60.0, "y": 692.28, "font_size": 3.7},
+            {"text": "100.000", "x": 284.88, "y": 692.4, "font_size": 7.0},
+            {"text": "106.3", "x": 331.56, "y": 692.28, "font_size": 7.0},
+            {"text": "106.9", "x": 362.16, "y": 692.4, "font_size": 7.0},
+            {"text": "107.5", "x": 392.64, "y": 692.16, "font_size": 7.0},
+            {"text": "2.0", "x": 428.16, "y": 692.28, "font_size": 7.0},
+            {"text": "0.6", "x": 456.12, "y": 692.28, "font_size": 8.0},
+            {
+                "text": "Intermediate materials, supplies and components",
+                "x": 62.52,
+                "y": 595.2,
+                "font_size": 7.0,
+            },
+            {"text": "100.000", "x": 285.24, "y": 595.44, "font_size": 7.0},
+            {"text": "104.8", "x": 331.8, "y": 595.32, "font_size": 7.0},
+            {"text": "105.5", "x": 362.4, "y": 595.32, "font_size": 7.0},
+            {"text": "106.2", "x": 393.0, "y": 595.32, "font_size": 7.0},
+            {"text": "5.3", "x": 428.4, "y": 595.32, "font_size": 7.0},
+            {"text": "0.7", "x": 456.4, "y": 595.32, "font_size": 7.0},
+        ]
+        x = parse_table1_aggregate_geometry(spans, "finished_goods")
+        self.assertEqual(x["status"], "PARSED_GEOMETRY")
+        self.assertEqual(x["current_month_level_nsa"], 107.5)
+        self.assertEqual(x["yoy_nsa_pct"], 2.0)
+        self.assertEqual(
+            x["row_identification"],
+            "RELATIVE_IMPORTANCE_100_STAGE_ORDER_FALLBACK",
+        )
+
+
 
 if __name__ == "__main__":
     unittest.main()
