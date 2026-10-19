@@ -320,7 +320,30 @@ def threshold_grid(ep: pd.DataFrame):
             })
     return pd.DataFrame(rows)
 
+def probe_nyfed_pd_schema():
+    """Temporary research probe for official NY Fed Primary Dealer API paths.
+    This does not alter SLF inputs, formula, thresholds, or scores.
+    """
+    try:
+        url = "https://markets.newyorkfed.org/static/docs/markets-api.yml"
+        r = requests.get(url, headers={"User-Agent":"Mozilla/5.0 MarketRegimeLab/SLF-V0"}, timeout=30)
+        print(f"NYFED_PD_SCHEMA status={r.status_code} bytes={len(r.content)}")
+        r.raise_for_status()
+        lines = r.text.splitlines()
+        printed = 0
+        for i, line in enumerate(lines):
+            if "/pd/" in line:
+                lo=max(0,i-5); hi=min(len(lines),i+28)
+                print("NYFED_PD_SCHEMA_BLOCK")
+                print("\n".join(lines[lo:hi]))
+                printed += 1
+                if printed >= 30:
+                    break
+    except Exception as exc:
+        print(f"NYFED_PD_SCHEMA_PROBE_ERROR: {exc!r}")
+
 def main():
+    probe_nyfed_pd_schema()
     fsi, raw_fsi, fsi_meta = load_fsi()
     fails, raw_d, raw_r = load_fails()
     spx, raw_spx = load_spx()
