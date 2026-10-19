@@ -794,6 +794,20 @@ def evaluate_horizon(
 ) -> dict[str, Any]:
     anchor = pd.Timestamp(anchor_date)
     after = price.loc[price.index > anchor]
+
+    # A rolling provider window must not silently drop the beginning of an
+    # unfinished prospective outcome path. If the first available observation
+    # is far after the anchor, the 63/126/252-session path is not reconstructible
+    # from this payload and the audit must fail closed instead of counting later
+    # sessions as though they immediately followed the signal.
+    if not after.empty:
+        first_after = pd.Timestamp(after.index[0])
+        if first_after > anchor + pd.Timedelta(days=10):
+            raise ValueError(
+                "price history does not cover episode start: "
+                f"anchor={anchor.date()} first_after={first_after.date()}"
+            )
+
     observed = min(len(after), sessions)
     if observed == 0:
         return {
