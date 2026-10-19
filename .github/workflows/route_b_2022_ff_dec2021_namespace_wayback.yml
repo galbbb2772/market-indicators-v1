@@ -5,6 +5,9 @@ on:
     paths:
       - "audit_ff_dec2021_wayback_namespace.py"
       - "tests/test_audit_ff_dec2021_wayback_namespace.py"
+      - "tests/test_route_b_2022_ff_dec2021_namespace_wayback_evidence.py"
+      - "research/route_b_2022_ff_dec2021_namespace_wayback_evidence.json"
+      - "research/ROUTE_B_2022_FF_DEC2021_NAMESPACE_WAYBACK.md"
       - ".github/workflows/route_b_2022_ff_dec2021_namespace_wayback.yml"
   workflow_dispatch:
 
@@ -19,8 +22,10 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: python -m pip install requests
-      - name: Static contract
-        run: python -m unittest tests.test_audit_ff_dec2021_wayback_namespace -v
+      - name: Static contracts
+        run: |
+          python -m unittest tests.test_audit_ff_dec2021_wayback_namespace -v
+          python -m unittest tests.test_route_b_2022_ff_dec2021_namespace_wayback_evidence -v
       - name: Audit December-2021 archive namespace before cutoff
         run: |
           python audit_ff_dec2021_wayback_namespace.py --output /tmp/ff_dec2021_namespace.json
@@ -31,13 +36,12 @@ jobs:
           assert x["query_errors"] == [], (
               "Wayback namespace query failed; result is incomplete."
           )
-          assert x["status"] in {
-              "PRE_CUTOFF_DEC2021_NAMESPACE_CAPTURE_FOUND",
-              "NO_PRE_CUTOFF_DEC2021_NAMESPACE_CAPTURE",
-          }
-          assert x["namespace_pre_cutoff_delivery_evidence"] == bool(
-              x["capture_count"]
+          assert x["status"] == "NO_PRE_CUTOFF_DEC2021_NAMESPACE_CAPTURE", (
+              "Wayback namespace coverage changed; update the committed "
+              "delivery-provenance evidence before accepting this PR."
           )
+          assert x["capture_count"] == 0
+          assert x["namespace_pre_cutoff_delivery_evidence"] is False
           for row in x["captures"]:
               assert row["timestamp"] <= x["cutoff"]
               assert "12%202021%20Update" in row["original"] or (
