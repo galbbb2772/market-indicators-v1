@@ -180,7 +180,7 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
             i for i in range(start + 1, len(lines))
             if re.match(r"^\s*Table B\.", lines[i], flags=re.I)
         ),
-        min(len(lines), start + 220),
+        min(len(lines), start + 260),
     )
     block = lines[start:end]
 
@@ -203,17 +203,38 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
 
     month_name = MONTH_NAMES[month - 1]
     row_re = re.compile(rf"^\s*{month_name}\b", flags=re.I)
-    row = next((line for line in section if row_re.search(line)), None)
-    if row is None:
-        return {"status": "MONTH_ROW_NOT_FOUND"}
+    row_index = next(
+        (i for i, line in enumerate(section) if row_re.search(line)),
+        None,
+    )
+    if row_index is None:
+        return {
+            "status": "MONTH_ROW_NOT_FOUND",
+            "year_section_excerpt": [norm(x)[:500] for x in section[:40]],
+        }
 
-    pos = row_re.search(row)
-    tail = row[pos.end():] if pos else row
+    # Historical PDF extraction can wrap one printed row onto multiple text lines.
+    row_lines = [section[row_index]]
+    for nxt in section[row_index + 1:row_index + 4]:
+        if re.match(r"^\s*(?:" + "|".join(MONTH_NAMES) + r")\b", nxt, flags=re.I):
+            break
+        if re.match(r"^\s*\d{4}:\s*$", nxt):
+            break
+        row_lines.append(nxt)
+
+    merged = " ".join(row_lines)
+    pos = row_re.search(merged)
+    tail = merged[pos.end():] if pos else merged
+
+    # Permit historical forms such as .4, -.3, 0, 1.2r, and .5p.
     num_re = re.compile(
-        r"(?<![A-Za-z0-9.])[+-]?(?:\d+\.\d+|\.\d+|\d+)(?![A-Za-z0-9.])"
+        r"(?<![A-Za-z0-9.])[+-]?(?:\d+\.\d+|\.\d+|\d+)(?:[rp])?(?![A-Za-z0-9.])",
+        flags=re.I,
     )
     vals = []
-    for token in num_re.findall(tail):
+    raw_tokens = num_re.findall(tail)
+    for token in raw_tokens:
+        token = re.sub(r"[rp]$", "", token, flags=re.I)
         try:
             vals.append(float(token))
         except ValueError:
@@ -223,7 +244,8 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
         return {
             "status": "ROW_NUMERIC_COLUMNS_INCOMPLETE",
             "numeric_columns_found": len(vals),
-            "row_excerpt": norm(row)[:900],
+            "raw_numeric_tokens": raw_tokens,
+            "row_excerpt": norm(merged)[:1400],
         }
 
     return {
@@ -232,7 +254,7 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
         "intermediate_goods_mom_sa_pct": vals[3],
         "numeric_columns_found": len(vals),
         "all_numeric_columns": vals[:9],
-        "row_excerpt": norm(row)[:900],
+        "row_excerpt": norm(merged)[:1400],
     }
 
 
@@ -424,7 +446,14 @@ def main() -> None:
         json.dump(result, f, indent=2)
         f.write("\n")
 
-    print(json.dumps({k: result[k] for k in ("status","checks","summary")}, indent=2))
+    print(json.dumps({k: result[k] for k in ("status","source_layer_status","checks","summary")}, indent=2))
+    for r in rows:
+        if r["table_a_extraction"].get("status") != "PARSED":
+            print(
+                "TABLE_A_UNRESOLVED",
+                r["observation_month"],
+                json.dumps(r["table_a_extraction"], ensure_ascii=False),
+            )
     for r in rows:
         fp = r["first_publication"]
         print(
