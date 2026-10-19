@@ -9,8 +9,12 @@ from pypdf import PdfReader
 
 CASES = [
     ("1986-02", "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_021986.pdf"),
+    ("1986-09", "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_091986.pdf"),
+    ("1986-11", "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_111986.pdf"),
     ("1987-05", "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_051987.pdf"),
     ("1988-03", "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_031988.pdf"),
+    ("1988-05", "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_051988.pdf"),
+    ("1988-08", "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_081988.pdf"),
 ]
 
 
