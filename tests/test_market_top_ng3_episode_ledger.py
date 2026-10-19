@@ -127,6 +127,24 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
         self.assertEqual(len(reopened["episodes"]),2)
         self.assertEqual(reopened["episodes"][1]["episode_id"],"NG3-202703")
 
+    def test_out_of_order_armed_month_fails_closed(self):
+        p=price_series()
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=empty_ledger(),
+        ):
+            first=update_episode_ledger(snap("202702"),p)
+
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=first,
+        ):
+            with self.assertRaisesRegex(
+                ValueError,
+                "out-of-order prospective episode update",
+            ):
+                update_episode_ledger(snap("202701"),p)
+
     def test_missing_month_between_armed_states_does_not_split_episode(self):
         p=price_series()
         with patch(
