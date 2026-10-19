@@ -23,11 +23,20 @@ class InflationMarginV1PreregistrationTests(unittest.TestCase):
 
     def test_formula_and_threshold_are_frozen(self):
         self.assertEqual(
-            self.data["formula"]["route_im_v1"],
+            self.data["formula"]["route_im_v1_1"],
             "cbrt(InflationScore*ULCScore*MarginCompressionScore)",
         )
         self.assertEqual(self.data["state_gate"]["route_threshold"], 85)
         self.assertEqual(im.THRESHOLD, 85.0)
+
+    def test_source_semantics_are_frozen(self):
+        src = self.data["sources"]
+        self.assertEqual(src["cpi_series"], "CPIAUCSL")
+        self.assertEqual(src["unit_labor_cost_yoy"], "PRS85006111")
+        self.assertEqual(src["unit_profit_yoy"], "PRS88003191")
+        self.assertEqual(im.CPI_ID, "CPIAUCSL")
+        self.assertEqual(im.ULC_ID, "PRS85006111")
+        self.assertEqual(im.UNIT_PROFIT_ID, "PRS88003191")
 
     def test_lags_are_frozen(self):
         pit = self.data["point_in_time"]
