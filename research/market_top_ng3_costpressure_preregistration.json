@@ -1,0 +1,114 @@
+{
+  "schema_version": "market-top-ng3-costpressure-preregistration-1",
+  "status": "PREREGISTERED_NOT_VALIDATED",
+  "research_only": true,
+  "production_effect": "none",
+  "sources": {
+    "cpi": "CUUR0000SA0",
+    "finished_ppi": "WPUFD49207",
+    "intermediate_ppi": "WPUID61",
+    "frequency": "monthly",
+    "seasonal_adjustment": "not seasonally adjusted"
+  },
+  "transforms": {
+    "cpi_yoy": "100*(CPI_t/CPI_t-12-1)",
+    "finished_ppi_yoy": "100*(FinishedPPI_t/FinishedPPI_t-12-1)",
+    "intermediate_ppi_yoy": "100*(IntermediatePPI_t/IntermediatePPI_t-12-1)",
+    "finished_gap_raw": "FinishedPPIYoY-CPIYoY",
+    "intermediate_gap_raw": "IntermediatePPIYoY-CPIYoY",
+    "inflation_level_score": "expanding_percentile(CPIYoY)",
+    "finished_gap_score": "expanding_percentile(FinishedGapRaw)",
+    "intermediate_gap_score": "expanding_percentile(IntermediateGapRaw)",
+    "costpressure_ng3": "cbrt(InflationLevelScore*FinishedGapScore*IntermediateGapScore)",
+    "producer_gap_baseline": "sqrt(FinishedGapScore*IntermediateGapScore)"
+  },
+  "pit": {
+    "synchronized_source_month": true,
+    "effective_lag_months": 6,
+    "event_specific_lags": false,
+    "interpolation_missing_months": false,
+    "ppi_finalization_convention": "conservative finalized-data lag"
+  },
+  "warmup_valid_source_months": 120,
+  "threshold": 85,
+  "top_location": {
+    "within_high_pct": 5,
+    "trailing_high_calendar_months": 24,
+    "high_age_calendar_months_max": 3,
+    "price_source": "S&P 500 price index (^GSPC) unadjusted close"
+  },
+  "baselines": [
+    "inflation_only",
+    "producer_gap",
+    "top_location_only"
+  ],
+  "screen_windows": [
+    [
+      "1957-01",
+      "1967-12"
+    ],
+    [
+      "1975-01",
+      "1986-12"
+    ],
+    [
+      "1988-01",
+      "2006-12"
+    ]
+  ],
+  "hypothesis_generation_exclusions": [
+    [
+      "1968-01",
+      "1974-12"
+    ],
+    [
+      "1987-01",
+      "1987-12"
+    ]
+  ],
+  "episode": {
+    "consecutive_armed_months_one_episode": true,
+    "anchor": "last trading-day close of first ARMED month",
+    "outcome_sessions": 252,
+    "diagnostic_horizons_sessions": [
+      63,
+      126,
+      252
+    ],
+    "classifications": {
+      "major_top_hit": "WorstVsSignal<=-20%",
+      "correction_risk_not_major_top": "-20%<WorstVsSignal<=-10%",
+      "clear_top_false_positive": "WorstVsSignal>-10%"
+    }
+  },
+  "structural_acceptance": {
+    "min_complete_episodes": 3,
+    "min_major_top_hits": 2,
+    "max_clear_top_false_positives": 1,
+    "min_major_top_fraction": 0.5
+  },
+  "incremental_acceptance": {
+    "compared_to": [
+      "inflation_only",
+      "producer_gap"
+    ],
+    "require_major_fraction_gte": true,
+    "require_false_fraction_lte": true,
+    "require_at_least_one_strict_improvement_per_baseline": true,
+    "zero_episode_baseline": "BASELINE_INSUFFICIENT"
+  },
+  "direct_trigger_authorized": false,
+  "margin_confirm_in_score": false,
+  "margin_missing_semantics": "MARGIN_NOT_COMPARABLE",
+  "post_result_tuning_allowed": false,
+  "production_pressure_inclusion_authorized": false,
+  "governance": [
+    "do_not_lower_threshold_after_results",
+    "do_not_shorten_lag_after_results",
+    "do_not_remove_top_location_gate_after_results",
+    "do_not_change_yoy_window_after_results",
+    "do_not_change_geometric_aggregation_after_results",
+    "do_not_add_margin_confirm_to_rescue_misses",
+    "any_structural_change_requires_new_named_version_and_preregistration"
+  ]
+}
