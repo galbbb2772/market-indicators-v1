@@ -1,0 +1,25 @@
+name: Market Top NG3 Table1 Geometry Audit
+
+on:
+  pull_request:
+    paths:
+      - "research/audit_market_top_ng3_table1_geometry.py"
+      - ".github/workflows/market_top_ng3_table1_geometry.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip requests pypdf
+      - name: Inspect Table 1 text geometry
+        run: python research/audit_market_top_ng3_table1_geometry.py
