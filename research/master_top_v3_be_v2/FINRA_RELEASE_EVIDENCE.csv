@@ -1,0 +1,4 @@
+reference_month,document_date,lag_calendar_days,document_type,url,note
+2026-05,2026-06-24,24,financial_news,https://www.barrons.com/livecoverage/stock-market-news-today-062426/card/margin-debt-surges-to-record-1-4-trillion-that-s-a-lot-of-leverage--sesneeYoaLzstqOEAMkI,public_no_later_than_date_not_initial_release
+2026-08,2026-09-17,17,dated_analyst_article,https://www.advisorperspectives.com/dshort/updates/2026/09/17/margin-debt-finra-august-2026,public_no_later_than_date_not_initial_release
+2026-09,2026-10-19,19,finra_official_page_observed,https://www.finra.org/rules-guidance/key-topics/margin-accounts/margin-statistics,observed_no_later_than_date_not_initial_release
