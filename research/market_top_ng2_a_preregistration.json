@@ -1,0 +1,61 @@
+{
+  "schema_version": "market-top-ng2-a-preregistration-1",
+  "status": "PREREGISTERED_NOT_VALIDATED",
+  "research_only": true,
+  "legacy_recovery": false,
+  "predecessor": "Route_A_NG1_CLOSED_DO_NOT_RETUNE",
+  "hypothesis_generation_cases": [
+    "1998-11",
+    "2007-11",
+    "2012-02",
+    "2025-07",
+    "2025-09"
+  ],
+  "thresholds": {
+    "route": 85,
+    "within_24m_high_pct": 5,
+    "high_age_months_max": 3
+  },
+  "point_in_time": {
+    "fama_french_effective_lag_months": 2,
+    "credit_spread_effective_lag_months": 1,
+    "percentiles": "expanding_current_inclusive",
+    "event_specific_lags": false,
+    "interpolation_missing_months": false
+  },
+  "formula": {
+    "spread_shock_score": "expanding_pct(max(delta3m(BAA10Y),delta6m(BAA10Y)))",
+    "finance_weakness_score": "expanding_pct(-(Finance6M-Market6M))",
+    "size_weakness": "expanding_pct(-CumSMB_6m)",
+    "portfolio_exhaustion_score": "expanding_pct(1-count(portfolio_6m>market_6m)/25)",
+    "financial_lead_gap_raw": "FinanceWeaknessScore-SpreadShockScore",
+    "financial_lead_score": "expanding_pct(FinancialLeadGapRaw)",
+    "credit_lead_stress_ng2": "cbrt(SpreadShockScore*FinanceWeaknessScore*FinancialLeadScore)",
+    "breadth_stress_ng2": "sqrt(SizeWeakness*PortfolioExhaustionScore)",
+    "route_a_ng2": "sqrt(CreditLeadStress_NG2*BreadthStress_NG2)"
+  },
+  "holdout": {
+    "evaluation_start": "1963-01",
+    "evaluation_end": "1992-12",
+    "percentile_warmup_months": 120,
+    "price_proxy": "S&P 500 price index (^GSPC) unadjusted close",
+    "episode_anchor": "last trading-day close of first ARMED month",
+    "horizon_trading_sessions": 252,
+    "classification": {
+      "major_top_hit": "WorstVsSignal<=-20%",
+      "correction_risk_not_major_top": "-20%<WorstVsSignal<=-10%",
+      "clear_top_false_positive": "WorstVsSignal>-10%"
+    },
+    "accept_if": {
+      "min_armed_episodes": 2,
+      "min_major_top_hits": 1,
+      "max_clear_top_false_positives": 0,
+      "min_major_top_hit_fraction": 0.5
+    },
+    "insufficient_if_complete_episodes_below": 2
+  },
+  "direct_trigger_authorized": false,
+  "production_pressure_inclusion_authorized": false,
+  "post_validation_tuning_allowed": false,
+  "failure_requires_new_version": "NG3_OR_LATER"
+}
