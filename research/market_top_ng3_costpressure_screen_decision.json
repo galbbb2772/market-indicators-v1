@@ -1,0 +1,122 @@
+{
+  "schema_version": "market-top-ng3-costpressure-screen-decision-1",
+  "status": "NG3_COSTPRESSURE_V1_CLOSED_INSUFFICIENT_SCREEN_EVENTS",
+  "research_only": true,
+  "production_effect": "none",
+  "workflow": {
+    "run_id": 39212213028,
+    "conclusion": "success",
+    "artifact_id": 12168052479,
+    "artifact_sha256": "a0b4d70fed744f8c41e71d2f95c873508d01848ef1129ac965c94bab7bdc3f0b"
+  },
+  "coverage": {
+    "source_rows": 708,
+    "screen_monthly_states": 487,
+    "first_screen_month": "1958-06",
+    "last_screen_month": "2006-12"
+  },
+  "candidate": {
+    "complete_episodes": 1,
+    "major_top_hits": 0,
+    "correction_risk_not_major_top": 0,
+    "clear_top_false_positives": 1,
+    "major_fraction": 0,
+    "false_fraction": 1,
+    "sole_episode": {
+      "start": "2006-03",
+      "end": "2006-03",
+      "score": 85.83147918618867,
+      "classification": "CLEAR_TOP_FALSE_POSITIVE",
+      "worst_252_return_from_anchor_pct": -5.49708109534931
+    }
+  },
+  "baselines": {
+    "inflation_only": {
+      "complete_episodes": 4,
+      "major_top_hits": 0,
+      "correction_risk_not_major_top": 1,
+      "clear_top_false_positives": 3,
+      "major_fraction": 0,
+      "false_fraction": 0.75
+    },
+    "producer_gap": {
+      "complete_episodes": 6,
+      "major_top_hits": 0,
+      "correction_risk_not_major_top": 0,
+      "clear_top_false_positives": 6,
+      "major_fraction": 0,
+      "false_fraction": 1
+    },
+    "top_location_only": {
+      "complete_episodes": 39,
+      "major_top_hits": 3,
+      "correction_risk_not_major_top": 6,
+      "clear_top_false_positives": 30,
+      "major_fraction": 0.07692307692307693,
+      "false_fraction": 0.7692307692307693
+    }
+  },
+  "decision": {
+    "structural": "INSUFFICIENT_SCREEN_EVENTS",
+    "incremental": "INCREMENTAL_VALUE_FAIL",
+    "final": "INSUFFICIENT_SCREEN_EVENTS"
+  },
+  "mechanism_diagnostic": {
+    "interpretation": "Frozen +6 finalized-data convention is consistent with a timing problem: highest cost-pressure states occur after the market has moved away from its recent high.",
+    "highest_scores_gate_false": [
+      [
+        "1975-01",
+        100
+      ],
+      [
+        "1975-04",
+        100
+      ],
+      [
+        "1975-05",
+        100
+      ],
+      [
+        "1975-06",
+        99.3814
+      ],
+      [
+        "1975-03",
+        98.738
+      ],
+      [
+        "1975-02",
+        98.4171
+      ]
+    ],
+    "high_scores_gate_true": [
+      [
+        "2006-03",
+        85.8315
+      ],
+      [
+        "2006-04",
+        84.7252
+      ],
+      [
+        "2006-07",
+        83.0849
+      ],
+      [
+        "2006-12",
+        81.0441
+      ],
+      [
+        "1979-09",
+        77.8791
+      ],
+      [
+        "1980-08",
+        76.5767
+      ]
+    ]
+  },
+  "next_gate": "Historical first-release PPI vintage reconstruction before any faster NG3 version is preregistered.",
+  "post_result_tuning_allowed": false,
+  "promoted": false
+}
