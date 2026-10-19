@@ -1,0 +1,176 @@
+{
+  "schema_version": "market-top-ng3-margin-revision-diagnostic-1",
+  "generated_from_publication_snapshots_on": "2026-10-19",
+  "research_only": true,
+  "production_effect": "none",
+  "interpretation": "revision/concept diagnostic only; not a scoring feature",
+  "vintage_1976_04": {
+    "source": "Economic Indicators, April 1976, p.3, BEA-sourced nonfinancial corporate business table",
+    "source_url": "https://fraser.stlouisfed.org/files/docs/publications/ei/1976/EI_041976.pdf",
+    "availability_rule": "conservative month-end 1976-04-30; exact issue day not established here",
+    "concept": "corporate profits with IVA and capital consumption adjustments",
+    "rows": [
+      [
+        "1974Q1",
+        1.108,
+        0.096
+      ],
+      [
+        "1974Q2",
+        1.142,
+        0.097
+      ],
+      [
+        "1974Q3",
+        1.176,
+        0.088
+      ],
+      [
+        "1974Q4",
+        1.212,
+        0.081
+      ],
+      [
+        "1975Q1",
+        1.251,
+        0.085
+      ],
+      [
+        "1975Q2",
+        1.267,
+        0.113
+      ],
+      [
+        "1975Q3",
+        1.278,
+        0.134
+      ],
+      [
+        "1975Q4",
+        1.292,
+        0.13
+      ]
+    ]
+  },
+  "vintage_1988_06": {
+    "source": "Survey of Current Business, June 1988, Table 7.18",
+    "source_url": "https://fraser.stlouisfed.org/title/survey-current-business-46/june-1988-10086/fulltext",
+    "availability_rule": "do not use before 1988-07-11 in PIT research; issue states it went to printer July 11, 1988",
+    "concept": "corporate profits with IVA and capital consumption adjustments",
+    "rows": [
+      [
+        "1986Q4",
+        1.093,
+        0.102
+      ],
+      [
+        "1987Q1",
+        1.103,
+        0.106
+      ],
+      [
+        "1987Q2",
+        1.111,
+        0.106
+      ],
+      [
+        "1987Q3",
+        1.118,
+        0.114
+      ],
+      [
+        "1987Q4",
+        1.123,
+        0.11
+      ],
+      [
+        "1988Q1",
+        1.123,
+        0.112
+      ]
+    ]
+  },
+  "current_revised_snapshot": {
+    "retrieved_context": "FRED/BEA current revised quarterly series, 2026-10 research snapshot",
+    "denominator_series": "A455RD3Q052SBEA",
+    "numerator_series": "A463RD3Q052SBEA",
+    "rows": [
+      [
+        "1974Q1",
+        0.319,
+        0.036
+      ],
+      [
+        "1974Q2",
+        0.327,
+        0.036
+      ],
+      [
+        "1974Q3",
+        0.338,
+        0.035
+      ],
+      [
+        "1974Q4",
+        0.349,
+        0.034
+      ],
+      [
+        "1975Q1",
+        0.358,
+        0.035
+      ],
+      [
+        "1975Q2",
+        0.362,
+        0.04
+      ],
+      [
+        "1975Q3",
+        0.369,
+        0.047
+      ],
+      [
+        "1975Q4",
+        0.374,
+        0.048
+      ],
+      [
+        "1986Q4",
+        0.607,
+        0.054
+      ],
+      [
+        "1987Q1",
+        0.612,
+        0.056
+      ],
+      [
+        "1987Q2",
+        0.614,
+        0.06
+      ],
+      [
+        "1987Q3",
+        0.617,
+        0.064
+      ],
+      [
+        "1987Q4",
+        0.621,
+        0.062
+      ],
+      [
+        "1988Q1",
+        0.624,
+        0.064
+      ]
+    ]
+  },
+  "formula": "profit_share = unit_profit / total_cost_and_profit_per_unit",
+  "frozen_boundary": {
+    "earliest_defensible_marginconfirm_publication": "1976-01 monthly SCB is explicitly IVA+CCAdj; use no earlier than a conservative 1976 start until an exact first-release day is recovered",
+    "pre_1976": "MARGIN_NOT_COMPARABLE for NG3 MarginConfirm",
+    "modern_revised_history": "diagnostic only, prohibited as a substitute for contemporaneous historical vintages"
+  }
+}
