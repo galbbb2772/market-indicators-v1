@@ -11,6 +11,9 @@ on:
       - "tests/test_market_top_ng3_forward.py"
       - "tests/test_market_top_ng3_forward_data.py"
       - "tests/test_market_top_ng3_dashboard_contract.py"
+      - "tests/test_market_top_route_a_ng_decision_record.py"
+      - "research/MARKET_TOP_ROUTE_A_NG_DECISION_RECORD.md"
+      - "research/market_top_route_a_ng_decision_record.json"
       - "docs/index.html"
       - "docs/data/market_top_ng3_current.json"
       - "docs/data/market_top_ng3_history.json"
@@ -44,6 +47,7 @@ jobs:
           python -m unittest tests.test_market_top_ng3_forward -v
           python -m unittest tests.test_market_top_ng3_forward_data -v
           python -m unittest tests.test_market_top_ng3_dashboard_contract -v
+          python -m unittest tests.test_market_top_route_a_ng_decision_record -v
       - name: Live source dry-run on PR
         if: github.event_name == 'pull_request'
         run: python market_top_ng3_forward.py --dry-run
