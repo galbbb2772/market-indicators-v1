@@ -4,16 +4,32 @@ import argparse
 import io
 import json
 import math
+import time
 import urllib.parse
 from datetime import datetime, timezone
 
 import pandas as pd
+import requests
 
 from audit_market_top_ng1_a_independent import get
 
 CPI_ID = "CPIAUCSL"
 ULC_ID = "PRS85006111"
-UNIT_PROFIT_ID = "A466RD3Q052SBEA"
+UNIT_PROFIT_ID = "PRS88003191"
+
+CPI_SNAPSHOT_COMMIT = "45fddf72d8c03167e68d3de6b76482d27ddc8874"
+CPI_SNAPSHOT_URL = (
+    "https://raw.githubusercontent.com/danielmiessler/Substrate/"
+    + CPI_SNAPSHOT_COMMIT
+    + "/Data/US-Inflation/CPI-US-Monthly-1947-2025.csv"
+)
+BLS_API_URL = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+BLS_FALLBACK_COMMIT = "d2f959bb311fb8e7a58289604a0e01e3b81f5708"
+BLS_FALLBACK_URL = (
+    "https://raw.githubusercontent.com/rmmomin/ai-adoption-labor-trends/"
+    + BLS_FALLBACK_COMMIT
+    + "/data/qilp_update/bls_responses.json"
+)
 
 THRESHOLD = 85.0
 WARMUP_MONTHS = 120
@@ -46,26 +62,146 @@ def period(s: str) -> pd.Period:
     return pd.Period(s, freq="M")
 
 
-def fetch_fred_series(series_id: str) -> pd.Series:
-    url = (
-        "https://fred.stlouisfed.org/graph/fredgraph.csv?id="
-        + urllib.parse.quote(series_id)
-    )
-    r = get(url)
+def fetch_cpi_snapshot() -> pd.Series:
+    r = get(CPI_SNAPSHOT_URL)
     df = pd.read_csv(io.StringIO(r.text), dtype=str)
-    if df.empty or "DATE" not in df.columns or series_id not in df.columns:
-        raise ValueError(f"unexpected FRED payload for {series_id}")
-    idx = pd.to_datetime(df["DATE"], errors="coerce")
+    date_col = next(
+        (x for x in ("observation_date", "DATE", "date") if x in df.columns),
+        None,
+    )
+    if df.empty or date_col is None or CPI_ID not in df.columns:
+        raise ValueError("unexpected pinned CPI snapshot")
+    idx = pd.to_datetime(df[date_col], errors="coerce")
     vals = pd.to_numeric(
-        df[series_id].astype(str).str.strip().replace({".": None, "": None}),
+        df[CPI_ID].astype(str).str.strip().replace({".": None, "": None}),
         errors="coerce",
     )
-    s = pd.Series(vals.to_numpy(), index=idx, name=series_id).dropna().sort_index()
-    s = s[~s.index.duplicated(keep="last")]
-    if len(s) < 100:
-        raise ValueError(f"{series_id} history too short: {len(s)}")
-    return s
+    out = pd.Series(
+        vals.to_numpy(), index=idx, name=CPI_ID
+    ).dropna().sort_index()
+    out = out[~out.index.duplicated(keep="last")]
+    if len(out) < 500 or out.index.min() > pd.Timestamp("1948-01-01"):
+        raise ValueError("pinned CPI snapshot coverage is insufficient")
+    out.attrs["source"] = (
+        "danielmiessler/Substrate@" + CPI_SNAPSHOT_COMMIT
+    )
+    return out
 
+
+def _bls_quarter_date(year: str, period_code: str) -> pd.Timestamp | None:
+    months = {"Q01": 1, "Q02": 4, "Q03": 7, "Q04": 10}
+    month = months.get(period_code)
+    if month is None:
+        return None
+    return pd.Timestamp(year=int(year), month=month, day=1)
+
+
+def _series_from_bls_blocks(blocks: list[dict], series_id: str) -> pd.Series:
+    pairs: dict[pd.Timestamp, float] = {}
+    for block in blocks:
+        if block.get("seriesID") != series_id:
+            continue
+        for row in block.get("data") or []:
+            dt = _bls_quarter_date(str(row.get("year")), str(row.get("period")))
+            if dt is None:
+                continue
+            try:
+                pairs[dt] = float(row.get("value"))
+            except (TypeError, ValueError):
+                continue
+    if not pairs:
+        raise ValueError(f"no BLS rows parsed for {series_id}")
+    return pd.Series(pairs, name=series_id, dtype=float).sort_index()
+
+
+def _walk_series_blocks(obj) -> list[dict]:
+    out: list[dict] = []
+    if isinstance(obj, dict):
+        if "seriesID" in obj and "data" in obj:
+            out.append(obj)
+        for value in obj.values():
+            out.extend(_walk_series_blocks(value))
+    elif isinstance(obj, list):
+        for value in obj:
+            out.extend(_walk_series_blocks(value))
+    return out
+
+
+def _fetch_bls_fallback(series_ids: list[str]) -> dict[str, pd.Series]:
+    r = get(BLS_FALLBACK_URL)
+    obj = r.json()
+    blocks = _walk_series_blocks(obj)
+    return {
+        sid: _series_from_bls_blocks(blocks, sid)
+        for sid in series_ids
+    }
+
+
+def fetch_bls_quarterly_yoy(series_ids: list[str]) -> tuple[dict[str, pd.Series], str]:
+    session = requests.Session()
+    session.headers.update(
+        {"User-Agent": "market-top-inflation-margin-v1.1/1.0"}
+    )
+    collected: dict[str, list[dict]] = {sid: [] for sid in series_ids}
+    try:
+        for start in (1948, 1968, 1988, 2008):
+            end = min(start + 19, 2026)
+            payload = {
+                "seriesid": series_ids,
+                "startyear": str(start),
+                "endyear": str(end),
+            }
+            last = None
+            for delay in (0, 2, 5):
+                if delay:
+                    time.sleep(delay)
+                try:
+                    resp = session.post(
+                        BLS_API_URL, json=payload, timeout=45
+                    )
+                    resp.raise_for_status()
+                    obj = resp.json()
+                    if obj.get("status") != "REQUEST_SUCCEEDED":
+                        raise RuntimeError(
+                            f"BLS status={obj.get('status')} "
+                            f"message={obj.get('message')}"
+                        )
+                    blocks = (obj.get("Results") or {}).get("series") or []
+                    for block in blocks:
+                        sid = block.get("seriesID")
+                        if sid in collected:
+                            collected[sid].append(block)
+                    last = None
+                    break
+                except Exception as exc:
+                    last = exc
+            if last is not None:
+                raise RuntimeError(
+                    f"BLS API chunk {start}-{end} failed: {last!r}"
+                )
+
+        parsed = {
+            sid: _series_from_bls_blocks(collected[sid], sid)
+            for sid in series_ids
+        }
+        for sid, series in parsed.items():
+            if len(series) < 100:
+                raise ValueError(
+                    f"BLS API {sid} history too short: {len(series)}"
+                )
+        return parsed, "BLS public API"
+    except Exception as api_exc:
+        parsed = _fetch_bls_fallback(series_ids)
+        for sid, series in parsed.items():
+            if len(series) < 100:
+                raise ValueError(
+                    f"BLS fallback {sid} history too short: {len(series)}"
+                ) from api_exc
+        return (
+            parsed,
+            "pinned rmmomin/ai-adoption-labor-trends BLS snapshot "
+            + BLS_FALLBACK_COMMIT,
+        )
 
 def build_cpi_rows(s: pd.Series) -> list[dict]:
     s = s.copy()
@@ -104,9 +240,8 @@ def build_ulc_rows(s: pd.Series) -> list[dict]:
 
 
 def build_margin_rows(s: pd.Series) -> list[dict]:
-    yoy = (s / s.shift(4) - 1.0) * 100.0
     rows = []
-    for dt, val in yoy.dropna().items():
+    for dt, val in s.dropna().items():
         source = pd.Period(pd.Timestamp(dt), freq="M")
         raw = -float(val)
         rows.append(
@@ -121,7 +256,6 @@ def build_margin_rows(s: pd.Series) -> list[dict]:
     for i, row in enumerate(rows):
         row["margin_compression_score"] = expanding_pct(vals, i)
     return rows
-
 
 def asof_row(rows: list[dict], month: pd.Period) -> dict | None:
     best = None
@@ -326,9 +460,12 @@ def window_hits(rows: list[dict], windows: list[tuple[str, str]]) -> dict:
 
 
 def evaluate() -> dict:
-    cpi = fetch_fred_series(CPI_ID)
-    ulc = fetch_fred_series(ULC_ID)
-    profit = fetch_fred_series(UNIT_PROFIT_ID)
+    cpi = fetch_cpi_snapshot()
+    bls, bls_provider = fetch_bls_quarterly_yoy(
+        [ULC_ID, UNIT_PROFIT_ID]
+    )
+    ulc = bls[ULC_ID]
+    profit = bls[UNIT_PROFIT_ID]
 
     states = build_monthly_states(
         build_cpi_rows(cpi),
@@ -418,12 +555,12 @@ def evaluate() -> dict:
     )[:20]
 
     return {
-        "schema_version": "market-top-inflation-margin-v1-screen-1",
+        "schema_version": "market-top-inflation-margin-v1.1-screen-1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "research_only": True,
         "production_effect": "none",
         "preregistration": (
-            "market-top-inflation-margin-v1-preregistration-1"
+            "market-top-inflation-margin-v1.1-preregistration-1"
         ),
         "sample": {
             "first_effective_month": (
@@ -474,10 +611,12 @@ def evaluate() -> dict:
             for x in top_rows
         ],
         "source_status": {
-            "historical_vintage": "CURRENT_OFFICIAL_HISTORY_NOT_EXACT_VINTAGE",
+            "historical_vintage": "CURRENT_HISTORY_NOT_EXACT_VINTAGE",
             "cpi": CPI_ID,
+            "cpi_provider": cpi.attrs.get("source"),
             "unit_labor_cost": ULC_ID,
             "unit_profit": UNIT_PROFIT_ID,
+            "bls_provider": bls_provider,
             "price": "Yahoo Finance ^GSPC unadjusted close",
         },
         "post_screen_tuning_allowed": False,
