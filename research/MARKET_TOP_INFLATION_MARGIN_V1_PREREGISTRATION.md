@@ -1,4 +1,4 @@
-# Market Top Inflation–Margin Route V1 — Preregistration
+# Market Top Inflation–Margin Route V1.1 — Preregistration
 
 Status:
 
@@ -6,32 +6,41 @@ Status:
 PREREGISTERED / NOT VALIDATED / RESEARCH ONLY
 ```
 
-This is a separate supplemental route. It does **not** modify PolicyShock V2.1.1, Route_B, legacy Route_A/Route_C, MASTER TOP V2.1.8, or production Pressure.
+V1.1 is a **pre-result provider hardening** of V1. The first V1 workflow failed before loading its first macro series, so no model score, validation-window result, or episode outcome had been observed. See `MARKET_TOP_INFLATION_MARGIN_V1_PROVIDER_FAILURE.md`.
+
+This remains a separate supplemental route. It does **not** modify PolicyShock V2.1.1, Route_B, legacy Route_A/Route_C, MASTER TOP V2.1.8, or production Pressure.
 
 ## Hypothesis
 
-Some historical U.S. equity tops occurred in an inflation/cost regime that the modern credit/liquidity routes do not describe well.
+Some historical U.S. equity tops occurred in an inflation/cost regime that modern credit/liquidity routes do not describe well.
 
 The frozen mechanism is:
 
 1. consumer-price inflation is historically elevated;
 2. unit labor-cost growth is historically elevated;
-3. nonfinancial corporate unit profits are compressing;
+3. nonfinancial-corporate unit-profit growth is historically weak;
 4. the equity index is still near a recent high.
 
-This route is deliberately macro-cost/profit based. No QE/taper variable is used.
+No QE/taper variable is used.
 
-## Official source series
+## Hardened source chain
 
-FRED identifiers:
+The semantic inputs are frozen as:
 
 - `CPIAUCSL` — CPI for All Urban Consumers, monthly;
-- `PRS85006111` — Nonfarm Business Unit Labor Costs, percent change from year ago, quarterly;
-- `A466RD3Q052SBEA` — nonfinancial corporate after-tax unit profits, quarterly.
+- `PRS85006111` — Nonfarm Business unit labor costs, % change same quarter one year ago;
+- `PRS88003191` — Nonfinancial Corporate unit profits, % change same quarter one year ago;
+- S&P 500 index `^GSPC` unadjusted close for the price gate and outcomes.
 
-Price gate and forward outcomes:
+Transport:
 
-- S&P 500 index `^GSPC`, unadjusted close.
+- CPIAUCSL is read from a pinned public snapshot of the FRED series:
+  `danielmiessler/Substrate@45fddf72d8c03167e68d3de6b76482d27ddc8874`.
+- BLS quarterly series are fetched from the BLS public API in fixed historical chunks.
+- If the BLS API is unavailable, the implementation may read the same BLS series IDs from the pinned public BLS-response snapshot:
+  `rmmomin/ai-adoption-labor-trends@d2f959bb311fb8e7a58289604a0e01e3b81f5708`.
+
+Changing transport/provider does not authorize changing any formula or decision rule.
 
 ## Frozen component definitions
 
@@ -48,14 +57,14 @@ InflationScore(t)
 
 ```
 ULCScore(q)
-  = expanding_percentile(ULC_YoY)
+  = expanding_percentile(PRS85006111)
 ```
 
 ### Margin compression
 
 ```
 UnitProfitYoY(q)
-  = 100 * (UnitProfit(q) / UnitProfit(q-4) - 1)
+  = PRS88003191
 
 MarginCompressionRaw(q)
   = -UnitProfitYoY(q)
@@ -67,7 +76,7 @@ MarginCompressionScore(q)
 ### Route
 
 ```
-Route_IM_V1
+Route_IM_V1.1
   = cbrt(
       InflationScore
       * ULCScore
@@ -78,14 +87,14 @@ Route_IM_V1
 Threshold:
 
 ```
-Route_IM_V1 >= 85
+Route_IM_V1.1 >= 85
 ```
 
 No weight or component threshold is added.
 
 ## Point-in-time convention
 
-This first historical screen uses current official histories and conservative publication lags.
+This first historical screen uses current historical series and conservative publication lags.
 
 - CPI monthly source observation: effective one calendar month later.
 - Quarterly ULC and unit-profit observation: effective five calendar months after the quarter-start label.
@@ -96,7 +105,7 @@ This first historical screen uses current official histories and conservative pu
 - expanding percentiles are current-inclusive using only source observations effective by that month;
 - no interpolation;
 - no event-specific lags;
-- first 10 years of component history are warm-up only.
+- first 10 years of common component history are warm-up only.
 
 This is **not** an exact historical-vintage replay. If the route survives screening, source-vintage robustness is a separate gate.
 
@@ -110,7 +119,7 @@ AND
 that high formed within the prior 3 calendar months
 ```
 
-No direct price-breakdown trigger is authorized in V1.
+No direct price-breakdown trigger is authorized.
 
 ## Hypothesis-generation windows
 
@@ -190,13 +199,13 @@ A pass remains research-only.
 
 ## Governance
 
-After screening begins:
+After the first successful screening calculation begins:
 
 - do not change the 85 threshold;
 - do not change component weights;
 - do not change lags;
 - do not remove the top-location gate;
-- do not redefine the positive/negative windows;
+- do not redefine positive/negative windows;
 - do not suppress failed episodes.
 
 Any structural redesign must be a new version.
