@@ -144,3 +144,32 @@ source_provenance_at_start
 and remains attached to that episode.
 
 This is required because the upstream datasets can be revised. A later dataset revision must not change which vintage generated a prospective signal.
+
+
+## Monthly signal immutability
+
+Beginning with the first countable effective month, each monthly signal is captured only once.
+
+Rule:
+
+```
+effective_month >= 2026-12
+```
+
+The **first successful run after that effective month is complete** becomes the canonical frozen snapshot for that month.
+
+If the required source data are unavailable or stale, the run fails closed and freezes nothing. A later scheduled run may try again.
+
+Once the monthly snapshot is frozen, later upstream revisions must not alter its:
+
+- NG3 score;
+- component scores;
+- phase gate;
+- top-location gate;
+- ARMED / IDLE state;
+- source months;
+- source SHA-256 fingerprints.
+
+Later runs may continue updating only the forward outcome path of already-opened prospective episodes.
+
+This prevents a revised Fama-French or credit history from rewriting what the model actually knew when the prospective month was first scored.
