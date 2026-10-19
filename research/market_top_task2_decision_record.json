@@ -306,8 +306,18 @@
     "unresolved_delivery_provenance": {
       "exact_jan3_ff_archive_wayback_capture": false,
       "exact_jan3_ff_archive_snapshot_count": 0,
-      "exact_jan3_treasury_page_bytes": false
+      "exact_jan3_treasury_page_bytes": false,
+      "official_page_pre_cutoff_202111_publication_proof": false
     },
-    "interpretation": "The 2022 Route_B numerical input chain is now reproduced from historically appropriate official/pre-cutoff content. Remaining gaps concern independent web-delivery timestamps for exact Jan-3 bytes, not the factor/valuation/policy values used in the replay."
+    "interpretation": "The 2022 Route_B numerical input chain is now reproduced from historically appropriate official/pre-cutoff content. Remaining gaps concern independent web-delivery timestamps for exact Jan-3 bytes, not the factor/valuation/policy values used in the replay.",
+    "publication_page_wayback": {
+      "status": "NO_PRE_CUTOFF_PUBLICATION_PAGE_PROOF",
+      "cutoff": "2022-01-03T23:59:59Z",
+      "snapshots_inspected": 2,
+      "query_errors": [],
+      "strongest_parseable_terminal_month": "202110",
+      "november_2021_publication_independently_proven": false,
+      "interpretation": "Official Dec-2021 factor-vintage content is recovered and numerically reproducible, but surviving pre-cutoff Ken French page captures do not independently prove publication through 2021-11."
+    }
   }
 }
