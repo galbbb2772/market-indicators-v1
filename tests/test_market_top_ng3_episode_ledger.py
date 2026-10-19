@@ -47,7 +47,7 @@ def empty_ledger():
         "schema_version":"market-top-route-a-ng3-episodes-1",
         "research_only":True,
         "production_effect":"none",
-        "protocol":"market-top-route-a-ng3-evidence-protocol-1",
+        "protocol":"market-top-route-a-ng3-evidence-protocol-2",
         "episodes":[],
         "summary":{},
     }
@@ -126,6 +126,75 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
             )
         self.assertEqual(len(reopened["episodes"]),2)
         self.assertEqual(reopened["episodes"][1]["episode_id"],"NG3-202703")
+
+    def test_missing_month_between_armed_states_does_not_split_episode(self):
+        p=price_series()
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=empty_ledger(),
+        ):
+            first=update_episode_ledger(snap("202612"),p)
+
+        # 2027-01 is missing entirely; the next observed month is ARMED.
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=first,
+        ):
+            bridged=update_episode_ledger(snap("202702"),p)
+
+        self.assertEqual(len(bridged["episodes"]),1)
+        ep=bridged["episodes"][0]
+        self.assertEqual(ep["episode_id"],"NG3-202612")
+        self.assertEqual(ep["last_armed_effective_month"],"202702")
+        self.assertTrue(ep["continuity_evidence_gap"])
+        self.assertEqual(ep["missing_effective_months"],["202701"])
+        self.assertEqual(
+            bridged["summary"]["episodes_with_continuity_gaps"],
+            1,
+        )
+
+    def test_gap_tainted_complete_episode_cannot_count_toward_review(self):
+        p=price_series()
+        episodes=[]
+        for i,month in enumerate(("202612","202702","202704","202706")):
+            episodes.append({
+                "episode_id":f"NG3-{month}",
+                "signal_status":"CLOSED",
+                "start_effective_month":month,
+                "last_armed_effective_month":month,
+                "closed_effective_month":month,
+                "closed_reason":"TEST",
+                "anchor_date":"2026-12-31",
+                "anchor_close":100.0,
+                "source_months_at_start":{},
+                "start_score":90.0,
+                "start_financial_lead_gap_raw":15.0,
+                "continuity_evidence_gap": i == 0,
+                "missing_effective_months":["202701"] if i == 0 else [],
+                "outcomes":{},
+                "classification_252":None,
+            })
+        ledger=empty_ledger()
+        ledger["episodes"]=episodes
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=ledger,
+        ):
+            x=update_episode_ledger(
+                snap("202708",state="IDLE"),
+                p,
+            )
+        self.assertEqual(
+            x["summary"]["complete_252_session_episodes"],
+            4,
+        )
+        self.assertEqual(
+            x["summary"][
+                "complete_252_session_episodes_without_continuity_gaps"
+            ],
+            3,
+        )
+        self.assertFalse(x["summary"]["review_eligible"])
 
     def test_252_classification_is_anchor_based(self):
         p=price_series()
