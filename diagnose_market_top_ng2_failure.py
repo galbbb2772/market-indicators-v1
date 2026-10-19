@@ -12,6 +12,7 @@ from validate_market_top_ng2_pre1993 import (
     build_ff_scores,
     fetch_sp500,
     month_gate,
+    classify_outcome,
 )
 
 
@@ -60,6 +61,15 @@ def diagnose() -> dict:
         x for x in rows
         if x["route_a_ng1"] >= THRESHOLD and x["top_location_pass"]
     ]
+    ng1_armed_with_outcomes = []
+    for x in ng1_armed:
+        gate = month_gate(price, x["effective_month"])
+        anchor = gate["asof"] if gate is not None else None
+        outcome = classify_outcome(price, anchor) if anchor is not None else None
+        y = compact(x)
+        y["anchor"] = anchor.date().isoformat() if anchor is not None else None
+        y["outcome_252"] = outcome
+        ng1_armed_with_outcomes.append(y)
 
     top_ng2 = sorted(rows, key=lambda x: x["route_a_ng2"], reverse=True)[:10]
     top_ng1 = sorted(rows, key=lambda x: x["route_a_ng1"], reverse=True)[:10]
@@ -99,7 +109,14 @@ def diagnose() -> dict:
         },
         "top_route_ng2_months": [compact(x) for x in top_ng2],
         "top_gate_route_ng2_months": [compact(x) for x in gate_top_ng2],
-        "ng1_armed_months": [compact(x) for x in ng1_armed],
+        "ng1_armed_months": ng1_armed_with_outcomes,
+        "selected_historical_near_misses": [
+            compact(x) for x in rows
+            if x["effective_month"] in {
+                "196608", "196812", "197301", "197307",
+                "198708", "198709", "199007", "199010"
+            }
+        ],
         "interpretation_rule": (
             "Diagnostic only. It may explain why frozen NG2 produced zero "
             "episodes, but it cannot alter NG2 threshold, formula, lags, or "
