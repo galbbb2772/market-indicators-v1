@@ -108,3 +108,19 @@ Build the bounded 1986-1988 source panel with explicit per-month provenance, pub
 Only after that panel passes source-integrity tests may a new faster NG3 formula be preregistered.
 
 NG3-CostPressure V1 remains closed and unchanged.
+
+
+## Reproducible validation
+
+Latest deterministic contract run:
+
+```
+workflow = Market Top NG3 First-Release Pilot 1987
+run = 39214748917
+conclusion = SUCCESS
+artifact = market-top-ng3-first-release-pilot-1987
+artifact id = 12168599810
+sha256 = 8e299b613023d1fdc574fd97a47cabed69ea1f56095ecd177e2cf71403fa443f
+```
+
+This run validates both frozen January and May revision cases while preserving the research-only boundary.
