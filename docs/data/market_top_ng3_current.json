@@ -1,0 +1,61 @@
+{
+  "schema_version": "market-top-route-a-ng3-forward-1",
+  "generated_at": "2026-10-19T05:18:41.094415+00:00",
+  "research_only": true,
+  "production_effect": "none",
+  "validation_status": "PROSPECTIVE_VALIDATION_PENDING",
+  "effective_month": "202609",
+  "evidence_phase": "RETROSPECTIVE_TRAINING_DIAGNOSTIC",
+  "counts_toward_prospective_validation": false,
+  "prospective_start_effective_month": "202612",
+  "source_months": {
+    "fama_french": "202607",
+    "credit": "202608"
+  },
+  "components": {
+    "spread_shock_score": 47.31428571428572,
+    "finance_weakness_score": 39.88294314381271,
+    "size_weakness_score": 46.82274247491639,
+    "portfolio_exhaustion_score": 27.34113712374582,
+    "financial_lead_gap_raw": -7.4313425704730065,
+    "effective_history_months": 875
+  },
+  "route_a_ng1_score": 39.42423064841047,
+  "route_a_ng3_score": 39.42423064841047,
+  "gates": {
+    "route_ge_85": false,
+    "lead_gap_ge_10": false,
+    "warmup_ge_120": true,
+    "phase_gate": false,
+    "top_location": {
+      "asof": "2026-09-30",
+      "close": 762.6300048828125,
+      "high24": 777.8800048828125,
+      "high24_date": "2026-08-13",
+      "within_5pct": true,
+      "high_within_3m": true,
+      "passes": true
+    }
+  },
+  "state": "IDLE",
+  "sources": {
+    "fama_french": {
+      "ff25_last_month": "202608",
+      "ff12_last_month": "202608",
+      "ff3_last_month": "202608",
+      "source": "Kenneth R. French official current ZIPs"
+    },
+    "credit": {
+      "source": "Pinned 1953+ credit history extended with MacroIntelligencePlatform FRED snapshot",
+      "pinned_commit": "71af02cba3493ffa15ac47f512dc346598f2e23f",
+      "extension_manifest_taken_at_utc": "2026-10-16T17:44:03+00:00",
+      "latest_month": "202609"
+    },
+    "price": "Yahoo Finance SPY unadjusted Close"
+  },
+  "governance": {
+    "historical_validation_authorized": false,
+    "production_promotion_authorized": false,
+    "post_preregistration_tuning_allowed": false
+  }
+}
