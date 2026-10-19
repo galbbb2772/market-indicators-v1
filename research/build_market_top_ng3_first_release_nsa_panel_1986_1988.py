@@ -6,14 +6,24 @@ import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 
-from research.build_market_top_ng3_first_release_panel_1986_1988 import (
-    MONTH_NAMES,
-    PANEL_MONTHS,
-    SOURCE_MONTHS,
-    fetch_text,
-    parse_schedule,
-    pdf_url,
-)
+try:
+    from research.build_market_top_ng3_first_release_panel_1986_1988 import (
+        MONTH_NAMES,
+        PANEL_MONTHS,
+        SOURCE_MONTHS,
+        fetch_text,
+        parse_schedule,
+        pdf_url,
+    )
+except ModuleNotFoundError:
+    from build_market_top_ng3_first_release_panel_1986_1988 import (
+        MONTH_NAMES,
+        PANEL_MONTHS,
+        SOURCE_MONTHS,
+        fetch_text,
+        parse_schedule,
+        pdf_url,
+    )
 
 
 def _numbers(s: str) -> list[float]:
