@@ -166,6 +166,9 @@ def _value_in_band(
 
 
 def parse_table1_aggregate_geometry(spans: list[dict], label: str) -> dict:
+    if label not in {"finished_goods", "intermediate_goods"}:
+        raise ValueError(label)
+
     labels = [
         s
         for s in spans
