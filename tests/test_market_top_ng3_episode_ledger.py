@@ -277,6 +277,23 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
         self.assertLessEqual(m["worst_return_from_anchor_pct"],-15.0)
         self.assertEqual(classify_252(m),"MAJOR_TOP")
 
+    def test_outcome_path_missing_near_anchor_fails_closed(self):
+        idx=pd.bdate_range("2032-01-05",periods=300)
+        p=pd.Series(100.0,index=idx,dtype=float)
+        p.attrs["source"]="Yahoo Finance SPY unadjusted Close"
+        p.attrs["payload_sha256"]="d"*64
+        p.attrs["latest_date"]=idx[-1].date().isoformat()
+        with self.assertRaisesRegex(
+            ValueError,
+            "price history does not cover episode start",
+        ):
+            evaluate_horizon(
+                p,
+                anchor_date="2026-12-31",
+                anchor_close=100.0,
+                sessions=252,
+            )
+
     def test_completed_horizon_carries_price_payload_provenance(self):
         p=price_series()
         m=evaluate_horizon(
