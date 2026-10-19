@@ -6,6 +6,7 @@ on:
       - "research/build_market_top_ng3_first_release_panel_1986_1988.py"
       - "research/market_top_ng3_first_release_panel_1986_1988.json"
       - "research/MARKET_TOP_NG3_FIRST_RELEASE_PANEL_1986_1988.md"
+      - "tests/test_market_top_ng3_first_release_panel_parser.py"
       - ".github/workflows/market_top_ng3_first_release_panel_1986_1988.yml"
   workflow_dispatch:
 
@@ -23,6 +24,8 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: python -m pip install --upgrade pip requests pypdf
+      - name: Run parser regression tests
+        run: python -m unittest tests.test_market_top_ng3_first_release_panel_parser -v
       - name: Build first-release panel
         run: |
           python research/build_market_top_ng3_first_release_panel_1986_1988.py \
