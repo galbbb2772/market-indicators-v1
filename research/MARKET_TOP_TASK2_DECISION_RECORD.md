@@ -1,6 +1,6 @@
 # Market Top Trigger Task 2 — Decision Record
 
-Status: **CORE TASK PASS WITH LEGACY PROVENANCE GAPS**
+Status: **CORE TASK PASS / FORWARD SHADOW OPERATIONAL / LEGACY A-C PROVENANCE GAPS**
 
 ## Original task
 
@@ -269,20 +269,21 @@ Route_B = 85.3048 to 85.6570
 
 All sampled variants remain above 85.
 
-### Remaining limitation
+### Remaining limitation — superseded by later December-2021 recovery
 
-The exact monthly factor file available on **2022-01-03** has not been recovered.
+The earlier research stage had not yet recovered the relevant 2021-11 factor vintage. That gap has since been narrowed materially.
 
-Therefore the evidence status is:
+Current status:
 
 ```
-conservative publication-lag replay = PASS
-official July-2022 annual-cut robustness = PASS
-cross-version revision sensitivity = PASS
-exact Jan-3 monthly vintage = UNRESOLVED
+official Dec-2021 factor-vintage content = RECOVERED
+numerical SizeWeakness replay = REPRODUCIBLE
+conservative Route_B = PASS
+
+exact Jan-3 web-delivery timestamp = UNPROVEN
 ```
 
-The official 2022 archive result is slightly stronger than the current canonical reconstructed history, so the 2022 pass is not being created by later CRSP revisions.
+The official 2022 archive lattice remains useful revision-robustness evidence, but it is no longer the strongest factor-vintage evidence.
 
 
 ### Wayback exact-vintage attempt
@@ -303,16 +304,17 @@ No pre-cutoff Wayback ZIP contained the required 2021-11 row.
 Therefore:
 
 ```
-exact Jan-3-2022 monthly vintage
+exact Jan-3-2022 web-delivery timestamp
 = not recoverable from Wayback
 ```
 
-This changes the provenance label, not the model result:
+This changes the delivery-provenance label, not the recovered factor-vintage content or model result:
 
 ```
+official Dec-2021 factor-vintage content = RECOVERED
 official July-2022 archive Route_B = 85.5692 -> PASS
 cross-version revision range = 85.3048 to 85.6570 -> PASS
-exact Jan-3 file = ARCHIVE COVERAGE UNAVAILABLE
+exact Jan-3 delivery timestamp = ARCHIVE COVERAGE UNAVAILABLE
 ```
 
 
@@ -369,7 +371,7 @@ versus the frozen:
 PolicyShock = 74.3886193
 ```
 
-So the 2022 pass remains positive under every observed current/official/pre-cutoff Valuation-Size combination, while exact January-3 monthly vintages remain explicitly unresolved.
+So the 2022 pass remains positive under every observed current/official/pre-cutoff Valuation-Size combination. The remaining unresolved issue is exact publication-time delivery provenance for some source bytes, not the recovered December-2021 FF vintage content.
 
 
 ## 2022 vintage-robustness evidence hierarchy
