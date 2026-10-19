@@ -1,6 +1,6 @@
 {
-  "schema_version": "market-top-route-a-ng3-evidence-protocol-1",
-  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "schema_version": "market-top-route-a-ng3-evidence-protocol-2",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START_SUPERSEDES_V1",
   "frozen_date": "2026-10-19",
   "prospective_start_effective_month": "202612",
   "research_only": true,
@@ -12,7 +12,9 @@
     "reopen": "an ARMED month after at least one completed IDLE effective month starts a new episode",
     "episode_id": "NG3-<first_armed_effective_month>",
     "anchor": "last trading day of first ARMED effective month",
-    "overlapping_outcome_windows_allowed": true
+    "overlapping_outcome_windows_allowed": true,
+    "missing_month_bridge": "ARMED -> missing effective month(s) -> ARMED remains one episode; record continuity_evidence_gap=true and missing_effective_months.",
+    "missing_month_conservative_bias": "Unknown monthly state may not be used as evidence that an episode ended."
   },
   "outcome_tracking": {
     "price": "SPY unadjusted Close",
@@ -38,7 +40,9 @@
     "minimum_complete_252_session_episodes": 4,
     "automatic_promotion": false,
     "action_signal": null,
-    "rule": "When four complete 252-session prospective episodes exist, only set review_eligible=true. A separate decision record is required for any promotion."
+    "rule": "When four complete 252-session prospective episodes without continuity evidence gaps exist, only set review_eligible=true. A separate decision record is required for any promotion.",
+    "minimum_complete_252_session_episodes_without_continuity_gaps": 4,
+    "continuity_gap_rule": "A completed episode with continuity_evidence_gap=true is retained in the ledger but excluded from review_eligible episode count."
   },
   "immutability": {
     "model_inputs_unchanged": true,
@@ -57,5 +61,6 @@
     "later_revisions": "Later scheduled runs may update forward outcome observations, but must not overwrite the frozen monthly signal state, score, gates, source months, or source fingerprints.",
     "failure_behavior": "If required inputs are stale or unavailable, no monthly snapshot is frozen; the workflow retries on a later scheduled run.",
     "purpose": "Preserve true prospective point-in-time evidence against later upstream revisions."
-  }
+  },
+  "supersedes": "market-top-route-a-ng3-evidence-protocol-1"
 }
