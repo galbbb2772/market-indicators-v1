@@ -6,6 +6,10 @@ on:
       - "market_top_route_c_ng2_forward.py"
       - "tests/test_market_top_route_c_ng2_forward.py"
       - "tests/test_market_top_route_c_ng2_preregistration.py"
+      - "tests/test_market_top_route_c_ng2_data.py"
+      - "docs/data/market_top_route_c_ng2_current.json"
+      - "docs/data/market_top_route_c_ng2_history.json"
+      - "research/MARKET_TOP_ROUTE_C_NG_DECISION_RECORD.md"
       - "research/MARKET_TOP_ROUTE_C_NG2_PREREGISTRATION.md"
       - "research/market_top_route_c_ng2_preregistration.json"
       - ".github/workflows/market_top_route_c_ng2_forward.yml"
@@ -42,6 +46,7 @@ jobs:
           python -m unittest \
             tests.test_market_top_route_c_ng2_preregistration \
             tests.test_market_top_route_c_ng2_forward \
+            tests.test_market_top_route_c_ng2_data \
             -v
 
       - name: Live dry-run on pull request
