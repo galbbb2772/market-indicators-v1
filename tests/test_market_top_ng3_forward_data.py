@@ -61,6 +61,28 @@ class NG3ForwardDataContractTests(unittest.TestCase):
             "2026-10-16T17:44:03+00:00",
         )
 
+    def test_seed_contains_cryptographic_source_fingerprints(self):
+        def is_sha(v):
+            return (
+                isinstance(v,str)
+                and len(v)==64
+                and all(c in "0123456789abcdef" for c in v.lower())
+            )
+        ff=self.x["sources"]["fama_french"]
+        for k in ("ff25_provenance","ff12_provenance","ff3_provenance"):
+            self.assertTrue(is_sha(ff[k]["zip_sha256"]))
+        credit=self.x["sources"]["credit"]
+        for k in (
+            "manifest_sha256","baa_extension_sha256",
+            "gs10_extension_sha256","baa_pinned_base_sha256",
+            "gs10_pinned_base_sha256",
+        ):
+            self.assertTrue(is_sha(credit[k]))
+        self.assertTrue(
+            is_sha(self.x["sources"]["price"]["payload_sha256"])
+        )
+        self.assertFalse(self.x["signal_snapshot_frozen"])
+
     def test_governance_is_fail_closed(self):
         g=self.x["governance"]
         self.assertFalse(g["historical_validation_authorized"])
