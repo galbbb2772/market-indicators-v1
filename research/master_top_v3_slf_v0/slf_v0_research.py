@@ -20,7 +20,9 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 UA = "market-top-research/SLF-v0 (public-source reproducibility)"
 FSI_URL = "https://www.financialresearch.gov/financial-stress-index/data/files/ofr-fsi.csv"
-FSI_MIRROR_URL = "https://www.diawonds.com/ofr/"
+ERC_HISTORY_URL = "https://economicriskclock.org/api/v1/data/metric_history"
+ERC_FUNDING_ID = "us_ofr_funding_contribution"
+ERC_SAFE_ID = "us_ofr_safe_assets_contribution"
 NYPD_URL = "https://data.financialresearch.gov/v1/series/timeseries"
 STOOQ_URL = "https://stooq.com/q/d/l/?s=%5Espx&i=d"
 
@@ -58,46 +60,75 @@ def pick_col(cols: Iterable[str], *needles: str) -> str:
             return c
     raise KeyError(f"Could not find column containing {needles}; columns={clist}")
 
+def load_erc_metric(entity_id: str):
+    rows = []
+    raw_parts = []
+    current_year = pd.Timestamp.utcnow().year
+    for year in range(2000, current_year + 1):
+        params = {
+            "entity_id": entity_id,
+            "limit": 500,
+            "period_from": f"{year}-01-01",
+            "period_to": f"{year}-12-31",
+        }
+        r = requests.get(ERC_HISTORY_URL, params=params, headers={"User-Agent": UA, "Accept": "application/json"}, timeout=60)
+        r.raise_for_status()
+        raw_parts.append((r.url + "\n").encode("utf-8") + r.content + b"\n")
+        obj = r.json()
+        items = obj.get("items", [])
+        sel = obj.get("history_selection", {})
+        if sel.get("matching_points", 0) > 500:
+            raise RuntimeError(f"ERC yearly chunk unexpectedly exceeds limit for {entity_id} {year}: {sel}")
+        for item in items:
+            data = item.get("data", item)
+            period = data.get("period")
+            value = data.get("value")
+            if period is not None:
+                rows.append((period, value))
+    df = pd.DataFrame(rows, columns=["source_date", entity_id])
+    df["source_date"] = pd.to_datetime(df["source_date"], errors="coerce")
+    df[entity_id] = pd.to_numeric(df[entity_id], errors="coerce")
+    df = df.dropna(subset=["source_date"]).drop_duplicates("source_date", keep="last").sort_values("source_date")
+    if len(df) < 6000:
+        raise RuntimeError(f"ERC history incomplete for {entity_id}: rows={len(df)}")
+    return df, b"".join(raw_parts)
+
 def load_fsi():
     source_url = FSI_URL
     source_role = "official_ofr_csv"
     try:
         raw = get_bytes(FSI_URL)
         df = pd.read_csv(io.BytesIO(raw))
+        date_col = pick_col(df.columns, "date")
+        funding_col = pick_col(df.columns, "fund")
+        try:
+            safe_col = pick_col(df.columns, "safe")
+        except KeyError:
+            safe_col = pick_col(df.columns, "flight")
+        out = df[[date_col, funding_col, safe_col]].copy()
+        out.columns = ["source_date", "funding", "safe_assets"]
+        out["source_date"] = pd.to_datetime(out["source_date"], errors="coerce")
+        out["funding"] = pd.to_numeric(out["funding"], errors="coerce")
+        out["safe_assets"] = pd.to_numeric(out["safe_assets"], errors="coerce")
+        meta = {"date_col": str(date_col), "funding_col": str(funding_col), "safe_col": str(safe_col),
+                "columns": [str(c) for c in df.columns], "source_url": source_url, "source_role": source_role}
     except Exception as official_error:
-        # Frozen pre-score fallback: retrospective mirror only. Exact raw bytes are hashed.
-        source_url = FSI_MIRROR_URL
-        source_role = "diawonds_retrospective_mirror_of_ofr"
-        raw = get_bytes(FSI_MIRROR_URL)
-        tables = pd.read_html(io.BytesIO(raw))
-        candidates = []
-        for t in tables:
-            cols = [str(c).strip().lower() for c in t.columns]
-            if any("fund" in c for c in cols) and any("safe" in c for c in cols):
-                candidates.append(t)
-        if not candidates:
-            raise RuntimeError(f"No OFR-like table in mirror; official_error={official_error}")
-        df = max(candidates, key=len)
-    date_col = pick_col(df.columns, "date")
-    funding_col = pick_col(df.columns, "fund")
-    try:
-        safe_col = pick_col(df.columns, "safe")
-    except KeyError:
-        safe_col = pick_col(df.columns, "flight")
-    out = df[[date_col, funding_col, safe_col]].copy()
-    out.columns = ["source_date", "funding", "safe_assets"]
-    # Mirror uses day-first dates; ISO official data remains correctly parsed with dayfirst=False fallback.
-    parsed = pd.to_datetime(out["source_date"], errors="coerce")
-    if parsed.notna().mean() < 0.95:
-        parsed = pd.to_datetime(out["source_date"], errors="coerce", dayfirst=True)
-    out["source_date"] = parsed
-    out["funding"] = pd.to_numeric(out["funding"], errors="coerce")
-    out["safe_assets"] = pd.to_numeric(out["safe_assets"], errors="coerce")
+        source_role = "economic_risk_clock_retained_ofr_history_retro_only"
+        fund, raw_fund = load_erc_metric(ERC_FUNDING_ID)
+        safe, raw_safe = load_erc_metric(ERC_SAFE_ID)
+        out = fund.merge(safe, on="source_date", how="inner")
+        out = out.rename(columns={ERC_FUNDING_ID:"funding", ERC_SAFE_ID:"safe_assets"})
+        raw = raw_fund + b"\n---SAFE_ASSETS---\n" + raw_safe
+        source_url = ERC_HISTORY_URL
+        meta = {
+            "date_col":"source_date","funding_col":ERC_FUNDING_ID,"safe_col":ERC_SAFE_ID,
+            "columns":list(out.columns),"source_url":source_url,"source_role":source_role,
+            "official_download_error":str(official_error),
+            "note":"retrospective mirror only; official OFR publication lag rules applied separately"
+        }
     out = out.dropna(subset=["source_date"]).sort_values("source_date")
     # Conservative rule frozen in data contract: observation t -> effective t+3 US business-day proxy.
     out["date"] = out["source_date"] + pd.offsets.BDay(3)
-    meta = {"date_col": str(date_col), "funding_col": str(funding_col), "safe_col": str(safe_col),
-            "columns": [str(c) for c in df.columns], "source_url": source_url, "source_role": source_role}
     return out, raw, meta
 
 def load_nypd_series(mnemonic: str):
