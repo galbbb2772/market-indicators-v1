@@ -246,14 +246,25 @@ prospective evidence.
 
 Protocol v2 also fails closed on time reversal.
 
-For an open prospective episode:
+For the prospective ledger as a whole:
 
 ```
-incoming effective_month < last_armed_effective_month
+incoming effective_month
+< latest month already represented by any episode
 => ERROR
 ```
 
+This applies regardless of whether the stale incoming state is `ARMED` or
+`IDLE`, and regardless of whether the latest existing episode is open or
+already closed.
+
 An older manual rerun, stale workflow checkout, or out-of-order job may not move
-the evidence ledger backward or rewrite episode continuity.
+the evidence ledger backward, reopen an older month after a later close, or
+rewrite episode continuity.
+
+This is an implementation hardening of the already-frozen
+`out_of_order_episode_updates_forbidden` rule, made before the first
+prospective effective month. It does not change any model or evidence-count
+criterion.
 
 This is bookkeeping protection only; it does not change any NG3 model rule.
