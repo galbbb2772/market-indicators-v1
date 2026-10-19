@@ -1,0 +1,55 @@
+name: Market Top NG3 Vintage Profit Share Diagnostic
+
+on:
+  pull_request:
+    paths:
+      - "audit_market_top_ng3_vintage_profit_share.py"
+      - "tests/test_market_top_ng3_vintage_profit_share.py"
+      - "research/MARKET_TOP_NG3_VINTAGE_PROFIT_SHARE.md"
+      - "research/market_top_ng3_vintage_profit_share.json"
+      - ".github/workflows/market_top_ng3_vintage_profit_share.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependency
+        run: python -m pip install --upgrade pip requests
+
+      - name: Verify frozen historical ratios
+        run: python -m unittest tests.test_market_top_ng3_vintage_profit_share -v
+
+      - name: Compare historical publication ratios with current revised BEA history
+        run: |
+          python audit_market_top_ng3_vintage_profit_share.py \
+            --output market_top_ng3_vintage_profit_share.json
+
+      - name: Print compact result
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open("market_top_ng3_vintage_profit_share.json"))
+          for k,v in x["cases"].items():
+              print(k)
+              print(" historical =", v["historical_profit_share_pct"])
+              print(" current    =", v["current_revised"]["profit_share_pct"])
+              print(" diff_pp    =", v["revision_diagnostic"]["profit_share_difference_pp"])
+              print(" rel_diff   =", v["revision_diagnostic"]["profit_share_relative_difference_pct"])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-top-ng3-vintage-profit-share
+          path: market_top_ng3_vintage_profit_share.json
+          if-no-files-found: error
