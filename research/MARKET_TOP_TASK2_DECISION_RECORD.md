@@ -764,3 +764,51 @@ exact Jan-3 web-delivery timing = UNPROVEN
 ```
 
 This does not reopen the numerical input chain. It prevents an unsupported upgrade from recovered historical content to independently timestamped Jan-3 web availability.
+
+
+## Monthly archive probe semantics
+
+A direct present-day probe confirms that the official Kenneth French archive
+directory labeled:
+
+```
+12 2021 Update
+```
+
+exists today, returns a valid FF3 ZIP, and that ZIP ends at:
+
+```
+202111
+```
+
+The neighboring period-labeled directories also behave coherently:
+
+```
+10 2021 Update -> through 202109
+11 2021 Update -> not present
+12 2021 Update -> through 202111
+01 2022 Update -> through 202112
+02 2022 Update -> through 202201
+```
+
+This is useful content/vintage-structure evidence, but the probe is explicitly
+**not** publication-time evidence.
+
+A period label such as `12 2021 Update` does not independently prove that the
+same URL or exact bytes were publicly downloadable before 2022-01-03.
+
+Therefore the frozen interpretation remains:
+
+```
+official Dec-2021 vintage content = RECOVERED
+period-labeled archive structure = VERIFIED
+numerical SizeWeakness replay = REPRODUCIBLE
+Route_B = 85.3338068250 = PASS
+
+pre-cutoff exact ZIP capture = ABSENT
+pre-cutoff official-page proof through 202111 = ABSENT
+exact Jan-3 web-delivery timestamp = UNPROVEN
+```
+
+The monthly archive probe must never be used to upgrade
+`publication_time_pre_cutoff_proven` to true.
