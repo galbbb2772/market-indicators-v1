@@ -1,0 +1,61 @@
+name: Market Top NG2-A Pre-1993 Holdout
+
+on:
+  pull_request:
+    paths:
+      - "research/MARKET_TOP_NG2_A_PREREGISTRATION.md"
+      - "research/market_top_ng2_a_preregistration.json"
+      - "screen_market_top_ng2_a_pre1993.py"
+      - "tests/test_market_top_ng2_a_preregistration.py"
+      - ".github/workflows/market_top_ng2_a_pre1993_holdout.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas requests
+
+      - name: Verify frozen preregistration
+        run: python -m unittest tests.test_market_top_ng2_a_preregistration -v
+
+      - name: Run untouched pre-1993 holdout
+        run: |
+          python screen_market_top_ng2_a_pre1993.py \
+            --output market_top_ng2_a_pre1993_result.json
+
+      - name: Print decision summary
+        run: |
+          python - <<'PY'
+          import json
+          p="market_top_ng2_a_pre1993_result.json"
+          x=json.load(open(p, encoding="utf-8"))
+          print("decision =", x["decision"])
+          print("summary =", json.dumps(x["summary"], indent=2))
+          print("proxy_overlap =", json.dumps(x["proxy_overlap_sanity"], indent=2))
+          for ep in x["episodes"]:
+              print(
+                  ep["start"],
+                  ep["end"],
+                  ep["route_at_start"],
+                  ep["outcome"].get("classification"),
+                  ep["outcome"].get("worst_return_from_anchor_pct"),
+              )
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-top-ng2-a-pre1993-result
+          path: market_top_ng2_a_pre1993_result.json
+          if-no-files-found: error
