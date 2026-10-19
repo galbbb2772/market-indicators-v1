@@ -10,12 +10,18 @@ A dedicated GitHub Actions workflow queried Wayback and downloaded the archived 
 
 Wayback returned six pre-cutoff candidates.
 
-The newest usable archived ZIP was:
+The newest usable capture timestamp is:
 
 ```
 timestamp: 2021-04-13 02:05:42 UTC
-last monthly row: 2021-02
+maximum monthly row across usable variants: 2021-02
+Wayback digest: EFKVXSQUQYCV73HEGEYBAHTQBIGZDSKZ
 ```
+
+The audit no longer assumes one unique ZIP per capture timestamp. Wayback/CDX
+can expose duplicate URL aliases or multiple candidate rows at one timestamp,
+so coverage is evaluated using the **maximum last_month across all usable
+variants at the latest capture time**.
 
 Older captures included:
 
@@ -150,3 +156,23 @@ exact Jan-3 Wayback/web-delivery bytes = NOT RECOVERED
 The current server reports a 2022-11-29 `Last-Modified` header, so that HTTP metadata must not be used as proof that the exact current bytes were downloadable on 2022-01-03.
 
 Thus the Wayback gap remains a **delivery-timestamp provenance gap**, not a numerical SizeWeakness-vintage gap.
+
+
+## Audit hardening — same-timestamp variants
+
+A later fail-closed CI run exposed that selecting a single row with
+`max(timestamp)` was brittle when Wayback returned multiple candidates at the
+same capture time.
+
+The audit now records:
+
+```
+latest_usable_capture_timestamp = 20210413020542
+latest_usable_max_last_month    = 202102
+observed latest digest          = EFKVXSQUQYCV73HEGEYBAHTQBIGZDSKZ
+```
+
+and requires every candidate to remain before the 2022-01-03 cutoff.
+
+This changes no model input and no research conclusion. It only makes the
+archive-coverage test robust to Wayback alias/digest multiplicity.
