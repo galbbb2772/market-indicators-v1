@@ -1,0 +1,94 @@
+{
+  "schema_version": "market-top-inflation-margin-v1-preregistration-1",
+  "status": "PREREGISTERED_NOT_VALIDATED",
+  "research_only": true,
+  "production_effect": "none",
+  "separate_route": true,
+  "modifies_policyshock": false,
+  "sources": {
+    "cpi": "CPIAUCSL",
+    "unit_labor_cost_yoy": "PRS85006111",
+    "unit_profit": "A466RD3Q052SBEA",
+    "price": "^GSPC unadjusted close"
+  },
+  "point_in_time": {
+    "cpi_effective_lag_months": 1,
+    "quarterly_effective_lag_months_from_quarter_start": 5,
+    "percentiles": "expanding_current_inclusive",
+    "interpolation": false,
+    "event_specific_lags": false,
+    "warmup_years": 10,
+    "exact_vintage_replay": false
+  },
+  "formula": {
+    "cpi_yoy": "100*(CPI_t/CPI_t-12-1)",
+    "inflation_score": "expanding_pct(CPIYoY)",
+    "ulc_score": "expanding_pct(ULC_YoY)",
+    "unit_profit_yoy": "100*(UnitProfit_t/UnitProfit_t-4-1)",
+    "margin_compression_raw": "-UnitProfitYoY",
+    "margin_compression_score": "expanding_pct(MarginCompressionRaw)",
+    "route_im_v1": "cbrt(InflationScore*ULCScore*MarginCompressionScore)"
+  },
+  "state_gate": {
+    "route_threshold": 85,
+    "within_24m_high_pct": 5,
+    "high_age_months_max": 3,
+    "direct_trigger": false
+  },
+  "hypothesis_generation_windows": [
+    [
+      "1965-12",
+      "1966-06"
+    ],
+    [
+      "1972-10",
+      "1973-03"
+    ]
+  ],
+  "validation_positive_windows": [
+    [
+      "1968-08",
+      "1969-02"
+    ],
+    [
+      "1980-08",
+      "1981-02"
+    ]
+  ],
+  "validation_negative_windows": [
+    [
+      "1987-06",
+      "1987-10"
+    ],
+    [
+      "1998-06",
+      "1998-10"
+    ],
+    [
+      "2000-01",
+      "2000-04"
+    ],
+    [
+      "2007-06",
+      "2007-10"
+    ],
+    [
+      "2018-08",
+      "2018-12"
+    ]
+  ],
+  "outcome": {
+    "horizon_sessions": 252,
+    "major_top": "worst_return_from_anchor_pct <= -15",
+    "clear_false": "worst_return_from_anchor_pct > -7.5 AND forward_return_252_pct > 0",
+    "other": "CORRECTION_OR_AMBIGUOUS"
+  },
+  "accept_if": {
+    "all_positive_windows_hit": true,
+    "all_negative_windows_clean": true,
+    "min_complete_nontraining_episodes": 2,
+    "min_major_top_share": 0.5,
+    "max_clear_false_share": 0.25
+  },
+  "post_screen_tuning_allowed": false
+}
