@@ -84,6 +84,20 @@ CORRECTION_OR_AMBIGUOUS
 
 Classification is emitted only after all 252 sessions are observed.
 
+### Completed-horizon immutability
+
+Once any 63 / 126 / 252-session horizon reaches:
+
+```
+complete = true
+```
+
+its stored metrics become immutable.
+
+Later scheduled runs must not recompute that completed horizon from a rolling price-download window. Only incomplete horizons may accumulate new sessions.
+
+This makes the evidence ledger append-only in substance: a completed prospective outcome cannot drift years later because an upstream price API changes its lookback window.
+
 ## Promotion-review rule
 
 NG3 is not automatically promoted.
