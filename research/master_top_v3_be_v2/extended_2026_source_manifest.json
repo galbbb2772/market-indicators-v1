@@ -1,0 +1,55 @@
+{
+  "status": "2026_EXTENSION_PROVISIONAL_NOT_PIT_OOS",
+  "retrieved_at": "2026-10-19",
+  "inputs": {
+    "cape": {
+      "url": "https://github.com/adambnash-afk/shiller-data/blob/main/data/stock_market_data.json",
+      "sha": "75f29174195d6cece783126c9135d68ee02766a9",
+      "last": "2026-10-01"
+    },
+    "spy": {
+      "url": "https://github.com/oid87/PersonalFiance/blob/main/data/SPY.json",
+      "sha": "64a04ed7b1952015b763841815dd3e12a295cfa1",
+      "last_full_day_used": "2026-10-15",
+      "suspect_last_day": "2026-10-16",
+      "suspect_reason": "Oct16 snapshot has 6.6m shares volume and 773.24 open > 773.23 high; excluded from completed-day assumptions"
+    },
+    "spy_before_2000": {
+      "url": "https://github.com/Setooooo/etf-insight/blob/main/data/raw/SPY.csv",
+      "sha": "52c647e871bd687c664db8ca8db0c23a75e6b8b2"
+    },
+    "margin": {
+      "url": "https://github.com/oid87/PersonalFiance/blob/main/data/margin_global_us.json",
+      "sha": "ca676be41369988ce7810cd9e6bdde354f58b54d",
+      "last": "2026-09"
+    }
+  },
+  "lag_calendardays_hypotheses": [
+    15,
+    25,
+    35,
+    45
+  ],
+  "main_research_lag": 25,
+  "model_cfg": {
+    "arm": 85,
+    "memory": 80,
+    "valuation": 85,
+    "top": 0.9,
+    "armN": 2,
+    "roll": 20,
+    "confirmTop": 0.9,
+    "resetBuild": 65,
+    "resetMem": 70,
+    "resetN": 3
+  },
+  "limitations": [
+    "updated mirrors not publication-vintage data",
+    "live Oct2026 is mid-month provisional, not official monthly state",
+    "latency assumptions can alter margin reference and current signal",
+    "CAPE historically reconstructed, not vintage locked",
+    "All results exploratory; not OOS",
+    "SPY ETF proxy not S&P 500 index",
+    "FINRA mirror is third party"
+  ]
+}
