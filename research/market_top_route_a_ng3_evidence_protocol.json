@@ -46,5 +46,10 @@
     "state_gate_unchanged": true,
     "retrospective_episodes_forbidden": true,
     "protocol_change_requires_new_version": true
+  },
+  "source_provenance": {
+    "snapshot_requirement": "Every prospective snapshot records cryptographic SHA-256 fingerprints for the Fama-French ZIP vintages, credit payloads/extension snapshot, and SPY payload used to compute the state.",
+    "episode_start_requirement": "Each new episode permanently stores source_provenance_at_start copied from the opening snapshot.",
+    "purpose": "Prevent later upstream revisions or rolling API windows from changing the identity of the evidence vintage."
   }
 }
