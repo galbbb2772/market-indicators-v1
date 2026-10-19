@@ -1,0 +1,33 @@
+{
+  "schema_version": "market-top-inflation-margin-v1.1-diagnostic-summary-1",
+  "status": "HYPOTHESIS_GENERATION_ONLY",
+  "frozen_decision": "REJECT",
+  "route_ge_85_months": 24,
+  "route_ge_85_and_top_gate_months": 0,
+  "top_gate_months": 324,
+  "max_route": {
+    "month": "1970-06",
+    "route": 96.80085251516017,
+    "top_location": false
+  },
+  "max_route_when_top_gate": {
+    "month": "1991-02",
+    "route": 71.07880366518329,
+    "top_location": true
+  },
+  "structural_findings": [
+    "1966: margin compression elevated but ULC pressure not extreme",
+    "1968-69: inflation high but ULC and margin compression not jointly extreme before top",
+    "1972-73: cost-profit gap negative; unit-profit growth stronger than ULC growth",
+    "1980-81: inflation and ULC elevated but margin compression low",
+    "three-way stress extremes arrive predominantly after the top-location gate fails"
+  ],
+  "next_hypothesis_boundary": "NEW_MONETARY_RESTRICTION_ROUTE_NOT_RETUNED_INFLATION_MARGIN",
+  "workflow": {
+    "run_id": 39204551814,
+    "artifact_id": 12164614953,
+    "artifact_sha256": "2ed7c30a4bed19d6bb5f5b26f12d4d40ecba3b623462499fbc8554ecacf84b7b"
+  },
+  "formula_changed": false,
+  "threshold_changed": false
+}
