@@ -1,4 +1,4 @@
-name: Market Top Inflation-Margin V1 Screen
+name: Market Top Inflation-Margin V1.1 Screen
 
 on:
   pull_request:
