@@ -150,6 +150,17 @@ def source_temporality(
     }
 
 
+def month_sequence(start_ym: str, end_ym: str) -> list[str]:
+    if end_ym < start_ym:
+        return []
+    out = []
+    cur = start_ym
+    while cur <= end_ym:
+        out.append(cur)
+        cur = add_months(cur, 1)
+    return out
+
+
 def completed_month_ym(now: datetime) -> str:
     ts = pd.Timestamp(now.astimezone(timezone.utc))
     first = pd.Timestamp(year=ts.year, month=ts.month, day=1)
@@ -619,6 +630,15 @@ def load_monthly_snapshot_book() -> dict[str, Any]:
                 FIRST_PROSPECTIVE_EFFECTIVE_MONTH
             ),
             "snapshots": [],
+            "summary": {
+                "frozen_prospective_months": 0,
+                "first_frozen_effective_month": None,
+                "latest_frozen_effective_month": None,
+                "missing_effective_months": [],
+                "evidence_gaps_present": False,
+                "fully_post_preregistration_source_months": 0,
+                "straddling_or_pre_preregistration_source_months": 0,
+            },
         }
     return json.loads(OUT_MONTHLY.read_text(encoding="utf-8"))
 
@@ -671,6 +691,50 @@ def freeze_monthly_signal_snapshot(
             ),
             "latest_frozen_effective_month": (
                 snapshots[-1]["effective_month"] if snapshots else None
+            ),
+            "missing_effective_months": (
+                [
+                    ym
+                    for ym in month_sequence(
+                        FIRST_PROSPECTIVE_EFFECTIVE_MONTH,
+                        snapshots[-1]["effective_month"],
+                    )
+                    if ym not in {
+                        str(x.get("effective_month")) for x in snapshots
+                    }
+                ]
+                if snapshots
+                else []
+            ),
+            "evidence_gaps_present": (
+                bool(
+                    [
+                        ym
+                        for ym in month_sequence(
+                            FIRST_PROSPECTIVE_EFFECTIVE_MONTH,
+                            snapshots[-1]["effective_month"],
+                        )
+                        if ym not in {
+                            str(x.get("effective_month")) for x in snapshots
+                        }
+                    ]
+                )
+                if snapshots
+                else False
+            ),
+            "fully_post_preregistration_source_months": sum(
+                1
+                for x in snapshots
+                if (
+                    x.get("source_temporality") or {}
+                ).get("all_source_months_fully_post_preregistration") is True
+            ),
+            "straddling_or_pre_preregistration_source_months": sum(
+                1
+                for x in snapshots
+                if (
+                    x.get("source_temporality") or {}
+                ).get("all_source_months_fully_post_preregistration") is False
             ),
         },
     }
@@ -847,6 +911,20 @@ def update_episode_ledger(
         for ep in episodes
         if (ep.get("outcomes") or {}).get("252", {}).get("complete")
     )
+    fully_post_source_episodes = sum(
+        1
+        for ep in episodes
+        if (
+            ep.get("source_temporality_at_start") or {}
+        ).get("all_source_months_fully_post_preregistration") is True
+    )
+    straddling_or_pre_source_episodes = sum(
+        1
+        for ep in episodes
+        if (
+            ep.get("source_temporality_at_start") or {}
+        ).get("all_source_months_fully_post_preregistration") is False
+    )
     ledger = {
         "schema_version": "market-top-route-a-ng3-episodes-1",
         "generated_at": observed_at or snapshot["generated_at"],
@@ -858,6 +936,12 @@ def update_episode_ledger(
         "summary": {
             "prospective_episode_count": len(episodes),
             "complete_252_session_episodes": complete_252,
+            "fully_post_preregistration_source_episodes": (
+                fully_post_source_episodes
+            ),
+            "straddling_or_pre_preregistration_source_episodes": (
+                straddling_or_pre_source_episodes
+            ),
             "minimum_for_promotion_review": 4,
             "review_eligible": bool(complete_252 >= 4),
             "automatic_promotion": False,
