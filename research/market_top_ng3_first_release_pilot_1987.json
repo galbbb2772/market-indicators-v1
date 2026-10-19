@@ -1,6 +1,6 @@
 {
-  "schema_version": "market-top-ng3-first-release-pilot-1987-1",
-  "status": "PARTIAL_PASS_FIRST_PUBLICATION_RECOVERED_FINALIZED_VALUES_PENDING",
+  "schema_version": "market-top-ng3-first-release-pilot-1987-2",
+  "status": "PASS_FIRST_TO_FINAL_REVISION_DELTA_RECOVERED",
   "research_only": true,
   "production_effect": "none",
   "purpose": "Source-engineering pilot only; no market-top outcome test or scoring.",
@@ -30,11 +30,31 @@
           "status": "FIRST_PUBLICATION_VALUE_RECOVERED"
         }
       },
+      "period_finalized_publication": {
+        "source": "PPI Detailed Report, March 1988",
+        "source_url": "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_031988.pdf",
+        "table_finished_goods": "Table B — Percent changes in finished goods price indexes, selected periods",
+        "table_intermediate_goods": "Table A — Percent changes from preceding month in selected stage-of-processing price indexes",
+        "seasonally_adjusted": true,
+        "timing_status": "BEYOND_FOUR_MONTH_REVISION_WINDOW",
+        "finished_goods": {
+          "may_1987_mom_pct": -0.1,
+          "status": "FINALIZED_VALUE_RECOVERED_AT_PUBLISHED_0_1PP_PRECISION"
+        },
+        "intermediate_materials": {
+          "may_1987_mom_pct": 0.5,
+          "status": "FINALIZED_VALUE_RECOVERED_AT_PUBLISHED_0_1PP_PRECISION"
+        }
+      },
       "revision_contract": {
         "ppi_revision_window_months": 4,
-        "finalized_value_status": "RECOVERY_PENDING",
-        "numeric_revision_delta_status": "PENDING",
-        "note": "Do not substitute current revised BLS history for the period-finalized vintage."
+        "finalized_value_status": "RECOVERED_AT_PUBLISHED_0_1PP_PRECISION",
+        "numeric_revision_delta_status": "RECOVERED_AT_PUBLISHED_0_1PP_PRECISION",
+        "first_to_final_revision_delta_pp": {
+          "finished_goods": -0.4,
+          "intermediate_materials": 0
+        },
+        "note": "Revision deltas compare published seasonally adjusted month-over-month changes at 0.1 percentage-point reporting precision. They are not derived from today's revised BLS history."
       }
     },
     "1987-01": {
@@ -54,9 +74,9 @@
     "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS"
   },
   "next_gate": [
-    "Recover a post-September-1987 report with finalized May 1987 finished/intermediate values",
-    "Verify final values and calculate first-to-final revision deltas",
     "Recover January 1987 first-published values for the explicitly documented revision case",
-    "Only after parser/source validation, expand the vintage panel beyond the pilot"
+    "Validate first-to-final extraction on additional 1986-1988 months",
+    "Build bounded 1986-1988 machine-readable vintage panel",
+    "Only after source-panel validation, preregister any faster NG3 formula before outcomes"
   ]
 }
