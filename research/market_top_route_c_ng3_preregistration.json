@@ -1,0 +1,58 @@
+{
+  "schema_version": "market-top-route-c-ng3-preregistration-1",
+  "status": "PREREGISTERED_PROSPECTIVE_ONLY",
+  "research_only": true,
+  "production_effect": "none",
+  "legacy_route_c_status": "UNRESOLVED",
+  "preregistration_date": "2026-10-19",
+  "consumed_historical_evidence": "U.S. history through 2026 consumed by Route_C NG1 diagnostics and NG2 pre-1993 holdout",
+  "formula": {
+    "valuation_context_120": "percentile_rank(current_CAPE within trailing_120_effective_CAPE_months,current_inclusive)",
+    "concentration_breadth": "cbrt(portfolio_exhaustion_score*leader_gap_score*big_growth_gap_score)",
+    "route_c_ng3_score": "sqrt(valuation_context_120*concentration_breadth)",
+    "spread_shock_score": "expanding_pct(max(delta3m(BAA-GS10),delta6m(BAA-GS10)))",
+    "big_growth_gap_change_3m": "big_growth_gap_raw_t-big_growth_gap_raw_t_minus_3m"
+  },
+  "phase_gate": {
+    "minimum_effective_history_months": 120,
+    "minimum_concentration_breadth": 85,
+    "maximum_spread_shock_score": 50,
+    "big_growth_gap_change_3m_must_be_positive": true
+  },
+  "state_gate": {
+    "route_threshold": 85,
+    "within_24m_high_pct": 5,
+    "high_age_months_max": 3,
+    "direct_trigger": false
+  },
+  "point_in_time": {
+    "fama_french_effective_lag_months": 2,
+    "shiller_cape_effective_lag_months": 1,
+    "credit_spread_effective_lag_months": 1,
+    "percentiles": "expanding_current_inclusive_except_trailing_valuation_context",
+    "valuation_context_months": 120,
+    "interpolation": false,
+    "event_specific_lags": false
+  },
+  "prospective": {
+    "first_countable_effective_month": "202612",
+    "ff_source_month_for_first_countable": "202610",
+    "cape_source_month_for_first_countable": "202611",
+    "credit_source_month_for_first_countable": "202611",
+    "earlier_results_label": "RETROSPECTIVE_TRAINING_DIAGNOSTIC",
+    "validation_status": "PROSPECTIVE_VALIDATION_PENDING",
+    "minimum_complete_252_session_episodes_before_promotion_review": 4
+  },
+  "outcome_protocol": {
+    "horizons_sessions": [
+      63,
+      126,
+      252
+    ],
+    "major_top": "worst_return_from_anchor_252 <= -15%",
+    "clear_false": "worst_return_from_anchor_252 > -7.5% AND forward_return_252 > 0%",
+    "other": "CORRECTION_OR_AMBIGUOUS"
+  },
+  "post_preregistration_tuning_allowed": false,
+  "redesign_requires": "ROUTE_C_NG4_OR_LATER"
+}

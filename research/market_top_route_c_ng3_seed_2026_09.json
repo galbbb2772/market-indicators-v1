@@ -1,0 +1,47 @@
+{
+  "schema_version": "market-top-route-c-ng3-seed-202609-1",
+  "status": "RETROSPECTIVE_TRAINING_DIAGNOSTIC",
+  "counts_toward_prospective_validation": false,
+  "prospective_start_effective_month": "202612",
+  "workflow": {
+    "run_id": 39205851962,
+    "conclusion": "success"
+  },
+  "effective_month": "202609",
+  "source_months": {
+    "fama_french": "202607",
+    "cape": "202608",
+    "credit": "202608"
+  },
+  "components": {
+    "cape": 40.98739354965891,
+    "valuation_context_120": 100,
+    "portfolio_exhaustion_score": 27.34113712374582,
+    "leader_gap_score": 96.15384615384616,
+    "big_growth_gap_score": 10.618729096989966,
+    "concentration_breadth": 30.33555360831475,
+    "big_growth_gap_change_3m": 5.249106259875605,
+    "spread_shock_raw": 0.02000000000000135,
+    "spread_shock_score": 47.31428571428572,
+    "effective_history_months": 875
+  },
+  "route_c_ng3_score": 55.07772109330119,
+  "gates": {
+    "route_ge_85": false,
+    "warmup_ge_120": true,
+    "concentration_ge_85": false,
+    "spread_shock_le_50": true,
+    "big_growth_gap_change_positive": true,
+    "phase_gate": false,
+    "top_location": true
+  },
+  "state": "IDLE",
+  "source_fingerprints": {
+    "ff25_zip_sha256": "e02edcd282d8993cf3133e71181665f888ecb57c202a99a9cbd6cdf7fc6b8429",
+    "ff3_zip_sha256": "593f4fbef03181bc0b22ff6292f217689dd1fb79355049ca905d95b262040a66",
+    "shiller_payload_sha256": "41fcfb636f28b0090e11a498f93d9741ec107e5c2d57921b00eaa0b649eedada",
+    "credit_manifest_sha256": "5e91e7461ff2ee9d80b8c74f8b78cff5b8a627442b347da0355422cb517361a0",
+    "spy_payload_sha256": "16ea3f622ae4c4ab028f167795d00dea7eaef5a8aadab89f90290bf650f7704e"
+  },
+  "post_snapshot_tuning_allowed": false
+}

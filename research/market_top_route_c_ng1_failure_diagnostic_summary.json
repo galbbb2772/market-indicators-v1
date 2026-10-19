@@ -1,0 +1,42 @@
+{
+  "schema_version": "market-top-route-c-ng1-failure-diagnostic-summary-1",
+  "status": "HYPOTHESIS_GENERATION_ONLY",
+  "frozen_ng1_decision": "REJECT",
+  "legacy_route_c": "UNRESOLVED",
+  "reproduction": {
+    "1998-06": 93.1,
+    "2000-03": 92.33,
+    "2021-10": 95.6
+  },
+  "target_structure": {
+    "2000-03": {
+      "valuation": 99.6,
+      "concentration_breadth": 85.6,
+      "spread_shock": 6.5,
+      "big_growth_gap_change_3m": 5.69,
+      "worst_252": -26.1
+    },
+    "2021-10": {
+      "valuation": 98.5,
+      "concentration_breadth": 92.8,
+      "spread_shock": 32.7,
+      "big_growth_gap_change_3m": 33.17,
+      "worst_252": -22.36
+    }
+  },
+  "generated_hypothesis": [
+    "require very high valuation",
+    "require very high concentration breadth",
+    "exclude already-extreme credit-spread shock",
+    "require positive three-month Big Growth gap change",
+    "retain existing top-location gate"
+  ],
+  "rejected_hypothesis": "Big Growth must be the current absolute leader",
+  "validation_boundary": "POST_1993_CASES_CONSUMED_PRE1993_HOLDOUT_REQUIRED",
+  "workflow": {
+    "run_id": 39204999131,
+    "artifact_id": 12165401107,
+    "artifact_sha256": "8f8862fe76f70a61bdecaff8c4a4bcf791d5aa70af8fd8298df2ee5f8062a4d9"
+  },
+  "formula_changed": false
+}

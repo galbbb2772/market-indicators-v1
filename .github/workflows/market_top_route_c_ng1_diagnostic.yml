@@ -1,0 +1,66 @@
+name: Market Top Route_C NG1 Failure Diagnostic
+
+on:
+  pull_request:
+    paths:
+      - "diagnose_route_c_ng1_failure.py"
+      - ".github/workflows/market_top_route_c_ng1_diagnostic.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas requests openpyxl
+
+      - name: Run frozen Route_C NG1 diagnostic
+        run: |
+          python diagnose_route_c_ng1_failure.py \
+            --output route_c_ng1_diagnostic.json
+
+      - name: Print selected cases
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open("route_c_ng1_diagnostic.json"))
+          print("big growth =", x["source_meta"]["big_growth_header"])
+          for m, r in x["selected_months"].items():
+              print(
+                  m,
+                  "route", round(r["route_c_ng1_reconstructed"],2),
+                  "val", round(r["valuation_score"],1),
+                  "cb", round(r["concentration_breadth"],1),
+                  "spread", None if r["spread_shock_score"] is None else round(r["spread_shock_score"],1),
+                  "bg_rank", r["big_growth_rank_desc"],
+                  "bg_leader_share6", round(r["big_growth_leader_share_6m"],2),
+                  "bg_gap_d3", None if r["big_growth_gap_change_3m"] is None else round(r["big_growth_gap_change_3m"],2),
+              )
+          print("\nEPISODES")
+          for e in x["episode_outcomes"]:
+              o=e["outcome_252"] or {}
+              print(
+                  e["start"], e["end"],
+                  "route", round(e["route_at_start"],2),
+                  "spread", e["spread_shock_score"],
+                  "bgshare", round(e["big_growth_leader_share_6m"],2),
+                  "worst", o.get("worst_from_signal_pct"),
+                  "fwd", o.get("forward_252_pct"),
+              )
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-top-route-c-ng1-diagnostic
+          path: route_c_ng1_diagnostic.json
+          if-no-files-found: error

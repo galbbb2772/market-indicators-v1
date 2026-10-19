@@ -1,0 +1,32 @@
+{
+  "schema_version": "market-top-route-c-ng3-evidence-protocol-1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "first_countable_effective_month": "202612",
+  "monthly_snapshot_immutability": true,
+  "episode": {
+    "id": "CNG3-<first armed effective month>",
+    "start": "first completed prospective ARMED month",
+    "close": "first completed IDLE month after an ARMED run",
+    "anchor": "last trading day of first ARMED effective month"
+  },
+  "horizons_sessions": [
+    63,
+    126,
+    252
+  ],
+  "classification": {
+    "major_top": "worst_return_from_anchor <= -15%",
+    "clear_false": "worst_return_from_anchor > -7.5% AND forward_return_252 > 0%",
+    "other": "CORRECTION_OR_AMBIGUOUS"
+  },
+  "completed_horizon_metrics_immutable": true,
+  "required_source_fingerprints": [
+    "FF25",
+    "FF3",
+    "Shiller_CAPE",
+    "BAA_GS10",
+    "SPY"
+  ],
+  "minimum_complete_252_session_episodes_before_review": 4,
+  "automatic_production_promotion": false
+}
