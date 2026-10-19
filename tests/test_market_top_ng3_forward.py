@@ -10,6 +10,7 @@ from market_top_ng3_forward import (
     completed_month_ym,
     merge_pinned_with_extension,
     select_completed_state,
+    source_temporality,
 )
 
 
@@ -36,6 +37,34 @@ class NG3ForwardUnitTests(unittest.TestCase):
         out=merge_pinned_with_extension(base,ext)
         self.assertEqual(float(out.loc[pd.Timestamp("2025-12-01")]),4.0)
         self.assertEqual(float(out.loc[pd.Timestamp("2026-04-01")]),4.4)
+
+    def test_december_2026_source_month_straddles_preregistration(self):
+        x=source_temporality("202610","202611")
+        self.assertFalse(
+            x["all_source_months_fully_post_preregistration"]
+        )
+        self.assertEqual(
+            x["tier"],
+            "SOURCE_MONTH_STRADDLES_PREREGISTRATION",
+        )
+        self.assertEqual(
+            x["detail"]["fama_french"]["relation"],
+            "STRADDLES_PREREGISTRATION_DATE",
+        )
+        self.assertEqual(
+            x["detail"]["credit"]["relation"],
+            "FULLY_POST_PREREGISTRATION",
+        )
+
+    def test_january_2027_sources_are_fully_post_preregistration(self):
+        x=source_temporality("202611","202612")
+        self.assertTrue(
+            x["all_source_months_fully_post_preregistration"]
+        )
+        self.assertEqual(
+            x["tier"],
+            "FULL_SOURCE_MONTHS_POST_PREREGISTRATION",
+        )
 
     def test_completed_state_must_match_latest_completed_month(self):
         states=[
