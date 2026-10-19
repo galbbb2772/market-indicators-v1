@@ -352,6 +352,47 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
             frozen_63,
         )
 
+    def test_four_clean_fully_post_source_episodes_set_diagnostic_ready(self):
+        p=price_series()
+        episodes=[]
+        for month in ("202612","202702","202704","202706"):
+            episodes.append({
+                "episode_id":f"NG3-{month}",
+                "signal_status":"CLOSED",
+                "start_effective_month":month,
+                "last_armed_effective_month":month,
+                "closed_effective_month":month,
+                "closed_reason":"TEST",
+                "anchor_date":"2026-12-31",
+                "anchor_close":100.0,
+                "source_months_at_start":{},
+                "source_temporality_at_start":{
+                    "all_source_months_fully_post_preregistration":True,
+                },
+                "start_score":90.0,
+                "start_financial_lead_gap_raw":15.0,
+                "continuity_evidence_gap":False,
+                "missing_effective_months":[],
+                "outcomes":{},
+                "classification_252":None,
+            })
+        ledger=empty_ledger()
+        ledger["episodes"]=episodes
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=ledger,
+        ):
+            x=update_episode_ledger(
+                snap("202708",state="IDLE"),
+                p,
+            )
+        self.assertEqual(
+            x["summary"]["complete_252_clean_fully_post_source_episodes"],
+            4,
+        )
+        self.assertTrue(x["summary"]["strict_temporal_evidence_ready"])
+        self.assertTrue(x["summary"]["review_eligible"])
+
     def test_no_automatic_promotion_even_when_review_eligible(self):
         p=price_series()
         episodes=[]
@@ -382,6 +423,16 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
                 p,
             )
         self.assertTrue(x["summary"]["review_eligible"])
+        self.assertEqual(
+            x["summary"]["complete_252_clean_fully_post_source_episodes"],
+            0,
+        )
+        self.assertFalse(x["summary"]["strict_temporal_evidence_ready"])
+        self.assertTrue(
+            x["summary"][
+                "strict_temporal_evidence_ready_is_diagnostic_only"
+            ]
+        )
         self.assertFalse(x["summary"]["automatic_promotion"])
         self.assertIsNone(x["summary"]["action_signal"])
 
