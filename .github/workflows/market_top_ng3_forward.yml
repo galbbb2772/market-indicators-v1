@@ -14,6 +14,7 @@ on:
       - "tests/test_market_top_route_a_ng_decision_record.py"
       - "tests/test_market_top_route_a_ng3_evidence_protocol.py"
       - "tests/test_market_top_ng3_episode_ledger.py"
+      - "tests/test_market_top_ng3_monthly_freeze.py"
       - "research/MARKET_TOP_ROUTE_A_NG3_EVIDENCE_PROTOCOL.md"
       - "research/market_top_route_a_ng3_evidence_protocol.json"
       - "research/MARKET_TOP_ROUTE_A_NG_DECISION_RECORD.md"
@@ -22,6 +23,7 @@ on:
       - "docs/data/market_top_ng3_current.json"
       - "docs/data/market_top_ng3_history.json"
       - "docs/data/market_top_ng3_episodes.json"
+      - "docs/data/market_top_ng3_monthly_snapshots.json"
       - ".github/workflows/market_top_ng3_forward.yml"
   workflow_dispatch:
   schedule:
@@ -55,6 +57,7 @@ jobs:
           python -m unittest tests.test_market_top_route_a_ng_decision_record -v
           python -m unittest tests.test_market_top_route_a_ng3_evidence_protocol -v
           python -m unittest tests.test_market_top_ng3_episode_ledger -v
+          python -m unittest tests.test_market_top_ng3_monthly_freeze -v
       - name: Live source dry-run on PR
         if: github.event_name == 'pull_request'
         run: |
@@ -106,7 +109,9 @@ jobs:
           assert x["governance"]["historical_validation_authorized"] is False
           assert x["governance"]["production_promotion_authorized"] is False
           ep=json.load(open("docs/data/market_top_ng3_episodes.json"))
+          monthly=json.load(open("docs/data/market_top_ng3_monthly_snapshots.json"))
           assert ep["production_effect"] == "none"
+          assert monthly["production_effect"] == "none"
           assert ep["summary"]["automatic_promotion"] is False
           assert ep["summary"]["action_signal"] is None
           def is_sha256(v):
@@ -130,6 +135,7 @@ jobs:
           assert is_sha256(x["sources"]["price"]["payload_sha256"])
           if x["effective_month"] < "202612":
               assert ep["episodes"] == []
+              assert monthly["snapshots"] == []
               assert ep["summary"]["review_eligible"] is False
               assert x["counts_toward_prospective_validation"] is False
               assert x["evidence_phase"] == "RETROSPECTIVE_TRAINING_DIAGNOSTIC"
@@ -147,7 +153,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/market_top_ng3_current.json docs/data/market_top_ng3_history.json docs/data/market_top_ng3_episodes.json
+          git add docs/data/market_top_ng3_current.json docs/data/market_top_ng3_history.json docs/data/market_top_ng3_episodes.json docs/data/market_top_ng3_monthly_snapshots.json
           if git diff --cached --quiet; then
             echo "No NG3 monitor change."
           else
