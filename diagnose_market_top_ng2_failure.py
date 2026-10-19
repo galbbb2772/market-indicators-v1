@@ -37,6 +37,16 @@ def diagnose() -> dict:
     states = build_effective_states(ff, credit)
     price = fetch_sp500()
 
+    training_months = {"199811", "200711", "201202", "202507", "202509"}
+    training_cases = {
+        x["effective_month"]: compact({
+            **x,
+            "top_location_pass": False,
+        })
+        for x in states
+        if x["effective_month"] in training_months
+    }
+
     rows = []
     for row in states:
         if row["effective_month"] > HOLDOUT_END:
@@ -110,6 +120,7 @@ def diagnose() -> dict:
         "top_route_ng2_months": [compact(x) for x in top_ng2],
         "top_gate_route_ng2_months": [compact(x) for x in gate_top_ng2],
         "ng1_armed_months": ng1_armed_with_outcomes,
+        "hypothesis_generation_case_scores": training_cases,
         "selected_historical_near_misses": [
             compact(x) for x in rows
             if x["effective_month"] in {
