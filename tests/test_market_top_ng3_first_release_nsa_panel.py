@@ -105,6 +105,40 @@ class MarketTopNG3FirstReleaseNSAPanelTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             parse_table1_aggregate_geometry([], "unknown")
 
+    def test_combined_numeric_span_maps_across_columns(self):
+        spans = [
+            {"text": "Finished goods", "x": 58.92, "y": 645.0, "font_size": 7.0},
+            {"text": "100.000", "x": 282.24, "y": 645.96, "font_size": 7.0},
+            {
+                "text": "287.6 290.5 290.7 -1.9 0.1 0.4 0.3 0.2",
+                "x": 328.08,
+                "y": 646.08,
+                "font_size": 7.0,
+            },
+        ]
+        x = parse_table1_aggregate_geometry(spans, "finished_goods")
+        self.assertEqual(x["status"], "PARSED_GEOMETRY")
+        self.assertEqual(x["january_level_nsa"], 287.6)
+        self.assertEqual(x["previous_month_level_nsa"], 290.5)
+        self.assertEqual(x["current_month_level_nsa"], 290.7)
+        self.assertEqual(x["yoy_nsa_pct"], -1.9)
+        self.assertEqual(x["mom_nsa_pct"], 0.1)
+
+    def test_label_and_numbers_in_one_span(self):
+        spans = [
+            {
+                "text": "Finished goods 100.000 291.8 295.0 296.3 2.6 0.4 0.4 0.7 0.3",
+                "x": 58.0,
+                "y": 685.5,
+                "font_size": 7.0,
+            }
+        ]
+        x = parse_table1_aggregate_geometry(spans, "finished_goods")
+        self.assertEqual(x["status"], "PARSED_GEOMETRY")
+        self.assertEqual(x["current_month_level_nsa"], 296.3)
+        self.assertEqual(x["yoy_nsa_pct"], 2.6)
+
+
 
 if __name__ == "__main__":
     unittest.main()
