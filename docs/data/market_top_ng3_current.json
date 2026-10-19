@@ -83,5 +83,20 @@
     "post_preregistration_tuning_allowed": false
   },
   "monitor_checked_at": "2026-10-19T05:34:04.574571+00:00",
-  "signal_snapshot_frozen": false
+  "signal_snapshot_frozen": false,
+  "source_temporality": {
+    "preregistration_date": "2026-10-19",
+    "tier": "SOURCE_MONTHS_INCLUDE_PRE_PREREGISTRATION",
+    "all_source_months_fully_post_preregistration": false,
+    "detail": {
+      "fama_french": {
+        "source_month": "202607",
+        "relation": "PRE_PREREGISTRATION"
+      },
+      "credit": {
+        "source_month": "202608",
+        "relation": "PRE_PREREGISTRATION"
+      }
+    }
+  }
 }
