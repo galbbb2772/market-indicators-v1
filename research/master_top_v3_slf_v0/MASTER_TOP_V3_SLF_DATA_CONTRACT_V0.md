@@ -69,9 +69,13 @@ Important boundary:
 中文：纽约联储一级交易商“未能交割 / 未能收货”数据。
 
 Primary series:
-- Aggregate Fails to Deliver
-- Aggregate Fails to Receive
-- Prefer Treasury-specific fails when a consistent long-history field is available; otherwise use aggregate total in V0 and disclose the choice.
+- **Frozen implementation choice for the full legacy rerun: U.S. Treasury fails ex-TIPS**, because the official New York Fed guide confirms Treasury fails have long historical coverage and the official Markets Data API exposes stable key IDs:
+  - `PDFTD-USTET` = Treasury Fails to Deliver, excluding TIPS
+  - `PDFTR-USTET` = Treasury Fails to Receive, excluding TIPS
+- This follows the V0 preregistration priority ("Prefer Treasury-specific fails when a consistent long-history field is available") and is fixed before the full 2000+ legacy rerun.
+- The first partial implementation used the OFR STFM aggregate-fails mirror, but that retrieval began only in 2015 and therefore could not evaluate the preregistered 2000/2007/2011 eras. That partial scan is retained as a diagnostic artifact, not used to choose this change.
+- Official full-history endpoint used by V0: `https://markets.newyorkfed.org/api/pd/get/PDFTD-USTET_PDFTR-USTET.json`.
+- The loader must fail closed if the returned Treasury fails history does not reach January 2000; it may not silently revert to the 2015+ series for the full legacy scan.
 
 用途：
 - 高 fails 往往意味着证券市场底层流动性/结算链条出现问题。
