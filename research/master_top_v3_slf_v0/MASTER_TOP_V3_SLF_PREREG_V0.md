@@ -82,7 +82,7 @@ Important:
 ### 4. Market-top contextualized variants
 Both variants are pre-declared and must always be reported together.
 
-Historical V0 price proxy is pre-frozen as Stooq ^SPX daily close (research only).
+Historical V0 price proxy is pre-frozen as Yahoo Finance SPY adjusted daily close (research only). The earlier Stooq endpoint failed CI access before any successful score run; this data-access substitution does not change the formula.
 
 Let:
 TopRatio_t = Price_t / HH_60M_t
