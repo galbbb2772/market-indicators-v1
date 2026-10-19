@@ -22,5 +22,32 @@
     "exact_zip_pre_cutoff_capture": "ABSENT",
     "official_page_pre_cutoff_202111_publication_proof": "ABSENT",
     "exact_jan3_web_delivery_timing": "UNPROVEN"
-  }
+  },
+  "captures": [
+    {
+      "timestamp": "20211204043142",
+      "captured_at_utc": "2021-12-04T04:31:42Z",
+      "original": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html",
+      "digest": "ICX77IXAZBJTOCA7ZLR4ZDOTZDT3ERK4",
+      "bytes": 245922,
+      "has_factor_identity": true,
+      "monthly_returns_terminal": null,
+      "monthly_returns_terminal_ym": null,
+      "target_202111_publication_visible": false,
+      "dec2021_archive_link_visible": false
+    },
+    {
+      "timestamp": "20211204035847",
+      "captured_at_utc": "2021-12-04T03:58:47Z",
+      "original": "http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library/f-f_factors.html",
+      "digest": "ZQHQ7FFVNKXLX2UM7HZ67BP7IOLQII3S",
+      "bytes": 16833,
+      "has_factor_identity": true,
+      "monthly_returns_terminal": "October 2021",
+      "monthly_returns_terminal_ym": "202110",
+      "target_202111_publication_visible": false,
+      "dec2021_archive_link_visible": false
+    }
+  ],
+  "audit_interpretation": "Two surviving pre-cutoff official-page captures were inspected. The factor description capture from 2021-12-04 explicitly ended at October 2021; neither capture independently proves November-2021 publication."
 }
