@@ -134,10 +134,19 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
         r"The index for intermediate goods(?P<body>.{0,700})",
     ]
     im_candidates = []
+    current_month_name = MONTH_NAMES[month - 1].lower()
     for pat in im_patterns:
         for match in re.finditer(pat, seg, flags=re.I):
-            value = signed_first_percent(match.group("body"))
-            if value is not None:
+            body = match.group("body")
+            context = body[:350].lower()
+            temporal_match = (
+                current_month_name in context
+                or "over the month" in context
+                or ("from " in context and " to " in context)
+                or "this month" in context
+            )
+            value = signed_first_percent(body)
+            if value is not None and temporal_match:
                 im_candidates.append((match.start(), value, match.group(0)[:500]))
     im_candidates.sort(key=lambda x: x[0])
     im = im_candidates[0][1] if im_candidates else None
@@ -237,7 +246,13 @@ def main() -> None:
     result = {
         "schema_version": "market-top-ng3-first-release-panel-1986-1988-1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "status": "PASS" if all(checks.values()) else "PARTIAL",
+        "status": (
+            "COMPLETE"
+            if all(checks.values())
+            and sum(r["first_publication"]["status"] == "PARSED" for r in rows) == 36
+            else "PARTIAL"
+        ),
+        "source_layer_status": "PASS" if all(checks.values()) else "FAIL",
         "research_only": True,
         "production_effect": "none",
         "purpose": "source engineering only; no market outcomes or score thresholds",
