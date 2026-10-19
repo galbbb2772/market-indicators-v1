@@ -4,66 +4,107 @@ Status:
 
 ```
 SOURCE_ENGINEERING_PILOT_PASS
-FIRST_PUBLICATION_PATH = PROVEN
-FIRST_TO_FINAL_REVISION_DELTA = RECOVERED
+TWO_MONTH_REVISION_CASES = RECOVERED
 MODEL_VALIDATION = NOT STARTED
 ```
 
-## Reproducible boundary
+## January 1987
 
-The deterministic workflow protects the historical first-publication contract. The pilot is now extended with a later historical PPI report beyond the four-month revision window.
-
-For May 1987:
+Official release date:
 
 ```
-initial release date = 1987-06-12
-
-Finished Goods
-first published = +0.3%
-period finalized = -0.1%
-delta = -0.4pp
-
-Intermediate Materials
-first published = +0.5%
-period finalized = +0.5%
-delta = 0.0pp at published 0.1pp precision
+1987-02-13
 ```
 
-The later values are taken from the March 1988 PPI Detailed Report, not from today's revised BLS history.
+The February report carries January's pre-revision values:
 
-This closes the previously open May-1987 period-finalized value and revision-delta tasks.
+```
+Finished Goods = +0.6%
+Intermediate Materials = +0.9%
+```
 
-## Interpretation
+A later May-data report explicitly says January 1987 was revised for late reports and respondent corrections and gives:
 
-The pilot now proves that a historical first-release/finalized split is not merely theoretical. In the finished-goods headline series, the published May monthly signal changes sign between the first report and the period-finalized historical table.
+```
+Finished Goods = +0.4%
+Intermediate Materials = +0.9%
+```
 
-Therefore any future faster NG3 candidate must explicitly choose and preserve its information set:
+Frozen revision diagnostic:
 
-- FR1 = first publication, usable only after its actual release;
-- FINAL = later finalized historical vintage.
+```
+Finished Goods delta = -0.2pp
+Intermediate Materials delta = 0.0pp
+```
 
-These are different research inputs and must never be mixed silently.
+The pre-revision values are labeled PRE_REVISION_CARRY_FORWARD because the evidence comes from the next monthly report before the documented revision, rather than a directly parsed January issue table.
+
+## May 1987
+
+Initial release date:
+
+```
+1987-06-12
+```
+
+Direct first publication:
+
+```
+Finished Goods = +0.3%
+Intermediate Materials = +0.5%
+```
+
+Period-finalized values from the March 1988 historical tables:
+
+```
+Finished Goods = -0.1%
+Intermediate Materials = +0.5%
+```
+
+Frozen revision diagnostic:
+
+```
+Finished Goods delta = -0.4pp
+Intermediate Materials delta = 0.0pp
+```
+
+The finished-goods May signal changes sign.
+
+## Decision
+
+The source-engineering pilot now has two numerically recovered 1987 revision cases.
+
+This is enough to demonstrate that:
+
+```
+first-release information
+and
+period-finalized information
+```
+
+are distinct datasets and must have separate versioned pipelines.
+
+It is not enough to validate a faster top model.
 
 ## What remains open
 
-January 1987 is still an explicitly documented revision event, but its original first-published numeric values have not yet been frozen.
-
-A complete 1986-1988 panel also does not yet exist.
+- broader 1986-1988 month coverage;
+- direct initial-issue recovery for cases currently supported by pre-revision carry-forward;
+- automated parser validation over changing historical table layouts;
+- any market-top outcome test.
 
 Therefore:
 
 ```
-complete vintage panel = NO
+complete 1986-1988 vintage panel = NO
 faster NG3 preregistration = NO
 market-top validation = NO
 ```
 
 ## Next gate
 
-1. recover January 1987 first-published finished/intermediate values;
-2. extend the same first-to-final process across additional months;
-3. validate multiple month/table mappings;
-4. build the bounded 1986-1988 vintage panel;
-5. only then preregister a new faster NG3 candidate before outcomes.
+Build the bounded 1986-1988 source panel with explicit per-month provenance, publication date, first/pre-revision value, later finalized value, and revision delta.
+
+Only after that panel passes source-integrity tests may a new faster NG3 formula be preregistered.
 
 NG3-CostPressure V1 remains closed and unchanged.
