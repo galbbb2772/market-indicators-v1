@@ -161,6 +161,92 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
     }
 
 
+
+def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
+    lines = text_layout.splitlines()
+    start = next(
+        (i for i, line in enumerate(lines)
+         if "table a." in line.lower()
+         and "percent changes" in line.lower()),
+        None,
+    )
+    if start is None:
+        return {"status": "TABLE_A_NOT_FOUND"}
+    end = next(
+        (i for i in range(start + 1, len(lines))
+         if "table b." in lines[i].lower()),
+        min(len(lines), start + 180),
+    )
+    block = lines[start:end]
+    month_name = MONTH_NAMES[month - 1]
+    num_re = re.compile(r"(?<![A-Za-z0-9])[+-]?(?:\\d+\\.\\d+|\\d+|\\.\\d+)(?![A-Za-z0-9])")
+    candidates = []
+    for i, raw in enumerate(block):
+        if not re.search(rf"\\b{month_name}\\b", raw, flags=re.I):
+            continue
+        merged = " ".join(block[i:i+3])
+        pos = re.search(rf"\\b{month_name}\\b", merged, flags=re.I)
+        if not pos:
+            continue
+        tail = merged[pos.end():]
+        vals = []
+        for token in num_re.findall(tail):
+            try:
+                vals.append(float(token))
+            except ValueError:
+                pass
+        if len(vals) >= 4:
+            candidates.append({
+                "block_line": i,
+                "finished_goods_mom_sa_pct": vals[0],
+                "intermediate_goods_mom_sa_pct": vals[3],
+                "numeric_columns_found": len(vals),
+                "row_excerpt": norm(merged)[:900],
+            })
+    if not candidates:
+        return {"status": "ROW_NOT_PARSED"}
+    # The current-year/current-month row is the latest matching row in Table A.
+    chosen = candidates[-1]
+    return {"status": "PARSED", **chosen}
+
+
+def resolve_first_publication(narrative: dict, table_a: dict) -> dict:
+    nfg = narrative.get("finished_goods_mom_sa_pct")
+    nim = narrative.get("intermediate_goods_mom_sa_pct")
+    tfg = table_a.get("finished_goods_mom_sa_pct")
+    tim = table_a.get("intermediate_goods_mom_sa_pct")
+
+    fg_conflict = nfg is not None and tfg is not None and abs(float(nfg) - float(tfg)) > 0.051
+    im_conflict = nim is not None and tim is not None and abs(float(nim) - float(tim)) > 0.051
+    if fg_conflict or im_conflict:
+        return {
+            "status": "CONFLICT",
+            "finished_goods_mom_sa_pct": None,
+            "intermediate_goods_mom_sa_pct": None,
+            "fg_conflict": fg_conflict,
+            "im_conflict": im_conflict,
+        }
+
+    fg = tfg if tfg is not None else nfg
+    im = tim if tim is not None else nim
+    if fg is None or im is None:
+        status = "AMBIGUOUS"
+    elif nfg is not None and nim is not None and tfg is not None and tim is not None:
+        status = "VERIFIED_DUAL_PATH"
+    elif tfg is not None and tim is not None:
+        status = "TABLE_A_RECOVERED"
+    else:
+        status = "NARRATIVE_RECOVERED"
+
+    return {
+        "status": status,
+        "finished_goods_mom_sa_pct": fg,
+        "intermediate_goods_mom_sa_pct": im,
+        "fg_conflict": False,
+        "im_conflict": False,
+    }
+
+
 def parse_schedule(text: str, source_year: int, source_month: int) -> list[dict]:
     x = norm(text)
     i = x.lower().find("scheduled release dates")
@@ -215,11 +301,14 @@ def main() -> None:
     for year, month in PANEL_MONTHS:
         key = f"{year:04d}-{month:02d}"
         d = docs.get(key, {})
-        parsed = (
-            parse_first_values(d.get("text_flow", ""), year, month)
-            if d.get("status") == "SOURCE_TEXT_RECOVERED"
-            else {"status": "SOURCE_UNAVAILABLE"}
-        )
+        if d.get("status") == "SOURCE_TEXT_RECOVERED":
+            narrative = parse_first_values(d.get("text_flow", ""), year, month)
+            table_a = parse_table_a_current(d.get("text_layout", ""), year, month)
+            resolved = resolve_first_publication(narrative, table_a)
+        else:
+            narrative = {"status": "SOURCE_UNAVAILABLE"}
+            table_a = {"status": "SOURCE_UNAVAILABLE"}
+            resolved = {"status": "SOURCE_UNAVAILABLE"}
         rows.append({
             "observation_month": key,
             "publication_pdf": pdf_url(year, month),
@@ -229,7 +318,9 @@ def main() -> None:
                 "release_date": None,
                 "schedule_source_month": None,
             }),
-            "first_publication": parsed,
+            "narrative_extraction": narrative,
+            "table_a_extraction": table_a,
+            "first_publication": resolved,
         })
 
     known = {r["observation_month"]: r for r in rows}
@@ -249,7 +340,7 @@ def main() -> None:
         "status": (
             "COMPLETE"
             if all(checks.values())
-            and sum(r["first_publication"]["status"] == "PARSED" for r in rows) == 36
+            and sum(r["first_publication"]["status"] == "VERIFIED_DUAL_PATH" for r in rows) == 36
             else "PARTIAL"
         ),
         "source_layer_status": "PASS" if all(checks.values()) else "FAIL",
