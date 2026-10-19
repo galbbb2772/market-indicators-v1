@@ -127,9 +127,22 @@ class NG3ForwardDataContractTests(unittest.TestCase):
 
     def test_episode_ledger_starts_empty_before_prospective_boundary(self):
         self.assertEqual(self.e["episodes"],[])
+        self.assertEqual(
+            self.e["schema_version"],
+            "market-top-route-a-ng3-episodes-2",
+        )
+        self.assertEqual(
+            self.e["protocol"],
+            "market-top-route-a-ng3-evidence-protocol-2",
+        )
         s=self.e["summary"]
         self.assertEqual(s["prospective_episode_count"],0)
         self.assertEqual(s["complete_252_session_episodes"],0)
+        self.assertEqual(
+            s["complete_252_session_episodes_without_continuity_gaps"],
+            0,
+        )
+        self.assertEqual(s["episodes_with_continuity_gaps"],0)
         self.assertEqual(
             s["fully_post_preregistration_source_episodes"],
             0,
