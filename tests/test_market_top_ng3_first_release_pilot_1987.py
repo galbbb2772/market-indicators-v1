@@ -11,10 +11,24 @@ class MarketTopNG3FirstReleasePilot1987Tests(unittest.TestCase):
         self.assertEqual(x["status"], "PASS")
         self.assertTrue(all(x["checks"].values()))
 
-    def test_rounded_first_publication_changes(self):
+    def test_first_publication_and_finalized_values(self):
         x = validate()
-        self.assertEqual(round(x["derived"]["finished_goods_mom_pct"], 1), 0.3)
-        self.assertEqual(round(x["derived"]["intermediate_materials_mom_pct"], 1), 0.5)
+        first = x["derived"]["first_published"]
+        final = x["derived"]["period_finalized"]
+        delta = x["derived"]["revision_delta_pp"]
+
+        self.assertEqual(first["finished_goods_mom_pct"], 0.3)
+        self.assertEqual(first["intermediate_materials_mom_pct"], 0.5)
+        self.assertEqual(final["finished_goods_mom_pct"], -0.1)
+        self.assertEqual(final["intermediate_materials_mom_pct"], 0.5)
+        self.assertEqual(delta["finished_goods"], -0.4)
+        self.assertEqual(delta["intermediate_materials"], 0.0)
+
+    def test_first_publication_levels_still_reproduce_reported_rounding(self):
+        x = validate()
+        implied = x["derived"]["first_publication_level_implied"]
+        self.assertEqual(round(implied["finished_goods_mom_pct"], 1), 0.3)
+        self.assertEqual(round(implied["intermediate_materials_mom_pct"], 1), 0.5)
 
 
 if __name__ == "__main__":
