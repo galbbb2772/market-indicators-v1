@@ -1,38 +1,36 @@
 {
-  "schema_version": "market-top-ng3-first-release-pilot-decision-1",
-  "status": "SOURCE_ENGINEERING_PILOT_PASS",
+  "schema_version": "market-top-ng3-first-release-pilot-decision-2",
+  "status": "SOURCE_ENGINEERING_PILOT_PASS_FIRST_TO_FINAL_DELTA_RECOVERED",
   "research_only": true,
   "production_effect": "none",
-  "workflow": {
-    "run_id": 39213672805,
-    "conclusion": "success",
-    "artifact_id": 12168871396,
-    "artifact_sha256": "1d1732af417fb4850c1f543257b432e4c0c1672ee880a256a6add651b11a74e8"
-  },
   "recovered": {
     "may_1987": {
       "initial_release_date": "1987-06-12",
-      "finished_goods": {
-        "april": 295.3,
-        "may": 296.2,
-        "reported_mom_pct": 0.3,
-        "implied_mom_pct": 0.30477480528274814
+      "first_publication": {
+        "finished_goods_mom_pct": 0.3,
+        "intermediate_materials_mom_pct": 0.5
       },
-      "intermediate_materials": {
-        "april": 311.2,
-        "may": 312.8,
-        "reported_mom_pct": 0.5,
-        "implied_mom_pct": 0.5141388174807249
+      "period_finalized": {
+        "source": "PPI Detailed Report, March 1988",
+        "source_url": "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_031988.pdf",
+        "finished_goods_mom_pct": -0.1,
+        "intermediate_materials_mom_pct": 0.5,
+        "precision_pp": 0.1
+      },
+      "revision_delta_pp": {
+        "finished_goods": -0.4,
+        "intermediate_materials": 0
       }
     }
   },
   "open": {
-    "may_1987_period_finalized_values": true,
-    "may_1987_revision_deltas": true,
+    "may_1987_period_finalized_values": false,
+    "may_1987_revision_deltas": false,
     "january_1987_first_published_numeric_values": true,
     "complete_1986_1988_vintage_panel": true
   },
   "model_validation_started": false,
   "faster_ng3_preregistered": false,
-  "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS"
+  "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS",
+  "next_gate": "Recover January 1987 first-published values, then expand and validate the 1986-1988 vintage panel."
 }
