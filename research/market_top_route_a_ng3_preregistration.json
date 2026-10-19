@@ -35,7 +35,14 @@
     "credit_source_month_for_first_countable": "202611",
     "earlier_results_label": "RETROSPECTIVE_TRAINING_DIAGNOSTIC",
     "validation_status": "PROSPECTIVE_VALIDATION_PENDING",
-    "minimum_complete_252_session_episodes_before_promotion_review": 4
+    "minimum_complete_252_session_episodes_before_promotion_review": 4,
+    "source_temporality_for_first_countable": "SOURCE_MONTH_STRADDLES_PREREGISTRATION",
+    "first_fully_post_preregistration_source_effective_month": "202701",
+    "first_fully_post_ff_source_month": "202611",
+    "first_fully_post_credit_source_month": "202612",
+    "first_countable_signal_unknown_at_preregistration": true,
+    "first_countable_all_source_months_fully_post_preregistration": false,
+    "clarification_model_change": false
   },
   "sources": {
     "fama_french_primary": "Kenneth R. French official current ZIPs",
