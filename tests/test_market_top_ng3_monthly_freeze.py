@@ -105,6 +105,32 @@ class NG3MonthlySnapshotFreezeTests(unittest.TestCase):
             1,
         )
 
+    def test_late_backfill_after_later_month_is_rejected(self):
+        jan=snapshot(month="202701",score=88.0,count=True)
+        jan["source_months"]={"fama_french":"202611","credit":"202612"}
+        jan["source_temporality"]={
+            "preregistration_date":"2026-10-19",
+            "tier":"FULL_SOURCE_MONTHS_POST_PREREGISTRATION",
+            "all_source_months_fully_post_preregistration":True,
+            "detail":{},
+        }
+        with patch(
+            "market_top_ng3_forward.load_monthly_snapshot_book",
+            return_value=book(),
+        ):
+            _,b,_=freeze_monthly_signal_snapshot(jan)
+
+        dec=snapshot(month="202612",score=91.0,count=True)
+        with patch(
+            "market_top_ng3_forward.load_monthly_snapshot_book",
+            return_value=b,
+        ):
+            with self.assertRaisesRegex(
+                ValueError,
+                "late prospective backfill is not allowed",
+            ):
+                freeze_monthly_signal_snapshot(dec)
+
     def test_later_same_month_revision_cannot_overwrite_frozen_signal(self):
         original=snapshot(score=90.0,hash_value="a"*64)
         with patch(
