@@ -193,3 +193,19 @@ def audit(live: bool = False) -> dict:
         },
     }
 
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--output")
+    ap.add_argument("--live", action="store_true")
+    args = ap.parse_args()
+
+    x = audit(live=args.live)
+    text = json.dumps(x, indent=2)
+    print(text)
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as fh:
+            fh.write(text + "\n")
+
+
+if __name__ == "__main__":
+    main()
