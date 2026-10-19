@@ -1,0 +1,80 @@
+{
+  "schema_version": "market-top-route-a-ng-decision-record-1",
+  "research_only": true,
+  "production_effect": "none",
+  "original_route_a": {
+    "status": "UNRESOLVED",
+    "legacy_formula_recovered": false,
+    "rejected_replacements": [
+      "A1_LEVEL_CREDIT",
+      "A2_SPREAD_SHOCK"
+    ]
+  },
+  "ng1": {
+    "status": "CLOSED_NO_TOP_ROUTE_PROMOTION",
+    "role": "credit/breadth stress diagnostic only",
+    "route_formula": "fourth_root(SpreadShockScore*FinanceWeaknessScore*SizeWeaknessScore*PortfolioExhaustionScore)",
+    "threshold": 85,
+    "evidence": {
+      "2007-11": "independent-source major-top hit",
+      "1998-11": "clear top false positive",
+      "2012-02": "correction risk, not major top",
+      "2025-07": "clear top false positive",
+      "2025-09": "correction risk, not major top",
+      "1955-11": "pre-1993 correction/ambiguous",
+      "1991-02": "pre-1993 clear false"
+    },
+    "production_ready": false
+  },
+  "ng2": {
+    "status": "REJECT_NG2_TOP_ROUTE",
+    "preregistered": true,
+    "formula": "sqrt(Route_A_NG1*FinancialLeadGapScore)",
+    "first_validation": "1953-11 through 1992-12 temporal holdout",
+    "result": {
+      "monthly_states": 470,
+      "route_ge_85_without_price_gate": 1,
+      "top_location_gate_pass_months": 191,
+      "armed_episodes": 0,
+      "preregistered_minimum_evaluable_episodes": 2
+    },
+    "failure_mechanism": "Lead-gap contains ordering information but using it as another geometric severity component over-compresses NG1; 2007 falls from 86.79 to 75.48.",
+    "post_validation_tuning_allowed": false
+  },
+  "ng3": {
+    "status": "PROSPECTIVE_VALIDATION_PENDING",
+    "preregistered": true,
+    "preregistration_date": "2026-10-19",
+    "historical_validation_authorized": false,
+    "score": "Route_A_NG1 unchanged",
+    "phase_gate": {
+      "financial_lead_gap_raw_min": 10,
+      "effective_history_months_min": 120
+    },
+    "threshold": 85,
+    "prospective_start_effective_month": "202612",
+    "first_countable_source_months": {
+      "fama_french": "202610",
+      "credit": "202611"
+    },
+    "promotion_review_minimum_complete_252_session_episodes": 4,
+    "current_snapshot": {
+      "effective_month": "202609",
+      "evidence_phase": "RETROSPECTIVE_TRAINING_DIAGNOSTIC",
+      "counts_toward_prospective_validation": false,
+      "route_a_ng3_score": 39.42423064841047,
+      "financial_lead_gap_raw": -7.4313425704730065,
+      "phase_gate": false,
+      "top_location_gate": true,
+      "state": "IDLE"
+    },
+    "production_ready": false,
+    "post_preregistration_tuning_allowed": false
+  },
+  "evidence_governance": {
+    "consumed_historical_range": "1953-2026 U.S. history",
+    "untouched_historical_holdout_remaining": false,
+    "next_valid_evidence": "Prospective effective months from 2026-12 onward",
+    "redesign_rule": "Any formula/gate/threshold change after NG3 preregistration requires NG4 or later"
+  }
+}
