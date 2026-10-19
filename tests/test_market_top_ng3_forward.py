@@ -9,6 +9,7 @@ from market_top_ng3_forward import (
     add_months,
     completed_month_ym,
     merge_pinned_with_extension,
+    select_completed_state,
 )
 
 
@@ -35,6 +36,16 @@ class NG3ForwardUnitTests(unittest.TestCase):
         out=merge_pinned_with_extension(base,ext)
         self.assertEqual(float(out.loc[pd.Timestamp("2025-12-01")]),4.0)
         self.assertEqual(float(out.loc[pd.Timestamp("2026-04-01")]),4.4)
+
+    def test_completed_state_must_match_latest_completed_month(self):
+        states=[
+            {"effective_month":"202608"},
+            {"effective_month":"202609"},
+        ]
+        x=select_completed_state(states,"202609")
+        self.assertEqual(x["effective_month"],"202609")
+        with self.assertRaises(ValueError):
+            select_completed_state(states,"202610")
 
     def test_credit_extension_fails_on_overlap_mismatch(self):
         base=pd.Series(
