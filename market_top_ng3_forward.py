@@ -757,7 +757,7 @@ def freeze_monthly_signal_snapshot(
 def load_episode_ledger() -> dict[str, Any]:
     if not OUT_EPISODES.exists():
         return {
-            "schema_version": "market-top-route-a-ng3-episodes-1",
+            "schema_version": "market-top-route-a-ng3-episodes-2",
             "research_only": True,
             "production_effect": "none",
             "protocol": "market-top-route-a-ng3-evidence-protocol-2",
@@ -983,7 +983,7 @@ def update_episode_ledger(
         ).get("all_source_months_fully_post_preregistration") is False
     )
     ledger = {
-        "schema_version": "market-top-route-a-ng3-episodes-1",
+        "schema_version": "market-top-route-a-ng3-episodes-2",
         "generated_at": observed_at or snapshot["generated_at"],
         "research_only": True,
         "production_effect": "none",
