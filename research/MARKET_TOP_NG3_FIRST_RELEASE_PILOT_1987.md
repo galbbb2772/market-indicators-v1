@@ -4,9 +4,9 @@ Status:
 
 ```
 PASS
-FIRST_PUBLICATION_VALUE_RECOVERED
-EXACT_RELEASE_DATE_RECOVERED
-FIRST_TO_FINAL_REVISION_DELTA_RECOVERED
+TWO_MONTH_REVISION_CASES_RECOVERED
+MAY_DIRECT_FIRST_PUBLICATION_RECOVERED
+JANUARY_PRE_REVISION_CARRY_FORWARD_RECOVERED
 MODEL_VALIDATION_NOT_STARTED
 ```
 
@@ -14,139 +14,163 @@ Research only. This is a source-engineering pilot, not a market-top test.
 
 ## Why this pilot exists
 
-The closed NG3-CostPressure V1 used a conservative +6-calendar-month finalized-data lag and produced too few eligible top episodes. That does **not** authorize a shorter lag on today's revised PPI history.
+NG3-CostPressure V1 used a conservative +6-calendar-month finalized-data lag and produced too few eligible top episodes. That result does not authorize shortening the lag on today's revised PPI history.
 
-A faster future version must first prove that historical first-published producer-price information and the later period-finalized vintage can actually be reconstructed.
+A faster future version must preserve the information set that actually existed at the time.
 
-Calendar year 1987 remains a hypothesis-generation period and cannot validate a future top model.
+Calendar year 1987 remains hypothesis-generation evidence and cannot validate a future top model.
 
-## May 1987 first publication
+## January 1987 — pre-revision and four-month revision values
 
-The May 1987 release calendar gives:
+The official 1987 BLS schedule gives:
 
 ```
 Producer Price Index
-period covered: May
-release date: 1987-06-12
+January observation
+initial release date = 1987-02-13
 ```
 
-The contemporaneous PPI Detailed Report reports, seasonally adjusted:
+The February 1987 PPI report states that January had:
 
 ```
-Finished Goods: +0.3%
-Intermediate Materials, Supplies, and Components: +0.5%
+Finished Goods = +0.6%
+Intermediate Materials = +0.9%
 ```
 
-Its stage-of-processing table on the 1967=100 base gives:
+This February report is important for provenance: its revision footnote refers to October 1986, not January 1987.
+
+The later May-data report explicitly states that **January 1987 data were revised** because of late reports and respondent corrections. In that revised table:
+
+```
+Finished Goods January = +0.4%
+Intermediate Materials January = +0.9%
+```
+
+Therefore, at the published 0.1 percentage-point precision:
 
 ```
 Finished Goods
-April 1987 = 295.3
-May   1987 = 296.2
-implied change = +0.3048%
+pre-revision = +0.6%
+four-month revision = +0.4%
+delta = -0.2pp
 
 Intermediate Materials
-April 1987 = 311.2
-May   1987 = 312.8
-implied change = +0.5141%
+pre-revision = +0.9%
+four-month revision = +0.9%
+delta = 0.0pp
 ```
 
-The level-implied changes are consistent with the published rounded +0.3% and +0.5%.
+### January provenance boundary
 
-## May 1987 period-finalized vintage
+The January pre-revision numbers are recovered from the next monthly report before the later documented January revision. They are not claimed to have been parsed directly from the January issue table.
 
-The March 1988 PPI Detailed Report is well beyond the documented four-month revision window for a May 1987 observation.
-
-Its historical tables report the seasonally adjusted May 1987 monthly changes as:
+The frozen label is therefore:
 
 ```
-Finished Goods = -0.1%
-Intermediate Goods Total = +0.5%
+PRE_REVISION_CARRY_FORWARD
 ```
 
-The finished-goods number comes from Table B, whose column is explicitly Finished Goods.
+rather than an unsupported claim of exact first-issue byte recovery.
 
-The intermediate-goods number comes from Table A's Intermediate goods — Total series.
+## May 1987 — direct first publication
 
-Therefore the first-published versus period-finalized comparison is:
+The May 1987 release date is:
+
+```
+1987-06-12
+```
+
+The contemporaneous May report gives, seasonally adjusted:
+
+```
+Finished Goods = +0.3%
+Intermediate Materials = +0.5%
+```
+
+Its 1967=100 table gives:
+
+```
+Finished Goods
+April = 295.3
+May   = 296.2
+level-implied change = +0.3048%
+
+Intermediate Materials
+April = 311.2
+May   = 312.8
+level-implied change = +0.5141%
+```
+
+which agrees with the rounded published changes.
+
+## May 1987 — period-finalized vintage
+
+The March 1988 PPI report is well beyond the four-month revision window for May 1987.
+
+Its historical tables give:
+
+```
+Finished Goods May 1987 = -0.1%
+Intermediate Goods Total May 1987 = +0.5%
+```
+
+Therefore:
 
 ```
 Finished Goods
 first published = +0.3%
 period finalized = -0.1%
-revision delta = -0.4 percentage points
+delta = -0.4pp
 
 Intermediate Materials
 first published = +0.5%
 period finalized = +0.5%
-revision delta = 0.0 percentage points
-at the publication's 0.1pp reporting precision
+delta = 0.0pp
 ```
 
-This is a material result for the data architecture: at least one headline stage-of-processing PPI signal in the pilot changes sign between first publication and the later finalized historical table.
+The finished-goods signal changes sign. This is direct evidence that first-release and finalized PPI information cannot be mixed silently.
 
-## Why percent changes are used for the revision delta
+## Why published percent changes are the revision diagnostic
 
-The PPI underwent reference-base changes around this period. Raw index levels from reports using different bases should not be compared mechanically.
+Reference bases changed around this era. Comparing raw index levels across differently based historical tables can create false revision estimates.
 
-The pilot therefore freezes the first-to-final diagnostic using the published seasonally adjusted month-over-month percentage changes, which are scale-free.
-
-The final values are labeled:
-
-```
-RECOVERED_AT_PUBLISHED_0_1PP_PRECISION
-```
+The pilot therefore compares the published seasonally adjusted month-over-month percentage changes and preserves their 0.1pp publication precision.
 
 No extra precision is invented.
 
-## January 1987 documented revision case
-
-The May 1987 report explicitly states that January 1987 data had been revised to reflect late reports and respondent corrections.
-
-January remains:
-
-```
-REVISION_EVENT_CONFIRMED_NUMERIC_DELTA_PENDING
-```
-
-because the earlier first-published January numbers have not yet been frozen from the initial report.
-
 ## Availability semantics
 
-For May 1987, the initial release date is 1987-06-12.
+A genuine first-release market state may use an observation only after its actual release date.
 
-A future genuine first-release market state may use the observation only after the actual release. If exact intraday release time is not established, the fail-closed rule remains:
+Where exact intraday release time is unavailable, the fail-closed rule remains:
 
 ```
 first usable equity state
 = next U.S. trading-day close after publication date
 ```
 
-No generic +1-month or +2-month lag replaces an actual dated release.
-
 ## What is now proved
 
-- a historical first-published PPI observation can be recovered;
-- the exact May 1987 initial release date can be recovered;
-- first-published finished/intermediate changes can be reconstructed;
-- a later report beyond the revision window can recover period-finalized May values;
-- a first-to-final numerical revision delta can be measured without using today's revised BLS history;
-- Finished Goods changed from +0.3% to -0.1% in this pilot;
-- Intermediate Materials remained +0.5% at published 0.1pp precision.
+- January 1987 exact release date is recovered;
+- January pre-revision Finished/Intermediate values are recovered from a pre-revision report;
+- January's later revision event and numeric deltas are recovered;
+- May direct first-publication values and exact release date are recovered;
+- May period-finalized historical values are recovered;
+- the first-to-final delta can be material enough to reverse the sign of a headline monthly PPI move;
+- all evidence remains source engineering only.
 
 Still not proved:
 
-- January 1987 first-to-final numeric delta;
 - a complete 1986-1988 vintage panel;
-- stable automated extraction across many issues;
+- a robust automated parser across many historical layouts;
 - any market-top predictive value.
 
 ## Next gate
 
-1. recover the January 1987 initial publication values;
-2. repeat first-to-final extraction for additional 1986-1988 months;
-3. build a bounded machine-readable vintage panel;
-4. validate the panel against manually checked publication tables;
-5. only then preregister any faster NG3 model before looking at outcomes.
+1. extend the same evidence structure to additional 1986-1988 months;
+2. prefer direct initial-issue tables when recoverable;
+3. validate several manual month mappings against the structured panel;
+4. build the bounded 1986-1988 first-release/finalized panel;
+5. only then preregister a faster NG3 candidate before outcome testing.
 
-NG3-CostPressure V1 remains closed. No V1 threshold or lag is changed.
+NG3-CostPressure V1 remains closed and unchanged.
