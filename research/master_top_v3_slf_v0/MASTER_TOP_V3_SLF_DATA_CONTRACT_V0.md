@@ -96,9 +96,12 @@ Prospective rule:
 SLF itself measures systemic liquidity stress. To test whether it is useful as a *market-top* route, two top-location contextualized variants will be reported side-by-side.
 
 Historical research price source for V0:
-- Stooq S&P 500 daily close (^SPX) is frozen now, before the first SLF legacy score run, as the research-only top-location proxy.
+- Yahoo Finance chart history for SPY adjusted close is frozen before the first successful SLF legacy score run as the research-only broad-U.S.-equity top-location proxy.
+- The earlier Stooq ^SPX endpoint was attempted first but returned a JavaScript verification page to GitHub CI; no SLF score was produced from it.
+- SPY is already the canonical broad-market ETF used elsewhere in this repository, and it has history spanning the full SLF common research era.
 - close at session t is usable only after that close
 - earliest executable interpretation is session t+1
+- exact downloaded JSON bytes are SHA256-pinned per run
 - a later production implementation must either preserve this source or prove date-by-date parity with the canonical MASTER TOP market-price feed before substitution
 
 No alternative price source may be selected after seeing SLF historical performance merely to improve results.
