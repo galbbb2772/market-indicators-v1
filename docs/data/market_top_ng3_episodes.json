@@ -1,0 +1,17 @@
+{
+  "schema_version": "market-top-route-a-ng3-episodes-1",
+  "generated_at": "2026-10-19T05:18:41.094415+00:00",
+  "research_only": true,
+  "production_effect": "none",
+  "protocol": "market-top-route-a-ng3-evidence-protocol-1",
+  "prospective_start_effective_month": "202612",
+  "episodes": [],
+  "summary": {
+    "prospective_episode_count": 0,
+    "complete_252_session_episodes": 0,
+    "minimum_for_promotion_review": 4,
+    "review_eligible": false,
+    "automatic_promotion": false,
+    "action_signal": null
+  }
+}
