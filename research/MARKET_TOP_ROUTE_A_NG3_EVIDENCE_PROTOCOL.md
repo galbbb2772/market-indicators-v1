@@ -123,3 +123,24 @@ This evidence protocol is frozen before the first prospective source months exis
 Changing episode grouping, horizon definitions, classification, or promotion-review count requires a new protocol version.
 
 The model itself remains frozen under the NG3 preregistration; model changes require NG4 or later.
+
+
+## Source-vintage fingerprints
+
+Every prospective NG3 snapshot must preserve the identity of the actual bytes used for the signal.
+
+Required provenance:
+
+- SHA-256 of each current Fama-French ZIP used by FF25 / FF12 / FF3;
+- SHA-256 of direct FRED BAA / GS10 payloads, or the fallback manifest + extension/base payload hashes;
+- SHA-256 of the Yahoo SPY payload used for the completed-month price gate.
+
+When an episode opens, the full snapshot source provenance is copied into:
+
+```
+source_provenance_at_start
+```
+
+and remains attached to that episode.
+
+This is required because the upstream datasets can be revised. A later dataset revision must not change which vintage generated a prospective signal.
