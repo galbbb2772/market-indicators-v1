@@ -30,6 +30,18 @@ class RouteANGDecisionRecordTests(unittest.TestCase):
         self.assertFalse(
             x["current_snapshot"]["counts_toward_prospective_validation"]
         )
+        q=x["source_temporality"]
+        self.assertEqual(
+            q["effective_202612_tier"],
+            "SOURCE_MONTH_STRADDLES_PREREGISTRATION",
+        )
+        self.assertFalse(
+            q["effective_202612_all_source_months_fully_post_preregistration"]
+        )
+        self.assertEqual(
+            q["first_fully_post_preregistration_source_effective_month"],
+            "202701",
+        )
 
     def test_no_historical_holdout_remains(self):
         self.assertFalse(
@@ -38,6 +50,16 @@ class RouteANGDecisionRecordTests(unittest.TestCase):
         self.assertIn(
             "2026-12",
             self.x["evidence_governance"]["next_valid_evidence"],
+        )
+        self.assertTrue(
+            self.x["evidence_governance"][
+                "monthly_evidence_gaps_must_be_explicit"
+            ]
+        )
+        self.assertFalse(
+            self.x["evidence_governance"][
+                "silent_later_vintage_backfill_allowed"
+            ]
         )
 
 if __name__=="__main__":
