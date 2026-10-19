@@ -1,14 +1,18 @@
 {
-  "schema_version": "market-top-inflation-margin-v1-preregistration-1",
+  "schema_version": "market-top-inflation-margin-v1.1-preregistration-1",
   "status": "PREREGISTERED_NOT_VALIDATED",
+  "predecessor": "V1_DATA_PROVIDER_FAILURE_NO_MODEL_RESULT",
   "research_only": true,
   "production_effect": "none",
   "separate_route": true,
   "modifies_policyshock": false,
   "sources": {
-    "cpi": "CPIAUCSL",
+    "cpi_series": "CPIAUCSL",
+    "cpi_transport": "danielmiessler/Substrate@45fddf72d8c03167e68d3de6b76482d27ddc8874",
     "unit_labor_cost_yoy": "PRS85006111",
-    "unit_profit": "A466RD3Q052SBEA",
+    "unit_profit_yoy": "PRS88003191",
+    "bls_primary": "BLS public API",
+    "bls_fallback": "rmmomin/ai-adoption-labor-trends@d2f959bb311fb8e7a58289604a0e01e3b81f5708 bls_responses.json",
     "price": "^GSPC unadjusted close"
   },
   "point_in_time": {
@@ -23,11 +27,11 @@
   "formula": {
     "cpi_yoy": "100*(CPI_t/CPI_t-12-1)",
     "inflation_score": "expanding_pct(CPIYoY)",
-    "ulc_score": "expanding_pct(ULC_YoY)",
-    "unit_profit_yoy": "100*(UnitProfit_t/UnitProfit_t-4-1)",
+    "ulc_score": "expanding_pct(PRS85006111)",
+    "unit_profit_yoy": "PRS88003191",
     "margin_compression_raw": "-UnitProfitYoY",
     "margin_compression_score": "expanding_pct(MarginCompressionRaw)",
-    "route_im_v1": "cbrt(InflationScore*ULCScore*MarginCompressionScore)"
+    "route_im_v1_1": "cbrt(InflationScore*ULCScore*MarginCompressionScore)"
   },
   "state_gate": {
     "route_threshold": 85,
