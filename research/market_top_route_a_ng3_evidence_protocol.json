@@ -15,7 +15,7 @@
     "overlapping_outcome_windows_allowed": true,
     "missing_month_bridge": "ARMED -> missing effective month(s) -> ARMED remains one episode; record continuity_evidence_gap=true and missing_effective_months.",
     "missing_month_conservative_bias": "Unknown monthly state may not be used as evidence that an episode ended.",
-    "monotonic_time_rule": "For an open episode, any incoming effective_month earlier than last_armed_effective_month is rejected fail-closed."
+    "monotonic_time_rule": "For the prospective ledger as a whole, any incoming effective_month earlier than the latest month already represented by any open or closed episode is rejected fail-closed, regardless of ARMED/IDLE state."
   },
   "outcome_tracking": {
     "price": "SPY unadjusted Close",
@@ -51,7 +51,9 @@
     "state_gate_unchanged": true,
     "retrospective_episodes_forbidden": true,
     "protocol_change_requires_new_version": true,
-    "out_of_order_episode_updates_forbidden": true
+    "out_of_order_episode_updates_forbidden": true,
+    "global_ledger_time_monotonic": true,
+    "monotonic_rule_hardening_before_prospective_start": true
   },
   "source_provenance": {
     "snapshot_requirement": "Every prospective snapshot records cryptographic SHA-256 fingerprints for the Fama-French ZIP vintages, credit payloads/extension snapshot, and SPY payload used to compute the state.",
