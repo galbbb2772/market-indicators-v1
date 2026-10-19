@@ -33,6 +33,13 @@ SLF 专门回答一个问题：
 Source:
 https://www.financialresearch.gov/financial-stress-index/
 
+Retrospective retrieval fallback frozen before any successful score run:
+- Preferred bytes: official OFR downloadable Financial Stress Index file.
+- If the official static download rejects automated CI retrieval, V0 may use the Diawonds retrospective mirror table, which explicitly identifies the raw source as the Office of Financial Research.
+- This fallback is **retrospective research only** and its exact raw HTML bytes must be SHA256-pinned.
+- Prospective evidence must use newly captured official OFR publication bytes/observations; the mirror cannot establish publication-time provenance.
+- Switching to the fallback because of HTTP access failure is a data-access substitution, not a formula or threshold change.
+
 Availability rule for historical causal scan:
 - observation date = t
 - assume publication availability no earlier than t + 2 U.S. business days
