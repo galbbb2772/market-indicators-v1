@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import unittest
 
-from research.build_market_top_ng3_first_release_panel_1986_1988 import (\n    parse_first_values,\n    resolve_first_publication,\n)
+from research.build_market_top_ng3_first_release_panel_1986_1988 import (
+    parse_first_values,
+    resolve_first_publication,
+)
 
 
 class MarketTopNG3FirstReleasePanelParserTests(unittest.TestCase):
@@ -80,9 +83,6 @@ class MarketTopNG3FirstReleasePanelParserTests(unittest.TestCase):
         self.assertEqual(x["finished_goods_mom_sa_pct"], 0.3)
         self.assertEqual(x["intermediate_goods_mom_sa_pct"], 0.5)
 
-
-if __name__ == "__main__":
-    unittest.main()
     def test_complete_table_row_is_primary_on_cross_path_conflict(self):
         x = resolve_first_publication(
             {
@@ -114,3 +114,5 @@ if __name__ == "__main__":
         self.assertEqual(x["intermediate_goods_mom_sa_pct"], 0.5)
 
 
+if __name__ == "__main__":
+    unittest.main()
