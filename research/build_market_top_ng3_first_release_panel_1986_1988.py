@@ -448,12 +448,11 @@ def main() -> None:
 
     print(json.dumps({k: result[k] for k in ("status","source_layer_status","checks","summary")}, indent=2))
     for r in rows:
-        if r["table_a_extraction"].get("status") != "PARSED":
-            print(
-                "TABLE_A_UNRESOLVED",
-                r["observation_month"],
-                json.dumps(r["table_a_extraction"], ensure_ascii=False),
-            )
+        print(
+            "TABLE_A_ROW",
+            r["observation_month"],
+            json.dumps(r["table_a_extraction"], ensure_ascii=False),
+        )
     for r in rows:
         fp = r["first_publication"]
         print(
