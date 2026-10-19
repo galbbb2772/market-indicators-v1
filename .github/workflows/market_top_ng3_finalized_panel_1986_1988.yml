@@ -5,7 +5,8 @@ on:
     paths:
       - "research/build_market_top_ng3_first_release_panel_1986_1988.py"
       - "research/build_market_top_ng3_finalized_panel_1986_1988.py"
-      - "research/MARKET_TOP_NG3_FINALIZED_PANEL_1986_1988.md"\n      - "tests/test_market_top_ng3_finalized_panel.py"
+      - "research/MARKET_TOP_NG3_FINALIZED_PANEL_1986_1988.md"
+      - "tests/test_market_top_ng3_finalized_panel.py"
       - ".github/workflows/market_top_ng3_finalized_panel_1986_1988.yml"
   workflow_dispatch:
 
@@ -18,15 +19,22 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Install dependencies
         run: python -m pip install --upgrade pip requests pypdf
-      - name: Run finalized-panel contract tests\n        run: python -m unittest tests.test_market_top_ng3_finalized_panel -v\n      - name: Build four-month finalized panel
+
+      - name: Run finalized-panel contract tests
+        run: python -m unittest tests.test_market_top_ng3_finalized_panel -v
+
+      - name: Build finalized consensus panel
         run: |
           python research/build_market_top_ng3_finalized_panel_1986_1988.py \
             --output market_top_ng3_finalized_panel_1986_1988.json
+
       - uses: actions/upload-artifact@v4
         with:
           name: market-top-ng3-finalized-panel-1986-1988
