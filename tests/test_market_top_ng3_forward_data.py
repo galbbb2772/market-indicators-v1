@@ -30,6 +30,25 @@ class NG3ForwardDataContractTests(unittest.TestCase):
             "202612",
         )
 
+    def test_seed_records_source_temporality_quality(self):
+        q=self.x["source_temporality"]
+        self.assertEqual(q["preregistration_date"],"2026-10-19")
+        self.assertEqual(
+            q["tier"],
+            "SOURCE_MONTHS_INCLUDE_PRE_PREREGISTRATION",
+        )
+        self.assertFalse(
+            q["all_source_months_fully_post_preregistration"]
+        )
+        self.assertEqual(
+            q["detail"]["fama_french"]["relation"],
+            "PRE_PREREGISTRATION",
+        )
+        self.assertEqual(
+            q["detail"]["credit"]["relation"],
+            "PRE_PREREGISTRATION",
+        )
+
     def test_seed_score_and_gates_match_live_dry_run(self):
         self.assertAlmostEqual(
             self.x["route_a_ng3_score"],
@@ -93,13 +112,32 @@ class NG3ForwardDataContractTests(unittest.TestCase):
     def test_monthly_snapshot_book_starts_empty_before_prospective_boundary(self):
         self.assertEqual(self.m["prospective_start_effective_month"],"202612")
         self.assertEqual(self.m["snapshots"],[])
-        self.assertEqual(self.m["summary"]["frozen_prospective_months"],0)
+        s=self.m["summary"]
+        self.assertEqual(s["frozen_prospective_months"],0)
+        self.assertEqual(s["missing_effective_months"],[])
+        self.assertFalse(s["evidence_gaps_present"])
+        self.assertEqual(
+            s["fully_post_preregistration_source_months"],
+            0,
+        )
+        self.assertEqual(
+            s["straddling_or_pre_preregistration_source_months"],
+            0,
+        )
 
     def test_episode_ledger_starts_empty_before_prospective_boundary(self):
         self.assertEqual(self.e["episodes"],[])
         s=self.e["summary"]
         self.assertEqual(s["prospective_episode_count"],0)
         self.assertEqual(s["complete_252_session_episodes"],0)
+        self.assertEqual(
+            s["fully_post_preregistration_source_episodes"],
+            0,
+        )
+        self.assertEqual(
+            s["straddling_or_pre_preregistration_source_episodes"],
+            0,
+        )
         self.assertFalse(s["review_eligible"])
         self.assertFalse(s["automatic_promotion"])
         self.assertIsNone(s["action_signal"])
