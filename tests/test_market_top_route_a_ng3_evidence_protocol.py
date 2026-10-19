@@ -29,7 +29,7 @@ class NG3EvidenceProtocolTests(unittest.TestCase):
         x=self.x["monthly_signal_immutability"]
         self.assertIn("first successful snapshot",x["lock_rule"])
         self.assertIn("must not overwrite",x["later_revisions"])
-        self.assertIn("freezes nothing",x["failure_behavior"])
+        self.assertIn("no monthly snapshot is frozen",x["failure_behavior"])
 
     def test_prospective_source_bytes_must_be_fingerprinted(self):
         p=self.x["source_provenance"]
