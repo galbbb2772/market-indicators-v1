@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import io
 import json
 import math
@@ -116,6 +117,7 @@ def fetch_fred_monthly(series_id: str) -> pd.Series:
     r.raise_for_status()
     s = parse_monthly_csv(r.text, series_id)
     s.attrs["source"] = f"FRED {series_id} direct CSV"
+    s.attrs["payload_sha256"] = hashlib.sha256(r.content).hexdigest()
     return s
 
 
@@ -148,12 +150,18 @@ def merge_pinned_with_extension(
 
 
 def fetch_credit_fallback(now: datetime) -> tuple[pd.Series, pd.Series, dict[str, Any]]:
-    manifest = get(MACRO_MANIFEST, timeout=20).json()
-    baa_ext = parse_monthly_csv(get(MACRO_BAA, timeout=20).text, "BAA")
-    gs_ext = parse_monthly_csv(get(MACRO_GS10, timeout=20).text, "GS10")
+    manifest_r = get(MACRO_MANIFEST, timeout=20)
+    baa_ext_r = get(MACRO_BAA, timeout=20)
+    gs_ext_r = get(MACRO_GS10, timeout=20)
+    baa_base_r = get(PINNED_BAA, timeout=20)
+    gs_base_r = get(PINNED_GS10, timeout=20)
 
-    baa_base = parse_monthly_csv(get(PINNED_BAA, timeout=20).text, "BAA")
-    gs_base = parse_monthly_csv(get(PINNED_GS10, timeout=20).text, "GS10")
+    manifest = manifest_r.json()
+    baa_ext = parse_monthly_csv(baa_ext_r.text, "BAA")
+    gs_ext = parse_monthly_csv(gs_ext_r.text, "GS10")
+
+    baa_base = parse_monthly_csv(baa_base_r.text, "BAA")
+    gs_base = parse_monthly_csv(gs_base_r.text, "GS10")
 
     baa = merge_pinned_with_extension(baa_base, baa_ext)
     gs10 = merge_pinned_with_extension(gs_base, gs_ext)
@@ -187,6 +195,11 @@ def fetch_credit_fallback(now: datetime) -> tuple[pd.Series, pd.Series, dict[str
         "pinned_commit": PINNED_COMMIT,
         "extension_manifest_taken_at_utc": manifest.get("taken_at_utc"),
         "latest_month": latest_baa,
+        "manifest_sha256": hashlib.sha256(manifest_r.content).hexdigest(),
+        "baa_extension_sha256": hashlib.sha256(baa_ext_r.content).hexdigest(),
+        "gs10_extension_sha256": hashlib.sha256(gs_ext_r.content).hexdigest(),
+        "baa_pinned_base_sha256": hashlib.sha256(baa_base_r.content).hexdigest(),
+        "gs10_pinned_base_sha256": hashlib.sha256(gs_base_r.content).hexdigest(),
     }
     baa.attrs.update(meta)
     gs10.attrs.update(meta)
@@ -209,6 +222,8 @@ def fetch_credit(now: datetime) -> tuple[pd.Series, pd.Series, dict[str, Any]]:
         return baa, gs10, {
             "source": "FRED direct monthly CSV",
             "latest_month": latest_baa,
+            "baa_payload_sha256": baa.attrs.get("payload_sha256"),
+            "gs10_payload_sha256": gs10.attrs.get("payload_sha256"),
         }
     except Exception as exc:
         errors.append(f"fred={exc!r}")
@@ -221,19 +236,25 @@ def fetch_credit(now: datetime) -> tuple[pd.Series, pd.Series, dict[str, Any]]:
     raise RuntimeError("all credit sources failed: " + "; ".join(errors))
 
 
-def unzip_current_ff(url: str) -> str:
+def unzip_current_ff(url: str) -> tuple[str, dict[str, str]]:
     raw = get(url, timeout=45).content
     with zipfile.ZipFile(io.BytesIO(raw)) as z:
         names = [n for n in z.namelist() if n.lower().endswith(".csv")]
         if not names:
             raise ValueError(f"no CSV in {url}")
-        return z.read(names[0]).decode("utf-8", "replace")
+        member = names[0]
+        text = z.read(member).decode("utf-8", "replace")
+    return text, {
+        "url": url,
+        "zip_member": member,
+        "zip_sha256": hashlib.sha256(raw).hexdigest(),
+    }
 
 
 def build_ff_scores() -> tuple[dict[str, dict], dict[str, str]]:
-    ff25_text = unzip_current_ff(FF25_URL)
-    ff12_text = unzip_current_ff(FF12_URL)
-    ff3_text = unzip_current_ff(FF3_URL)
+    ff25_text, ff25_prov = unzip_current_ff(FF25_URL)
+    ff12_text, ff12_prov = unzip_current_ff(FF12_URL)
+    ff3_text, ff3_prov = unzip_current_ff(FF3_URL)
 
     _, r25 = parse_portfolio_block(
         ff25_text, "Average Value Weighted Returns -- Monthly", 25
@@ -291,6 +312,9 @@ def build_ff_scores() -> tuple[dict[str, dict], dict[str, str]]:
         "ff12_last_month": r12[-1][0],
         "ff3_last_month": ff3[-1][0],
         "source": "Kenneth R. French official current ZIPs",
+        "ff25_provenance": ff25_prov,
+        "ff12_provenance": ff12_prov,
+        "ff3_provenance": ff3_prov,
     }
     return {x["ym"]: x for x in rows}, meta
 
@@ -355,7 +379,8 @@ def build_effective_states(
 
 
 def fetch_spy() -> pd.Series:
-    obj = get(YAHOO_SPY, timeout=20).json()
+    response = get(YAHOO_SPY, timeout=20)
+    obj = response.json()
     x = obj["chart"]["result"][0]
     ts = x["timestamp"]
     close = x["indicators"]["quote"][0]["close"]
@@ -368,6 +393,9 @@ def fetch_spy() -> pd.Series:
     s = s[~s.index.duplicated(keep="last")].sort_index()
     if len(s) < 600:
         raise ValueError("SPY history too short")
+    s.attrs["source"] = "Yahoo Finance SPY unadjusted Close"
+    s.attrs["payload_sha256"] = hashlib.sha256(response.content).hexdigest()
+    s.attrs["latest_date"] = pd.Timestamp(s.index[-1]).date().isoformat()
     return s
 
 
@@ -487,7 +515,14 @@ def build_snapshot(
         "sources": {
             "fama_french": ff_meta,
             "credit": credit_meta,
-            "price": "Yahoo Finance SPY unadjusted Close",
+            "price": {
+                "source": price.attrs.get(
+                    "source",
+                    "Yahoo Finance SPY unadjusted Close",
+                ),
+                "payload_sha256": price.attrs.get("payload_sha256"),
+                "latest_date": price.attrs.get("latest_date"),
+            },
         },
         "governance": {
             "historical_validation_authorized": False,
@@ -628,6 +663,9 @@ def update_episode_ledger(
                     "anchor_date": gate["asof"],
                     "anchor_close": float(gate["close"]),
                     "source_months_at_start": dict(snapshot["source_months"]),
+                    "source_provenance_at_start": dict(
+                        snapshot.get("sources") or {}
+                    ),
                     "start_score": float(snapshot["route_a_ng3_score"]),
                     "start_financial_lead_gap_raw": float(
                         snapshot["components"]["financial_lead_gap_raw"]
