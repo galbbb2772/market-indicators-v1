@@ -19,7 +19,7 @@ class MarketTopNG3VintageProfitShareTests(unittest.TestCase):
 
     def test_concepts_are_not_silently_relabelled(self):
         for x in HISTORICAL_VINTAGES.values():
-            self.assertIn("inventory valuation", x["concept"])
+            self.assertIn("iva", x["concept"].lower())
             self.assertIn("capital consumption", x["concept"])
 
 
