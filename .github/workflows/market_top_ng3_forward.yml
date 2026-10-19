@@ -9,6 +9,9 @@ on:
       - "research/market_top_route_a_ng3_preregistration.json"
       - "tests/test_market_top_route_a_ng3_preregistration.py"
       - "tests/test_market_top_ng3_forward.py"
+      - "tests/test_market_top_ng3_forward_data.py"
+      - "docs/data/market_top_ng3_current.json"
+      - "docs/data/market_top_ng3_history.json"
       - ".github/workflows/market_top_ng3_forward.yml"
   workflow_dispatch:
   schedule:
@@ -35,7 +38,9 @@ jobs:
       - name: Preregistration contracts
         run: python -m unittest tests.test_market_top_route_a_ng3_preregistration -v
       - name: Forward unit contracts
-        run: python -m unittest tests.test_market_top_ng3_forward -v
+        run: |
+          python -m unittest tests.test_market_top_ng3_forward -v
+          python -m unittest tests.test_market_top_ng3_forward_data -v
       - name: Live source dry-run on PR
         if: github.event_name == 'pull_request'
         run: python market_top_ng3_forward.py --dry-run
