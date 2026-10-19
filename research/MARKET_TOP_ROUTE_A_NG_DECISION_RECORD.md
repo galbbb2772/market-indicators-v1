@@ -149,12 +149,21 @@ First countable effective month:
 2026-12
 ```
 
-which uses only post-preregistration source months:
+with source months:
 
 ```
 Fama-French = 2026-10
 Credit       = 2026-11
 ```
+
+Evidence-quality clarification:
+
+- the October 2026 Fama-French month was not complete or published when NG3 was preregistered on 2026-10-19, so the December signal itself was still unknown;
+- however, October 2026 **straddles** the preregistration date and is not a source month wholly after preregistration;
+- therefore effective 2026-12 remains countable under the original frozen preregistration, but must be tagged `SOURCE_MONTH_STRADDLES_PREREGISTRATION`;
+- effective 2027-01, using Fama-French 2026-11 and credit 2026-12, is the first month whose required monthly source periods are wholly post-preregistration.
+
+This is a disclosure/evidence-quality clarification only. The NG3 formula, gates, first countable month, and promotion-review rule are unchanged.
 
 Any earlier NG3 output is:
 
@@ -234,3 +243,19 @@ NG3 = PROSPECTIVE VALIDATION PENDING
 ```
 
 No version currently qualifies as a recovered or production Route_A.
+
+
+### Prospective evidence-gap accounting
+
+The NG3 monitor must preserve missing prospective months explicitly.
+
+If all eligible runs fail for an entire countable effective month, a later revised data vintage must not silently recreate that month as though it were the first successful post-close snapshot.
+
+The monthly evidence book therefore records:
+
+```
+missing_effective_months
+evidence_gaps_present
+```
+
+and each opened episode records the source-temporality tier that generated it.
