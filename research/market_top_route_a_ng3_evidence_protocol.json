@@ -51,5 +51,11 @@
     "snapshot_requirement": "Every prospective snapshot records cryptographic SHA-256 fingerprints for the Fama-French ZIP vintages, credit payloads/extension snapshot, and SPY payload used to compute the state.",
     "episode_start_requirement": "Each new episode permanently stores source_provenance_at_start copied from the opening snapshot.",
     "purpose": "Prevent later upstream revisions or rolling API windows from changing the identity of the evidence vintage."
+  },
+  "monthly_signal_immutability": {
+    "lock_rule": "For effective_month >= 202612, the first successful snapshot produced after that month is complete becomes the canonical signal snapshot for that effective month.",
+    "later_revisions": "Later scheduled runs may update forward outcome observations, but must not overwrite the frozen monthly signal state, score, gates, source months, or source fingerprints.",
+    "failure_behavior": "If required inputs are stale or unavailable, no monthly snapshot is frozen; the workflow retries on a later scheduled run.",
+    "purpose": "Preserve true prospective point-in-time evidence against later upstream revisions."
   }
 }
