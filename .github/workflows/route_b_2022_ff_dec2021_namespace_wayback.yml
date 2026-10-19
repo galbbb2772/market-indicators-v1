@@ -1,0 +1,51 @@
+name: Route_B 2022 FF Dec-2021 Namespace Wayback Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_ff_dec2021_wayback_namespace.py"
+      - "tests/test_audit_ff_dec2021_wayback_namespace.py"
+      - ".github/workflows/route_b_2022_ff_dec2021_namespace_wayback.yml"
+  workflow_dispatch:
+
+jobs:
+  namespace-wayback-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install requests
+      - name: Static contract
+        run: python -m unittest tests.test_audit_ff_dec2021_wayback_namespace -v
+      - name: Audit December-2021 archive namespace before cutoff
+        run: |
+          python audit_ff_dec2021_wayback_namespace.py --output /tmp/ff_dec2021_namespace.json
+          python - <<'PY'
+          import json
+          x=json.load(open("/tmp/ff_dec2021_namespace.json"))
+          assert x["cutoff"] == "20220103235959"
+          assert x["query_errors"] == [], (
+              "Wayback namespace query failed; result is incomplete."
+          )
+          assert x["status"] in {
+              "PRE_CUTOFF_DEC2021_NAMESPACE_CAPTURE_FOUND",
+              "NO_PRE_CUTOFF_DEC2021_NAMESPACE_CAPTURE",
+          }
+          assert x["namespace_pre_cutoff_delivery_evidence"] == bool(
+              x["capture_count"]
+          )
+          for row in x["captures"]:
+              assert row["timestamp"] <= x["cutoff"]
+              assert "12%202021%20Update" in row["original"] or (
+                  "12 2021 Update" in row["original"]
+              )
+          print(
+              "FF_DEC2021_NAMESPACE_WAYBACK",
+              "status=",x["status"],
+              "captures=",x["capture_count"],
+          )
+          PY
