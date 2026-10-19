@@ -10,6 +10,8 @@ on:
       - "research/ROUTE_B_2022_FF_DEC2021_NAMESPACE_WAYBACK.md"
       - ".github/workflows/route_b_2022_ff_dec2021_namespace_wayback.yml"
   workflow_dispatch:
+  schedule:
+    - cron: "20 4 * * 0"
 
 jobs:
   namespace-wayback-audit:
@@ -27,6 +29,7 @@ jobs:
           python -m unittest tests.test_audit_ff_dec2021_wayback_namespace -v
           python -m unittest tests.test_route_b_2022_ff_dec2021_namespace_wayback_evidence -v
       - name: Audit December-2021 archive namespace before cutoff
+        if: github.event_name != 'pull_request'
         run: |
           python audit_ff_dec2021_wayback_namespace.py --output /tmp/ff_dec2021_namespace.json
           python - <<'PY'
@@ -53,3 +56,10 @@ jobs:
               "captures=",x["capture_count"],
           )
           PY
+
+      - name: PR evidence-boundary note
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "Live CDX prefix revalidation is intentionally skipped on PRs."
+          echo "Static contracts protect the last complete successful audit."
+          echo "Scheduled/manual runs remain fail-closed against Wayback coverage changes."
