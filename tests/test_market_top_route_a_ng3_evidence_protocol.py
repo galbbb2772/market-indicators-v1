@@ -25,7 +25,7 @@ class NG3EvidenceProtocolTests(unittest.TestCase):
         self.assertIn("-15",o["final_252_classification"]["major_top"])
         self.assertIn("-7.5",o["final_252_classification"]["clear_false"])
 
-    def test_monthly_prospective_signal_is_first-successful-snapshot_locked(self):
+    def test_monthly_prospective_signal_is_first_successful_snapshot_locked(self):
         x=self.x["monthly_signal_immutability"]
         self.assertIn("first successful snapshot",x["lock_rule"])
         self.assertIn("must not overwrite",x["later_revisions"])
