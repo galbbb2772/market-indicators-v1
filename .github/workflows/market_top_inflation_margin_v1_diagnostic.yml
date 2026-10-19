@@ -1,0 +1,57 @@
+name: Market Top Inflation-Margin V1.1 Diagnostic
+
+on:
+  pull_request:
+    paths:
+      - "diagnose_inflation_margin_v1_1.py"
+      - ".github/workflows/market_top_inflation_margin_v1_diagnostic.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas requests
+
+      - name: Run frozen-model diagnostic
+        run: |
+          python diagnose_inflation_margin_v1_1.py \
+            --output inflation_margin_v1_1_diagnostic.json
+
+      - name: Print diagnostic summary
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open("inflation_margin_v1_1_diagnostic.json"))
+          print("counts =", json.dumps(x["counts"], indent=2))
+          print("maxima =", json.dumps(x["maxima"], indent=2))
+          for name, block in x["windows"].items():
+              print("\nWINDOW", name)
+              for row in block["rows"]:
+                  print(
+                      row["month"],
+                      "route", round(row["route"],2),
+                      "gate", row["top_location_pass"],
+                      "inf", round(row["inflation_score"],1),
+                      "ulc", round(row["ulc_score"],1),
+                      "margin", round(row["margin_compression_score"],1),
+                      "gap", round(row["cost_profit_gap_yoy"],2),
+                  )
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflation-margin-v1-1-diagnostic
+          path: inflation_margin_v1_1_diagnostic.json
+          if-no-files-found: error
