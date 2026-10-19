@@ -1,0 +1,81 @@
+{
+  "study": "MASTER TOP V3 / BE V2.5 Entry-Price Validation",
+  "as_of": "2026-10-19",
+  "status": "RESEARCH_ONLY_NOT_VALIDATED",
+  "branch": "research/market-top-v3-be-v25-entry-loss",
+  "parent_branch": "research/market-top-v3-be-v24-conditional-incremental",
+  "inputs": {
+    "outcomes": {
+      "path": "research/master_top_v3_be_v2/v22_monthly_forward_outcomes.csv",
+      "sha": "1f4d7d9840b28b6fcb62413d8b7af0e83b2d1cd8"
+    },
+    "features": {
+      "path": "research/master_top_v3_be_v2/extended_2026_mirror_monthly_lag25.csv",
+      "sha": "6f82aa42be2decc1b620f08a0025ae98733a9d9e"
+    }
+  },
+  "label": "future 365-day minimum close / signal-day close - 1 <= -20%",
+  "nonoptimized_sensitivity_percent": [
+    10,
+    15,
+    20
+  ],
+  "model_family": "logistic-ridge",
+  "slope_penalty": 2,
+  "predeclared_anchors": [
+    "01",
+    "04",
+    "07",
+    "10"
+  ],
+  "train_label_maturity_gap_days": 395,
+  "minimum_train_rows": 11,
+  "period_2019plus": {
+    "distinct_years": 7,
+    "forecast_rows": 27,
+    "entry20_positives": 6,
+    "prior_brier": 0.17480666,
+    "cape_top_brier": 0.18138136,
+    "cape_top_roll_brier": 0.18551924,
+    "delta_brier_roll_minus_base": 0.00413788,
+    "year_cluster_95_ci": [
+      -0.01301654,
+      0.02824361
+    ]
+  },
+  "severity_2019plus": {
+    "10": {
+      "events": 12,
+      "delta_brier": -0.01355338,
+      "bootstrap_ci": [
+        -0.04171415,
+        0.01019562
+      ]
+    },
+    "15": {
+      "events": 8,
+      "delta_brier": 0.00739787,
+      "bootstrap_ci": [
+        -0.00865352,
+        0.02421033
+      ]
+    },
+    "20": {
+      "events": 6,
+      "delta_brier": 0.00413788,
+      "bootstrap_ci": [
+        -0.01312814,
+        0.02836147
+      ]
+    }
+  },
+  "assumptions": [
+    "Retrospectively revised mirrors; NOT vintage PIT",
+    "Original architecture historically selected; NOT truly untouched OOS",
+    "Four annual anchors share calendar years and shocks",
+    "7 years only in 2019+; uncertainty high",
+    "No inferred trading edge nor trading recommendation",
+    "No prospective October 2026 month-end record yet"
+  ],
+  "use_gpt_api": false
+}
