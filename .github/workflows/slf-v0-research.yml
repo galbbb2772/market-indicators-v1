@@ -33,6 +33,20 @@ jobs:
           print('status=',r.status_code)
           print(r.text[:5000])
           PY
+      - name: Probe NY Fed Primary Dealer API schema
+        run: |
+          python - <<'PY'
+          import requests
+          u='https://markets.newyorkfed.org/static/docs/markets-api.yml'
+          r=requests.get(u,headers={'User-Agent':'Mozilla/5.0 MarketRegimeLab/SLF-V0'},timeout=30)
+          print('status=',r.status_code,'bytes=',len(r.content))
+          r.raise_for_status()
+          lines=r.text.splitlines()
+          for i,line in enumerate(lines):
+              if '/pd/' in line or ('seriesbreak' in line.lower() and 'pd' in '\n'.join(lines[max(0,i-5):i+5]).lower()):
+                  print('\n'.join(lines[max(0,i-8):min(len(lines),i+35)]))
+                  print('---PD-SCHEMA-BLOCK---')
+          PY
       - name: Run frozen SLF V0 scan
         run: python research/master_top_v3_slf_v0/slf_v0_research.py
       - name: Upload SLF V0 research outputs
