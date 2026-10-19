@@ -102,32 +102,97 @@ ZERO = (
 )
 
 
-def signed_first_percent(body: str) -> float | None:
+def _phrase_re(phrases: tuple[str, ...]) -> str:
+    return r"(?:" + "|".join(re.escape(x) for x in phrases) + r")"
+
+
+def signed_percent_for_month(body: str, month_name: str) -> float | None:
     b = body.lower()
-    first_sentence = re.split(r"(?<=[.!?])\s+", b, maxsplit=1)[0]
-    # A headline zero-change sentence must win over a later sentence that
-    # describes the previous month (for example, "fell 0.2 percent in October").
-    if any(z in first_sentence for z in ZERO):
+    month = re.escape(month_name.lower())
+    number = r"(\d+(?:\.\d+)?)"
+    up = _phrase_re(UP)
+    down = _phrase_re(DOWN)
+
+    # Strongest evidence: a directional change and percentage tied to the
+    # current observation month in the same sentence.
+    m = re.search(
+        rf"\b{up}\b[^.!?]{{0,90}}?{number}\s*(?:-| )?percent"
+        rf"[^.!?]{{0,100}}?\b{month}\b",
+        b,
+    )
+    if m:
+        return float(m.group(1))
+
+    m = re.search(
+        rf"\b{down}\b[^.!?]{{0,90}}?{number}\s*(?:-| )?percent"
+        rf"[^.!?]{{0,100}}?\b{month}\b",
+        b,
+    )
+    if m:
+        return -float(m.group(1))
+
+    # Historical prose sometimes expresses the movement as a noun:
+    # "its 0.2-percent drop in May".
+    m = re.search(
+        rf"{number}\s*(?:-| )?percent\s+"
+        rf"(?:drop|decline|decrease|fall)[^.!?]{{0,60}}?\b{month}\b",
+        b,
+    )
+    if m:
+        return -float(m.group(1))
+
+    m = re.search(
+        rf"{number}\s*(?:-| )?percent\s+"
+        rf"(?:increase|rise|advance|gain)[^.!?]{{0,60}}?\b{month}\b",
+        b,
+    )
+    if m:
+        return float(m.group(1))
+
+    # Explicit current-month zero-change wording. Keep the pattern narrow so
+    # "no change in October ... advanced 0.5 percent in November" is not
+    # misclassified as a November zero.
+    zero_patterns = [
+        rf"(?:showed|registered)\s+(?:virtually\s+)?no change"
+        rf"[^.!?]{{0,55}}?from\s+[a-z]+\s+to\s+{month}\b",
+        rf"(?:was|remained)\s+(?:virtually\s+)?unchanged"
+        rf"[^.!?]{{0,40}}?\b{month}\b",
+        rf"(?:showed|registered)\s+(?:virtually\s+)?no change"
+        rf"\s+in\s+{month}\b",
+    ]
+    if any(re.search(p, b) for p in zero_patterns):
         return 0.0
 
-    m = re.search(r"(\d+(?:\.\d+)?)\s*(?:-| )?percent", first_sentence)
-    search_text = first_sentence
-    if not m:
-        m = re.search(r"(\d+(?:\.\d+)?)\s*(?:-| )?percent", b)
-        search_text = b
-    if not m:
-        return None
+    # Fallback: the first sentence of the headline stage-of-processing
+    # paragraph normally describes the current month. Pair a direction with
+    # the first percentage that follows it rather than doing substring rfind.
+    first_sentence = re.split(r"(?<=[.!?])\s+", b, maxsplit=1)[0]
 
-    n = float(m.group(1))
-    prefix = search_text[:m.start()]
-    up_pos = max([prefix.rfind(v) for v in UP])
-    down_pos = max([prefix.rfind(v) for v in DOWN])
-    if down_pos > up_pos:
-        return -n
-    if up_pos >= 0:
-        return n
+    # A zero-change headline can omit the month name.
+    if any(z in first_sentence for z in ZERO):
+        # Do not let a subordinate previous-month clause override a later
+        # explicit current-month movement; those were handled above.
+        explicit_move = re.search(
+            rf"\b(?:{up}|{down})\b[^.!?]{{0,80}}?"
+            rf"{number}\s*(?:-| )?percent",
+            first_sentence,
+        )
+        if not explicit_move:
+            return 0.0
+
+    moves = []
+    for sign, phrases in ((1.0, UP), (-1.0, DOWN)):
+        phrase_pat = _phrase_re(phrases)
+        for pm in re.finditer(rf"\b{phrase_pat}\b", first_sentence):
+            tail = first_sentence[pm.end():]
+            nm = re.search(rf"{number}\s*(?:-| )?percent", tail)
+            if nm:
+                moves.append((pm.start(), sign * float(nm.group(1))))
+    if moves:
+        moves.sort(key=lambda x: x[0])
+        return moves[0][1]
+
     return None
-
 
 def parse_first_values(text: str, year: int, month: int) -> dict:
     seg = movement_segment(text, year, month)
@@ -139,9 +204,9 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
         seg,
         flags=re.I,
     )
-    fg = signed_first_percent(fg_match.group("body")) if fg_match else None
+    fg = signed_percent_for_month(fg_match.group("body"), current_month_name) if fg_match else None
 
-    im_patterns = [
+    current_month_name = MONTH_NAMES[month - 1].lower()\n\n    im_patterns = [
         r"The Producer Price Index for Intermediate Materials,?\s*Supplies,?\s*and Components(?P<body>.{0,700})",
         r"The index for Intermediate Materials,?\s*Supplies,?\s*and Components(?P<body>.{0,700})",
         r"Prices received by (?:domestic )?producers of intermediate goods(?P<body>.{0,700})",
@@ -174,7 +239,7 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
                 or "this month" in context
                 or lead_statement
             )
-            value = signed_first_percent(body)
+            value = signed_percent_for_month(body, current_month_name)
             if value is not None and temporal_match and not annual_context:
                 im_candidates.append((match.start(), value, match.group(0)[:500]))
     im_candidates.sort(key=lambda x: x[0])
