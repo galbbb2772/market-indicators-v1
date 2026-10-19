@@ -27,6 +27,12 @@ def snap(month,state="ARMED",count=True,anchor="2026-12-31"):
         "counts_toward_prospective_validation":count,
         "state":state,
         "source_months":{"fama_french":"202610","credit":"202611"},
+        "source_temporality":{
+            "preregistration_date":"2026-10-19",
+            "tier":"SOURCE_MONTH_STRADDLES_PREREGISTRATION",
+            "all_source_months_fully_post_preregistration":False,
+            "detail":{},
+        },
         "route_a_ng3_score":90.0,
         "components":{"financial_lead_gap_raw":15.0},
         "gates":{"top_location":{"asof":anchor,"close":100.0}},
@@ -67,6 +73,17 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
             first=update_episode_ledger(snap("202612"),p)
         self.assertEqual(len(first["episodes"]),1)
         self.assertEqual(first["episodes"][0]["episode_id"],"NG3-202612")
+        self.assertFalse(
+            first["episodes"][0]["source_temporality_at_start"][
+                "all_source_months_fully_post_preregistration"
+            ]
+        )
+        self.assertEqual(
+            first["summary"][
+                "straddling_or_pre_preregistration_source_episodes"
+            ],
+            1,
+        )
 
         with patch(
             "market_top_ng3_forward.load_episode_ledger",
