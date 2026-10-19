@@ -39,7 +39,10 @@ def fetch_text(year: int, month: int) -> dict:
         flow_pages = []
         layout_pages = []
         for i, page in enumerate(reader.pages):
-            if i >= 7:
+            # Table 1 aggregate stage-of-processing data sits after the
+            # introductory pages in these historical reports. Keep enough
+            # pages for both release schedules and Table 1/Table A extraction.
+            if i >= 12:
                 break
             flow_pages.append(page.extract_text() or "")
             try:
