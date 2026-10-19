@@ -1,0 +1,65 @@
+{
+  "schema_version": "market-top-route-c-ng2-preregistration-1",
+  "status": "PREREGISTERED_NOT_VALIDATED",
+  "research_only": true,
+  "production_effect": "none",
+  "legacy_route_c_status": "UNRESOLVED",
+  "predecessor": "Route_C_NG1_REJECTED",
+  "training_boundary": "ALL_1993_2022_NG1_C_EPISODES_CONSUMED",
+  "base_formula": {
+    "portfolio_exhaustion": "expanding_pct(1-count(portfolio_6m>market_6m)/25)",
+    "leader_gap": "expanding_pct(max(portfolio_6m)-median(portfolio_6m))",
+    "big_growth_gap": "expanding_pct(BIG_LoBM_6m-median(portfolio_6m))",
+    "concentration_breadth": "cbrt(PortfolioExhaustionScore*LeaderGapScore*BigGrowthGapScore)",
+    "valuation": "expanding_pct(Shiller_CAPE)",
+    "route_c_ng1": "sqrt(Valuation*ConcentrationBreadth)"
+  },
+  "ng2_gates": {
+    "route_c_ng1_min": 85,
+    "valuation_min": 98,
+    "concentration_breadth_min": 85,
+    "spread_shock_score_max": 50,
+    "big_growth_gap_change_3m": " > 0",
+    "top_location_required": true
+  },
+  "point_in_time": {
+    "fama_french_lag_months": 2,
+    "shiller_cape_lag_months": 1,
+    "credit_spread_lag_months": 1,
+    "percentiles": "expanding_current_inclusive",
+    "interpolation": false,
+    "event_specific_lags": false,
+    "common_history_warmup_months": 120
+  },
+  "holdout": {
+    "start": "1963-01",
+    "end": "1992-12",
+    "price_proxy": "^GSPC unadjusted close",
+    "proxy_overlap_gate_agreement_min": 0.95,
+    "positive_windows": [
+      [
+        "1968-09",
+        "1969-01"
+      ],
+      [
+        "1972-11",
+        "1973-02"
+      ]
+    ]
+  },
+  "outcome": {
+    "horizon_sessions": 252,
+    "major_top": "worst_return_from_anchor_pct <= -15",
+    "clear_false": "worst_return_from_anchor_pct > -7.5 AND forward_return_252_pct > 0",
+    "other": "CORRECTION_OR_AMBIGUOUS"
+  },
+  "accept_if": {
+    "proxy_overlap_pass": true,
+    "all_positive_windows_hit": true,
+    "min_complete_episodes": 2,
+    "min_major_top_share": 0.5,
+    "max_clear_false_share": 0.25
+  },
+  "post_validation_tuning_allowed": false,
+  "failure_requires_new_version": "ROUTE_C_NG3_OR_LATER"
+}
