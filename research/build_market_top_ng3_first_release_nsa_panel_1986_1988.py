@@ -370,6 +370,69 @@ def parse_table1_aggregate_geometry(
     if len(good) == 0 and len(labels) == 1 and len(diagnostics) == 1:
         return diagnostics[0]
 
+    # A small number of archived PDFs corrupt only the aggregate row label
+    # while preserving every numeric cell. When there is no usable text label,
+    # recover the stage aggregate from the rows whose relative importance is
+    # exactly 100.000. Table 1 prints Finished, Intermediate, then Crude stages
+    # in that vertical order, so the highest 100-row is Finished and the next
+    # is Intermediate. This fallback is never used when an explicit label is
+    # available.
+    if len(labels) == 0:
+        anonymous = {}
+        for s in spans:
+            if s["font_size"] < 6.0 or not (265 <= float(s["x"]) < 320):
+                continue
+            value = _one_number(s["text"])
+            if value is None or abs(float(value) - 100.0) > 0.001:
+                continue
+            y = float(s["y"])
+            row = _row_spans(spans, y)
+            parsed = _assign_row_tokens(row, label)
+            required = FIELD_ORDER[:6]
+            if not all(
+                parsed[name]["status"] == "PARSED"
+                for name in required
+            ):
+                continue
+            values = {
+                name: float(parsed[name]["value"])
+                for name in required
+            }
+            plausible = (
+                abs(values["relative_importance"] - 100.0) <= 0.001
+                and values["january_level_nsa"] > 20
+                and values["previous_month_level_nsa"] > 20
+                and values["current_month_level_nsa"] > 20
+                and abs(values["yoy_nsa_pct"]) <= 50
+                and abs(values["mom_nsa_pct"]) <= 25
+            )
+            if not plausible:
+                continue
+            anonymous.setdefault(
+                round(y, 1),
+                {
+                    "status": "PARSED_GEOMETRY",
+                    **values,
+                    "label": {
+                        "text": None,
+                        "x": None,
+                        "y": round(y, 3),
+                    },
+                    "row_identification": (
+                        "RELATIVE_IMPORTANCE_100_STAGE_ORDER_FALLBACK"
+                    ),
+                    "columns": parsed,
+                },
+            )
+
+        rows = sorted(
+            anonymous.values(),
+            key=lambda x: -float(x["label"]["y"]),
+        )
+        stage_index = 0 if label == "finished_goods" else 1
+        if len(rows) > stage_index:
+            return rows[stage_index]
+
     return {
         "status": "AGGREGATE_ROW_NOT_UNIQUE",
         "label_candidates": len(labels),
