@@ -31,10 +31,15 @@ jobs:
           assert x["positive_control_2022_08_valid"] is True, (
               "Known 2022-08 archive did not resolve; probe is inconclusive."
           )
+          assert x["schema_version"] == "ff-monthly-official-archive-probe-2"
+          assert x["dec2021_labeled_archive_exists_now"] is True
+          assert x["publication_time_pre_cutoff_proven"] is False
           print(
               "FF_MONTHLY_ARCHIVE_PROBE",
-              "pre_cutoff_hit=",
-              x["pre_cutoff_official_snapshot_with_202111_found"],
+              "dec2021_exists_now=",
+              x["dec2021_labeled_archive_exists_now"],
+              "publication_time_pre_cutoff_proven=",
+              x["publication_time_pre_cutoff_proven"],
           )
           for row in x["candidate_directories"]:
               print(
