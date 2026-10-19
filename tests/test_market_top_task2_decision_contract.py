@@ -29,8 +29,26 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
         self.assertFalse(f["full_pressure_authoritative"])
 
     def test_2022_vintage_robustness(self):
+        self.assertEqual(
+            self.data["schema_version"],
+            "market-top-task2-decision-record-2",
+        )
         v = self.data["vintage_robustness"]
-        self.assertFalse(v["exact_2022_01_03_monthly_vintage_recovered"])
+        self.assertTrue(
+            v["official_dec2021_factor_vintage_content_recovered"]
+        )
+        self.assertFalse(
+            v["exact_2022_01_03_web_delivery_timestamp_proven"]
+        )
+        self.assertTrue(v["ambiguous_exact_monthly_vintage_flag_removed"])
+        self.assertEqual(
+            v["evidence_boundary"],
+            "FACTOR_CONTENT_RECOVERED_DELIVERY_TIMESTAMP_UNPROVEN",
+        )
+        self.assertNotIn(
+            "exact_2022_01_03_monthly_vintage_recovered",
+            v,
+        )
         self.assertEqual(v["official_july_2022_archive"]["status"], "PASS")
         self.assertGreater(
             v["official_july_2022_archive"]["route_b"],
@@ -142,6 +160,22 @@ class MarketTopTask2DecisionContractTests(unittest.TestCase):
         self.assertFalse(
             x["unresolved_delivery_provenance"][
                 "exact_jan3_ff_archive_wayback_capture"
+            ]
+        )
+        self.assertFalse(
+            x["unresolved_delivery_provenance"][
+                "dec2021_namespace_wayback_capture"
+            ]
+        )
+        self.assertEqual(
+            x["unresolved_delivery_provenance"][
+                "dec2021_namespace_capture_count"
+            ],
+            0,
+        )
+        self.assertFalse(
+            x["unresolved_delivery_provenance"][
+                "publication_time_pre_cutoff_proven"
             ]
         )
 
