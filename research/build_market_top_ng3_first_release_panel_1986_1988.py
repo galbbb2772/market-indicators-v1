@@ -165,7 +165,7 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
 def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
     lines = text_layout.splitlines()
     heading_re = re.compile(
-        r"^\s*Table A\.\s*Percent changes from preceding month",
+        r"\bTable\s+A[.\-:]?\s*Percent changes from preceding month",
         flags=re.I,
     )
     start = next(
@@ -184,7 +184,7 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
     )
     block = lines[start:end]
 
-    year_re = re.compile(rf"^\s*{year}:\s*$")
+    year_re = re.compile(rf"^\s*{year}\s*:\s*$")
     year_start = next(
         (i for i, line in enumerate(block) if year_re.match(line)),
         None,
@@ -195,7 +195,7 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
     year_end = next(
         (
             i for i in range(year_start + 1, len(block))
-            if re.match(r"^\s*\d{4}:\s*$", block[i])
+            if re.match(r"^\s*\d{4}\s*:\s*$", block[i])
         ),
         len(block),
     )
@@ -218,7 +218,7 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
     for nxt in section[row_index + 1:row_index + 4]:
         if re.match(r"^\s*(?:" + "|".join(MONTH_NAMES) + r")\b", nxt, flags=re.I):
             break
-        if re.match(r"^\s*\d{4}:\s*$", nxt):
+        if re.match(r"^\s*\d{4}\s*:\s*$", nxt):
             break
         # Only append numeric-looking continuation lines. Stop before footnotes/prose.
         if re.search(r"[A-Za-z]{2,}", nxt):
@@ -228,12 +228,11 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
     merged = " ".join(row_lines)
     pos = row_re.search(merged)
     tail = merged[pos.end():] if pos else merged
-    # Separate visually adjacent decimal columns such as '-.1.5' -> '-.1 .5'.
-    tail = re.sub(r"(?<=\d)(?=[+-]?\.\d)", " ", tail)
-
     # Permit historical forms such as .4, -.3, 0, 1.2r, and .5p.
+    # Do not pre-split before decimal points: OCR strings such as "-.1.5"
+    # naturally tokenize as "-.1", ".5", while "1.4" must remain one value.
     num_re = re.compile(
-        r"(?<![A-Za-z0-9.])[+-]?(?:\d+\.\d+|\.\d+|\d+)(?:[rp])?(?![A-Za-z0-9.])",
+        r"[+-]?(?:\d+\.\d+|\.\d+|\d+)(?:[rp])?",
         flags=re.I,
     )
     vals = []
