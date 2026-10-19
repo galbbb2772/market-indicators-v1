@@ -1,10 +1,26 @@
 {
-  "schema_version": "market-top-ng3-first-release-pilot-decision-2",
-  "status": "SOURCE_ENGINEERING_PILOT_PASS_FIRST_TO_FINAL_DELTA_RECOVERED",
+  "schema_version": "market-top-ng3-first-release-pilot-decision-3",
+  "status": "SOURCE_ENGINEERING_PILOT_PASS_TWO_MONTH_REVISION_CASES_RECOVERED",
   "research_only": true,
   "production_effect": "none",
   "recovered": {
-    "may_1987": {
+    "1987-01": {
+      "initial_release_date": "1987-02-13",
+      "pre_revision_provenance": "PRE_REVISION_CARRY_FORWARD",
+      "pre_revision": {
+        "finished_goods_mom_pct": 0.6,
+        "intermediate_materials_mom_pct": 0.9
+      },
+      "four_month_revision": {
+        "finished_goods_mom_pct": 0.4,
+        "intermediate_materials_mom_pct": 0.9
+      },
+      "revision_delta_pp": {
+        "finished_goods": -0.2,
+        "intermediate_materials": 0
+      }
+    },
+    "1987-05": {
       "initial_release_date": "1987-06-12",
       "first_publication": {
         "finished_goods_mom_pct": 0.3,
@@ -24,13 +40,12 @@
     }
   },
   "open": {
-    "may_1987_period_finalized_values": false,
-    "may_1987_revision_deltas": false,
-    "january_1987_first_published_numeric_values": true,
-    "complete_1986_1988_vintage_panel": true
+    "january_1987_direct_initial_issue_table": true,
+    "complete_1986_1988_vintage_panel": true,
+    "automated_multi_layout_parser": true
   },
   "model_validation_started": false,
   "faster_ng3_preregistered": false,
   "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS",
-  "next_gate": "Recover January 1987 first-published values, then expand and validate the 1986-1988 vintage panel."
+  "next_gate": "Build and validate the bounded 1986-1988 vintage panel before any faster NG3 preregistration."
 }
