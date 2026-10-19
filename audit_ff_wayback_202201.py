@@ -102,6 +102,8 @@ def main() -> None:
                 {
                     "timestamp": snap["timestamp"],
                     "original": snap["original"],
+                    "digest": snap.get("digest"),
+                    "mimetype": snap.get("mimetype"),
                     "last_month": last_month,
                     "has_202111": has_target,
                     "zip_member": member,
@@ -115,6 +117,8 @@ def main() -> None:
                 {
                     "timestamp": snap.get("timestamp"),
                     "original": snap.get("original"),
+                    "digest": snap.get("digest"),
+                    "mimetype": snap.get("mimetype"),
                     "error": repr(exc),
                 }
             )
@@ -142,18 +146,37 @@ def main() -> None:
             }
         )
     else:
+        usable = [x for x in attempts if x.get("last_month")]
+        latest_ts = max(
+            (str(x.get("timestamp")) for x in usable),
+            default=None,
+        )
+        latest_variants = [
+            x for x in usable
+            if latest_ts is not None and str(x.get("timestamp")) == latest_ts
+        ]
+        latest_max_last_month = max(
+            (str(x.get("last_month")) for x in latest_variants),
+            default=None,
+        )
         result = {
-            "schema_version": "route-b-2022-wayback-vintage-audit-1",
+            "schema_version": "route-b-2022-wayback-vintage-audit-2",
             "status": "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
             "cutoff": CUTOFF,
             "exact_or_pre_cutoff_vintage": False,
             "snapshot_count": len(snaps),
             "attempts": attempts,
             "errors": errors,
+            "latest_usable_capture_timestamp": latest_ts,
+            "latest_usable_variants": latest_variants,
+            "latest_usable_max_last_month": latest_max_last_month,
             "interpretation": (
                 "Wayback snapshots of the Ken French ZIP were reachable, but no "
                 "snapshot captured on/before 2022-01-03 contained the 2021-11 "
-                "monthly row required by the frozen publication-lag replay."
+                "monthly row required by the frozen publication-lag replay. "
+                "Multiple archived digests may share one capture timestamp; "
+                "coverage is summarized by the maximum last_month across all "
+                "usable variants at the latest timestamp."
             ),
         }
 
