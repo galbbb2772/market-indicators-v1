@@ -1,5 +1,5 @@
 {
-  "schema_version": "market-top-task2-decision-record-1",
+  "schema_version": "market-top-task2-decision-record-2",
   "task": "Repair the 2022 Market Top Trigger miss without retuning the rest of V2.4",
   "status": "CORE_TASK_PASS_FORWARD_SHADOW_OPERATIONAL_WITH_LEGACY_PROVENANCE_GAPS",
   "production_effect": "none",
@@ -115,7 +115,6 @@
     "walcl_eod_semantics": "H.4.1 release-aware; Thursday ~4:30 p.m. ET and federal-holiday shifts are gated to the next eligible market EOD"
   },
   "vintage_robustness": {
-    "exact_2022_01_03_monthly_vintage_recovered": false,
     "official_july_2022_archive": {
       "status": "PASS",
       "size_weakness": 85.43859649122807,
@@ -182,7 +181,11 @@
       "route_margin": 0.33380682500023795,
       "zip_sha256": "e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86",
       "server_last_modified": "Tue, 29 Nov 2022 17:09:26 GMT"
-    }
+    },
+    "official_dec2021_factor_vintage_content_recovered": true,
+    "exact_2022_01_03_web_delivery_timestamp_proven": false,
+    "ambiguous_exact_monthly_vintage_flag_removed": true,
+    "evidence_boundary": "FACTOR_CONTENT_RECOVERED_DELIVERY_TIMESTAMP_UNPROVEN"
   },
   "route_b_2022_vintage_robustness": {
     "exact_2022_01_03_monthly_bytes_recovered": false,
@@ -307,7 +310,10 @@
       "exact_jan3_ff_archive_wayback_capture": false,
       "exact_jan3_ff_archive_snapshot_count": 0,
       "exact_jan3_treasury_page_bytes": false,
-      "official_page_pre_cutoff_202111_publication_proof": false
+      "official_page_pre_cutoff_202111_publication_proof": false,
+      "dec2021_namespace_wayback_capture": false,
+      "dec2021_namespace_capture_count": 0,
+      "publication_time_pre_cutoff_proven": false
     },
     "interpretation": "The 2022 Route_B numerical input chain is now reproduced from historically appropriate official/pre-cutoff content. Remaining gaps concern independent web-delivery timestamps for exact Jan-3 bytes, not the factor/valuation/policy values used in the replay.",
     "publication_page_wayback": {
