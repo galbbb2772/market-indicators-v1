@@ -25,6 +25,12 @@ class NG3EvidenceProtocolTests(unittest.TestCase):
         self.assertIn("-15",o["final_252_classification"]["major_top"])
         self.assertIn("-7.5",o["final_252_classification"]["clear_false"])
 
+    def test_monthly_prospective_signal_is_first-successful-snapshot_locked(self):
+        x=self.x["monthly_signal_immutability"]
+        self.assertIn("first successful snapshot",x["lock_rule"])
+        self.assertIn("must not overwrite",x["later_revisions"])
+        self.assertIn("freezes nothing",x["failure_behavior"])
+
     def test_prospective_source_bytes_must_be_fingerprinted(self):
         p=self.x["source_provenance"]
         self.assertIn("SHA-256",p["snapshot_requirement"])
