@@ -1,0 +1,68 @@
+{
+  "schema_version": "market-top-inflation-margin-v1.1-screen-summary-1",
+  "status": "REJECT",
+  "research_only": true,
+  "production_effect": "none",
+  "workflow": {
+    "run_id": 39204352570,
+    "job_id": 117903827966,
+    "conclusion": "success",
+    "artifact_id": 12164882009,
+    "artifact_sha256": "f38b27115fd80a95dea5875409dcce3242aeca3ce23cb9936ce63df5ce786125"
+  },
+  "sample": {
+    "first_effective_month": "1958-05",
+    "last_effective_month": "2018-03",
+    "months": 719,
+    "warmup_months": 120
+  },
+  "decision_metrics": {
+    "positive_windows_all_hit": false,
+    "negative_windows_all_clean": true,
+    "complete_nontraining_episodes": 0,
+    "major_top_count": 0,
+    "clear_false_count": 0,
+    "major_top_share": 0,
+    "clear_false_share": 0
+  },
+  "positive_window_hits": {
+    "1968-08_to_1969-02": [],
+    "1980-08_to_1981-02": []
+  },
+  "negative_window_hits": {
+    "1987-06_to_1987-10": [],
+    "1998-06_to_1998-10": [],
+    "2000-01_to_2000-04": [],
+    "2007-06_to_2007-10": [],
+    "2018-08_to_2018-12": []
+  },
+  "highest_route_months": [
+    {
+      "month": "1970-06",
+      "route": 96.80085251516017,
+      "top_location": false
+    },
+    {
+      "month": "1970-07",
+      "route": 96.68119744571703,
+      "top_location": false
+    },
+    {
+      "month": "1970-08",
+      "route": 96.03155993925611,
+      "top_location": false
+    },
+    {
+      "month": "1970-03",
+      "route": 95.38400677184507,
+      "top_location": false
+    },
+    {
+      "month": "1974-06",
+      "route": 92.23284531018452,
+      "top_location": false
+    }
+  ],
+  "frozen_conclusion": "MACRO_STRESS_DIAGNOSTIC_NOT_TOP_ROUTE",
+  "post_result_retuning_allowed": false
+}
