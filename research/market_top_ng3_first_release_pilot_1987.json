@@ -1,0 +1,117 @@
+{
+  "schema_version": "market-top-ng3-first-release-pilot-1987-3",
+  "status": "PASS_TWO_MONTH_FIRST_TO_FINAL_REVISION_DELTAS_RECOVERED",
+  "research_only": true,
+  "production_effect": "none",
+  "purpose": "Source-engineering pilot only; no market-top outcome test or scoring.",
+  "cases": {
+    "1987-01": {
+      "observation_month": "1987-01",
+      "exact_initial_release_date": "1987-02-13",
+      "release_date_status": "RECOVERED",
+      "release_date_source": "Monthly Labor Review, January 1987 release schedule",
+      "pre_revision_publication": {
+        "source": "PPI Detailed Report, February 1987",
+        "source_url": "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_021987.pdf",
+        "seasonally_adjusted": true,
+        "provenance_status": "PRE_REVISION_CARRY_FORWARD",
+        "rationale": "The February report states January Finished Goods rose 0.6% and Intermediate Goods rose 0.9%. Its revision footnote applies to October 1986, while a later May report explicitly identifies January 1987 as newly revised.",
+        "finished_goods": {
+          "january_1987_mom_pct": 0.6,
+          "status": "PRE_REVISION_VALUE_RECOVERED"
+        },
+        "intermediate_materials": {
+          "january_1987_mom_pct": 0.9,
+          "status": "PRE_REVISION_VALUE_RECOVERED"
+        }
+      },
+      "four_month_revision_publication": {
+        "source": "PPI Detailed Report, Data for May 1987",
+        "source_url": "https://fraser.stlouisfed.org/title/ppi-detailed-report-63/may-1987-21618/fulltext",
+        "seasonally_adjusted": true,
+        "revision_note": "The report explicitly states January 1987 data were revised for late reports and respondent corrections.",
+        "finished_goods": {
+          "january_1987_mom_pct": 0.4,
+          "status": "FOUR_MONTH_REVISION_VALUE_RECOVERED_AT_PUBLISHED_0_1PP_PRECISION"
+        },
+        "intermediate_materials": {
+          "january_1987_mom_pct": 0.9,
+          "status": "FOUR_MONTH_REVISION_VALUE_RECOVERED_AT_PUBLISHED_0_1PP_PRECISION"
+        }
+      },
+      "revision_contract": {
+        "initial_release_to_revision_months_approx": 4,
+        "numeric_revision_delta_status": "RECOVERED_AT_PUBLISHED_0_1PP_PRECISION",
+        "first_to_revision_delta_pp": {
+          "finished_goods": -0.2,
+          "intermediate_materials": 0
+        },
+        "first_value_provenance_boundary": "January values are recovered from the next monthly report before the documented January revision, not from a directly parsed January issue table."
+      }
+    },
+    "1987-05": {
+      "observation_month": "1987-05",
+      "exact_initial_release_date": "1987-06-12",
+      "release_date_status": "RECOVERED",
+      "release_date_source": "Monthly Labor Review, May 1987 release calendar",
+      "first_publication": {
+        "source": "PPI Detailed Report, Data for May 1987",
+        "source_url": "https://fraser.stlouisfed.org/title/ppi-detailed-report-63/may-1987-21618/fulltext",
+        "reference_base": "1967=100",
+        "seasonally_adjusted": true,
+        "finished_goods": {
+          "april_level": 295.3,
+          "may_level": 296.2,
+          "reported_mom_pct": 0.3,
+          "level_implied_mom_pct": 0.30477480528274814,
+          "status": "FIRST_PUBLICATION_VALUE_RECOVERED"
+        },
+        "intermediate_materials": {
+          "april_level": 311.2,
+          "may_level": 312.8,
+          "reported_mom_pct": 0.5,
+          "level_implied_mom_pct": 0.5141388174807249,
+          "status": "FIRST_PUBLICATION_VALUE_RECOVERED"
+        }
+      },
+      "period_finalized_publication": {
+        "source": "PPI Detailed Report, March 1988",
+        "source_url": "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_031988.pdf",
+        "table_finished_goods": "Table B — Percent changes in finished goods price indexes, selected periods",
+        "table_intermediate_goods": "Table A — Percent changes from preceding month in selected stage-of-processing price indexes",
+        "seasonally_adjusted": true,
+        "timing_status": "BEYOND_FOUR_MONTH_REVISION_WINDOW",
+        "finished_goods": {
+          "may_1987_mom_pct": -0.1,
+          "status": "FINALIZED_VALUE_RECOVERED_AT_PUBLISHED_0_1PP_PRECISION"
+        },
+        "intermediate_materials": {
+          "may_1987_mom_pct": 0.5,
+          "status": "FINALIZED_VALUE_RECOVERED_AT_PUBLISHED_0_1PP_PRECISION"
+        }
+      },
+      "revision_contract": {
+        "ppi_revision_window_months": 4,
+        "finalized_value_status": "RECOVERED_AT_PUBLISHED_0_1PP_PRECISION",
+        "numeric_revision_delta_status": "RECOVERED_AT_PUBLISHED_0_1PP_PRECISION",
+        "first_to_final_revision_delta_pp": {
+          "finished_goods": -0.4,
+          "intermediate_materials": 0
+        },
+        "note": "Revision deltas compare published seasonally adjusted month-over-month changes at 0.1 percentage-point reporting precision. They are not derived from today's revised BLS history."
+      }
+    }
+  },
+  "model_boundary": {
+    "faster_ng3_formula_preregistered": false,
+    "historical_outcome_test_authorized": false,
+    "v1_reopened": false,
+    "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS"
+  },
+  "next_gate": [
+    "Recover additional 1986-1988 months using the same pre-revision/finalized separation",
+    "Prefer direct initial-issue tables over carry-forward evidence where available",
+    "Build bounded 1986-1988 machine-readable vintage panel",
+    "Only after source-panel validation, preregister any faster NG3 formula before outcomes"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "market-top-ng3-bea-vintage-audit-summary-1",
+  "status": "CONCEPT_BREAK_CONFIRMED_FORMULA_NOT_FROZEN",
+  "research_only": true,
+  "production_effect": "none",
+  "archived_sources": [
+    {
+      "vintage": "1974-08",
+      "publication": "Survey of Current Business — August 1974 Part I",
+      "url": "https://fraser.stlouisfed.org/title/survey-current-business-46/august-1974-part-i-9638/fulltext",
+      "observed_profit_label": "Corporate profits and inventory valuation adjustment",
+      "concept_class": "IVA_ONLY_LABEL_IN_UNIT_TABLE"
+    },
+    {
+      "vintage": "1976-04",
+      "publication": "Survey of Current Business — April 1976",
+      "url": "https://fraser.stlouisfed.org/title/survey-current-business-46/april-1976-9659/fulltext",
+      "observed_profit_label": "Corporate profits with inventory valuation and capital consumption adjustments",
+      "concept_class": "IVA_PLUS_CCADJ_EXPLICIT"
+    },
+    {
+      "vintage": "1988-03",
+      "publication": "Survey of Current Business — March 1988",
+      "url": "https://fraser.stlouisfed.org/title/survey-current-business-46/march-1988-10083/fulltext",
+      "observed_profit_label": "Corporate profits with inventory valuation and capital consumption adjustments",
+      "concept_class": "IVA_PLUS_CCADJ_EXPLICIT"
+    }
+  ],
+  "prohibited_shortcut": "Do not backfill modern revised A463RD into 1968-1974 and label it genuine PIT margin data.",
+  "architecture": {
+    "cost_pressure": {
+      "status": "SOURCE_FAMILY_FEASIBLE",
+      "candidate_inputs": [
+        "CUUR0000SA0",
+        "WPUFD49207",
+        "WPUID61"
+      ]
+    },
+    "margin_confirm": {
+      "status": "VINTAGE_AND_CONCEPT_BRIDGE_REQUIRED",
+      "mandatory_for_early_era": false
+    }
+  },
+  "preferred_revision_diagnostic": "within-vintage profit share = unit profit / total current-dollar cost-and-profit per unit, only when numerator and denominator concepts are internally consistent",
+  "formula_status": "NOT_FROZEN",
+  "historical_performance_status": "NOT_TESTED",
+  "next_gate": [
+    "Unambiguous 1976 quarter/column mapping",
+    "Unambiguous 1987/1988 quarter/column mapping",
+    "Within-vintage profit-share calculations",
+    "Modern-vs-vintage ratio revision diagnostic",
+    "Freeze earliest stable MarginConfirm start date"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "market-top-ng3-vintage-profit-share-summary-1",
+  "status": "PASS",
+  "research_only": true,
+  "production_effect": "none",
+  "workflow": {
+    "run_id": 39211709080,
+    "conclusion": "success",
+    "artifact_id": 12168056556,
+    "artifact_sha256": "16f1ed2c20378082e9355eef6308f31c0458d437187fdfd90794092645b35000"
+  },
+  "cases": {
+    "1976Q1": {
+      "historical": {
+        "price_per_unit": 1.296,
+        "unit_profit": 0.131,
+        "profit_share_pct": 10.108024691358025
+      },
+      "current_revised_2026_10_19": {
+        "price_per_unit": 0.376,
+        "unit_profit": 0.052,
+        "profit_share_pct": 13.829787234042554
+      },
+      "difference_pp": 3.7217625426845284,
+      "relative_difference_pct": 36.81987981159656
+    },
+    "1987Q4": {
+      "historical": {
+        "price_per_unit": 1.123,
+        "unit_profit": 0.108,
+        "profit_share_pct": 9.617097061442564
+      },
+      "current_revised_2026_10_19": {
+        "price_per_unit": 0.621,
+        "unit_profit": 0.062,
+        "profit_share_pct": 9.98389694041868
+      },
+      "difference_pp": 0.3667998789761151,
+      "relative_difference_pct": 3.814039482316467
+    }
+  },
+  "boundary": {
+    "pre_1976_margin_confirm": "NOT_COMPARABLE_BY_DEFAULT",
+    "post_1976_margin_confirm": "ELIGIBLE_ONLY_WITH_DOCUMENTED_VINTAGE",
+    "modern_revised_history_is_genuine_pit": false
+  },
+  "scoring_effect": "NONE"
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "market-top-ng3-source-feasibility-summary-1",
+  "status": "PARTIAL_PASS",
+  "research_only": true,
+  "production_effect": "none",
+  "workflow": {
+    "run_id": 39209452843,
+    "conclusion": "success"
+  },
+  "bls_coverage": [
+    {
+      "role": "CPI-U all items NSA",
+      "series_id": "CUUR0000SA0",
+      "first": "1947-01",
+      "last": "1992-12",
+      "missing_months": 0
+    },
+    {
+      "role": "Finished goods PPI NSA",
+      "series_id": "WPUFD49207",
+      "first": "1947-01",
+      "last": "1992-12",
+      "missing_months": 0
+    },
+    {
+      "role": "Processed goods for intermediate demand NSA",
+      "series_id": "WPUID61",
+      "first": "1947-01",
+      "last": "1992-12",
+      "missing_months": 0
+    }
+  ],
+  "pit_boundaries": {
+    "cpi_u_nsa": "final_when_issued_except_rare_corrections; release-date gate still required",
+    "ppi": "subject_to_revision_up_to_4_months; first-release reconstruction or conservative finalization lag required",
+    "bea_table_115": "quarterly coverage back to 1947Q1; current history is revised; exact pre-1993 vintage automation not yet proven"
+  },
+  "bea_candidate": {
+    "table": "NIPA 1.15",
+    "historical_table_number": "7.15",
+    "lines": {
+      "price_per_unit": 1,
+      "unit_labor_cost": 2,
+      "unit_nonlabor_cost": 3,
+      "unit_profits_current_production": 7,
+      "after_tax_unit_profits": 9
+    }
+  },
+  "formula_status": "NOT_FROZEN",
+  "next_gate": "targeted BEA 1970s/1980s publication-vintage recovery and revision audit"
+}

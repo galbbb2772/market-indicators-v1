@@ -1,0 +1,38 @@
+name: Market Top NG3 BEA Vintage Concept Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_market_top_ng3_bea_vintage_concepts.py"
+      - "research/MARKET_TOP_NG3_BEA_VINTAGE_AUDIT.md"
+      - "research/market_top_ng3_bea_vintage_audit.json"
+      - ".github/workflows/market_top_ng3_bea_vintage_audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependency
+        run: python -m pip install --upgrade pip requests
+
+      - name: Verify archived SCB concept labels
+        run: |
+          python audit_market_top_ng3_bea_vintage_concepts.py \
+            --output market_top_ng3_bea_vintage_audit.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-top-ng3-bea-vintage-audit
+          path: market_top_ng3_bea_vintage_audit.json
+          if-no-files-found: error

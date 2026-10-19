@@ -1,0 +1,33 @@
+name: Market Top NG3 NSA Table2 Pilot
+
+on:
+  pull_request:
+    paths:
+      - "research/audit_market_top_ng3_nsa_table2_pilot.py"
+      - "research/MARKET_TOP_NG3_PPI_REVISION_SEMANTICS.md"
+      - ".github/workflows/market_top_ng3_nsa_table2_pilot.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip requests pypdf
+      - name: Inspect historical Table 2 layout
+        run: |
+          python research/audit_market_top_ng3_nsa_table2_pilot.py \
+            --output market_top_ng3_nsa_table2_pilot.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-top-ng3-nsa-table2-pilot
+          path: market_top_ng3_nsa_table2_pilot.json
+          if-no-files-found: error

@@ -1,0 +1,108 @@
+{
+  "schema_version": "market-top-ng3-margin-revision-diagnostic-result-1",
+  "research_only": true,
+  "production_effect": "none",
+  "formula": "profit_share = unit_profit / total_cost_and_profit_per_unit",
+  "vintage_1976_04_vs_current": {
+    "rows": [
+      {
+        "quarter": "1974Q1",
+        "vintage_profit_share_pct": 8.66426,
+        "current_revised_profit_share_pct": 11.285266,
+        "vintage_minus_current_pp": -2.621007
+      },
+      {
+        "quarter": "1974Q2",
+        "vintage_profit_share_pct": 8.49387,
+        "current_revised_profit_share_pct": 11.009174,
+        "vintage_minus_current_pp": -2.515304
+      },
+      {
+        "quarter": "1974Q3",
+        "vintage_profit_share_pct": 7.482993,
+        "current_revised_profit_share_pct": 10.35503,
+        "vintage_minus_current_pp": -2.872036
+      },
+      {
+        "quarter": "1974Q4",
+        "vintage_profit_share_pct": 6.683168,
+        "current_revised_profit_share_pct": 9.74212,
+        "vintage_minus_current_pp": -3.058952
+      },
+      {
+        "quarter": "1975Q1",
+        "vintage_profit_share_pct": 6.794564,
+        "current_revised_profit_share_pct": 9.776536,
+        "vintage_minus_current_pp": -2.981972
+      },
+      {
+        "quarter": "1975Q2",
+        "vintage_profit_share_pct": 8.918706,
+        "current_revised_profit_share_pct": 11.049724,
+        "vintage_minus_current_pp": -2.131018
+      },
+      {
+        "quarter": "1975Q3",
+        "vintage_profit_share_pct": 10.485133,
+        "current_revised_profit_share_pct": 12.737127,
+        "vintage_minus_current_pp": -2.251994
+      },
+      {
+        "quarter": "1975Q4",
+        "vintage_profit_share_pct": 10.06192,
+        "current_revised_profit_share_pct": 12.834225,
+        "vintage_minus_current_pp": -2.772305
+      }
+    ],
+    "mean_abs_difference_pp": 2.650574,
+    "max_abs_difference_pp": 3.058952
+  },
+  "vintage_1988_06_vs_current": {
+    "rows": [
+      {
+        "quarter": "1986Q4",
+        "vintage_profit_share_pct": 9.332113,
+        "current_revised_profit_share_pct": 8.896211,
+        "vintage_minus_current_pp": 0.435903
+      },
+      {
+        "quarter": "1987Q1",
+        "vintage_profit_share_pct": 9.610154,
+        "current_revised_profit_share_pct": 9.150327,
+        "vintage_minus_current_pp": 0.459827
+      },
+      {
+        "quarter": "1987Q2",
+        "vintage_profit_share_pct": 9.540954,
+        "current_revised_profit_share_pct": 9.771987,
+        "vintage_minus_current_pp": -0.231033
+      },
+      {
+        "quarter": "1987Q3",
+        "vintage_profit_share_pct": 10.19678,
+        "current_revised_profit_share_pct": 10.372771,
+        "vintage_minus_current_pp": -0.175992
+      },
+      {
+        "quarter": "1987Q4",
+        "vintage_profit_share_pct": 9.795191,
+        "current_revised_profit_share_pct": 9.983897,
+        "vintage_minus_current_pp": -0.188705
+      },
+      {
+        "quarter": "1988Q1",
+        "vintage_profit_share_pct": 9.973286,
+        "current_revised_profit_share_pct": 10.25641,
+        "vintage_minus_current_pp": -0.283124
+      }
+    ],
+    "mean_abs_difference_pp": 0.295764,
+    "max_abs_difference_pp": 0.459827
+  },
+  "decision": {
+    "modern_revised_history_as_pit_substitute": "PROHIBITED",
+    "pre_1976_marginconfirm": "MARGIN_NOT_COMPARABLE",
+    "numerical_ng3_formula": "NOT_FROZEN",
+    "historical_hit_rate": "NOT_TESTED"
+  }
+}

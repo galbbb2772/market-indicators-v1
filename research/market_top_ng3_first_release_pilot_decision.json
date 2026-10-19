@@ -1,0 +1,58 @@
+{
+  "schema_version": "market-top-ng3-first-release-pilot-decision-3",
+  "status": "SOURCE_ENGINEERING_PILOT_PASS_TWO_MONTH_REVISION_CASES_RECOVERED",
+  "research_only": true,
+  "production_effect": "none",
+  "recovered": {
+    "1987-01": {
+      "initial_release_date": "1987-02-13",
+      "pre_revision_provenance": "PRE_REVISION_CARRY_FORWARD",
+      "pre_revision": {
+        "finished_goods_mom_pct": 0.6,
+        "intermediate_materials_mom_pct": 0.9
+      },
+      "four_month_revision": {
+        "finished_goods_mom_pct": 0.4,
+        "intermediate_materials_mom_pct": 0.9
+      },
+      "revision_delta_pp": {
+        "finished_goods": -0.2,
+        "intermediate_materials": 0
+      }
+    },
+    "1987-05": {
+      "initial_release_date": "1987-06-12",
+      "first_publication": {
+        "finished_goods_mom_pct": 0.3,
+        "intermediate_materials_mom_pct": 0.5
+      },
+      "period_finalized": {
+        "source": "PPI Detailed Report, March 1988",
+        "source_url": "https://fraser.stlouisfed.org/files/docs/publications/ppi/1980s/ppi_031988.pdf",
+        "finished_goods_mom_pct": -0.1,
+        "intermediate_materials_mom_pct": 0.5,
+        "precision_pp": 0.1
+      },
+      "revision_delta_pp": {
+        "finished_goods": -0.4,
+        "intermediate_materials": 0
+      }
+    }
+  },
+  "open": {
+    "january_1987_direct_initial_issue_table": true,
+    "complete_1986_1988_vintage_panel": true,
+    "automated_multi_layout_parser": true
+  },
+  "model_validation_started": false,
+  "faster_ng3_preregistered": false,
+  "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS",
+  "next_gate": "Build and validate the bounded 1986-1988 vintage panel before any faster NG3 preregistration.",
+  "workflow": {
+    "run_id": 39214748917,
+    "conclusion": "success",
+    "artifact_id": 12168599810,
+    "artifact_name": "market-top-ng3-first-release-pilot-1987",
+    "artifact_sha256": "8e299b613023d1fdc574fd97a47cabed69ea1f56095ecd177e2cf71403fa443f"
+  }
+}

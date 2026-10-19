@@ -1,0 +1,26 @@
+name: Market Top NG3 Margin Revision Diagnostic
+
+on:
+  pull_request:
+    paths:
+      - "research/market_top_ng3_margin_revision_diagnostic_input.json"
+      - "research/compute_market_top_ng3_margin_revision_diagnostic.py"
+      - "research/market_top_ng3_margin_revision_diagnostic_result.json"
+      - ".github/workflows/market_top_ng3_margin_revision_diagnostic.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Recompute diagnostic
+        run: python research/compute_market_top_ng3_margin_revision_diagnostic.py
+      - name: Verify frozen result
+        run: git diff --exit-code -- research/market_top_ng3_margin_revision_diagnostic_result.json

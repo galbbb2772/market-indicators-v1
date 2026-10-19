@@ -1,0 +1,47 @@
+{
+  "schema_version": "market-top-ng3-first-release-source-feasibility-1",
+  "status": "PASS_IN_PRINCIPLE",
+  "research_only": true,
+  "production_effect": "none",
+  "sources": {
+    "bls_modern_detail_archive": {
+      "coverage": "2005-current",
+      "url": "https://www.bls.gov/ppi/detailed-report/",
+      "revision_window_months": 4
+    },
+    "fraser_ppi_detail": {
+      "coverage": "1978-current",
+      "url": "https://fraser.stlouisfed.org/title/ppi-detailed-report-63",
+      "pilot_period": "1986-1988"
+    },
+    "fraser_g8": {
+      "coverage": "1955-1978-06",
+      "url": "https://fraser.stlouisfed.org/title/g8-index-numbers-wholesale-prices-3936",
+      "role": "pre-1978 contemporaneous wholesale-price source",
+      "most_data_provided_by": "Bureau of Labor Statistics"
+    },
+    "alfred": {
+      "role": "post-2006 vintage cross-check",
+      "limitation": "time-travel coverage is not a solution for genuine 1960s-1980s releases"
+    }
+  },
+  "historical_concepts": [
+    "intermediate materials",
+    "producer finished goods"
+  ],
+  "release_rule": "first usable equity state is next U.S. trading-day close after documented publication date when intraday time is unavailable",
+  "vintage_panel_fields": [
+    "observation_month",
+    "publication_date",
+    "first_published_value",
+    "revision_values",
+    "finalized_value",
+    "source_publication",
+    "page_or_table",
+    "historical_concept_label"
+  ],
+  "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS",
+  "faster_formula_preregistered": false,
+  "full_first_release_panel_built": false,
+  "next_gate": "1986-1988 source-engineering pilot before backward extension to G.8 era"
+}
