@@ -31,11 +31,11 @@ def previous_month(month):
 
 
 def validate(record):
-    assert record['schema_version'] == 'BE_V25_PROSPECTIVE_1'
+    if record.get('schema_version') != 'BE_V25_PROSPECTIVE_1':
+        raise ValueError('Unsupported schema version')
     month = record['signal_month']
     prior = previous_month(month)
     run_at = timestamp(record['locked_at'])
-    end = dt.datetime(int(month[:4]), int(month[5:7]), 1, tzinfo=dt.timezone.utc)
     if run_at < (dt.datetime(int(month[:4])+1, 1, 1, tzinfo=dt.timezone.utc)
                  if month.endswith('-12') else
                  dt.datetime(int(month[:4]), int(month[5:7])+1, 1, tzinfo=dt.timezone.utc)):
@@ -49,14 +49,17 @@ def validate(record):
     for name in ('margin', 'cape', 'spy'):
         src = record['sources'][name]
         ref = src['reference_month']
+        previous_month(ref)  # explicit YYYY-MM validation
         if ref > (month if name == 'spy' else prior):
             raise ValueError(name + ' references future data')
         if name == 'spy' and ref != month:
             raise ValueError('SPY source must correspond to signal month')
         pub = timestamp(src['published_at'])
         captured = timestamp(src['captured_at'])
-        if pub > run_at or captured > run_at:
+        if pub > captured or pub > run_at or captured > run_at:
             raise ValueError('Input was not available at lock time')
+        if not src.get('release_evidence_url', '').startswith('https://'):
+            raise ValueError('Dated release evidence URL required')
         if not src.get('source_url', '').startswith('https://'):
             raise ValueError('Source URL must be explicit and HTTPS')
         local = pathlib.Path(src['snapshot_path'])
