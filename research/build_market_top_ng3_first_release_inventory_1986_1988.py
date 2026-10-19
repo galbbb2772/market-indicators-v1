@@ -31,14 +31,14 @@ def fetch_text(url: str) -> tuple[str | None, str | None]:
     try:
         r = requests.get(
             url,
-            timeout=(10, 45),
+            timeout=(5, 20),
             headers={"User-Agent": "market-top-ng3-first-release-panel/1.0"},
         )
         r.raise_for_status()
         reader = PdfReader(io.BytesIO(r.content))
         pages = []
         for i, page in enumerate(reader.pages):
-            if i >= 8:
+            if i >= 6:
                 break
             pages.append(page.extract_text() or "")
         return "\n".join(pages), None
@@ -69,28 +69,33 @@ def main() -> None:
     ap.add_argument("--output", default="market_top_ng3_first_release_inventory_1986_1988.json")
     args = ap.parse_args()
 
-    rows = []
-    for year, month in MONTHS:
+    def one(pair):
+        year, month = pair
         url = pdf_url(year, month)
         text, error = fetch_text(url)
         if text is None:
-            rows.append({
+            return {
                 "observation_month": f"{year:04d}-{month:02d}",
                 "url": url,
                 "status": "SOURCE_UNAVAILABLE",
                 "error": error,
-            })
-            continue
-
-        rows.append({
+            }
+        return {
             "observation_month": f"{year:04d}-{month:02d}",
             "url": url,
             "status": "SOURCE_TEXT_RECOVERED",
-            "text_chars_first_8_pages": len(text),
+            "text_chars_first_6_pages": len(text),
             "release_candidates": release_candidates(text),
             "finished_goods_candidates": candidates(text, "finished goods"),
             "intermediate_candidates": candidates(text, "intermediate"),
-        })
+        }
+
+    rows = []
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        futures = {ex.submit(one, pair): pair for pair in MONTHS}
+        for fut in as_completed(futures):
+            rows.append(fut.result())
+    rows.sort(key=lambda x: x["observation_month"])
 
     result = {
         "schema_version": "market-top-ng3-first-release-inventory-1986-1988-1",
