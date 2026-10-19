@@ -13,6 +13,15 @@ def book():
         "production_effect":"none",
         "prospective_start_effective_month":"202612",
         "snapshots":[],
+        "summary":{
+            "frozen_prospective_months":0,
+            "first_frozen_effective_month":None,
+            "latest_frozen_effective_month":None,
+            "missing_effective_months":[],
+            "evidence_gaps_present":False,
+            "fully_post_preregistration_source_months":0,
+            "straddling_or_pre_preregistration_source_months":0,
+        },
     }
 
 
@@ -31,6 +40,12 @@ def snapshot(month="202612",score=90.0,count=True,hash_value="a"*64):
         "gates":{"phase_gate":True,"top_location":{"passes":True}},
         "state":"ARMED",
         "source_months":{"fama_french":"202610","credit":"202611"},
+        "source_temporality":{
+            "preregistration_date":"2026-10-19",
+            "tier":"SOURCE_MONTH_STRADDLES_PREREGISTRATION",
+            "all_source_months_fully_post_preregistration":False,
+            "detail":{},
+        },
         "sources":{"fama_french":{"ff3_provenance":{"zip_sha256":hash_value}}},
     }
 
@@ -64,6 +79,31 @@ class NG3MonthlySnapshotFreezeTests(unittest.TestCase):
             canonical["evidence_lock"]["immutable_signal_fields"]
         )
         self.assertEqual(len(b["snapshots"]),1)
+
+    def test_missing_prospective_month_is_explicit_gap(self):
+        jan=snapshot(month="202701",score=88.0,count=True)
+        jan["source_months"]={"fama_french":"202611","credit":"202612"}
+        jan["source_temporality"]={
+            "preregistration_date":"2026-10-19",
+            "tier":"FULL_SOURCE_MONTHS_POST_PREREGISTRATION",
+            "all_source_months_fully_post_preregistration":True,
+            "detail":{},
+        }
+        with patch(
+            "market_top_ng3_forward.load_monthly_snapshot_book",
+            return_value=book(),
+        ):
+            _,b,created=freeze_monthly_signal_snapshot(jan)
+        self.assertTrue(created)
+        self.assertEqual(
+            b["summary"]["missing_effective_months"],
+            ["202612"],
+        )
+        self.assertTrue(b["summary"]["evidence_gaps_present"])
+        self.assertEqual(
+            b["summary"]["fully_post_preregistration_source_months"],
+            1,
+        )
 
     def test_later_same_month_revision_cannot_overwrite_frozen_signal(self):
         original=snapshot(score=90.0,hash_value="a"*64)
