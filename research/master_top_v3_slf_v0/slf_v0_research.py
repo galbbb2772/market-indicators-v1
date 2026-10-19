@@ -60,37 +60,62 @@ def pick_col(cols: Iterable[str], *needles: str) -> str:
             return c
     raise KeyError(f"Could not find column containing {needles}; columns={clist}")
 
-def load_erc_metric(entity_id: str):
+def _erc_items_to_rows(items, entity_id):
     rows = []
+    for item in items:
+        data = item.get("data", item)
+        period = data.get("period")
+        value = data.get("value")
+        if period is not None:
+            rows.append((period, value))
+    return rows
+
+def load_erc_metric(entity_id: str):
+    # First try one complete snapshot-selected history request. If the service clamps the
+    # requested limit, fall back to predeclared calendar-year chunks without changing data semantics.
     raw_parts = []
-    current_year = pd.Timestamp.utcnow().year
-    for year in range(2000, current_year + 1):
-        params = {
-            "entity_id": entity_id,
-            "limit": 500,
-            "period_from": f"{year}-01-01",
-            "period_to": f"{year}-12-31",
-        }
-        r = requests.get(ERC_HISTORY_URL, params=params, headers={"User-Agent": UA, "Accept": "application/json"}, timeout=60)
-        r.raise_for_status()
-        raw_parts.append((r.url + "\n").encode("utf-8") + r.content + b"\n")
-        obj = r.json()
-        items = obj.get("items", [])
-        sel = obj.get("history_selection", {})
-        if sel.get("matching_points", 0) > 500:
-            raise RuntimeError(f"ERC yearly chunk unexpectedly exceeds limit for {entity_id} {year}: {sel}")
-        for item in items:
-            data = item.get("data", item)
-            period = data.get("period")
-            value = data.get("value")
-            if period is not None:
-                rows.append((period, value))
+    r = requests.get(
+        ERC_HISTORY_URL,
+        params={"entity_id": entity_id, "limit": 10000},
+        headers={"User-Agent": UA, "Accept": "application/json"},
+        timeout=60,
+    )
+    r.raise_for_status()
+    obj = r.json()
+    raw_parts.append((r.url + "\n").encode("utf-8") + r.content + b"\n")
+    sel = obj.get("history_selection", {})
+    items = obj.get("items", [])
+    matching = int(sel.get("matching_points", len(items)) or 0)
+    returned = int(sel.get("returned_points", len(items)) or 0)
+
+    if matching > 0 and returned >= matching:
+        rows = _erc_items_to_rows(items, entity_id)
+    else:
+        rows = []
+        raw_parts = []
+        current_year = pd.Timestamp.utcnow().year
+        for year in range(2000, current_year + 1):
+            params = {
+                "entity_id": entity_id,
+                "limit": 500,
+                "period_from": f"{year}-01-01",
+                "period_to": f"{year}-12-31",
+            }
+            yr = requests.get(ERC_HISTORY_URL, params=params, headers={"User-Agent": UA, "Accept": "application/json"}, timeout=60)
+            yr.raise_for_status()
+            raw_parts.append((yr.url + "\n").encode("utf-8") + yr.content + b"\n")
+            yobj = yr.json()
+            ysel = yobj.get("history_selection", {})
+            if int(ysel.get("matching_points", 0) or 0) > 500:
+                raise RuntimeError(f"ERC yearly chunk unexpectedly exceeds limit for {entity_id} {year}: {ysel}")
+            rows.extend(_erc_items_to_rows(yobj.get("items", []), entity_id))
+
     df = pd.DataFrame(rows, columns=["source_date", entity_id])
     df["source_date"] = pd.to_datetime(df["source_date"], errors="coerce")
     df[entity_id] = pd.to_numeric(df[entity_id], errors="coerce")
     df = df.dropna(subset=["source_date"]).drop_duplicates("source_date", keep="last").sort_values("source_date")
     if len(df) < 6000:
-        raise RuntimeError(f"ERC history incomplete for {entity_id}: rows={len(df)}")
+        raise RuntimeError(f"ERC history incomplete for {entity_id}: rows={len(df)} matching={matching} returned={returned}")
     return df, b"".join(raw_parts)
 
 def load_fsi():
