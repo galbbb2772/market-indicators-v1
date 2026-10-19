@@ -92,7 +92,7 @@ Every observed combination tested remains above 85.
 
 The correct evidence statement is:
 
-> Route_B > 85 is robust across every observed historical vintage and the primary-source PolicyShock chain, but the minimum reconstructed margin is narrow and exact Jan-3 monthly source bytes remain partly unrecovered.
+> Route_B > 85 is robust across every observed historical vintage and the primary-source PolicyShock chain, but the minimum reconstructed margin is narrow. The official December-2021 Fama-French vintage content is recovered; the remaining provenance limitations concern exact Jan-3 web-delivery timestamps/bytes and the unavailable exact November-2021 Shiller pre-cutoff workbook.
 
 Do not describe the 2022 Route_B result as having a large safety cushion.
 
