@@ -20,6 +20,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 UA = "market-top-research/SLF-v0 (public-source reproducibility)"
 FSI_URL = "https://www.financialresearch.gov/financial-stress-index/data/files/ofr-fsi.csv"
+FSI_MIRROR_URL = "https://www.diawonds.com/ofr/"
 NYPD_URL = "https://data.financialresearch.gov/v1/series/timeseries"
 STOOQ_URL = "https://stooq.com/q/d/l/?s=%5Espx&i=d"
 
@@ -58,8 +59,25 @@ def pick_col(cols: Iterable[str], *needles: str) -> str:
     raise KeyError(f"Could not find column containing {needles}; columns={clist}")
 
 def load_fsi():
-    raw = get_bytes(FSI_URL)
-    df = pd.read_csv(io.BytesIO(raw))
+    source_url = FSI_URL
+    source_role = "official_ofr_csv"
+    try:
+        raw = get_bytes(FSI_URL)
+        df = pd.read_csv(io.BytesIO(raw))
+    except Exception as official_error:
+        # Frozen pre-score fallback: retrospective mirror only. Exact raw bytes are hashed.
+        source_url = FSI_MIRROR_URL
+        source_role = "diawonds_retrospective_mirror_of_ofr"
+        raw = get_bytes(FSI_MIRROR_URL)
+        tables = pd.read_html(io.BytesIO(raw))
+        candidates = []
+        for t in tables:
+            cols = [str(c).strip().lower() for c in t.columns]
+            if any("fund" in c for c in cols) and any("safe" in c for c in cols):
+                candidates.append(t)
+        if not candidates:
+            raise RuntimeError(f"No OFR-like table in mirror; official_error={official_error}")
+        df = max(candidates, key=len)
     date_col = pick_col(df.columns, "date")
     funding_col = pick_col(df.columns, "fund")
     try:
@@ -68,13 +86,19 @@ def load_fsi():
         safe_col = pick_col(df.columns, "flight")
     out = df[[date_col, funding_col, safe_col]].copy()
     out.columns = ["source_date", "funding", "safe_assets"]
-    out["source_date"] = pd.to_datetime(out["source_date"], errors="coerce")
+    # Mirror uses day-first dates; ISO official data remains correctly parsed with dayfirst=False fallback.
+    parsed = pd.to_datetime(out["source_date"], errors="coerce")
+    if parsed.notna().mean() < 0.95:
+        parsed = pd.to_datetime(out["source_date"], errors="coerce", dayfirst=True)
+    out["source_date"] = parsed
     out["funding"] = pd.to_numeric(out["funding"], errors="coerce")
     out["safe_assets"] = pd.to_numeric(out["safe_assets"], errors="coerce")
     out = out.dropna(subset=["source_date"]).sort_values("source_date")
     # Conservative rule frozen in data contract: observation t -> effective t+3 US business-day proxy.
     out["date"] = out["source_date"] + pd.offsets.BDay(3)
-    return out, raw, {"date_col": date_col, "funding_col": funding_col, "safe_col": safe_col, "columns": list(df.columns)}
+    meta = {"date_col": str(date_col), "funding_col": str(funding_col), "safe_col": str(safe_col),
+            "columns": [str(c) for c in df.columns], "source_url": source_url, "source_role": source_role}
+    return out, raw, meta
 
 def load_nypd_series(mnemonic: str):
     raw = get_bytes(NYPD_URL, {"mnemonic": mnemonic})
@@ -247,7 +271,7 @@ def main():
         "status":"RESEARCH_ONLY_LATEST_VINTAGE_RETRO",
         "formula_version":"SLF_V0_PREREG_2026-10-19",
         "sources":{
-            "ofr_fsi":{"url":FSI_URL,"sha256":sha256_bytes(raw_fsi),"meta":fsi_meta},
+            "ofr_fsi":{"url":fsi_meta.get("source_url",FSI_URL),"sha256":sha256_bytes(raw_fsi),"meta":fsi_meta},
             "nypd_fails_deliver":{"mnemonic":"NYPD-PD_AFtD_TOT-A","sha256":sha256_bytes(raw_d)},
             "nypd_fails_receive":{"mnemonic":"NYPD-PD_AFtR_TOT-A","sha256":sha256_bytes(raw_r)},
             "stooq_spx":{"url":STOOQ_URL,"sha256":sha256_bytes(raw_spx),"role":"research-only top-location proxy"},
