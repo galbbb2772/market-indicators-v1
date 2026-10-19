@@ -119,6 +119,46 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
         self.assertLessEqual(m["worst_return_from_anchor_pct"],-15.0)
         self.assertEqual(classify_252(m),"MAJOR_TOP")
 
+    def test_completed_horizon_metrics_are_never_recomputed(self):
+        p=price_series()
+        frozen_63={
+            "sessions_required":63,
+            "sessions_observed":63,
+            "complete":True,
+            "asof":"2027-03-30",
+            "forward_return_pct":12.345,
+            "worst_return_from_anchor_pct":-3.21,
+            "max_peak_to_trough_dd_pct":-4.56,
+        }
+        ledger=empty_ledger()
+        ledger["episodes"]=[{
+            "episode_id":"NG3-202612",
+            "signal_status":"CLOSED",
+            "start_effective_month":"202612",
+            "last_armed_effective_month":"202612",
+            "closed_effective_month":"202701",
+            "closed_reason":"FIRST_COMPLETED_IDLE_MONTH",
+            "anchor_date":"2026-12-31",
+            "anchor_close":100.0,
+            "source_months_at_start":{},
+            "start_score":90.0,
+            "start_financial_lead_gap_raw":15.0,
+            "outcomes":{"63":dict(frozen_63)},
+            "classification_252":None,
+        }]
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=ledger,
+        ):
+            x=update_episode_ledger(
+                snap("202702",state="IDLE"),
+                p,
+            )
+        self.assertEqual(
+            x["episodes"][0]["outcomes"]["63"],
+            frozen_63,
+        )
+
     def test_no_automatic_promotion_even_when_review_eligible(self):
         p=price_series()
         episodes=[]
