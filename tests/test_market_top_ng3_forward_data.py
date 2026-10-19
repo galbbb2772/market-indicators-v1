@@ -7,12 +7,14 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 CURRENT=ROOT/"docs"/"data"/"market_top_ng3_current.json"
 HISTORY=ROOT/"docs"/"data"/"market_top_ng3_history.json"
+EPISODES=ROOT/"docs"/"data"/"market_top_ng3_episodes.json"
 
 class NG3ForwardDataContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.x=json.loads(CURRENT.read_text(encoding="utf-8"))
         cls.h=json.loads(HISTORY.read_text(encoding="utf-8"))
+        cls.e=json.loads(EPISODES.read_text(encoding="utf-8"))
 
     def test_seed_is_not_prospective_evidence(self):
         self.assertEqual(self.x["effective_month"],"202609")
@@ -63,6 +65,15 @@ class NG3ForwardDataContractTests(unittest.TestCase):
         self.assertFalse(g["production_promotion_authorized"])
         self.assertFalse(g["post_preregistration_tuning_allowed"])
         self.assertEqual(self.x["production_effect"],"none")
+
+    def test_episode_ledger_starts_empty_before_prospective_boundary(self):
+        self.assertEqual(self.e["episodes"],[])
+        s=self.e["summary"]
+        self.assertEqual(s["prospective_episode_count"],0)
+        self.assertEqual(s["complete_252_session_episodes"],0)
+        self.assertFalse(s["review_eligible"])
+        self.assertFalse(s["automatic_promotion"])
+        self.assertIsNone(s["action_signal"])
 
     def test_history_seed_cannot_count_as_prospective(self):
         rows=self.h["history"]
