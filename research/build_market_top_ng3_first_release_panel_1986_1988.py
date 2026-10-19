@@ -220,11 +220,16 @@ def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
             break
         if re.match(r"^\s*\d{4}:\s*$", nxt):
             break
+        # Only append numeric-looking continuation lines. Stop before footnotes/prose.
+        if re.search(r"[A-Za-z]{2,}", nxt):
+            break
         row_lines.append(nxt)
 
     merged = " ".join(row_lines)
     pos = row_re.search(merged)
     tail = merged[pos.end():] if pos else merged
+    # Separate visually adjacent decimal columns such as '-.1.5' -> '-.1 .5'.
+    tail = re.sub(r"(?<=\d)(?=[+-]?\.\d)", " ", tail)
 
     # Permit historical forms such as .4, -.3, 0, 1.2r, and .5p.
     num_re = re.compile(
@@ -264,37 +269,50 @@ def resolve_first_publication(narrative: dict, table_a: dict) -> dict:
     tfg = table_a.get("finished_goods_mom_sa_pct")
     tim = table_a.get("intermediate_goods_mom_sa_pct")
 
-    if tfg is None or tim is None:
+    table_complete = tfg is not None and tim is not None
+    narrative_complete = nfg is not None and nim is not None
+
+    if table_complete:
+        fg_conflict = (
+            nfg is not None
+            and abs(float(nfg) - float(tfg)) > 0.051
+        )
+        im_conflict = (
+            nim is not None
+            and abs(float(nim) - float(tim)) > 0.051
+        )
+        if narrative_complete and not fg_conflict and not im_conflict:
+            status = "VERIFIED_DUAL_PATH"
+        elif fg_conflict or im_conflict:
+            status = "TABLE_A_RECOVERED_NARRATIVE_CONFLICT"
+        else:
+            status = "TABLE_A_RECOVERED"
         return {
-            "status": "AMBIGUOUS_TABLE_A_MISSING",
-            "finished_goods_mom_sa_pct": None,
-            "intermediate_goods_mom_sa_pct": None,
-            "fg_conflict": False,
-            "im_conflict": False,
+            "status": status,
+            "finished_goods_mom_sa_pct": float(tfg),
+            "intermediate_goods_mom_sa_pct": float(tim),
+            "fg_conflict": bool(fg_conflict),
+            "im_conflict": bool(im_conflict),
+            "primary_source_path": "TABLE_A_CURRENT_MONTH_ROW",
         }
 
-    fg_conflict = (
-        nfg is not None
-        and abs(float(nfg) - float(tfg)) > 0.051
-    )
-    im_conflict = (
-        nim is not None
-        and abs(float(nim) - float(tim)) > 0.051
-    )
-
-    if nfg is not None and nim is not None and not fg_conflict and not im_conflict:
-        status = "VERIFIED_DUAL_PATH"
-    elif fg_conflict or im_conflict:
-        status = "TABLE_A_RECOVERED_NARRATIVE_CONFLICT"
-    else:
-        status = "TABLE_A_RECOVERED"
+    if narrative_complete:
+        return {
+            "status": "NARRATIVE_RECOVERED",
+            "finished_goods_mom_sa_pct": float(nfg),
+            "intermediate_goods_mom_sa_pct": float(nim),
+            "fg_conflict": False,
+            "im_conflict": False,
+            "primary_source_path": "CURRENT_REPORT_NARRATIVE",
+        }
 
     return {
-        "status": status,
-        "finished_goods_mom_sa_pct": float(tfg),
-        "intermediate_goods_mom_sa_pct": float(tim),
-        "fg_conflict": bool(fg_conflict),
-        "im_conflict": bool(im_conflict),
+        "status": "AMBIGUOUS",
+        "finished_goods_mom_sa_pct": None,
+        "intermediate_goods_mom_sa_pct": None,
+        "fg_conflict": False,
+        "im_conflict": False,
+        "primary_source_path": None,
     }
 
 
@@ -428,8 +446,12 @@ def main() -> None:
             ),
             "dual_path_verified": dual_verified,
             "narrative_conflicts": narrative_conflicts,
-            "ambiguous_table_rows": sum(
-                r["first_publication"]["status"] == "AMBIGUOUS_TABLE_A_MISSING"
+            "ambiguous_rows": sum(
+                r["first_publication"]["status"] == "AMBIGUOUS"
+                for r in rows
+            ),
+            "narrative_only_recovered": sum(
+                r["first_publication"]["status"] == "NARRATIVE_RECOVERED"
                 for r in rows
             ),
         },
