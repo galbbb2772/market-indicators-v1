@@ -47,5 +47,12 @@
   "model_validation_started": false,
   "faster_ng3_preregistered": false,
   "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS",
-  "next_gate": "Build and validate the bounded 1986-1988 vintage panel before any faster NG3 preregistration."
+  "next_gate": "Build and validate the bounded 1986-1988 vintage panel before any faster NG3 preregistration.",
+  "workflow": {
+    "run_id": 39214748917,
+    "conclusion": "success",
+    "artifact_id": 12168599810,
+    "artifact_name": "market-top-ng3-first-release-pilot-1987",
+    "artifact_sha256": "8e299b613023d1fdc574fd97a47cabed69ea1f56095ecd177e2cf71403fa443f"
+  }
 }
