@@ -1,0 +1,49 @@
+{
+  "schema_version": "market-top-route-a-ng3-evidence-protocol-1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "frozen_date": "2026-10-19",
+  "prospective_start_effective_month": "202612",
+  "research_only": true,
+  "production_effect": "none",
+  "episode_definition": {
+    "start": "first completed prospective effective month with NG3 state ARMED",
+    "same_episode": "consecutive completed effective months with state ARMED",
+    "close": "first completed effective month with state IDLE after an ARMED run",
+    "reopen": "an ARMED month after at least one completed IDLE effective month starts a new episode",
+    "episode_id": "NG3-<first_armed_effective_month>",
+    "anchor": "last trading day of first ARMED effective month",
+    "overlapping_outcome_windows_allowed": true
+  },
+  "outcome_tracking": {
+    "price": "SPY unadjusted Close",
+    "horizons_sessions": [
+      63,
+      126,
+      252
+    ],
+    "path_start": "first trading session after anchor",
+    "metrics": [
+      "forward_return_pct",
+      "worst_return_from_anchor_pct",
+      "max_peak_to_trough_dd_pct"
+    ],
+    "final_252_classification": {
+      "major_top": "worst_return_from_anchor_pct <= -15",
+      "clear_false": "worst_return_from_anchor_pct > -7.5 AND forward_return_pct > 0",
+      "other": "CORRECTION_OR_AMBIGUOUS"
+    }
+  },
+  "promotion_review": {
+    "minimum_complete_252_session_episodes": 4,
+    "automatic_promotion": false,
+    "action_signal": null,
+    "rule": "When four complete 252-session prospective episodes exist, only set review_eligible=true. A separate decision record is required for any promotion."
+  },
+  "immutability": {
+    "model_inputs_unchanged": true,
+    "model_score_unchanged": true,
+    "state_gate_unchanged": true,
+    "retrospective_episodes_forbidden": true,
+    "protocol_change_requires_new_version": true
+  }
+}
