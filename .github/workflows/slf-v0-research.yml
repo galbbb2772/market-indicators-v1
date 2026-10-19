@@ -1,0 +1,43 @@
+name: SLF V0 Research Scan
+
+on:
+  pull_request:
+    branches:
+      - research/market-top-unified-ledger-2026-10-19
+    paths:
+      - 'research/master_top_v3_slf_v0/**'
+      - '.github/workflows/slf-v0-research.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-slf-v0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas numpy requests tabulate
+
+      - name: Run frozen SLF V0 scan
+        run: |
+          python research/master_top_v3_slf_v0/slf_v0_research.py
+
+      - name: Show output files
+        run: |
+          find research/master_top_v3_slf_v0/output -maxdepth 1 -type f -printf '%f\n' | sort
+
+      - name: Upload SLF V0 research outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: slf-v0-research-output
+          path: research/master_top_v3_slf_v0/output/
+          if-no-files-found: error
