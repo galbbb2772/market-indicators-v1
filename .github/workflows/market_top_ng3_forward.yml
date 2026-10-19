@@ -124,6 +124,16 @@ jobs:
               "complete_252_session_episodes_without_continuity_gaps"
           ]
           assert ep["summary"]["review_eligible"] == (clean_complete >= 4)
+          strict_complete = ep["summary"][
+              "complete_252_clean_fully_post_source_episodes"
+          ]
+          assert strict_complete <= clean_complete
+          assert ep["summary"]["strict_temporal_evidence_ready"] == (
+              strict_complete >= 4
+          )
+          assert ep["summary"][
+              "strict_temporal_evidence_ready_is_diagnostic_only"
+          ] is True
           assert ep["summary"]["automatic_promotion"] is False
           assert ep["summary"]["action_signal"] is None
           def is_sha256(v):
