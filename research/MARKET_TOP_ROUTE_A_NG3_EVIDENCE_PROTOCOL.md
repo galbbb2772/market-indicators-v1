@@ -268,3 +268,26 @@ prospective effective month. It does not change any model or evidence-count
 criterion.
 
 This is bookkeeping protection only; it does not change any NG3 model rule.
+
+
+## Incomplete-outcome path coverage
+
+An incomplete 63 / 126 / 252-session horizon may continue accumulating only
+when the current price payload still covers the beginning of the post-anchor
+path.
+
+Fail-closed rule:
+
+```
+first available price observation after anchor
+> anchor + 10 calendar days
+=> ERROR
+```
+
+This guard prevents a rolling provider window from dropping the early part of
+an unfinished episode and then incorrectly treating much later observations as
+sessions 1..N after the signal.
+
+Completed horizons remain immutable as before. This hardening applies only to
+still-incomplete outcomes and changes no model, classification, or promotion
+criterion.
