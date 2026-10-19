@@ -8,6 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 CURRENT=ROOT/"docs"/"data"/"market_top_ng3_current.json"
 HISTORY=ROOT/"docs"/"data"/"market_top_ng3_history.json"
 EPISODES=ROOT/"docs"/"data"/"market_top_ng3_episodes.json"
+MONTHLY=ROOT/"docs"/"data"/"market_top_ng3_monthly_snapshots.json"
 
 class NG3ForwardDataContractTests(unittest.TestCase):
     @classmethod
@@ -15,6 +16,7 @@ class NG3ForwardDataContractTests(unittest.TestCase):
         cls.x=json.loads(CURRENT.read_text(encoding="utf-8"))
         cls.h=json.loads(HISTORY.read_text(encoding="utf-8"))
         cls.e=json.loads(EPISODES.read_text(encoding="utf-8"))
+        cls.m=json.loads(MONTHLY.read_text(encoding="utf-8"))
 
     def test_seed_is_not_prospective_evidence(self):
         self.assertEqual(self.x["effective_month"],"202609")
@@ -65,6 +67,11 @@ class NG3ForwardDataContractTests(unittest.TestCase):
         self.assertFalse(g["production_promotion_authorized"])
         self.assertFalse(g["post_preregistration_tuning_allowed"])
         self.assertEqual(self.x["production_effect"],"none")
+
+    def test_monthly_snapshot_book_starts_empty_before_prospective_boundary(self):
+        self.assertEqual(self.m["prospective_start_effective_month"],"202612")
+        self.assertEqual(self.m["snapshots"],[])
+        self.assertEqual(self.m["summary"]["frozen_prospective_months"],0)
 
     def test_episode_ledger_starts_empty_before_prospective_boundary(self):
         self.assertEqual(self.e["episodes"],[])
