@@ -309,6 +309,14 @@ def main() -> None:
             narrative = {"status": "SOURCE_UNAVAILABLE"}
             table_a = {"status": "SOURCE_UNAVAILABLE"}
             resolved = {"status": "SOURCE_UNAVAILABLE"}
+        if key == "1987-05":
+            layout_lines = d.get("text_layout", "").splitlines()
+            ta = next((i for i, line in enumerate(layout_lines) if "table a." in line.lower()), None)
+            if ta is not None:
+                print("DEBUG_TABLE_A_1987_05_START")
+                for debug_line in layout_lines[ta:ta+45]:
+                    print(repr(debug_line))
+                print("DEBUG_TABLE_A_1987_05_END")
         rows.append({
             "observation_month": key,
             "publication_pdf": pdf_url(year, month),
