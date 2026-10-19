@@ -1,0 +1,91 @@
+{
+  "schema_version": "market-top-route-c-ng2-pre1993-holdout-summary-1",
+  "status": "INSUFFICIENT_HOLDOUT_EVENTS",
+  "research_only": true,
+  "production_effect": "none",
+  "legacy_route_c_status": "UNRESOLVED",
+  "workflow": {
+    "run_id": 39205354725,
+    "job_id": 117906877168,
+    "conclusion": "success",
+    "artifact_id": 12165188838,
+    "artifact_name": "market-top-route-c-ng2-pre1993",
+    "artifact_sha256": "c6d6b4eeb8640a911124672a9fbeaf3d11eb5e9380b7d89281bbf44af74ed5ee"
+  },
+  "proxy_overlap": {
+    "start": "1995-02",
+    "end": "1999-12",
+    "months": 59,
+    "agreements": 58,
+    "agreement_rate": 0.9830508474576272,
+    "required_min": 0.95,
+    "passes": true,
+    "disagreements": [
+      {
+        "month": "1999-05",
+        "sp500_gate": true,
+        "spy_gate": false
+      }
+    ]
+  },
+  "positive_window_hits": {
+    "1968-09_to_1969-01": [],
+    "1972-11_to_1973-02": []
+  },
+  "summary": {
+    "armed_episodes": 0,
+    "complete_episodes": 0,
+    "major_top_count": 0,
+    "clear_false_count": 0,
+    "major_top_share": 0,
+    "clear_false_share": 0,
+    "all_positive_windows_hit": false
+  },
+  "structural_failure": "VALUATION_REGIME_DEPENDENCE",
+  "representative_near_misses": [
+    {
+      "month": "1969-10",
+      "route_c_ng1": 82.39944963922522,
+      "valuation": 75.5868544600939,
+      "concentration_breadth": 89.82605969443829,
+      "spread_shock": 3.125,
+      "big_growth_gap_change_3m": 15.629604103118577,
+      "top_location": false
+    },
+    {
+      "month": "1969-11",
+      "route_c_ng1": 82.32363665282425,
+      "valuation": 75.98499061913697,
+      "concentration_breadth": 89.19105071310467,
+      "spread_shock": 43.523316062176164,
+      "big_growth_gap_change_3m": 3.5977030830078185,
+      "top_location": false
+    },
+    {
+      "month": "1972-09",
+      "route_c_ng1": 79.62528178214549,
+      "valuation": 72.54545454545455,
+      "concentration_breadth": 87.39604071146212,
+      "spread_shock": 15.859030837004406,
+      "big_growth_gap_change_3m": 15.190920070628358,
+      "top_location": true
+    },
+    {
+      "month": "1972-12",
+      "route_c_ng1": 81.91650326659445,
+      "valuation": 75.97461468721669,
+      "concentration_breadth": 88.32310022304121,
+      "spread_shock": 4.782608695652174,
+      "big_growth_gap_change_3m": -2.948458355254658,
+      "top_location": true
+    }
+  ],
+  "evidence_boundary": {
+    "post1993_consumed": true,
+    "pre1993_consumed": true,
+    "untouched_us_historical_holdout_remaining": false,
+    "next_validation": "PROSPECTIVE_OR_GENUINELY_INDEPENDENT_DOMAIN"
+  },
+  "post_result_retuning_allowed": false,
+  "next_structural_version": "ROUTE_C_NG3_OR_LATER"
+}
