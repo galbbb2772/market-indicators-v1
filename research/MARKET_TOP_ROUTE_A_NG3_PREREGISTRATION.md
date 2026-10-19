@@ -144,7 +144,22 @@ effective 2026-12
   -> credit source month 2026-11
 ```
 
-Both source months occur after this preregistration.
+The December 2026 effective signal was still unknown at preregistration because the October 2026 Fama-French month was incomplete and unpublished on 2026-10-19. However, the October source month itself straddles the preregistration date.
+
+Therefore:
+
+```
+effective 2026-12
+  => countable under the original frozen preregistration
+  => SOURCE_MONTH_STRADDLES_PREREGISTRATION
+
+effective 2027-01
+  -> FF source month 2026-11
+  -> credit source month 2026-12
+  => first FULL_SOURCE_MONTHS_POST_PREREGISTRATION signal
+```
+
+This is an evidence-quality distinction only. It does not move the frozen first countable effective month.
 
 Any 2026-11 or earlier computation is allowed only as:
 
@@ -244,3 +259,18 @@ From this preregistration forward, do not change inside NG3:
 - outcome definitions.
 
 Any redesign is NG4 or later.
+
+
+## Source-temporality clarification incorporated
+
+The later source-temporality addendum is incorporated here as a clarification of the original evidence boundary, not as a model change.
+
+Frozen facts:
+
+```
+preregistration date = 2026-10-19
+first countable effective month = 2026-12
+first fully post-preregistration source-period effective month = 2027-01
+```
+
+Therefore no text in this preregistration should be read as claiming that all underlying source-period calendar days for effective 2026-12 occurred after 2026-10-19.
