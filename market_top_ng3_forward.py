@@ -994,6 +994,17 @@ def update_episode_ledger(
     episodes_with_continuity_gaps = sum(
         1 for ep in episodes if bool(ep.get("continuity_evidence_gap"))
     )
+    complete_252_clean_fully_post_source = sum(
+        1
+        for ep in episodes
+        if (
+            (ep.get("outcomes") or {}).get("252", {}).get("complete")
+            and not bool(ep.get("continuity_evidence_gap"))
+            and (
+                ep.get("source_temporality_at_start") or {}
+            ).get("all_source_months_fully_post_preregistration") is True
+        )
+    )
     fully_post_source_episodes = sum(
         1
         for ep in episodes
@@ -1023,6 +1034,13 @@ def update_episode_ledger(
                 complete_252_without_continuity_gaps
             ),
             "episodes_with_continuity_gaps": episodes_with_continuity_gaps,
+            "complete_252_clean_fully_post_source_episodes": (
+                complete_252_clean_fully_post_source
+            ),
+            "strict_temporal_evidence_ready": bool(
+                complete_252_clean_fully_post_source >= 4
+            ),
+            "strict_temporal_evidence_ready_is_diagnostic_only": True,
             "fully_post_preregistration_source_episodes": (
                 fully_post_source_episodes
             ),
