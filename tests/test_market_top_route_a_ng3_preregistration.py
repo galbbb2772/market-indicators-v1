@@ -13,6 +13,29 @@ class NG3PreregistrationTests(unittest.TestCase):
         self.assertEqual(self.x["status"],"PREREGISTERED_PROSPECTIVE_ONLY")
         self.assertEqual(self.x["prospective"]["first_countable_effective_month"],"202612")
         self.assertEqual(self.x["prospective"]["validation_status"],"PROSPECTIVE_VALIDATION_PENDING")
+        self.assertEqual(
+            self.x["prospective"]["source_temporality_for_first_countable"],
+            "SOURCE_MONTH_STRADDLES_PREREGISTRATION",
+        )
+        self.assertFalse(
+            self.x["prospective"][
+                "first_countable_all_source_months_fully_post_preregistration"
+            ]
+        )
+        self.assertTrue(
+            self.x["prospective"][
+                "first_countable_signal_unknown_at_preregistration"
+            ]
+        )
+        self.assertEqual(
+            self.x["prospective"][
+                "first_fully_post_preregistration_source_effective_month"
+            ],
+            "202701",
+        )
+        self.assertFalse(
+            self.x["prospective"]["clarification_model_change"]
+        )
 
     def test_phase_gate_is_frozen(self):
         self.assertEqual(self.x["phase_gate"]["minimum_effective_history_months"],120)
