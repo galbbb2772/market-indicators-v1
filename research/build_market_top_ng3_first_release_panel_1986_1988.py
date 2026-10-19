@@ -484,6 +484,19 @@ def main() -> None:
             fp.get("status"),
         )
 
+    for r in rows:
+        fp = r["first_publication"]
+        im = fp.get("intermediate_goods_mom_sa_pct")
+        if (
+            fp.get("status") == "AMBIGUOUS"
+            or (im is not None and abs(float(im)) >= 3.0)
+        ):
+            print(
+                "NARRATIVE_DIAGNOSTIC",
+                r["observation_month"],
+                json.dumps(r["narrative_extraction"], ensure_ascii=False),
+            )
+
 
 if __name__ == "__main__":
     main()
