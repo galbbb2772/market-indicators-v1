@@ -644,14 +644,20 @@ def update_episode_ledger(
                 open_episode["closed_reason"] = "FIRST_COMPLETED_IDLE_MONTH"
 
     for ep in episodes:
+        previous = dict(ep.get("outcomes") or {})
         outcomes = {}
         for horizon in (63, 126, 252):
-            outcomes[str(horizon)] = evaluate_horizon(
-                price,
-                anchor_date=str(ep["anchor_date"]),
-                anchor_close=float(ep["anchor_close"]),
-                sessions=horizon,
-            )
+            key = str(horizon)
+            prior = previous.get(key) or {}
+            if prior.get("complete") is True:
+                outcomes[key] = prior
+            else:
+                outcomes[key] = evaluate_horizon(
+                    price,
+                    anchor_date=str(ep["anchor_date"]),
+                    anchor_close=float(ep["anchor_close"]),
+                    sessions=horizon,
+                )
         ep["outcomes"] = outcomes
         ep["classification_252"] = classify_252(outcomes["252"])
 
