@@ -25,6 +25,11 @@ class NG3EvidenceProtocolTests(unittest.TestCase):
         self.assertIn("-15",o["final_252_classification"]["major_top"])
         self.assertIn("-7.5",o["final_252_classification"]["clear_false"])
 
+    def test_completed_horizon_evidence_is_immutable(self):
+        rule=self.x["outcome_tracking"]["completed_horizon_immutability"]
+        self.assertIn("complete=true",rule)
+        self.assertIn("frozen",rule)
+
     def test_no_automatic_promotion(self):
         p=self.x["promotion_review"]
         self.assertEqual(p["minimum_complete_252_session_episodes"],4)
