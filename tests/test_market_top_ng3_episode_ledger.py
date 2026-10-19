@@ -1,0 +1,157 @@
+from __future__ import annotations
+
+import unittest
+from unittest.mock import patch
+
+import pandas as pd
+
+from market_top_ng3_forward import (
+    classify_252,
+    evaluate_horizon,
+    update_episode_ledger,
+)
+
+
+def price_series():
+    idx=pd.bdate_range("2026-12-31",periods=420)
+    vals=pd.Series(100.0,index=idx,dtype=float)
+    vals.iloc[80]=80.0
+    vals.iloc[-1]=110.0
+    return vals
+
+
+def snap(month,state="ARMED",count=True,anchor="2026-12-31"):
+    return {
+        "generated_at":"2026-12-31T23:00:00+00:00",
+        "effective_month":month,
+        "counts_toward_prospective_validation":count,
+        "state":state,
+        "source_months":{"fama_french":"202610","credit":"202611"},
+        "route_a_ng3_score":90.0,
+        "components":{"financial_lead_gap_raw":15.0},
+        "gates":{"top_location":{"asof":anchor,"close":100.0}},
+    }
+
+
+def empty_ledger():
+    return {
+        "schema_version":"market-top-route-a-ng3-episodes-1",
+        "research_only":True,
+        "production_effect":"none",
+        "protocol":"market-top-route-a-ng3-evidence-protocol-1",
+        "episodes":[],
+        "summary":{},
+    }
+
+
+class NG3EpisodeLedgerTests(unittest.TestCase):
+    def test_preprospective_snapshot_cannot_open_episode(self):
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=empty_ledger(),
+        ):
+            x=update_episode_ledger(
+                snap("202611",state="ARMED",count=False),
+                price_series(),
+            )
+        self.assertEqual(x["episodes"],[])
+        self.assertEqual(x["summary"]["prospective_episode_count"],0)
+        self.assertFalse(x["summary"]["review_eligible"])
+
+    def test_contiguous_armed_months_are_one_episode_then_idle_closes(self):
+        p=price_series()
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=empty_ledger(),
+        ):
+            first=update_episode_ledger(snap("202612"),p)
+        self.assertEqual(len(first["episodes"]),1)
+        self.assertEqual(first["episodes"][0]["episode_id"],"NG3-202612")
+
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=first,
+        ):
+            second=update_episode_ledger(snap("202701"),p)
+        self.assertEqual(len(second["episodes"]),1)
+        self.assertEqual(
+            second["episodes"][0]["last_armed_effective_month"],
+            "202701",
+        )
+
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=second,
+        ):
+            closed=update_episode_ledger(
+                snap("202702",state="IDLE"),
+                p,
+            )
+        self.assertEqual(
+            closed["episodes"][0]["signal_status"],
+            "CLOSED",
+        )
+        self.assertEqual(
+            closed["episodes"][0]["closed_effective_month"],
+            "202702",
+        )
+
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=closed,
+        ):
+            reopened=update_episode_ledger(
+                snap("202703",anchor="2027-03-31"),
+                p,
+            )
+        self.assertEqual(len(reopened["episodes"]),2)
+        self.assertEqual(reopened["episodes"][1]["episode_id"],"NG3-202703")
+
+    def test_252_classification_is_anchor_based(self):
+        p=price_series()
+        m=evaluate_horizon(
+            p,
+            anchor_date="2026-12-31",
+            anchor_close=100.0,
+            sessions=252,
+        )
+        self.assertTrue(m["complete"])
+        self.assertLessEqual(m["worst_return_from_anchor_pct"],-15.0)
+        self.assertEqual(classify_252(m),"MAJOR_TOP")
+
+    def test_no_automatic_promotion_even_when_review_eligible(self):
+        p=price_series()
+        episodes=[]
+        for i,month in enumerate(("202612","202702","202704","202706")):
+            episodes.append({
+                "episode_id":f"NG3-{month}",
+                "signal_status":"CLOSED",
+                "start_effective_month":month,
+                "last_armed_effective_month":month,
+                "closed_effective_month":month,
+                "closed_reason":"TEST",
+                "anchor_date":"2026-12-31",
+                "anchor_close":100.0,
+                "source_months_at_start":{},
+                "start_score":90.0,
+                "start_financial_lead_gap_raw":15.0,
+                "outcomes":{},
+                "classification_252":None,
+            })
+        ledger=empty_ledger()
+        ledger["episodes"]=episodes
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=ledger,
+        ):
+            x=update_episode_ledger(
+                snap("202708",state="IDLE"),
+                p,
+            )
+        self.assertTrue(x["summary"]["review_eligible"])
+        self.assertFalse(x["summary"]["automatic_promotion"])
+        self.assertIsNone(x["summary"]["action_signal"])
+
+
+if __name__=="__main__":
+    unittest.main()
