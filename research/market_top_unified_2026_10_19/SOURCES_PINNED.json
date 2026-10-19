@@ -1,0 +1,133 @@
+{
+  "snapshot_date": "2026-10-19",
+  "branch": "research/market-top-unified-ledger-2026-10-19",
+  "source_control_status": "MANIFEST_OF_RESEARCH_SOURCES_NOT_ORIGINAL_DATA_ARCHIVE",
+  "repo": "galbbb2772/market-indicators-v1",
+  "github_sources": [
+    {
+      "model": "V2.1.8 frozen spec",
+      "branch": "main",
+      "path": "MASTER_TOP_V2_1_8_SPEC.md",
+      "git_blob_sha": "2d4815ee82bed92cc8a767adf816a30c0f0a9465",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/main/MASTER_TOP_V2_1_8_SPEC.md"
+    },
+    {
+      "model": "V2.1.8 seed snapshot",
+      "branch": "main",
+      "path": "docs/data/master_top_v218.json",
+      "git_blob_sha": "5381a037dfe11f0039eeab580891758d9db46580",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/main/docs/data/master_top_v218.json"
+    },
+    {
+      "model": "V2.4R PolicyShock frozen",
+      "branch": "research/policyshock-v2.1.1-frozen",
+      "path": "research/POLICYSHOCK_V2_1_1_FROZEN.md",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/policyshock-v2.1.1-frozen/research/POLICYSHOCK_V2_1_1_FROZEN.md"
+    },
+    {
+      "model": "V2.4R model boundary",
+      "branch": "research/policyshock-v2.1.1-frozen",
+      "path": "research/MARKET_TOP_CROSS_MODEL_BOUNDARY.md",
+      "git_blob_sha": "b2524351e4fcdfb84c1891ddfff53b4238c944dd",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/policyshock-v2.1.1-frozen/research/MARKET_TOP_CROSS_MODEL_BOUNDARY.md"
+    },
+    {
+      "model": "Route A NG3 decision",
+      "branch": "research/route-c-ng3-prospective",
+      "path": "research/MARKET_TOP_ROUTE_A_NG_DECISION_RECORD.md",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/route-c-ng3-prospective/research/MARKET_TOP_ROUTE_A_NG_DECISION_RECORD.md"
+    },
+    {
+      "model": "Route C NG3 preregistration",
+      "branch": "research/route-c-ng3-prospective",
+      "path": "research/MARKET_TOP_ROUTE_C_NG3_PREREGISTRATION.md",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/route-c-ng3-prospective/research/MARKET_TOP_ROUTE_C_NG3_PREREGISTRATION.md"
+    },
+    {
+      "model": "Route C NG3 evidence protocol",
+      "branch": "research/route-c-ng3-prospective",
+      "path": "research/MARKET_TOP_ROUTE_C_NG3_EVIDENCE_PROTOCOL.md",
+      "git_blob_sha": "1fdbe6b7e25e2c8c7bcae921ecc3a0c49ab593e2",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/route-c-ng3-prospective/research/MARKET_TOP_ROUTE_C_NG3_EVIDENCE_PROTOCOL.md"
+    },
+    {
+      "model": "NG3 PPI 1986-88 first releases",
+      "branch": "research/market-top-ng3-inflation-margin",
+      "path": "research/MARKET_TOP_NG3_FIRST_RELEASE_PANEL_1986_1988.md",
+      "git_blob_sha": "1d28e999bd891f807726e0343c33d7e86240aba4",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/market-top-ng3-inflation-margin/research/MARKET_TOP_NG3_FIRST_RELEASE_PANEL_1986_1988.md"
+    },
+    {
+      "model": "NG3 CostPressure V1 rejected",
+      "branch": "research/market-top-ng3-inflation-margin",
+      "path": "research/MARKET_TOP_NG3_COSTPRESSURE_SCREEN_DECISION.md",
+      "git_blob_sha": "109241e2b4c198ac611a4de39c45f7021d54beed",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/market-top-ng3-inflation-margin/research/MARKET_TOP_NG3_COSTPRESSURE_SCREEN_DECISION.md"
+    },
+    {
+      "model": "NG3 company unit-profit margin revision",
+      "branch": "research/market-top-ng3-inflation-margin",
+      "path": "research/MARKET_TOP_NG3_MARGIN_REVISION_DIAGNOSTIC.md",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/market-top-ng3-inflation-margin/research/MARKET_TOP_NG3_MARGIN_REVISION_DIAGNOSTIC.md"
+    },
+    {
+      "model": "BE v25 outcome research",
+      "branch": "research/market-top-v3-be-v25-entry-loss",
+      "path": "research/master_top_v3_be_v25/V25_FINDINGS.md",
+      "git_blob_sha": "4340785c2bbd1dc31aacb27f0f637dc351fded40",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/market-top-v3-be-v25-entry-loss/research/master_top_v3_be_v25/V25_FINDINGS.md"
+    },
+    {
+      "model": "BE v25 reproducibility lock",
+      "branch": "research/market-top-v3-be-v25-entry-loss",
+      "path": "research/master_top_v3_be_v25/V25_REPRODUCIBILITY_LOCK.json",
+      "git_blob_sha": "fa9789dd39f574fef4ab057c4235fb9453fcb25a",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/market-top-v3-be-v25-entry-loss/research/master_top_v3_be_v25/V25_REPRODUCIBILITY_LOCK.json"
+    },
+    {
+      "model": "BE V2.2 event time audit",
+      "branch": "research/market-top-v3-be-pit-replay-v2",
+      "path": "research/master_top_v3_be_v2/v22_event_peak_timing_audit.csv",
+      "git_blob_sha": "dda54ec7c9b52f1aebb8caf668797170f0b29f5f",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/market-top-v3-be-pit-replay-v2/research/master_top_v3_be_v2/v22_event_peak_timing_audit.csv"
+    },
+    {
+      "model": "BE v21 state lifecycle",
+      "branch": "research/market-top-v3-be-v25-entry-loss",
+      "path": "research/master_top_v3_be_v2/state_v21_reheat_lifecycle.csv",
+      "git_blob_sha": "77f091077e83662b066d54368bbfdd9946365948",
+      "url": "https://github.com/galbbb2772/market-indicators-v1/blob/research/market-top-v3-be-v25-entry-loss/research/master_top_v3_be_v2/state_v21_reheat_lifecycle.csv"
+    }
+  ],
+  "library_sources": [
+    {
+      "file": "MASTER_TOP_V3_STAGE0_SPEC.md",
+      "as_of": "2026-10-18",
+      "surface": "ChatGPT Library",
+      "status": "CANONICAL_V3_STAGE0"
+    },
+    {
+      "file": "MASTER_TOP_V3_STAGE1_STATUS.md",
+      "as_of": "2026-10-19",
+      "surface": "ChatGPT Library",
+      "status": "V3_FOUR_ROUTES_CURRENT_STATUS"
+    },
+    {
+      "file": "MASTER_TOP_V3_CREDIT_REAL_BACKTEST_V0.md",
+      "as_of": "2026-10-18",
+      "surface": "ChatGPT Library",
+      "status": "CB_CREDIT_RESEARCH_NOT_PROMOTED"
+    },
+    {
+      "file": "MASTER_TOP_V3_ROUTE_REGISTRY_V3.csv",
+      "as_of": "2026-10-18",
+      "surface": "ChatGPT Library",
+      "status": "VERSIONED_PREDECESSOR_REGISTRY"
+    }
+  ],
+  "notes": [
+    "Blob SHA values identify content where already fetched during this audit; omit SHA where not independently pinned in this turn.",
+    "Do not treat source links as complete point-in-time first-release data snapshots.",
+    "This registry is not a derived all-model risk score."
+  ]
+}
