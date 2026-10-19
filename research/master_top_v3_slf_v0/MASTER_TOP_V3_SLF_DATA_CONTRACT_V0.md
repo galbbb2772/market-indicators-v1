@@ -35,10 +35,12 @@ https://www.financialresearch.gov/financial-stress-index/
 
 Retrospective retrieval fallback frozen before any successful score run:
 - Preferred bytes: official OFR downloadable Financial Stress Index file.
-- If the official static download rejects automated CI retrieval, V0 may use the Diawonds retrospective mirror table, which explicitly identifies the raw source as the Office of Financial Research.
-- This fallback is **retrospective research only** and its exact raw HTML bytes must be SHA256-pinned.
-- Prospective evidence must use newly captured official OFR publication bytes/observations; the mirror cannot establish publication-time provenance.
-- Switching to the fallback because of HTTP access failure is a data-access substitution, not a formula or threshold change.
+- The official static CSV returns HTTP 403 to the GitHub CI runner. Before any successful SLF score run, the fallback is therefore frozen as the Economic Risk Clock retained OFR history API for the two published OFR category contributions used by V0: Funding and Safe Assets.
+- The mirror exposes the full OFR-derived history, source-period values, retained source-file hashes, and explicitly labels it as original published OFR index/contribution data; however, its reconstructed history is **not historical point-in-time evidence**.
+- V0 retrieves this fallback in calendar-year chunks and SHA256-pins the exact JSON bytes for reproducibility.
+- This fallback is **retrospective research only**. Prospective evidence must capture official OFR publication bytes/observations; the mirror cannot establish the original historical publication timestamp.
+- The earlier Diawonds HTML fallback was attempted but did not expose a machine-readable table to CI and is not used.
+- These changes are data-access substitutions made before any legacy SLF score was produced; no formula, threshold, top gate, or outcome rule changed.
 
 Availability rule for historical causal scan:
 - observation date = t
