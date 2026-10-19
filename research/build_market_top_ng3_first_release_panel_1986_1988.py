@@ -199,14 +199,20 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
     if not seg:
         return {"status": "MOVEMENT_SEGMENT_NOT_FOUND"}
 
+    current_month_name = MONTH_NAMES[month - 1].lower()
+
     fg_match = re.search(
         r"The Producer Price Index for Finished Goods(?P<body>.{0,700})",
         seg,
         flags=re.I,
     )
-    fg = signed_percent_for_month(fg_match.group("body"), current_month_name) if fg_match else None
+    fg = (
+        signed_percent_for_month(fg_match.group("body"), current_month_name)
+        if fg_match
+        else None
+    )
 
-    current_month_name = MONTH_NAMES[month - 1].lower()\n\n    im_patterns = [
+    im_patterns = [
         r"The Producer Price Index for Intermediate Materials,?\s*Supplies,?\s*and Components(?P<body>.{0,700})",
         r"The index for Intermediate Materials,?\s*Supplies,?\s*and Components(?P<body>.{0,700})",
         r"Prices received by (?:domestic )?producers of intermediate goods(?P<body>.{0,700})",
@@ -215,7 +221,6 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
         r"The index for intermediate goods(?P<body>.{0,700})",
     ]
     im_candidates = []
-    current_month_name = MONTH_NAMES[month - 1].lower()
     for pat in im_patterns:
         for match in re.finditer(pat, seg, flags=re.I):
             body = match.group("body")
@@ -253,8 +258,6 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
         "intermediate_match_excerpt": im_evidence,
         "segment_excerpt": seg[:1800],
     }
-
-
 
 def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
     lines = text_layout.splitlines()
