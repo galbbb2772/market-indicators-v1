@@ -25,6 +25,7 @@ ERC_HISTORY_URL = "https://economicriskclock.org/api/v1/data/metric_history"
 ERC_FUNDING_ID = "us_ofr_funding_contribution"
 ERC_SAFE_ID = "us_ofr_safe_assets_contribution"
 NYPD_URL = "https://data.financialresearch.gov/v1/series/timeseries"
+NYFED_PD_TREASURY_FAILS_URL = "https://markets.newyorkfed.org/api/pd/get/PDFTD-USTET_PDFTR-USTET.json"
 YAHOO_SPY_URL = "https://query1.finance.yahoo.com/v8/finance/chart/SPY"
 
 THRESHOLDS = [70.0, 80.0, 90.0]
@@ -155,21 +156,58 @@ def load_nypd_series(mnemonic: str):
     return df.dropna(subset=["source_date"]).sort_values("source_date"), raw
 
 def load_fails():
-    d_m = "NYPD-PD_AFtD_TOT-A"
-    r_m = "NYPD-PD_AFtR_TOT-A"
-    d, raw_d = load_nypd_series(d_m)
-    r, raw_r = load_nypd_series(r_m)
-    x = d.merge(r, on="source_date", how="outer").sort_values("source_date")
-    x["fails_deliver"] = x[d_m]
-    x["fails_receive"] = x[r_m]
+    """Official NY Fed long-history Treasury settlement fails, ex-TIPS.
+
+    Frozen pre-full-rerun choice under the preregistered priority to use
+    Treasury-specific fails when a consistent long-history series is available.
+    """
+    r = requests.get(
+        NYFED_PD_TREASURY_FAILS_URL,
+        headers={"User-Agent":"Mozilla/5.0 MarketRegimeLab/SLF-V0","Accept":"application/json"},
+        timeout=60,
+    )
+    r.raise_for_status()
+    raw = r.content
+    obj = r.json()
+    rows = ((obj.get("pd") or {}).get("timeseries") or [])
+    if not rows:
+        raise RuntimeError("Official NY Fed Primary Dealer fails endpoint returned no timeseries rows")
+
+    parsed = []
+    for item in rows:
+        key = str(item.get("keyid") or "").strip()
+        if key not in {"PDFTD-USTET","PDFTR-USTET"}:
+            continue
+        dt = pd.to_datetime(item.get("asofdate") or item.get("asOfDate"), errors="coerce")
+        val = pd.to_numeric(item.get("value"), errors="coerce")
+        if pd.notna(dt) and pd.notna(val):
+            parsed.append((dt, key, float(val)))
+    if not parsed:
+        raise RuntimeError("Official NY Fed response contained no numeric Treasury fails rows")
+
+    z = pd.DataFrame(parsed, columns=["source_date","keyid","value"])
+    wide = z.pivot_table(index="source_date", columns="keyid", values="value", aggfunc="last").reset_index()
+    if "PDFTD-USTET" not in wide or "PDFTR-USTET" not in wide:
+        raise RuntimeError(f"Missing one Treasury fails leg; columns={list(wide.columns)}")
+    x = wide.rename(columns={
+        "PDFTD-USTET":"fails_deliver",
+        "PDFTR-USTET":"fails_receive",
+    }).sort_values("source_date")
     x["fails_total"] = x["fails_deliver"] + x["fails_receive"]
     x["log_fails"] = np.log1p(x["fails_total"].clip(lower=0))
     x["med52"] = x["log_fails"].rolling(52, min_periods=52).median()
     x["settlement_raw"] = (x["log_fails"] - x["med52"]).clip(lower=0)
-    # PDF example: release Thursday for week ended previous Wednesday; next-session rule => +9 calendar days.
+
+    # NY Fed releases prior-week Primary Dealer statistics Thursday ~4:15 p.m.;
+    # next-session actionability => week-ending Wednesday + 9 calendar days (Friday).
     x["date"] = x["source_date"] + pd.to_timedelta(9, unit="D")
     x["date"] = x["date"] + pd.offsets.BDay(0)
-    return x[["source_date","date","fails_deliver","fails_receive","fails_total","settlement_raw"]], raw_d, raw_r
+
+    first = x["source_date"].min()
+    if pd.isna(first) or first > pd.Timestamp("2000-01-31"):
+        raise RuntimeError(f"Treasury fails legacy coverage insufficient; first source date={first}")
+
+    return x[["source_date","date","fails_deliver","fails_receive","fails_total","settlement_raw"]], raw, raw
 
 def load_spx():
     params = {
@@ -364,8 +402,8 @@ def main():
         "formula_version":"SLF_V0_PREREG_2026-10-19",
         "sources":{
             "ofr_fsi":{"url":fsi_meta.get("source_url",FSI_URL),"sha256":sha256_bytes(raw_fsi),"meta":fsi_meta},
-            "nypd_fails_deliver":{"mnemonic":"NYPD-PD_AFtD_TOT-A","sha256":sha256_bytes(raw_d)},
-            "nypd_fails_receive":{"mnemonic":"NYPD-PD_AFtR_TOT-A","sha256":sha256_bytes(raw_r)},
+            "nyfed_treasury_fails_deliver":{"keyid":"PDFTD-USTET","sha256":sha256_bytes(raw_d),"source":NYFED_PD_TREASURY_FAILS_URL},
+            "nyfed_treasury_fails_receive":{"keyid":"PDFTR-USTET","sha256":sha256_bytes(raw_r),"source":NYFED_PD_TREASURY_FAILS_URL},
             "yahoo_spy":{"url":YAHOO_SPY_URL,"sha256":sha256_bytes(raw_spx),"role":"research-only broad-market top-location proxy"},
         },
         "coverage":{
@@ -393,14 +431,14 @@ def main():
         "## Data QA",
         f"- Score coverage: {manifest['coverage']['score_start']} to {manifest['coverage']['score_end']}",
         f"- OFR FSI SHA256: {manifest['sources']['ofr_fsi']['sha256']}",
-        f"- NYPD FTD SHA256: {manifest['sources']['nypd_fails_deliver']['sha256']}",
-        f"- NYPD FTR SHA256: {manifest['sources']['nypd_fails_receive']['sha256']}",
+        f"- NY Fed Treasury FTD SHA256: {manifest['sources']['nyfed_treasury_fails_deliver']['sha256']}",
+        f"- NY Fed Treasury FTR SHA256: {manifest['sources']['nyfed_treasury_fails_receive']['sha256']}",
         f"- Yahoo SPY SHA256: {manifest['sources']['yahoo_spy']['sha256']}",
         "",
         "## Governance",
         "- Threshold grid 70/80/90 is diagnostic only; no threshold is promoted from this retrospective scan.",
         "- 2025-2026 is current/censored and is not used to select formula, threshold or top gate.",
-        "- OFR/NYPD historical values are latest-vintage retrospective inputs; this is not genuine historical PIT proof.",
+        "- OFR and NY Fed historical values are latest-vintage retrospective inputs; this is not genuine historical PIT proof.",
         "",
         "## Threshold grid (legacy only)",
         "",
