@@ -51,5 +51,15 @@ jobs:
             echo "No cross-monitor change."
           else
             git commit -m "data: refresh Market Top cross-model monitor"
-            git push
+            branch="${GITHUB_REF_NAME}"
+            for attempt in 1 2 3; do
+              git pull --rebase origin "$branch"
+              if git push origin HEAD:"$branch"; then
+                exit 0
+              fi
+              echo "Push race on attempt $attempt; retrying after rebase."
+              sleep 5
+            done
+            echo "Failed to push after 3 attempts."
+            exit 1
           fi
