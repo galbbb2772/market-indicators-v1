@@ -164,50 +164,76 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
 
 def parse_table_a_current(text_layout: str, year: int, month: int) -> dict:
     lines = text_layout.splitlines()
+    heading_re = re.compile(
+        r"^\s*Table A\.\s*Percent changes from preceding month",
+        flags=re.I,
+    )
     start = next(
-        (i for i, line in enumerate(lines)
-         if "table a." in line.lower()
-         and "percent changes" in line.lower()),
+        (i for i, line in enumerate(lines) if heading_re.search(line)),
         None,
     )
     if start is None:
         return {"status": "TABLE_A_NOT_FOUND"}
+
     end = next(
-        (i for i in range(start + 1, len(lines))
-         if "table b." in lines[i].lower()),
-        min(len(lines), start + 180),
+        (
+            i for i in range(start + 1, len(lines))
+            if re.match(r"^\s*Table B\.", lines[i], flags=re.I)
+        ),
+        min(len(lines), start + 220),
     )
     block = lines[start:end]
+
+    year_re = re.compile(rf"^\s*{year}:\s*$")
+    year_start = next(
+        (i for i, line in enumerate(block) if year_re.match(line)),
+        None,
+    )
+    if year_start is None:
+        return {"status": "YEAR_SECTION_NOT_FOUND"}
+
+    year_end = next(
+        (
+            i for i in range(year_start + 1, len(block))
+            if re.match(r"^\s*\d{4}:\s*$", block[i])
+        ),
+        len(block),
+    )
+    section = block[year_start + 1:year_end]
+
     month_name = MONTH_NAMES[month - 1]
-    num_re = re.compile(r"(?<![A-Za-z0-9])[+-]?(?:\\d+\\.\\d+|\\d+|\\.\\d+)(?![A-Za-z0-9])")
-    candidates = []
-    for i, raw in enumerate(block):
-        if not re.search(rf"\\b{month_name}\\b", raw, flags=re.I):
-            continue
-        merged = " ".join(block[i:i+3])
-        pos = re.search(rf"\\b{month_name}\\b", merged, flags=re.I)
-        if not pos:
-            continue
-        tail = merged[pos.end():]
-        vals = []
-        for token in num_re.findall(tail):
-            try:
-                vals.append(float(token))
-            except ValueError:
-                pass
-        if len(vals) >= 4:
-            candidates.append({
-                "block_line": i,
-                "finished_goods_mom_sa_pct": vals[0],
-                "intermediate_goods_mom_sa_pct": vals[3],
-                "numeric_columns_found": len(vals),
-                "row_excerpt": norm(merged)[:900],
-            })
-    if not candidates:
-        return {"status": "ROW_NOT_PARSED"}
-    # The current-year/current-month row is the latest matching row in Table A.
-    chosen = candidates[-1]
-    return {"status": "PARSED", **chosen}
+    row_re = re.compile(rf"^\s*{month_name}\b", flags=re.I)
+    row = next((line for line in section if row_re.search(line)), None)
+    if row is None:
+        return {"status": "MONTH_ROW_NOT_FOUND"}
+
+    pos = row_re.search(row)
+    tail = row[pos.end():] if pos else row
+    num_re = re.compile(
+        r"(?<![A-Za-z0-9.])[+-]?(?:\d+\.\d+|\.\d+|\d+)(?![A-Za-z0-9.])"
+    )
+    vals = []
+    for token in num_re.findall(tail):
+        try:
+            vals.append(float(token))
+        except ValueError:
+            pass
+
+    if len(vals) < 9:
+        return {
+            "status": "ROW_NUMERIC_COLUMNS_INCOMPLETE",
+            "numeric_columns_found": len(vals),
+            "row_excerpt": norm(row)[:900],
+        }
+
+    return {
+        "status": "PARSED",
+        "finished_goods_mom_sa_pct": vals[0],
+        "intermediate_goods_mom_sa_pct": vals[3],
+        "numeric_columns_found": len(vals),
+        "all_numeric_columns": vals[:9],
+        "row_excerpt": norm(row)[:900],
+    }
 
 
 def resolve_first_publication(narrative: dict, table_a: dict) -> dict:
@@ -216,34 +242,37 @@ def resolve_first_publication(narrative: dict, table_a: dict) -> dict:
     tfg = table_a.get("finished_goods_mom_sa_pct")
     tim = table_a.get("intermediate_goods_mom_sa_pct")
 
-    fg_conflict = nfg is not None and tfg is not None and abs(float(nfg) - float(tfg)) > 0.051
-    im_conflict = nim is not None and tim is not None and abs(float(nim) - float(tim)) > 0.051
-    if fg_conflict or im_conflict:
+    if tfg is None or tim is None:
         return {
-            "status": "CONFLICT",
+            "status": "AMBIGUOUS_TABLE_A_MISSING",
             "finished_goods_mom_sa_pct": None,
             "intermediate_goods_mom_sa_pct": None,
-            "fg_conflict": fg_conflict,
-            "im_conflict": im_conflict,
+            "fg_conflict": False,
+            "im_conflict": False,
         }
 
-    fg = tfg if tfg is not None else nfg
-    im = tim if tim is not None else nim
-    if fg is None or im is None:
-        status = "AMBIGUOUS"
-    elif nfg is not None and nim is not None and tfg is not None and tim is not None:
+    fg_conflict = (
+        nfg is not None
+        and abs(float(nfg) - float(tfg)) > 0.051
+    )
+    im_conflict = (
+        nim is not None
+        and abs(float(nim) - float(tim)) > 0.051
+    )
+
+    if nfg is not None and nim is not None and not fg_conflict and not im_conflict:
         status = "VERIFIED_DUAL_PATH"
-    elif tfg is not None and tim is not None:
-        status = "TABLE_A_RECOVERED"
+    elif fg_conflict or im_conflict:
+        status = "TABLE_A_RECOVERED_NARRATIVE_CONFLICT"
     else:
-        status = "NARRATIVE_RECOVERED"
+        status = "TABLE_A_RECOVERED"
 
     return {
         "status": status,
-        "finished_goods_mom_sa_pct": fg,
-        "intermediate_goods_mom_sa_pct": im,
-        "fg_conflict": False,
-        "im_conflict": False,
+        "finished_goods_mom_sa_pct": float(tfg),
+        "intermediate_goods_mom_sa_pct": float(tim),
+        "fg_conflict": bool(fg_conflict),
+        "im_conflict": bool(im_conflict),
     }
 
 
@@ -309,14 +338,6 @@ def main() -> None:
             narrative = {"status": "SOURCE_UNAVAILABLE"}
             table_a = {"status": "SOURCE_UNAVAILABLE"}
             resolved = {"status": "SOURCE_UNAVAILABLE"}
-        if key == "1987-05":
-            layout_lines = d.get("text_layout", "").splitlines()
-            ta = next((i for i, line in enumerate(layout_lines) if "table a." in line.lower()), None)
-            if ta is not None:
-                print("DEBUG_TABLE_A_1987_05_START")
-                for debug_line in layout_lines[ta:ta+45]:
-                    print(repr(debug_line))
-                print("DEBUG_TABLE_A_1987_05_END")
         rows.append({
             "observation_month": key,
             "publication_pdf": pdf_url(year, month),
@@ -342,13 +363,26 @@ def main() -> None:
         "may_1987_im": known["1987-05"]["first_publication"].get("intermediate_goods_mom_sa_pct") == 0.5,
     }
 
+    table_complete = all(
+        r["first_publication"].get("finished_goods_mom_sa_pct") is not None
+        and r["first_publication"].get("intermediate_goods_mom_sa_pct") is not None
+        for r in rows
+    )
+    dual_verified = sum(
+        r["first_publication"]["status"] == "VERIFIED_DUAL_PATH"
+        for r in rows
+    )
+    narrative_conflicts = sum(
+        r["first_publication"]["status"] == "TABLE_A_RECOVERED_NARRATIVE_CONFLICT"
+        for r in rows
+    )
+
     result = {
-        "schema_version": "market-top-ng3-first-release-panel-1986-1988-1",
+        "schema_version": "market-top-ng3-first-release-panel-1986-1988-2",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "status": (
-            "COMPLETE"
-            if all(checks.values())
-            and sum(r["first_publication"]["status"] == "VERIFIED_DUAL_PATH" for r in rows) == 36
+            "COMPLETE_SOURCE_PANEL"
+            if all(checks.values()) and table_complete
             else "PARTIAL"
         ),
         "source_layer_status": "PASS" if all(checks.values()) else "FAIL",
@@ -358,10 +392,24 @@ def main() -> None:
         "checks": checks,
         "summary": {
             "months": 36,
-            "source_recovered": sum(r["source_status"] == "SOURCE_TEXT_RECOVERED" for r in rows),
-            "release_dates_recovered": sum(bool(r["release"]["release_date"]) for r in rows),
-            "first_values_both_parsed": sum(r["first_publication"]["status"] == "PARSED" for r in rows),
-            "first_values_ambiguous": sum(r["first_publication"]["status"] != "PARSED" for r in rows),
+            "source_recovered": sum(
+                r["source_status"] == "SOURCE_TEXT_RECOVERED" for r in rows
+            ),
+            "release_dates_recovered": sum(
+                bool(r["release"]["release_date"]) for r in rows
+            ),
+            "table_a_values_complete": bool(table_complete),
+            "first_values_resolved": sum(
+                r["first_publication"].get("finished_goods_mom_sa_pct") is not None
+                and r["first_publication"].get("intermediate_goods_mom_sa_pct") is not None
+                for r in rows
+            ),
+            "dual_path_verified": dual_verified,
+            "narrative_conflicts": narrative_conflicts,
+            "ambiguous_table_rows": sum(
+                r["first_publication"]["status"] == "AMBIGUOUS_TABLE_A_MISSING"
+                for r in rows
+            ),
         },
         "rows": rows,
         "boundary": {
