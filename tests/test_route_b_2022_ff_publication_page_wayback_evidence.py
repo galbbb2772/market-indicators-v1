@@ -27,6 +27,19 @@ class FFPublicationPageEvidenceTests(unittest.TestCase):
         x = self.data["strongest_parseable_pre_cutoff_page"]
         self.assertEqual(x["monthly_returns_terminal_ym"], "202110")
 
+    def test_wayback_capture_fingerprints_are_preserved(self):
+        rows = self.data["captures"]
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(rows[0]["timestamp"], "20211204043142")
+        self.assertEqual(rows[1]["timestamp"], "20211204035847")
+        self.assertEqual(
+            rows[1]["monthly_returns_terminal_ym"],
+            "202110",
+        )
+        self.assertFalse(
+            any(x["target_202111_publication_visible"] for x in rows)
+        )
+
     def test_numerical_replay_remains_pass(self):
         x = self.data["established_independently"]
         self.assertEqual(x["official_dec2021_factor_vintage_content"], "RECOVERED")
