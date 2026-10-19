@@ -1,0 +1,62 @@
+{
+  "schema_version": "market-top-ng3-first-release-pilot-1987-1",
+  "status": "PARTIAL_PASS_FIRST_PUBLICATION_RECOVERED_FINALIZED_VALUES_PENDING",
+  "research_only": true,
+  "production_effect": "none",
+  "purpose": "Source-engineering pilot only; no market-top outcome test or scoring.",
+  "cases": {
+    "1987-05": {
+      "observation_month": "1987-05",
+      "exact_initial_release_date": "1987-06-12",
+      "release_date_status": "RECOVERED",
+      "release_date_source": "Monthly Labor Review, May 1987 release calendar",
+      "first_publication": {
+        "source": "PPI Detailed Report, Data for May 1987",
+        "source_url": "https://fraser.stlouisfed.org/title/ppi-detailed-report-63/may-1987-21618/fulltext",
+        "reference_base": "1967=100",
+        "seasonally_adjusted": true,
+        "finished_goods": {
+          "april_level": 295.3,
+          "may_level": 296.2,
+          "reported_mom_pct": 0.3,
+          "level_implied_mom_pct": 0.30477480528274814,
+          "status": "FIRST_PUBLICATION_VALUE_RECOVERED"
+        },
+        "intermediate_materials": {
+          "april_level": 311.2,
+          "may_level": 312.8,
+          "reported_mom_pct": 0.5,
+          "level_implied_mom_pct": 0.5141388174807249,
+          "status": "FIRST_PUBLICATION_VALUE_RECOVERED"
+        }
+      },
+      "revision_contract": {
+        "ppi_revision_window_months": 4,
+        "finalized_value_status": "RECOVERY_PENDING",
+        "numeric_revision_delta_status": "PENDING",
+        "note": "Do not substitute current revised BLS history for the period-finalized vintage."
+      }
+    },
+    "1987-01": {
+      "observation_month": "1987-01",
+      "revision_event": {
+        "status": "REVISION_EVENT_CONFIRMED_NUMERIC_DELTA_PENDING",
+        "evidence": "May 1987 PPI report explicitly says January 1987 data were revised for late reports and respondent corrections.",
+        "first_published_numeric_status": "NOT_YET_RECOVERED",
+        "revised_numeric_status": "PARTIAL_TABLE_VALUES_EXIST_BUT_NOT_FROZEN_AS_DELTA"
+      }
+    }
+  },
+  "model_boundary": {
+    "faster_ng3_formula_preregistered": false,
+    "historical_outcome_test_authorized": false,
+    "v1_reopened": false,
+    "v1_status": "CLOSED_INSUFFICIENT_SCREEN_EVENTS"
+  },
+  "next_gate": [
+    "Recover a post-September-1987 report with finalized May 1987 finished/intermediate values",
+    "Verify final values and calculate first-to-final revision deltas",
+    "Recover January 1987 first-published values for the explicitly documented revision case",
+    "Only after parser/source validation, expand the vintage panel beyond the pilot"
+  ]
+}
