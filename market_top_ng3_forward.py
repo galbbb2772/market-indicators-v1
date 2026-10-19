@@ -1073,22 +1073,17 @@ def update_episode_ledger(
 
 
 def write_outputs(snapshot: dict[str, Any], price: pd.Series) -> None:
-    OUT_CURRENT.parent.mkdir(parents=True, exist_ok=True)
-
+    # Build every durable artifact first. A fail-closed error in monthly
+    # freezing or episode/outcome accounting must happen before the first file
+    # write so a manual run cannot leave a partially updated evidence set.
     canonical, monthly_book, _ = freeze_monthly_signal_snapshot(snapshot)
-    OUT_MONTHLY.write_text(
-        json.dumps(monthly_book, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+
     current_view = json.loads(json.dumps(canonical))
     current_view["monitor_checked_at"] = snapshot["generated_at"]
     current_view["signal_snapshot_frozen"] = bool(
         canonical.get("evidence_lock")
     )
-    OUT_CURRENT.write_text(
-        json.dumps(current_view, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+
     hist = load_history()
     row = {
         "effective_month": canonical["effective_month"],
@@ -1108,25 +1103,32 @@ def write_outputs(snapshot: dict[str, Any], price: pd.Series) -> None:
     by_month = {x["effective_month"]: x for x in hist}
     by_month[row["effective_month"]] = row
     rows = [by_month[k] for k in sorted(by_month)]
-    OUT_HISTORY.write_text(
-        json.dumps(
-            {
-                "schema_version": "market-top-route-a-ng3-history-1",
-                "research_only": True,
-                "history": rows[-240:],
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-
+    history_payload = {
+        "schema_version": "market-top-route-a-ng3-history-1",
+        "research_only": True,
+        "history": rows[-240:],
+    }
 
     ledger = update_episode_ledger(
         canonical,
         price,
         observed_at=snapshot["generated_at"],
+    )
+
+    # Only after all calculations and fail-closed checks pass do we mutate the
+    # durable files.
+    OUT_CURRENT.parent.mkdir(parents=True, exist_ok=True)
+    OUT_MONTHLY.write_text(
+        json.dumps(monthly_book, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    OUT_CURRENT.write_text(
+        json.dumps(current_view, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    OUT_HISTORY.write_text(
+        json.dumps(history_payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
     )
     OUT_EPISODES.write_text(
         json.dumps(ledger, ensure_ascii=False, indent=2) + "\n",
