@@ -1,0 +1,35 @@
+{
+  "schema_version": "market-top-route-a-ng3-source-temporality-addendum-1",
+  "status": "EVIDENCE_QUALITY_CLARIFICATION_NO_MODEL_CHANGE",
+  "preregistration_date": "2026-10-19",
+  "original_first_countable_effective_month": "202612",
+  "model_rules_changed": false,
+  "promotion_rule_changed": false,
+  "evidence_quality": {
+    "effective_202612": {
+      "ff_source_month": "202610",
+      "credit_source_month": "202611",
+      "tier": "SOURCE_MONTH_STRADDLES_PREREGISTRATION",
+      "all_source_months_fully_post_preregistration": false,
+      "remains_countable_under_original_preregistration": true
+    },
+    "first_fully_post_preregistration_source_effective_month": {
+      "effective_month": "202701",
+      "ff_source_month": "202611",
+      "credit_source_month": "202612",
+      "tier": "FULL_SOURCE_MONTHS_POST_PREREGISTRATION"
+    }
+  },
+  "monthly_gap_policy": {
+    "missing_months_explicit": true,
+    "later_backfill_may_masquerade_as_first_available_vintage": false,
+    "fields": [
+      "missing_effective_months",
+      "evidence_gaps_present"
+    ]
+  },
+  "episode_provenance_fields": [
+    "source_temporality_at_start",
+    "source_provenance_at_start"
+  ]
+}
