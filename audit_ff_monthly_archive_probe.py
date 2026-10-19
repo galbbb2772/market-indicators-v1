@@ -87,25 +87,39 @@ def probe_one(year: int, month: int, *, timeout: int = 40) -> Probe:
 def run_probe() -> dict:
     rows = [asdict(probe_one(y, m)) for y, m in CANDIDATES]
     positive = next(x for x in rows if x["year"] == 2022 and x["month"] == 8)
-    hidden_pre_cutoff = [
+    period_labeled_matches = [
         x for x in rows
         if (x["year"], x["month"]) <= (2022, 1)
         and x["valid_zip"]
         and x["has_202111"]
     ]
+    dec2021 = next(
+        x for x in rows if x["year"] == 2021 and x["month"] == 12
+    )
+    jan2022 = next(
+        x for x in rows if x["year"] == 2022 and x["month"] == 1
+    )
     return {
-        "schema_version": "ff-monthly-official-archive-probe-1",
+        "schema_version": "ff-monthly-official-archive-probe-2",
         "research_only": True,
         "production_effect": "none",
         "candidate_directories": rows,
         "positive_control_2022_08_valid": bool(positive["valid_zip"]),
-        "pre_cutoff_official_snapshot_with_202111_found": bool(hidden_pre_cutoff),
-        "matching_candidates": hidden_pre_cutoff,
+        "period_labeled_archives_with_202111": period_labeled_matches,
+        "dec2021_labeled_archive_exists_now": bool(
+            dec2021["valid_zip"] and dec2021["has_202111"]
+        ),
+        "jan2022_labeled_archive_exists_now": bool(
+            jan2022["valid_zip"] and jan2022["has_202111"]
+        ),
+        "publication_time_pre_cutoff_proven": False,
         "interpretation": (
-            "Directly probes plausible monthly Kenneth French Historical_Archives "
-            "directory names. The 2022-08 archive is a positive control. "
-            "A pre-cutoff hit is evidence only if the returned ZIP parses and "
-            "contains the 2021-11 FF3 monthly row."
+            "This is a present-day existence/content probe of plausible monthly "
+            "Kenneth French Historical_Archives directory names. A directory "
+            "label such as '12 2021 Update' is provenance about the archive's "
+            "stated period, not independent proof that the URL was publicly "
+            "downloadable before 2022-01-03. Publication-time proof is handled "
+            "only by the separate Wayback delivery/page audits."
         ),
     }
 
