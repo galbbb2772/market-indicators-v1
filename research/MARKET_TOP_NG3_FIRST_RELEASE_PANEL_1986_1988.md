@@ -1,41 +1,41 @@
-# Market Top NG3 — 1986–1988 First-Release PPI Panel: Source-Engineering Checkpoint
+# Market Top NG3 — 1986–1988 First-Release PPI Panel
 
 Status:
 
 ```
 ARCHIVE_COVERAGE = PASS
 RELEASE_DATE_PANEL = PASS
-FIRST_VALUE_EXTRACTION = PARTIAL
-FINALIZED_VALUE_PANEL = NOT BUILT
+FIRST_VALUE_PANEL = COMPLETE_SOURCE_PANEL
+FINALIZED_VALUE_PANEL = IN PROGRESS
 MODEL_OUTCOME_TEST = NOT AUTHORIZED
 ```
 
 Research only. NG3-CostPressure V1 remains closed and is not retuned.
 
-## Reproducible checkpoint
+## Reproducible first-release checkpoint
 
-GitHub Actions run:
+A fully reproducible source-panel run completed successfully:
 
 ```
-39229612648
 workflow = Market Top NG3 First-Release Panel 1986-1988
+run = 39234720575
 conclusion = SUCCESS
 artifact = market-top-ng3-first-release-panel-1986-1988
-artifact id = 12175408387
-artifact sha256 = c4e21ae984b3fcab1b95af7dd48ef9b1ec9794288e3ac8932f562658a38d722a
+artifact id = 12178279558
+artifact sha256 = 6096416c985ce943fcac2779bca62fa40dcadd50d6be6814935dee658e09a859
 ```
 
-The workflow retrieved every monthly PPI Detailed Report PDF for 1986-01 through 1988-12 from the FRASER archive.
+Coverage:
 
 ```
-months requested = 36
+months = 36
 source PDFs recovered = 36
-source PDFs unavailable = 0
+initial release dates recovered = 36
+first values resolved = 36
+ambiguous first-value rows = 0
 ```
 
-It also reconstructs exact scheduled initial release dates by reading the release-calendar tables printed in the historical reports. All 36 observation months received a dated release.
-
-Examples:
+Examples of recovered release dates:
 
 ```
 1986-01 -> 1986-02-14
@@ -45,20 +45,48 @@ Examples:
 1988-12 -> 1989-01-13
 ```
 
-The dated-release layer therefore closes the previous guessed-lag problem for this bounded pilot period.
+## Numeric source hierarchy
 
-## First-publication value extraction
+The printed seasonally adjusted **Table A current-month row** is now the primary numeric authority whenever all expected columns are recovered.
 
-The first parser pass recovered both seasonally adjusted headline stage-of-processing changes for 18 of 36 months and marked the other 18 AMBIGUOUS rather than guessing.
+The headline narrative is a separate cross-check.
 
-The parser is fail-closed:
+Resolution rule:
 
 ```
-ambiguous historical text != zero
-ambiguous historical text != inferred value
+complete Table A + matching narrative
+    -> VERIFIED_DUAL_PATH
+
+complete Table A + conflicting narrative
+    -> TABLE_A_PRIMARY_NARRATIVE_CONFLICT
+
+complete Table A + incomplete narrative
+    -> TABLE_A_ONLY_PROVISIONAL
+
+incomplete Table A + complete narrative
+    -> NARRATIVE_RECOVERED
+
+neither complete
+    -> AMBIGUOUS
 ```
 
-The previously frozen manual cases are reproduced exactly:
+This ordering was frozen before any faster-NG3 market outcome test. It prevents a prose parser error from overriding a complete printed table row.
+
+Current source-path counts:
+
+```
+VERIFIED_DUAL_PATH = 10
+TABLE_A_PRIMARY_NARRATIVE_CONFLICT = 7
+TABLE_A_ONLY_PROVISIONAL = 7
+NARRATIVE_RECOVERED = 12
+AMBIGUOUS = 0
+```
+
+The seven cross-path conflicts are retained as diagnostics; they are not averaged. Table A wins when the complete row is available.
+
+## Anchor checks
+
+Previously hand-verified cases still reproduce:
 
 ```
 1987-01
@@ -72,57 +100,48 @@ Intermediate Goods = +0.5%
 release = 1987-06-12
 ```
 
-Those two cases are the independent anchor checks. Other automatically parsed values remain provisional until a second extraction path or manual table cross-check agrees.
+The September 1988 regression case also explicitly prevents a 12-month Intermediate Goods change from being accepted as the current-month change.
 
-## Parser limitation found
+## What is now closed
 
-Historical PDF/OCR layout changes materially across the 36 issues.
+For the bounded 1986–1988 pilot, the source-engineering layer now has:
 
-In particular:
+- every monthly source issue;
+- every initial release date;
+- one resolved first-publication Finished Goods value per month;
+- one resolved first-publication Intermediate Goods value per month;
+- explicit provenance/status for every row;
+- regression tests for known narrative/OCR failure modes.
 
-- the lead paragraph sometimes uses `Intermediate Goods` rather than the full `Intermediate Materials, Supplies, and Components` title;
-- some reports insert `domestic producers` into the sentence;
-- line-wrap hyphenation can split words such as `per-cent`;
-- an overly broad match can accidentally capture a 12-month change rather than the current-month change.
+This is a **complete source panel**, not a predictive-model validation.
 
-This is a source-engineering issue, not a model signal.
+## Remaining source gate
 
-The parser has therefore been revised to prefer the earliest current-report intermediate-goods statement rather than a later detailed-section match. No market outcome has been consulted in making this change.
+The next task is period-finalized reconstruction.
 
-## What this checkpoint proves
+A single later PDF parse is not trusted because isolated OCR errors can turn values such as `-.7` into `-7.0`.
 
-The 1986–1988 historical first-release source path is not merely theoretical anymore:
+The finalized-panel pipeline therefore uses repeated later historical Table A snapshots and requires at least two snapshots to agree at the published 0.1 percentage-point precision.
 
-- all 36 source issues are machine retrievable;
-- all 36 initial release dates can be reconstructed from contemporaneous schedules;
-- known first-release values can be reproduced;
-- parser ambiguity can be surfaced explicitly instead of silently filled.
+Only after the finalized panel passes can first-to-final revision deltas be frozen.
 
-## What it does not prove
+## Research boundary
 
-This checkpoint does **not** establish:
-
-- a complete validated 36-month first-value panel;
-- a complete finalized/revision panel;
-- a faster NG3 score;
-- a shorter lag;
-- a threshold;
-- market-top predictive value.
-
-No price outcomes are read by this workflow.
-
-## Next gate
-
-1. resolve the remaining first-value ambiguities using the current-report lead paragraph and Table A as independent extraction paths;
-2. require agreement between the two paths or label the month AMBIGUOUS;
-3. recover each month's value after the historical four-month revision window;
-4. freeze first-to-final revision deltas for the complete 1986–1988 panel;
-5. only then preregister a separately named first-release NG3 candidate.
-
-Until those steps pass:
+Still prohibited:
 
 ```
 FASTER_NG3_PREREGISTRATION = NO
-HISTORICAL_OUTCOME_SCREEN = NO
+MARKET_TOP_OUTCOME_SCREEN = NO
+POST_RESULT_THRESHOLD_TUNING = NO
 PRODUCTION_EFFECT = NONE
+```
+
+The next valid gate is:
+
+```
+complete finalized 1986–1988 panel
+-> freeze revision distribution
+-> decide whether first-release source quality is sufficient
+-> preregister a separately named faster NG3 candidate
+-> only then run outcomes
 ```
