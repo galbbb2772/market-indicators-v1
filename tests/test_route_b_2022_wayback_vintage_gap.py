@@ -27,10 +27,18 @@ class RouteB2022WaybackVintageGapTests(unittest.TestCase):
         self.assertEqual(recovered["last_month"], "202111")
         self.assertTrue(recovered["pass"])
 
-    def test_latest_wayback_snapshot_is_too_old(self):
-        x = self.data["latest_usable_snapshot"]
+    def test_latest_wayback_capture_is_too_old(self):
+        self.assertEqual(
+            self.data["schema_version"],
+            "route-b-2022-wayback-vintage-gap-2",
+        )
+        x = self.data["latest_usable_capture"]
         self.assertEqual(x["timestamp"], "20210413020542")
-        self.assertEqual(x["last_month"], "202102")
+        self.assertEqual(x["max_last_month"], "202102")
+        self.assertEqual(
+            x["observed_digest"],
+            "EFKVXSQUQYCV73HEGEYBAHTQBIGZDSKZ",
+        )
         self.assertFalse(x["has_202111"])
 
     def test_exact_vintage_remains_unresolved(self):
