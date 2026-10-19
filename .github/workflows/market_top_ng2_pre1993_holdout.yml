@@ -1,0 +1,50 @@
+name: Market Top Route_A NG2 Pre-1993 Holdout
+
+on:
+  pull_request:
+    paths:
+      - "validate_market_top_ng2_pre1993.py"
+      - "audit_market_top_ng1_a_independent.py"
+      - "research/MARKET_TOP_ROUTE_A_NG2_PREREGISTRATION.md"
+      - "research/market_top_route_a_ng2_preregistration.json"
+      - "tests/test_market_top_route_a_ng2_preregistration.py"
+      - "tests/test_validate_market_top_ng2_pre1993.py"
+      - ".github/workflows/market_top_ng2_pre1993_holdout.yml"
+  workflow_dispatch:
+
+jobs:
+  pre1993-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install pandas requests
+      - name: Preregistration contract
+        run: python -m unittest tests.test_market_top_route_a_ng2_preregistration -v
+      - name: Holdout unit contracts
+        run: python -m unittest tests.test_validate_market_top_ng2_pre1993 -v
+      - name: Run untouched pre-1993 holdout
+        run: |
+          python validate_market_top_ng2_pre1993.py --output /tmp/ng2_pre1993.json
+          python - <<'PY'
+          import json
+          x=json.load(open("/tmp/ng2_pre1993.json"))
+          assert x["preregistration"] == "market-top-route-a-ng2-preregistration-1"
+          assert x["sample"]["last_effective_month"] <= "199212"
+          assert x["post_validation_tuning_allowed"] is False
+          assert x["decision"] in {
+              "ACCEPT_RESEARCH_SCREENING_CANDIDATE",
+              "REJECT_NG2_TOP_ROUTE",
+          }
+          print(
+              "NG2_PRE1993",
+              "decision=", x["decision"],
+              "episodes=", x["decision_metrics"]["evaluable_episodes"],
+              "major_share=", x["decision_metrics"]["major_top_share"],
+              "clear_false_share=", x["decision_metrics"]["clear_false_share"],
+          )
+          PY
