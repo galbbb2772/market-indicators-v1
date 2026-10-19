@@ -150,3 +150,28 @@ price_latest_date
 Once a horizon becomes complete, those fields freeze together with the completed outcome metrics.
 
 This does not prevent legitimate accumulation while a horizon is incomplete; it makes the final completed classification traceable to a specific upstream price payload.
+
+
+## Strict temporal-purity diagnostic
+
+The original promotion-review rule is unchanged.
+
+The episode ledger additionally reports:
+
+```
+complete_252_clean_fully_post_source_episodes
+strict_temporal_evidence_ready
+```
+
+This is a **diagnostic only**. It counts completed 252-session episodes that:
+
+- have no continuity evidence gap; and
+- opened from source months wholly after the NG3 preregistration date.
+
+Therefore a December-2026 straddling-source episode may still count under the
+original frozen `review_eligible` rule, but it cannot make
+`strict_temporal_evidence_ready` true.
+
+This prevents a later reviewer from confusing "countable under the original
+preregistration" with "all underlying source months fully post-preregistration"
+without changing the model or promotion-review governance.
