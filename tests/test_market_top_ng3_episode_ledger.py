@@ -119,6 +119,22 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
         self.assertLessEqual(m["worst_return_from_anchor_pct"],-15.0)
         self.assertEqual(classify_252(m),"MAJOR_TOP")
 
+    def test_outcome_ledger_uses_current_observation_time_not_frozen_signal_time(self):
+        p=price_series()
+        with patch(
+            "market_top_ng3_forward.load_episode_ledger",
+            return_value=empty_ledger(),
+        ):
+            x=update_episode_ledger(
+                snap("202612"),
+                p,
+                observed_at="2027-01-15T03:00:00+00:00",
+            )
+        self.assertEqual(
+            x["generated_at"],
+            "2027-01-15T03:00:00+00:00",
+        )
+
     def test_completed_horizon_metrics_are_never_recomputed(self):
         p=price_series()
         frozen_63={
