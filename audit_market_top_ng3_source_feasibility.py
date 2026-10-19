@@ -19,9 +19,9 @@ SERIES = {
         "role": "producer finished-goods prices",
         "expected_pre1993": True,
     },
-    "ppi_intermediate_legacy_nsa": {
-        "id": "WPUSOP2000",
-        "role": "legacy intermediate materials / supplies / components",
+    "ppi_intermediate_processed_nsa": {
+        "id": "WPUID61",
+        "role": "processed goods for intermediate demand",
         "expected_pre1993": True,
     },
 }
@@ -130,6 +130,12 @@ def main() -> None:
                 "PPI observations are preliminary and may be revised for up to "
                 "4 months after first publication. A genuine PIT backtest needs "
                 "first-published/release-vintage values or a conservative lag."
+            ),
+            "ppi_legacy_mapping": (
+                "WPUSOP2000 is the discontinued legacy SOP intermediate-materials series; "
+                "BLS maps users to current FD-ID replacement WPUID61. The audit queries "
+                "the current BLS series ID because the public API did not return the "
+                "discontinued ID in the pre-1993 request."
             ),
             "bea_profit_margin_candidate": (
                 "NIPA Table 1.15 line 7 (unit profits from current production) "
