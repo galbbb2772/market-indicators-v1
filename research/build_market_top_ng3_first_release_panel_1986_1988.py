@@ -125,23 +125,29 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
     )
     fg = signed_first_percent(fg_match.group("body")) if fg_match else None
 
-    im_match = re.search(
+    im_patterns = [
         r"The Producer Price Index for Intermediate Materials,?\s*Supplies,?\s*and Components(?P<body>.{0,700})",
-        seg,
-        flags=re.I,
-    )
-    if not im_match:
-        im_match = re.search(
-            r"(?:prices received by producers of|the index for) intermediate goods(?P<body>.{0,700})",
-            seg,
-            flags=re.I,
-        )
-    im = signed_first_percent(im_match.group("body")) if im_match else None
+        r"The index for Intermediate Materials,?\s*Supplies,?\s*and Components(?P<body>.{0,700})",
+        r"Prices received by (?:domestic )?producers of intermediate goods(?P<body>.{0,700})",
+        r"(?:The )?Intermediate Goods Price Index(?P<body>.{0,700})",
+        r"Intermediate goods prices(?P<body>.{0,700})",
+        r"The index for intermediate goods(?P<body>.{0,700})",
+    ]
+    im_candidates = []
+    for pat in im_patterns:
+        for match in re.finditer(pat, seg, flags=re.I):
+            value = signed_first_percent(match.group("body"))
+            if value is not None:
+                im_candidates.append((match.start(), value, match.group(0)[:500]))
+    im_candidates.sort(key=lambda x: x[0])
+    im = im_candidates[0][1] if im_candidates else None
+    im_evidence = im_candidates[0][2] if im_candidates else None
 
     return {
         "status": "PARSED" if fg is not None and im is not None else "AMBIGUOUS",
         "finished_goods_mom_sa_pct": fg,
         "intermediate_goods_mom_sa_pct": im,
+        "intermediate_match_excerpt": im_evidence,
         "segment_excerpt": seg[:1800],
     }
 
