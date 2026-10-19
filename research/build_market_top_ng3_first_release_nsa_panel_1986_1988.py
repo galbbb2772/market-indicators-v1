@@ -40,6 +40,17 @@ def _one_number(text: str) -> float | None:
         return None
 
 
+def _numbers_in_text(text: str) -> list[float]:
+    t = _norm(text).replace(",", "")
+    out = []
+    for tok in re.findall(r"[+-]?(?:\\d+\\.\\d+|\\.\\d+|\\d+)", t):
+        try:
+            out.append(float(tok))
+        except ValueError:
+            pass
+    return out
+
+
 def _collect_spans(page) -> list[dict]:
     spans: list[dict] = []
 
@@ -61,342 +72,254 @@ def _collect_spans(page) -> list[dict]:
 
 
 def _find_table1_page(reader: PdfReader):
+    fallback = []
     for idx, page in enumerate(reader.pages[:18]):
         text = page.extract_text() or ""
-        low = text.lower()
+        low = _norm(text).lower()
         if (
             "table 1." in low
             and "producer price indexes" in low
             and "stage of processing" in low
         ):
             return idx, page
+
+        # Some archived PDFs lose the printed table title during extraction.
+        # Fall back to structural fingerprints unique to the aggregate Table 1:
+        # both aggregate stage labels plus its relative-importance / adjustment
+        # headers. Table 2 does not carry the aggregate relative-importance block.
+        try:
+            layout = page.extract_text(extraction_mode="layout") or ""
+        except TypeError:
+            layout = text
+        q = _norm(layout).lower()
+        score = 0
+        if "finished goods" in q:
+            score += 1
+        if "intermediate materials" in q:
+            score += 1
+        if "relative importance" in q:
+            score += 2
+        if "unadjusted" in q:
+            score += 1
+        if "seasonally adjusted" in q:
+            score += 1
+        if "crude materials" in q:
+            score += 1
+        if score >= 6:
+            fallback.append((score, idx, page))
+
+    if fallback:
+        fallback.sort(key=lambda x: (-x[0], x[1]))
+        _, idx, page = fallback[0]
+        return idx, page
     return None, None
-
-
-def fetch_nsa_document(year: int, month: int) -> dict:
-    url = pdf_url(year, month)
-    try:
-        r = requests.get(
-            url,
-            timeout=(6, 35),
-            headers={"User-Agent": "market-top-ng3-nsa-panel/2.0"},
-        )
-        r.raise_for_status()
-        reader = PdfReader(io.BytesIO(r.content))
-
-        layout_pages = []
-        for page in reader.pages[:7]:
-            try:
-                layout_pages.append(page.extract_text(extraction_mode="layout") or "")
-            except TypeError:
-                layout_pages.append(page.extract_text() or "")
-
-        page_idx, table1_page = _find_table1_page(reader)
-        spans = _collect_spans(table1_page) if table1_page is not None else []
-
-        return {
-            "source_month": f"{year:04d}-{month:02d}",
-            "url": url,
-            "status": "SOURCE_RECOVERED",
-            "schedule_text_layout": "\n".join(layout_pages),
-            "table1_page_zero_based": page_idx,
-            "table1_spans": spans,
-        }
-    except Exception as exc:
-        return {
-            "source_month": f"{year:04d}-{month:02d}",
-            "url": url,
-            "status": "SOURCE_UNAVAILABLE",
-            "error": repr(exc),
-            "schedule_text_layout": "",
-            "table1_page_zero_based": None,
-            "table1_spans": [],
-        }
-
-
-def _aggregate_label_match(text: str, label: str) -> bool:
+def _label_prefix(text: str, label: str) -> bool:
     t = _norm(text).lower().rstrip(".")
     if label == "finished_goods":
-        return t == "finished goods"
-    if label == "intermediate_goods":
-        return t == "intermediate materials, supplies and components"
-    raise ValueError(label)
+        base = "finished goods"
+    elif label == "intermediate_goods":
+        base = "intermediate materials, supplies and components"
+    else:
+        raise ValueError(label)
+
+    if t == base:
+        return True
+    if not t.startswith(base):
+        return False
+
+    tail = t[len(base):].lstrip(" .:-")
+    # A combined row span may contain the label followed immediately by the
+    # numeric columns. Do not accept named subcomponents such as
+    # "Finished goods, excluding foods".
+    return bool(re.match(r"^[+\\-]?(?:\\d|\\.)", tail))
 
 
-def _value_in_band(
-    spans: list[dict],
-    y: float,
-    x_lo: float,
-    x_hi: float,
-    *,
-    y_tol: float = 1.25,
-) -> dict:
-    candidates = []
-    for s in spans:
-        if s["font_size"] < 6.0:
+def _row_spans(spans: list[dict], anchor_y: float, *, y_tol: float = 1.55) -> list[dict]:
+    return [
+        s
+        for s in spans
+        if s["font_size"] >= 6.0 and abs(float(s["y"]) - anchor_y) <= y_tol
+    ]
+
+
+FIELD_ORDER = (
+    "relative_importance",
+    "january_level_nsa",
+    "previous_month_level_nsa",
+    "current_month_level_nsa",
+    "yoy_nsa_pct",
+    "mom_nsa_pct",
+    "sa_prev2_to_prev1",
+    "sa_prev1_to_current",
+    "sa_current_aux",
+)
+
+FIELD_CENTERS = {
+    "relative_importance": 283.0,
+    "january_level_nsa": 331.0,
+    "previous_month_level_nsa": 361.0,
+    "current_month_level_nsa": 392.0,
+    "yoy_nsa_pct": 427.0,
+    "mom_nsa_pct": 457.0,
+    "sa_prev2_to_prev1": 488.0,
+    "sa_prev1_to_current": 516.0,
+    "sa_current_aux": 544.0,
+}
+
+
+def _start_field_for_x(x: float) -> int | None:
+    if x < 180:
+        return 0
+    if 265 <= x < 320:
+        return 0
+    if 320 <= x < 350:
+        return 1
+    if 350 <= x < 380:
+        return 2
+    if 380 <= x < 415:
+        return 3
+    if 415 <= x < 445:
+        return 4
+    if 445 <= x < 475:
+        return 5
+    if 475 <= x < 505:
+        return 6
+    if 505 <= x < 532:
+        return 7
+    if 532 <= x < 565:
+        return 8
+    return None
+
+
+def _assign_row_tokens(row: list[dict], label: str) -> dict:
+    candidates: dict[str, list[dict]] = {name: [] for name in FIELD_ORDER}
+
+    for s in row:
+        text = _norm(s["text"])
+        nums = _numbers_in_text(text)
+        if not nums:
             continue
-        if not (x_lo <= s["x"] < x_hi):
+
+        # If the label and all values were emitted as one PDF text object,
+        # start at relative importance. Otherwise infer the first logical
+        # column from the object's x coordinate.
+        if _label_prefix(text, label):
+            if label == "finished_goods":
+                base = "finished goods"
+            else:
+                base = "intermediate materials, supplies and components"
+            tail = text.lower().split(base, 1)[1]
+            nums = _numbers_in_text(tail)
+            start = 0
+        else:
+            start = _start_field_for_x(float(s["x"]))
+
+        if start is None or not nums:
             continue
-        if abs(s["y"] - y) > y_tol:
-            continue
-        value = _one_number(s["text"])
-        if value is None:
-            continue
-        candidates.append(
-            {
-                "value": value,
-                "x": round(s["x"], 3),
-                "y": round(s["y"], 3),
-                "text": s["text"],
-                "font_size": round(s["font_size"], 3),
+
+        # A single PDF object can encode the rest of a printed row, e.g.
+        # "287.6 290.5 290.7 -1.9 0.1 0.4 0.3 0.2". Map those tokens in
+        # printed left-to-right column order.
+        for offset, value in enumerate(nums):
+            idx = start + offset
+            if idx >= len(FIELD_ORDER):
+                break
+            name = FIELD_ORDER[idx]
+            candidates[name].append(
+                {
+                    "value": float(value),
+                    "source_text": text,
+                    "source_x": round(float(s["x"]), 3),
+                    "source_y": round(float(s["y"]), 3),
+                    "token_offset": offset,
+                }
+            )
+
+    resolved = {}
+    for name in FIELD_ORDER:
+        vals = candidates[name]
+        # De-duplicate the same numeric value when the PDF emits overlapping
+        # text objects for the same printed cell.
+        unique = {}
+        for item in vals:
+            unique.setdefault(round(float(item["value"]), 9), item)
+        vals = list(unique.values())
+        if len(vals) == 1:
+            resolved[name] = {"status": "PARSED", **vals[0]}
+        else:
+            resolved[name] = {
+                "status": "AMBIGUOUS_COLUMN",
+                "candidates": vals,
             }
-        )
-
-    if len(candidates) != 1:
-        return {
-            "status": "AMBIGUOUS_COLUMN",
-            "candidates": candidates,
-            "x_band": [x_lo, x_hi],
-        }
-    return {
-        "status": "PARSED",
-        **candidates[0],
-        "x_band": [x_lo, x_hi],
-    }
+    return resolved
 
 
 def parse_table1_aggregate_geometry(spans: list[dict], label: str) -> dict:
     if label not in {"finished_goods", "intermediate_goods"}:
         raise ValueError(label)
 
-    labels = [
+    label_candidates = [
         s
         for s in spans
-        if s["x"] < 180
+        if s["x"] < 190
         and s["font_size"] >= 6.0
-        and _aggregate_label_match(s["text"], label)
+        and _label_prefix(s["text"], label)
     ]
-    if len(labels) != 1:
-        return {
-            "status": "AGGREGATE_LABEL_NOT_UNIQUE",
-            "label_count": len(labels),
-            "labels": [
+
+    # Collapse duplicate extraction objects sitting on the same printed row.
+    by_y = {}
+    for s in label_candidates:
+        by_y.setdefault(round(float(s["y"]), 1), s)
+    labels = list(by_y.values())
+
+    parsed_rows = []
+    for anchor in labels:
+        row = _row_spans(spans, float(anchor["y"]))
+        parsed = _assign_row_tokens(row, label)
+        required = FIELD_ORDER[:6]
+        if not all(parsed[name]["status"] == "PARSED" for name in required):
+            parsed_rows.append(
                 {
-                    "text": s["text"],
-                    "x": round(s["x"], 3),
-                    "y": round(s["y"], 3),
+                    "status": "COLUMN_GEOMETRY_INCOMPLETE",
+                    "anchor": anchor,
+                    "columns": parsed,
                 }
-                for s in labels
-            ],
-        }
-
-    anchor = labels[0]
-    y = float(anchor["y"])
-
-    # Column bands are deliberately broad enough for the 1986-1988 layouts
-    # but separated by the printed column centers observed in the source PDFs.
-    # Small-font superscript footnote markers are discarded above.
-    bands = {
-        "relative_importance": (270.0, 320.0),
-        "january_level_nsa": (320.0, 350.0),
-        "previous_month_level_nsa": (350.0, 380.0),
-        "current_month_level_nsa": (380.0, 415.0),
-        "yoy_nsa_pct": (415.0, 445.0),
-        "mom_nsa_pct": (445.0, 475.0),
-    }
-    parsed = {name: _value_in_band(spans, y, *band) for name, band in bands.items()}
-
-    required = (
-        "relative_importance",
-        "january_level_nsa",
-        "previous_month_level_nsa",
-        "current_month_level_nsa",
-        "yoy_nsa_pct",
-        "mom_nsa_pct",
-    )
-    if not all(parsed[name]["status"] == "PARSED" for name in required):
-        return {
-            "status": "COLUMN_GEOMETRY_INCOMPLETE",
-            "label": {
-                "text": anchor["text"],
-                "x": round(anchor["x"], 3),
-                "y": round(anchor["y"], 3),
-            },
-            "columns": parsed,
-        }
-
-    values = {name: float(parsed[name]["value"]) for name in required}
-
-    # Fail closed on physically implausible column assignment. This catches
-    # accidental footnotes or neighboring columns without using market outcomes.
-    if not (50.0 <= values["relative_importance"] <= 110.0):
-        return {"status": "RELATIVE_IMPORTANCE_IMPLAUSIBLE", "values": values}
-    if not (
-        values["january_level_nsa"] > 20
-        and values["previous_month_level_nsa"] > 20
-        and values["current_month_level_nsa"] > 20
-    ):
-        return {"status": "NSA_LEVEL_IMPLAUSIBLE", "values": values}
-    if abs(values["yoy_nsa_pct"]) > 50 or abs(values["mom_nsa_pct"]) > 25:
-        return {"status": "RATE_IMPLAUSIBLE", "values": values}
-
-    return {
-        "status": "PARSED_GEOMETRY",
-        **values,
-        "label": {
-            "text": anchor["text"],
-            "x": round(anchor["x"], 3),
-            "y": round(anchor["y"], 3),
-        },
-        "columns": parsed,
-    }
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
-        "--output",
-        default="market_top_ng3_first_release_nsa_panel_1986_1988.json",
-    )
-    args = ap.parse_args()
-
-    docs = {}
-    with ThreadPoolExecutor(max_workers=8) as ex:
-        futs = {
-            ex.submit(fetch_nsa_document, y, m): (y, m)
-            for y, m in SOURCE_MONTHS
-        }
-        for fut in as_completed(futs):
-            d = fut.result()
-            docs[d["source_month"]] = d
-
-    schedule = {}
-    for source_month, d in sorted(docs.items()):
-        if d["status"] != "SOURCE_RECOVERED":
+            )
             continue
-        sy, sm = map(int, source_month.split("-"))
-        for item in parse_schedule(d["schedule_text_layout"], sy, sm):
-            schedule[item["observation_month"]] = item
 
-    rows = []
-    for y, m in PANEL_MONTHS:
-        key = f"{y:04d}-{m:02d}"
-        d = docs[key]
-        finished = parse_table1_aggregate_geometry(
-            d["table1_spans"], "finished_goods"
-        )
-        intermediate = parse_table1_aggregate_geometry(
-            d["table1_spans"], "intermediate_goods"
-        )
-        release = schedule.get(key, {})
-        complete = (
-            finished.get("status") == "PARSED_GEOMETRY"
-            and intermediate.get("status") == "PARSED_GEOMETRY"
-            and bool(release.get("release_date"))
-        )
-        rows.append(
+        values = {name: float(parsed[name]["value"]) for name in required}
+        if not (50.0 <= values["relative_importance"] <= 110.0):
+            continue
+        if not (
+            values["january_level_nsa"] > 20
+            and values["previous_month_level_nsa"] > 20
+            and values["current_month_level_nsa"] > 20
+        ):
+            continue
+        if abs(values["yoy_nsa_pct"]) > 50 or abs(values["mom_nsa_pct"]) > 25:
+            continue
+
+        parsed_rows.append(
             {
-                "observation_month": key,
-                "release_date": release.get("release_date"),
-                "publication_pdf": pdf_url(y, m),
-                "table1_page_zero_based": d.get("table1_page_zero_based"),
-                "reference_basis_note": (
-                    "native basis printed in contemporaneous report; YoY is "
-                    "taken from the same publication row"
-                ),
-                "finished_goods": finished,
-                "intermediate_goods": intermediate,
-                "status": "COMPLETE" if complete else "AMBIGUOUS",
+                "status": "PARSED_GEOMETRY",
+                **values,
+                "label": {
+                    "text": anchor["text"],
+                    "x": round(float(anchor["x"]), 3),
+                    "y": round(float(anchor["y"]), 3),
+                },
+                "columns": parsed,
             }
         )
 
-    known = {r["observation_month"]: r for r in rows}
-    may = known["1987-05"]
-    feb86 = known["1986-02"]
-    mar88 = known["1988-03"]
-    checks = {
-        "all_36_rows_complete": all(r["status"] == "COMPLETE" for r in rows),
-        "all_36_release_dates": all(bool(r["release_date"]) for r in rows),
-        "may_1987_release": may["release_date"] == "1987-06-12",
-        "may_1987_finished_level": (
-            may["finished_goods"].get("current_month_level_nsa") == 296.3
-        ),
-        "may_1987_finished_yoy": (
-            may["finished_goods"].get("yoy_nsa_pct") == 2.6
-        ),
-        "may_1987_intermediate_level": (
-            may["intermediate_goods"].get("current_month_level_nsa") == 312.7
-        ),
-        "may_1987_intermediate_yoy": (
-            may["intermediate_goods"].get("yoy_nsa_pct") == 2.0
-        ),
-        "feb_1986_geometry_guard": (
-            feb86["finished_goods"].get("current_month_level_nsa") == 292.3
-            and feb86["finished_goods"].get("yoy_nsa_pct") == -0.1
-        ),
-        "mar_1988_geometry_guard": (
-            mar88["intermediate_goods"].get("current_month_level_nsa") == 104.6
-            and mar88["intermediate_goods"].get("yoy_nsa_pct") == 5.0
-        ),
+    good = [x for x in parsed_rows if x["status"] == "PARSED_GEOMETRY"]
+    if len(good) == 1:
+        return good[0]
+
+    return {
+        "status": "AGGREGATE_ROW_NOT_UNIQUE",
+        "label_candidates": len(labels),
+        "valid_rows": len(good),
+        "diagnostics": parsed_rows[:4],
     }
 
-    result = {
-        "schema_version": "market-top-ng3-first-release-nsa-panel-1986-1988-2",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "status": "PASS" if all(checks.values()) else "PARTIAL",
-        "research_only": True,
-        "production_effect": "none",
-        "purpose": (
-            "Recover contemporaneous not-seasonally-adjusted stage-of-processing "
-            "levels and YoY changes using PDF coordinate geometry so footnote "
-            "superscripts cannot merge into numeric columns."
-        ),
-        "checks": checks,
-        "summary": {
-            "months": len(rows),
-            "source_recovered": sum(
-                docs[f"{y:04d}-{m:02d}"]["status"] == "SOURCE_RECOVERED"
-                for y, m in PANEL_MONTHS
-            ),
-            "table1_pages_found": sum(
-                docs[f"{y:04d}-{m:02d}"]["table1_page_zero_based"] is not None
-                for y, m in PANEL_MONTHS
-            ),
-            "complete_rows": sum(r["status"] == "COMPLETE" for r in rows),
-            "ambiguous_rows": sum(r["status"] != "COMPLETE" for r in rows),
-        },
-        "rows": rows,
-        "boundary": {
-            "historical_concept_bridge_to_modern_fdid_required": True,
-            "cpi_release_alignment_not_yet_frozen": True,
-            "faster_ng3_formula_preregistered": False,
-            "market_outcome_test_authorized": False,
-        },
-    }
-
-    with open(args.output, "w", encoding="utf-8") as f:
-        json.dump(result, f, indent=2)
-        f.write("\n")
-
-    print(
-        json.dumps(
-            {k: result[k] for k in ("status", "checks", "summary")},
-            indent=2,
-        )
-    )
-    for r in rows:
-        fg = r["finished_goods"]
-        im = r["intermediate_goods"]
-        print(
-            r["observation_month"],
-            r["release_date"],
-            "FG", fg.get("current_month_level_nsa"), fg.get("yoy_nsa_pct"),
-            "IM", im.get("current_month_level_nsa"), im.get("yoy_nsa_pct"),
-            r["status"],
-            fg.get("status"),
-            im.get("status"),
-        )
-
-
-if __name__ == "__main__":
-    main()
