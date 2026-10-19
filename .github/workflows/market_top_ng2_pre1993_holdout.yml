@@ -9,6 +9,10 @@ on:
       - "research/market_top_route_a_ng2_preregistration.json"
       - "tests/test_market_top_route_a_ng2_preregistration.py"
       - "tests/test_validate_market_top_ng2_pre1993.py"
+      - "tests/test_market_top_route_a_ng2_holdout_evidence.py"
+      - "tests/test_market_top_route_a_ng2_failure_diagnostic.py"
+      - "research/market_top_route_a_ng2_pre1993_holdout.json"
+      - "research/market_top_route_a_ng2_failure_diagnostic.json"
       - "diagnose_market_top_ng2_failure.py"
       - ".github/workflows/market_top_ng2_pre1993_holdout.yml"
   workflow_dispatch:
@@ -27,7 +31,10 @@ jobs:
       - name: Preregistration contract
         run: python -m unittest tests.test_market_top_route_a_ng2_preregistration -v
       - name: Holdout unit contracts
-        run: python -m unittest tests.test_validate_market_top_ng2_pre1993 -v
+        run: |
+          python -m unittest tests.test_validate_market_top_ng2_pre1993 -v
+          python -m unittest tests.test_market_top_route_a_ng2_holdout_evidence -v
+          python -m unittest tests.test_market_top_route_a_ng2_failure_diagnostic -v
       - name: Run untouched pre-1993 holdout
         run: |
           python validate_market_top_ng2_pre1993.py --output /tmp/ng2_pre1993.json
