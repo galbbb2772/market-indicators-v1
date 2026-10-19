@@ -69,12 +69,21 @@
       "state": "IDLE"
     },
     "production_ready": false,
-    "post_preregistration_tuning_allowed": false
+    "post_preregistration_tuning_allowed": false,
+    "source_temporality": {
+      "original_first_countable_effective_month": "202612",
+      "effective_202612_tier": "SOURCE_MONTH_STRADDLES_PREREGISTRATION",
+      "effective_202612_all_source_months_fully_post_preregistration": false,
+      "first_fully_post_preregistration_source_effective_month": "202701",
+      "interpretation": "The December 2026 signal remains countable under the original preregistration because the October FF month was unfinished/unpublished at freeze time, but the October source month straddles the 2026-10-19 preregistration date. January 2027 is the first effective month whose required monthly source periods are wholly post-preregistration."
+    }
   },
   "evidence_governance": {
     "consumed_historical_range": "1953-2026 U.S. history",
     "untouched_historical_holdout_remaining": false,
     "next_valid_evidence": "Prospective effective months from 2026-12 onward",
-    "redesign_rule": "Any formula/gate/threshold change after NG3 preregistration requires NG4 or later"
+    "redesign_rule": "Any formula/gate/threshold change after NG3 preregistration requires NG4 or later",
+    "monthly_evidence_gaps_must_be_explicit": true,
+    "silent_later_vintage_backfill_allowed": false
   }
 }
