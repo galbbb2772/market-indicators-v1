@@ -1,0 +1,69 @@
+name: Market Top Route_C NG2 Pre-1993 Holdout
+
+on:
+  pull_request:
+    paths:
+      - "research/MARKET_TOP_ROUTE_C_NG2_PREREGISTRATION.md"
+      - "research/market_top_route_c_ng2_preregistration.json"
+      - "screen_route_c_ng2_pre1993.py"
+      - "tests/test_route_c_ng2_preregistration.py"
+      - ".github/workflows/market_top_route_c_ng2_holdout.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas requests openpyxl
+
+      - name: Verify frozen NG2 preregistration
+        run: python -m unittest tests.test_route_c_ng2_preregistration -v
+
+      - name: Run untouched pre-1993 holdout
+        run: |
+          python screen_route_c_ng2_pre1993.py \
+            --output route_c_ng2_pre1993_result.json
+
+      - name: Print holdout summary
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open("route_c_ng2_pre1993_result.json"))
+          print("decision =", x["decision"])
+          print("proxy =", json.dumps(x["proxy_overlap"], indent=2))
+          print("positive =", json.dumps(x["positive_window_hits"], indent=2))
+          print("summary =", json.dumps(x["summary"], indent=2))
+          print("episodes =")
+          for e in x["episodes"]:
+              o=e["outcome_252"]
+              print(
+                  e["start"], e["end"],
+                  "route", round(e["route_at_start"],2),
+                  "val", round(e["valuation_at_start"],1),
+                  "cb", round(e["concentration_at_start"],1),
+                  "spread", round(e["spread_at_start"],1),
+                  "gap", round(e["gap_change_at_start"],2),
+                  "class", o.get("classification"),
+                  "worst", o.get("worst_return_from_anchor_pct"),
+              )
+          print("near misses =")
+          for r in x["near_miss_states"][:12]:
+              print(r)
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-top-route-c-ng2-pre1993
+          path: route_c_ng2_pre1993_result.json
+          if-no-files-found: error
