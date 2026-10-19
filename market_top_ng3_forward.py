@@ -55,6 +55,7 @@ YAHOO_SPY = (
 OUT_CURRENT = Path("docs/data/market_top_ng3_current.json")
 OUT_HISTORY = Path("docs/data/market_top_ng3_history.json")
 OUT_EPISODES = Path("docs/data/market_top_ng3_episodes.json")
+OUT_MONTHLY = Path("docs/data/market_top_ng3_monthly_snapshots.json")
 
 HTTP = requests.Session()
 HTTP.headers.update({"User-Agent": "market-top-ng3-forward/1.0"})
@@ -539,6 +540,74 @@ def load_history() -> list[dict[str, Any]]:
     return list(obj.get("history") or [])
 
 
+def load_monthly_snapshot_book() -> dict[str, Any]:
+    if not OUT_MONTHLY.exists():
+        return {
+            "schema_version": "market-top-route-a-ng3-monthly-snapshots-1",
+            "research_only": True,
+            "production_effect": "none",
+            "prospective_start_effective_month": (
+                FIRST_PROSPECTIVE_EFFECTIVE_MONTH
+            ),
+            "snapshots": [],
+        }
+    return json.loads(OUT_MONTHLY.read_text(encoding="utf-8"))
+
+
+def freeze_monthly_signal_snapshot(
+    snapshot: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any], bool]:
+    book = load_monthly_snapshot_book()
+    if not canonical["counts_toward_prospective_validation"]:
+        return snapshot, book, False
+
+    month = str(canonical["effective_month"])
+    existing = next(
+        (
+            x
+            for x in book.get("snapshots") or []
+            if str(x.get("effective_month")) == month
+        ),
+        None,
+    )
+    if existing is not None:
+        return existing, book, False
+
+    frozen = json.loads(json.dumps(snapshot))
+    frozen["evidence_lock"] = {
+        "mode": "FIRST_SUCCESSFUL_POST_MONTH_CLOSE_SNAPSHOT",
+        "frozen_at": canonical["generated_at"],
+        "effective_month": month,
+        "immutable_signal_fields": True,
+    }
+
+    snapshots = list(book.get("snapshots") or [])
+    snapshots.append(frozen)
+    snapshots = sorted(
+        snapshots,
+        key=lambda x: str(x.get("effective_month") or ""),
+    )
+    book = {
+        "schema_version": "market-top-route-a-ng3-monthly-snapshots-1",
+        "research_only": True,
+        "production_effect": "none",
+        "prospective_start_effective_month": (
+            FIRST_PROSPECTIVE_EFFECTIVE_MONTH
+        ),
+        "snapshots": snapshots,
+        "summary": {
+            "frozen_prospective_months": len(snapshots),
+            "first_frozen_effective_month": (
+                snapshots[0]["effective_month"] if snapshots else None
+            ),
+            "latest_frozen_effective_month": (
+                snapshots[-1]["effective_month"] if snapshots else None
+            ),
+        },
+    }
+    return frozen, book, True
+
+
 def load_episode_ledger() -> dict[str, Any]:
     if not OUT_EPISODES.exists():
         return {
@@ -625,9 +694,9 @@ def update_episode_ledger(
     ledger = load_episode_ledger()
     episodes = list(ledger.get("episodes") or [])
 
-    current_month = str(snapshot["effective_month"])
-    is_prospective = bool(snapshot["counts_toward_prospective_validation"])
-    state = str(snapshot["state"])
+    current_month = str(canonical["effective_month"])
+    is_prospective = bool(canonical["counts_toward_prospective_validation"])
+    state = str(canonical["state"])
 
     open_episode = next(
         (x for x in reversed(episodes) if x.get("signal_status") == "OPEN"),
@@ -666,9 +735,9 @@ def update_episode_ledger(
                     "source_provenance_at_start": dict(
                         snapshot.get("sources") or {}
                     ),
-                    "start_score": float(snapshot["route_a_ng3_score"]),
+                    "start_score": float(canonical["route_a_ng3_score"]),
                     "start_financial_lead_gap_raw": float(
-                        snapshot["components"]["financial_lead_gap_raw"]
+                        canonical["components"]["financial_lead_gap_raw"]
                     ),
                     "outcomes": {},
                     "classification_252": None,
@@ -706,7 +775,7 @@ def update_episode_ledger(
     )
     ledger = {
         "schema_version": "market-top-route-a-ng3-episodes-1",
-        "generated_at": snapshot["generated_at"],
+        "generated_at": canonical["generated_at"],
         "research_only": True,
         "production_effect": "none",
         "protocol": "market-top-route-a-ng3-evidence-protocol-1",
@@ -726,25 +795,31 @@ def update_episode_ledger(
 
 def write_outputs(snapshot: dict[str, Any], price: pd.Series) -> None:
     OUT_CURRENT.parent.mkdir(parents=True, exist_ok=True)
+
+    canonical, monthly_book, _ = freeze_monthly_signal_snapshot(snapshot)
+    OUT_MONTHLY.write_text(
+        json.dumps(monthly_book, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     OUT_CURRENT.write_text(
-        json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(canonical, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     hist = load_history()
     row = {
-        "effective_month": snapshot["effective_month"],
-        "generated_at": snapshot["generated_at"],
-        "evidence_phase": snapshot["evidence_phase"],
+        "effective_month": canonical["effective_month"],
+        "generated_at": canonical["generated_at"],
+        "evidence_phase": canonical["evidence_phase"],
         "counts_toward_prospective_validation": (
-            snapshot["counts_toward_prospective_validation"]
+            canonical["counts_toward_prospective_validation"]
         ),
-        "route_a_ng3_score": snapshot["route_a_ng3_score"],
+        "route_a_ng3_score": canonical["route_a_ng3_score"],
         "financial_lead_gap_raw": (
-            snapshot["components"]["financial_lead_gap_raw"]
+            canonical["components"]["financial_lead_gap_raw"]
         ),
-        "phase_gate": snapshot["gates"]["phase_gate"],
-        "top_location_pass": snapshot["gates"]["top_location"]["passes"],
-        "state": snapshot["state"],
+        "phase_gate": canonical["gates"]["phase_gate"],
+        "top_location_pass": canonical["gates"]["top_location"]["passes"],
+        "state": canonical["state"],
     }
     by_month = {x["effective_month"]: x for x in hist}
     by_month[row["effective_month"]] = row
@@ -764,7 +839,7 @@ def write_outputs(snapshot: dict[str, Any], price: pd.Series) -> None:
     )
 
 
-    ledger = update_episode_ledger(snapshot, price)
+    ledger = update_episode_ledger(canonical, price)
     OUT_EPISODES.write_text(
         json.dumps(ledger, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
