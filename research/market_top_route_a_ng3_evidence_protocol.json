@@ -31,7 +31,8 @@
       "major_top": "worst_return_from_anchor_pct <= -15",
       "clear_false": "worst_return_from_anchor_pct > -7.5 AND forward_return_pct > 0",
       "other": "CORRECTION_OR_AMBIGUOUS"
-    }
+    },
+    "completed_horizon_immutability": "Once a horizon has complete=true, its stored metrics are frozen and must not be recomputed from a later rolling price window."
   },
   "promotion_review": {
     "minimum_complete_252_session_episodes": 4,
