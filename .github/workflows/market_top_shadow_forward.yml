@@ -89,7 +89,17 @@ jobs:
           if [ -n "$(git status --porcelain docs/data/market_top_shadow_current.json docs/data/market_top_shadow_history.json)" ]; then
             git add docs/data/market_top_shadow_current.json docs/data/market_top_shadow_history.json
             git commit -m "data: refresh Market Top shadow forward"
-            git push
+            branch="${GITHUB_REF_NAME}"
+            for attempt in 1 2 3; do
+              git pull --rebase origin "$branch"
+              if git push origin HEAD:"$branch"; then
+                exit 0
+              fi
+              echo "Push race on attempt $attempt; retrying after rebase."
+              sleep 5
+            done
+            echo "Failed to push after 3 attempts."
+            exit 1
           else
             echo "No Market Top shadow data change."
           fi
