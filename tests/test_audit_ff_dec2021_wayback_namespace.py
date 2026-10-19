@@ -7,6 +7,7 @@ from audit_ff_dec2021_wayback_namespace import (
     CUTOFF,
     PREFIXES,
     _is_target_namespace,
+    _query_prefix,
     run,
 )
 
@@ -30,6 +31,51 @@ class FFDec2021NamespaceWaybackTests(unittest.TestCase):
                 "Data_Library/Historical_Archives/08%202022%20Update/ftp/a.zip"
             )
         )
+
+    def test_prefix_query_retries_one_transient_timeout(self):
+        class Response:
+            def raise_for_status(self):
+                return None
+
+            def json(self):
+                return [["timestamp", "original"], ["20211201000000", "x"]]
+
+        class Session:
+            def __init__(self):
+                self.calls = 0
+
+            def get(self, *args, **kwargs):
+                self.calls += 1
+                if self.calls == 1:
+                    raise TimeoutError("transient")
+                return Response()
+
+        s = Session()
+        with patch("audit_ff_dec2021_wayback_namespace.time.sleep"):
+            data, error = _query_prefix(
+                s,
+                PREFIXES[0],
+                attempts=2,
+                timeout=1,
+            )
+        self.assertIsNone(error)
+        self.assertEqual(s.calls, 2)
+        self.assertEqual(data[1][0], "20211201000000")
+
+    def test_prefix_query_still_fails_closed_after_all_retries(self):
+        class Session:
+            def get(self, *args, **kwargs):
+                raise TimeoutError("persistent")
+
+        with patch("audit_ff_dec2021_wayback_namespace.time.sleep"):
+            data, error = _query_prefix(
+                Session(),
+                PREFIXES[0],
+                attempts=2,
+                timeout=1,
+            )
+        self.assertIsNone(data)
+        self.assertIn("persistent", error)
 
     def test_capture_is_delivery_evidence_but_empty_result_is_not_nonpublication(self):
         capture = {
