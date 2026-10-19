@@ -21,7 +21,7 @@
         "quarter": "1974Q3",
         "vintage_profit_share_pct": 7.482993,
         "current_revised_profit_share_pct": 10.35503,
-        "vintage_minus_current_pp": -2.872037
+        "vintage_minus_current_pp": -2.872036
       },
       {
         "quarter": "1974Q4",
@@ -61,7 +61,7 @@
     "rows": [
       {
         "quarter": "1986Q4",
-        "vintage_profit_share_pct": 9.33193,
+        "vintage_profit_share_pct": 9.332113,
         "current_revised_profit_share_pct": 8.896211,
         "vintage_minus_current_pp": 0.435903
       },
