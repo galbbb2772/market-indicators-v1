@@ -240,3 +240,20 @@ and only the second quantity drives promotion-review eligibility.
 This protocol hardening was made on 2026-10-19, before the first countable
 prospective effective month (2026-12), so it does not relabel or discard any
 prospective evidence.
+
+
+## Monotonic episode-ledger time
+
+Protocol v2 also fails closed on time reversal.
+
+For an open prospective episode:
+
+```
+incoming effective_month < last_armed_effective_month
+=> ERROR
+```
+
+An older manual rerun, stale workflow checkout, or out-of-order job may not move
+the evidence ledger backward or rewrite episode continuity.
+
+This is bookkeeping protection only; it does not change any NG3 model rule.
