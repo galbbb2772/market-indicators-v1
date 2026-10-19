@@ -1,0 +1,57 @@
+{
+  "schema_version": "market-top-route-a-ng3-preregistration-1",
+  "status": "PREREGISTERED_PROSPECTIVE_ONLY",
+  "research_only": true,
+  "production_effect": "none",
+  "legacy_recovery": false,
+  "preregistration_date": "2026-10-19",
+  "consumed_historical_evidence": "1953-2026 U.S. history used in prior screening/holdout/hypothesis generation",
+  "formula": {
+    "route_a_ng1": "fourth_root(spread_shock_score*finance_weakness_score*size_weakness_score*portfolio_exhaustion_score)",
+    "financial_lead_gap_raw": "finance_weakness_score-spread_shock_score",
+    "route_a_ng3_score": "route_a_ng1"
+  },
+  "phase_gate": {
+    "minimum_effective_history_months": 120,
+    "minimum_financial_lead_gap_raw": 10,
+    "interpretation": "FinanceWeakness must exceed SpreadShock by at least 10 percentile points"
+  },
+  "state_gate": {
+    "route_threshold": 85,
+    "within_24m_high_pct": 5,
+    "high_age_months_max": 3,
+    "direct_trigger": false
+  },
+  "point_in_time": {
+    "fama_french_effective_lag_months": 2,
+    "credit_spread_effective_lag_months": 1,
+    "percentiles": "expanding_current_inclusive",
+    "interpolation": false,
+    "event_specific_lags": false
+  },
+  "prospective": {
+    "first_countable_effective_month": "202612",
+    "ff_source_month_for_first_countable": "202610",
+    "credit_source_month_for_first_countable": "202611",
+    "earlier_results_label": "RETROSPECTIVE_TRAINING_DIAGNOSTIC",
+    "validation_status": "PROSPECTIVE_VALIDATION_PENDING",
+    "minimum_complete_252_session_episodes_before_promotion_review": 4
+  },
+  "sources": {
+    "fama_french_primary": "Kenneth R. French official current ZIPs",
+    "credit_primary": "FRED BAA and GS10 monthly CSV",
+    "credit_fallback": "dlockar1mtg/MacroIntelligencePlatform data/snapshot with manifest freshness checks",
+    "price": "Yahoo Finance SPY unadjusted Close"
+  },
+  "outcome_protocol": {
+    "horizons_sessions": [
+      63,
+      126,
+      252
+    ],
+    "major_top": "worst_return_from_anchor_252 <= -15%",
+    "clear_false": "worst_return_from_anchor_252 > -7.5% AND forward_return_252 > 0%",
+    "other": "CORRECTION_OR_AMBIGUOUS"
+  },
+  "post_preregistration_tuning_allowed": false
+}
