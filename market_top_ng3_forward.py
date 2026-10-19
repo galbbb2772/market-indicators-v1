@@ -662,6 +662,19 @@ def freeze_monthly_signal_snapshot(
     if existing is not None:
         return existing, book, False
 
+    prior_snapshots = list(book.get("snapshots") or [])
+    later_existing = [
+        str(x.get("effective_month"))
+        for x in prior_snapshots
+        if str(x.get("effective_month") or "") > month
+    ]
+    if later_existing:
+        raise ValueError(
+            "late prospective backfill is not allowed: "
+            f"{month} is older than already frozen month "
+            f"{min(later_existing)}"
+        )
+
     frozen = json.loads(json.dumps(snapshot))
     frozen["evidence_lock"] = {
         "mode": "FIRST_SUCCESSFUL_POST_MONTH_CLOSE_SNAPSHOT",
@@ -791,6 +804,9 @@ def evaluate_horizon(
             "forward_return_pct": None,
             "worst_return_from_anchor_pct": None,
             "max_peak_to_trough_dd_pct": None,
+            "price_source": price.attrs.get("source"),
+            "price_payload_sha256": price.attrs.get("payload_sha256"),
+            "price_latest_date": price.attrs.get("latest_date"),
         }
 
     path = after.iloc[:sessions]
@@ -817,6 +833,9 @@ def evaluate_horizon(
         "forward_return_pct": float(forward),
         "worst_return_from_anchor_pct": float(worst),
         "max_peak_to_trough_dd_pct": float(dd.min()),
+        "price_source": price.attrs.get("source"),
+        "price_payload_sha256": price.attrs.get("payload_sha256"),
+        "price_latest_date": price.attrs.get("latest_date"),
     }
 
 
