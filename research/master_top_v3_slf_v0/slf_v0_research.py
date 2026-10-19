@@ -359,26 +359,32 @@ def threshold_grid(ep: pd.DataFrame):
     return pd.DataFrame(rows)
 
 def probe_nyfed_pd_schema():
-    """Temporary research probe for official NY Fed Primary Dealer API paths.
+    """Temporary research probe for official NY Fed Primary Dealer API paths/catalog.
     This does not alter SLF inputs, formula, thresholds, or scores.
     """
     try:
-        url = "https://markets.newyorkfed.org/static/docs/markets-api.yml"
-        r = requests.get(url, headers={"User-Agent":"Mozilla/5.0 MarketRegimeLab/SLF-V0"}, timeout=30)
-        print(f"NYFED_PD_SCHEMA status={r.status_code} bytes={len(r.content)}")
-        r.raise_for_status()
-        lines = r.text.splitlines()
-        printed = 0
-        for i, line in enumerate(lines):
-            if "/pd/" in line:
-                lo=max(0,i-5); hi=min(len(lines),i+28)
-                print("NYFED_PD_SCHEMA_BLOCK")
-                print("\n".join(lines[lo:hi]))
-                printed += 1
-                if printed >= 30:
-                    break
+        base = "https://markets.newyorkfed.org/api/pd"
+        h = {"User-Agent":"Mozilla/5.0 MarketRegimeLab/SLF-V0","Accept":"application/json"}
+        br = requests.get(base + "/list/seriesbreaks.json", headers=h, timeout=30)
+        br.raise_for_status()
+        print("NYFED_SERIESBREAKS", json.dumps((br.json().get("pd") or {}).get("seriesbreaks") or [], indent=2))
+
+        tr = requests.get(base + "/list/timeseries.json", headers=h, timeout=30)
+        tr.raise_for_status()
+        rows = (tr.json().get("pd") or {}).get("timeseries") or []
+        candidates = []
+        for row in rows:
+            textv = " ".join(str(row.get(k) or "") for k in ("keyid","description","seriesbreak")).lower()
+            if "fail" in textv and ("treasury" in textv or "u.s. government" in textv or "government securities" in textv):
+                candidates.append(row)
+        print("NYFED_TREASURY_FAIL_CANDIDATES", json.dumps(candidates, indent=2))
+        raise SystemExit("PD catalog probe complete")
+    except SystemExit:
+        raise
     except Exception as exc:
         print(f"NYFED_PD_SCHEMA_PROBE_ERROR: {exc!r}")
+        raise
+
 
 def main():
     probe_nyfed_pd_schema()
