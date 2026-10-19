@@ -5,7 +5,7 @@ import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 
-from research.build_market_top_ng3_first_release_panel_1986_1988 import (
+from build_market_top_ng3_first_release_panel_1986_1988 import (
     PANEL_MONTHS,
     fetch_text,
     parse_first_values,
