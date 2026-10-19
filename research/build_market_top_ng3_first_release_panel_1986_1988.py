@@ -36,19 +36,22 @@ def fetch_text(year: int, month: int) -> dict:
         )
         r.raise_for_status()
         reader = PdfReader(io.BytesIO(r.content))
-        pages = []
+        flow_pages = []
+        layout_pages = []
         for i, page in enumerate(reader.pages):
             if i >= 7:
                 break
+            flow_pages.append(page.extract_text() or "")
             try:
-                pages.append(page.extract_text(extraction_mode="layout") or "")
+                layout_pages.append(page.extract_text(extraction_mode="layout") or "")
             except TypeError:
-                pages.append(page.extract_text() or "")
+                layout_pages.append(page.extract_text() or "")
         return {
             "source_month": f"{year:04d}-{month:02d}",
             "url": url,
             "status": "SOURCE_TEXT_RECOVERED",
-            "text": "\n".join(pages),
+            "text_flow": "\n".join(flow_pages),
+            "text_layout": "\n".join(layout_pages),
         }
     except Exception as exc:
         return {
@@ -56,7 +59,8 @@ def fetch_text(year: int, month: int) -> dict:
             "url": url,
             "status": "SOURCE_UNAVAILABLE",
             "error": repr(exc),
-            "text": "",
+            "text_flow": "",
+            "text_layout": "",
         }
 
 
@@ -190,7 +194,7 @@ def main() -> None:
         if d["status"] != "SOURCE_TEXT_RECOVERED":
             continue
         sy, sm = map(int, source_month.split("-"))
-        for item in parse_schedule(d["text"], sy, sm):
+        for item in parse_schedule(d["text_layout"], sy, sm):
             schedule[item["observation_month"]] = item
 
     rows = []
@@ -198,7 +202,7 @@ def main() -> None:
         key = f"{year:04d}-{month:02d}"
         d = docs.get(key, {})
         parsed = (
-            parse_first_values(d.get("text", ""), year, month)
+            parse_first_values(d.get("text_flow", ""), year, month)
             if d.get("status") == "SOURCE_TEXT_RECOVERED"
             else {"status": "SOURCE_UNAVAILABLE"}
         )
