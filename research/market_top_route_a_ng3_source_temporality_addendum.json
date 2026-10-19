@@ -40,5 +40,13 @@
       "price_latest_date"
     ],
     "completed_horizon_provenance_immutable": true
+  },
+  "strict_temporal_purity_diagnostic": {
+    "model_or_promotion_rule_changed": false,
+    "complete_episode_metric": "complete_252_clean_fully_post_source_episodes",
+    "readiness_metric": "strict_temporal_evidence_ready",
+    "diagnostic_only": true,
+    "requirement": "252 complete AND no continuity gap AND all source months fully post-preregistration",
+    "threshold_for_readiness": 4
   }
 }
