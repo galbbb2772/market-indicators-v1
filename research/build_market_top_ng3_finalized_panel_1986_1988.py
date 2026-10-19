@@ -6,14 +6,24 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 
-from build_market_top_ng3_first_release_panel_1986_1988 import (
-    PANEL_MONTHS,
-    fetch_text,
-    parse_first_values,
-    parse_table_a_current,
-    pdf_url,
-    resolve_first_publication,
-)
+try:
+    from research.build_market_top_ng3_first_release_panel_1986_1988 import (
+        PANEL_MONTHS,
+        fetch_text,
+        parse_first_values,
+        parse_table_a_current,
+        pdf_url,
+        resolve_first_publication,
+    )
+except ModuleNotFoundError:
+    from build_market_top_ng3_first_release_panel_1986_1988 import (
+        PANEL_MONTHS,
+        fetch_text,
+        parse_first_values,
+        parse_table_a_current,
+        pdf_url,
+        resolve_first_publication,
+    )
 
 FINAL_VINTAGE_OFFSETS = (4, 5, 6, 7)
 
