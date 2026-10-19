@@ -1,0 +1,4 @@
+period,years,anchor_forecasts,entry_loss_positives,delta_brier,delta_brier_low,delta_brier_high,delta_logloss,delta_logloss_low,delta_logloss_high
+2013-2018,6,24,0,-0.0174124,-0.0370273,-0.0044286,-0.0481304,-0.0917974,-0.0152876
+2019-2025,7,27,6,0.0041379,-0.0130165,0.0282436,0.0019461,-0.044389,0.0577302
+all,13,51,6,-0.0060034,-0.0205079,0.0100988,-0.0216193,-0.056294,0.0147387
