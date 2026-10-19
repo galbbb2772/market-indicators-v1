@@ -47,6 +47,16 @@ class NG3EvidenceProtocolTests(unittest.TestCase):
         self.assertIn("complete=true",rule)
         self.assertIn("frozen",rule)
 
+    def test_incomplete_outcome_path_must_cover_anchor_neighborhood(self):
+        rule=self.x["outcome_tracking"]["incomplete_horizon_path_coverage"]
+        self.assertIn("10 calendar days",rule)
+        self.assertIn("Fail closed",rule)
+        self.assertTrue(
+            self.x["immutability"][
+                "incomplete_outcome_path_must_cover_anchor_neighborhood"
+            ]
+        )
+
     def test_no_automatic_promotion(self):
         p=self.x["promotion_review"]
         self.assertEqual(p["minimum_complete_252_session_episodes"],4)
