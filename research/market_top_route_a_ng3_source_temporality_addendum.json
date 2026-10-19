@@ -26,10 +26,19 @@
     "fields": [
       "missing_effective_months",
       "evidence_gaps_present"
-    ]
+    ],
+    "late_backfill_after_later_month_frozen": "FAIL_CLOSED"
   },
   "episode_provenance_fields": [
     "source_temporality_at_start",
     "source_provenance_at_start"
-  ]
+  ],
+  "outcome_provenance": {
+    "fields": [
+      "price_source",
+      "price_payload_sha256",
+      "price_latest_date"
+    ],
+    "completed_horizon_provenance_immutable": true
+  }
 }
