@@ -57,7 +57,40 @@ jobs:
           python -m unittest tests.test_market_top_ng3_episode_ledger -v
       - name: Live source dry-run on PR
         if: github.event_name == 'pull_request'
-        run: python market_top_ng3_forward.py --dry-run
+        run: |
+          python - <<'PY'
+          import json
+          from market_top_ng3_forward import build_snapshot, fetch_spy
+
+          def is_sha256(x):
+              return isinstance(x, str) and len(x) == 64 and all(
+                  c in "0123456789abcdef" for c in x.lower()
+              )
+
+          price = fetch_spy()
+          x = build_snapshot(price=price)
+
+          ff = x["sources"]["fama_french"]
+          for key in ("ff25_provenance", "ff12_provenance", "ff3_provenance"):
+              assert is_sha256(ff[key]["zip_sha256"])
+
+          credit = x["sources"]["credit"]
+          if credit["source"] == "FRED direct monthly CSV":
+              assert is_sha256(credit["baa_payload_sha256"])
+              assert is_sha256(credit["gs10_payload_sha256"])
+          else:
+              for key in (
+                  "manifest_sha256",
+                  "baa_extension_sha256",
+                  "gs10_extension_sha256",
+                  "baa_pinned_base_sha256",
+                  "gs10_pinned_base_sha256",
+              ):
+                  assert is_sha256(credit[key])
+
+          assert is_sha256(x["sources"]["price"]["payload_sha256"])
+          print(json.dumps(x, ensure_ascii=False, indent=2))
+          PY
       - name: Refresh NG3 prospective monitor
         if: github.event_name != 'pull_request'
         run: python market_top_ng3_forward.py
@@ -76,6 +109,25 @@ jobs:
           assert ep["production_effect"] == "none"
           assert ep["summary"]["automatic_promotion"] is False
           assert ep["summary"]["action_signal"] is None
+          def is_sha256(v):
+              return isinstance(v,str) and len(v)==64 and all(
+                  c in "0123456789abcdef" for c in v.lower()
+              )
+          ff=x["sources"]["fama_french"]
+          for k in ("ff25_provenance","ff12_provenance","ff3_provenance"):
+              assert is_sha256(ff[k]["zip_sha256"])
+          credit=x["sources"]["credit"]
+          if credit["source"] == "FRED direct monthly CSV":
+              assert is_sha256(credit["baa_payload_sha256"])
+              assert is_sha256(credit["gs10_payload_sha256"])
+          else:
+              for k in (
+                  "manifest_sha256","baa_extension_sha256",
+                  "gs10_extension_sha256","baa_pinned_base_sha256",
+                  "gs10_pinned_base_sha256",
+              ):
+                  assert is_sha256(credit[k])
+          assert is_sha256(x["sources"]["price"]["payload_sha256"])
           if x["effective_month"] < "202612":
               assert ep["episodes"] == []
               assert ep["summary"]["review_eligible"] is False
