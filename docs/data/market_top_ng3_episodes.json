@@ -12,6 +12,8 @@
     "minimum_for_promotion_review": 4,
     "review_eligible": false,
     "automatic_promotion": false,
-    "action_signal": null
+    "action_signal": null,
+    "fully_post_preregistration_source_episodes": 0,
+    "straddling_or_pre_preregistration_source_episodes": 0
   }
 }
