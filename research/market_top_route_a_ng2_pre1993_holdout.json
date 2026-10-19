@@ -1,0 +1,32 @@
+{
+  "schema_version": "market-top-route-a-ng2-pre1993-holdout-1",
+  "research_only": true,
+  "production_effect": "none",
+  "preregistration": "market-top-route-a-ng2-preregistration-1",
+  "sample": {
+    "first_effective_month": "195311",
+    "last_effective_month": "199212",
+    "months": 470,
+    "price_source": "Yahoo Finance ^GSPC unadjusted Close",
+    "ff_source": "official Kenneth R. French live ZIPs",
+    "credit_source": "Snow-Ouyang/Market-Regime-Clustering pinned immutable BAA/GS10 snapshots"
+  },
+  "formula": {
+    "route_a_ng2": "sqrt(route_a_ng1*financial_lead_gap_score)",
+    "threshold": 85
+  },
+  "episodes": [],
+  "decision_metrics": {
+    "evaluable_episodes": 0,
+    "major_top_count": 0,
+    "clear_false_count": 0,
+    "major_top_share": 0,
+    "clear_false_share": 0,
+    "minimum_evaluable_episodes": 2,
+    "minimum_major_top_share": 0.5,
+    "maximum_clear_false_share": 0.25
+  },
+  "decision": "REJECT_NG2_TOP_ROUTE",
+  "rejection_reason": "Frozen NG2 produced zero ARMED episodes in the untouched pre-1993 holdout, failing the preregistered minimum-evaluable-episodes requirement.",
+  "post_validation_tuning_allowed": false
+}
