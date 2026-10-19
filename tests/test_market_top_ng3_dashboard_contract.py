@@ -14,7 +14,13 @@ class NG3DashboardContractTests(unittest.TestCase):
 
     def test_dashboard_reads_research_snapshot(self):
         self.assertIn("./data/market_top_ng3_current.json",HTML)
+        self.assertIn("./data/market_top_ng3_episodes.json",HTML)
         self.assertIn("renderNG3",HTML)
+        self.assertIn("renderNG3Episodes",HTML)
+
+    def test_episode_ledger_never_implies_automatic_promotion(self):
+        self.assertIn("review eligible",HTML)
+        self.assertIn("automatic promotion",HTML)
 
     def test_nonprospective_snapshot_is_explicitly_diagnostic(self):
         self.assertIn("RETROSPECTIVE_TRAINING_DIAGNOSTIC",HTML)
