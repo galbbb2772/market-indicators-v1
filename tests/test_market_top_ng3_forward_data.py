@@ -144,6 +144,14 @@ class NG3ForwardDataContractTests(unittest.TestCase):
         )
         self.assertEqual(s["episodes_with_continuity_gaps"],0)
         self.assertEqual(
+            s["complete_252_clean_fully_post_source_episodes"],
+            0,
+        )
+        self.assertFalse(s["strict_temporal_evidence_ready"])
+        self.assertTrue(
+            s["strict_temporal_evidence_ready_is_diagnostic_only"]
+        )
+        self.assertEqual(
             s["fully_post_preregistration_source_episodes"],
             0,
         )
