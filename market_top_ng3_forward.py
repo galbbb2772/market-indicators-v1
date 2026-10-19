@@ -690,6 +690,8 @@ def evaluate_horizon(
 def update_episode_ledger(
     snapshot: dict[str, Any],
     price: pd.Series,
+    *,
+    observed_at: str | None = None,
 ) -> dict[str, Any]:
     ledger = load_episode_ledger()
     episodes = list(ledger.get("episodes") or [])
@@ -775,7 +777,7 @@ def update_episode_ledger(
     )
     ledger = {
         "schema_version": "market-top-route-a-ng3-episodes-1",
-        "generated_at": snapshot["generated_at"],
+        "generated_at": observed_at or snapshot["generated_at"],
         "research_only": True,
         "production_effect": "none",
         "protocol": "market-top-route-a-ng3-evidence-protocol-1",
@@ -801,8 +803,13 @@ def write_outputs(snapshot: dict[str, Any], price: pd.Series) -> None:
         json.dumps(monthly_book, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    current_view = json.loads(json.dumps(canonical))
+    current_view["monitor_checked_at"] = snapshot["generated_at"]
+    current_view["signal_snapshot_frozen"] = bool(
+        canonical.get("evidence_lock")
+    )
     OUT_CURRENT.write_text(
-        json.dumps(canonical, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(current_view, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     hist = load_history()
@@ -839,7 +846,11 @@ def write_outputs(snapshot: dict[str, Any], price: pd.Series) -> None:
     )
 
 
-    ledger = update_episode_ledger(canonical, price)
+    ledger = update_episode_ledger(
+        canonical,
+        price,
+        observed_at=snapshot["generated_at"],
+    )
     OUT_EPISODES.write_text(
         json.dumps(ledger, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
