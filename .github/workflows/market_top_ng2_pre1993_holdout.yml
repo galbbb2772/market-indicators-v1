@@ -9,6 +9,7 @@ on:
       - "research/market_top_route_a_ng2_preregistration.json"
       - "tests/test_market_top_route_a_ng2_preregistration.py"
       - "tests/test_validate_market_top_ng2_pre1993.py"
+      - "diagnose_market_top_ng2_failure.py"
       - ".github/workflows/market_top_ng2_pre1993_holdout.yml"
   workflow_dispatch:
 
@@ -46,5 +47,26 @@ jobs:
               "episodes=", x["decision_metrics"]["evaluable_episodes"],
               "major_share=", x["decision_metrics"]["major_top_share"],
               "clear_false_share=", x["decision_metrics"]["clear_false_share"],
+          )
+          PY
+
+      - name: Diagnose frozen NG2 rejection
+        run: |
+          python diagnose_market_top_ng2_failure.py --output /tmp/ng2_diag.json
+          python - <<'PY'
+          import json
+          x=json.load(open("/tmp/ng2_diag.json"))
+          assert x["ng2_decision_locked"] == "REJECT_NG2_TOP_ROUTE"
+          assert x["formula_changed"] is False
+          print(
+              "NG2_DIAGNOSTIC",
+              "route85=", x["counts"]["route_ng2_ge_85_without_price_gate"],
+              "top_gate=", x["counts"]["top_location_gate_pass_months"],
+              "ng2_armed=", x["counts"]["ng2_armed_months"],
+              "ng1_armed=", x["counts"]["ng1_armed_months_under_same_price_gate"],
+              "max_ng2=", x["maxima"]["max_route_ng2"]["route_a_ng2"],
+              "max_ng2_gate=", (
+                  x["maxima"]["max_route_ng2_when_top_gate_passes"] or {}
+              ).get("route_a_ng2"),
           )
           PY
