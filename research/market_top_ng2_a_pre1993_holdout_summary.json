@@ -1,0 +1,71 @@
+{
+  "schema_version": "market-top-ng2-a-pre1993-holdout-summary-1",
+  "status": "NG2_A_CLOSED_INSUFFICIENT_HOLDOUT_EVENTS",
+  "decision": "INSUFFICIENT_HOLDOUT_EVENTS",
+  "research_only": true,
+  "production_effect": "none",
+  "workflow": {
+    "run_id": 39202778112,
+    "conclusion": "success",
+    "artifact_id": 12164084180,
+    "artifact_name": "market-top-ng2-a-pre1993-result",
+    "artifact_sha256": "e0cd5a5425736aa74cb631fafd3ce5bb0d97c0b01eaf0de54773435915d9a159"
+  },
+  "holdout": {
+    "requested_start": "1963-01",
+    "requested_end": "1992-12",
+    "effective_start": "1963-10",
+    "effective_end": "1992-12",
+    "monthly_states": 351,
+    "warmup_months": 120
+  },
+  "summary": {
+    "armed_episodes": 0,
+    "complete_episodes": 0,
+    "major_top_hits": 0,
+    "correction_risk_not_major_top": 0,
+    "clear_top_false_positives": 0
+  },
+  "pressure_threshold_crosses": [
+    {
+      "month": "1990-11",
+      "route_a_ng2": 86.5933,
+      "top_location_gate": false
+    },
+    {
+      "month": "1990-12",
+      "route_a_ng2": 88.4544,
+      "top_location_gate": false
+    },
+    {
+      "month": "1991-01",
+      "route_a_ng2": 86.2335,
+      "top_location_gate": false
+    }
+  ],
+  "highest_top_gate_pass": {
+    "month": "1991-02",
+    "route_a_ng2": 82.9479,
+    "threshold": 85
+  },
+  "proxy_overlap": {
+    "start": "1995-02",
+    "end": "1999-12",
+    "months": 59,
+    "agreements": 58,
+    "agreement_rate": 0.9830508474576272,
+    "disagreements": [
+      {
+        "month": "1999-05",
+        "sp500_gate": true,
+        "spy_gate": false
+      }
+    ]
+  },
+  "governance": {
+    "promoted": false,
+    "legacy_route_a_status": "UNRESOLVED",
+    "post_holdout_retuning_allowed": false,
+    "next_structural_version": "NG3_OR_LATER"
+  }
+}
