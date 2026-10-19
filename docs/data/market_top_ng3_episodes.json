@@ -16,6 +16,9 @@
     "fully_post_preregistration_source_episodes": 0,
     "straddling_or_pre_preregistration_source_episodes": 0,
     "complete_252_session_episodes_without_continuity_gaps": 0,
-    "episodes_with_continuity_gaps": 0
+    "episodes_with_continuity_gaps": 0,
+    "complete_252_clean_fully_post_source_episodes": 0,
+    "strict_temporal_evidence_ready": false,
+    "strict_temporal_evidence_ready_is_diagnostic_only": true
   }
 }
