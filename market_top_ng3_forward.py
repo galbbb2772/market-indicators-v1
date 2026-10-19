@@ -558,10 +558,10 @@ def freeze_monthly_signal_snapshot(
     snapshot: dict[str, Any],
 ) -> tuple[dict[str, Any], dict[str, Any], bool]:
     book = load_monthly_snapshot_book()
-    if not canonical["counts_toward_prospective_validation"]:
+    if not snapshot["counts_toward_prospective_validation"]:
         return snapshot, book, False
 
-    month = str(canonical["effective_month"])
+    month = str(snapshot["effective_month"])
     existing = next(
         (
             x
@@ -576,7 +576,7 @@ def freeze_monthly_signal_snapshot(
     frozen = json.loads(json.dumps(snapshot))
     frozen["evidence_lock"] = {
         "mode": "FIRST_SUCCESSFUL_POST_MONTH_CLOSE_SNAPSHOT",
-        "frozen_at": canonical["generated_at"],
+        "frozen_at": snapshot["generated_at"],
         "effective_month": month,
         "immutable_signal_fields": True,
     }
@@ -694,9 +694,9 @@ def update_episode_ledger(
     ledger = load_episode_ledger()
     episodes = list(ledger.get("episodes") or [])
 
-    current_month = str(canonical["effective_month"])
-    is_prospective = bool(canonical["counts_toward_prospective_validation"])
-    state = str(canonical["state"])
+    current_month = str(snapshot["effective_month"])
+    is_prospective = bool(snapshot["counts_toward_prospective_validation"])
+    state = str(snapshot["state"])
 
     open_episode = next(
         (x for x in reversed(episodes) if x.get("signal_status") == "OPEN"),
@@ -735,9 +735,9 @@ def update_episode_ledger(
                     "source_provenance_at_start": dict(
                         snapshot.get("sources") or {}
                     ),
-                    "start_score": float(canonical["route_a_ng3_score"]),
+                    "start_score": float(snapshot["route_a_ng3_score"]),
                     "start_financial_lead_gap_raw": float(
-                        canonical["components"]["financial_lead_gap_raw"]
+                        snapshot["components"]["financial_lead_gap_raw"]
                     ),
                     "outcomes": {},
                     "classification_252": None,
@@ -775,7 +775,7 @@ def update_episode_ledger(
     )
     ledger = {
         "schema_version": "market-top-route-a-ng3-episodes-1",
-        "generated_at": canonical["generated_at"],
+        "generated_at": snapshot["generated_at"],
         "research_only": True,
         "production_effect": "none",
         "protocol": "market-top-route-a-ng3-evidence-protocol-1",
