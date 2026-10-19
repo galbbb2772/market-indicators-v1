@@ -24,7 +24,7 @@ ERC_HISTORY_URL = "https://economicriskclock.org/api/v1/data/metric_history"
 ERC_FUNDING_ID = "us_ofr_funding_contribution"
 ERC_SAFE_ID = "us_ofr_safe_assets_contribution"
 NYPD_URL = "https://data.financialresearch.gov/v1/series/timeseries"
-STOOQ_URL = "https://stooq.com/q/d/l/?s=%5Espx&i=d"
+YAHOO_SPY_URL = "https://query1.finance.yahoo.com/v8/finance/chart/SPY"
 
 THRESHOLDS = [70.0, 80.0, 90.0]
 VARIANTS = ["slf_raw", "slf90", "slf95"]
@@ -182,21 +182,44 @@ def load_fails():
     return x[["source_date","date","fails_deliver","fails_receive","fails_total","settlement_raw"]], raw_d, raw_r
 
 def load_spx():
-    raw = get_bytes(STOOQ_URL)
-    df = pd.read_csv(io.BytesIO(raw))
-    date_col = pick_col(df.columns, "date")
-    close_col = pick_col(df.columns, "close")
-    x = df[[date_col, close_col]].copy()
-    x.columns = ["source_date", "price"]
-    x["source_date"] = pd.to_datetime(x["source_date"], errors="coerce")
-    x["price"] = pd.to_numeric(x["price"], errors="coerce")
-    x = x.dropna(subset=["source_date","price"]).sort_values("source_date")
-    x["hh_60m"] = x["price"].rolling(1260, min_periods=1260).max()
-    x["top_ratio"] = x["price"] / x["hh_60m"]
-    x["top_prox90"] = ((x["top_ratio"] - 0.90) / 0.10).clip(0, 1)
-    x["top_prox95"] = ((x["top_ratio"] - 0.95) / 0.05).clip(0, 1)
-    x["date"] = x["source_date"] + pd.offsets.BDay(1)
-    return x, raw
+    params = {
+        "period1": 946684800,  # 2000-01-01 UTC
+        "period2": int(pd.Timestamp.now(tz="UTC").timestamp()),
+        "interval": "1d",
+        "events": "history",
+        "includeAdjustedClose": "true",
+    }
+    raw = None
+    last_error = None
+    for url in (YAHOO_SPY_URL, YAHOO_SPY_URL.replace("query1.", "query2.")):
+        try:
+            r = requests.get(url, params=params, headers={"User-Agent":"Mozilla/5.0 MarketRegimeLab/SLF-V0"}, timeout=60)
+            r.raise_for_status()
+            raw = r.content
+            obj = r.json()
+            res = (obj.get("chart") or {}).get("result")
+            if not res:
+                raise RuntimeError(str((obj.get("chart") or {}).get("error")))
+            item = res[0]
+            ts = item.get("timestamp") or []
+            quote = ((item.get("indicators") or {}).get("quote") or [{}])[0]
+            adj = ((item.get("indicators") or {}).get("adjclose") or [{}])[0].get("adjclose")
+            close = adj if adj and len(adj) == len(ts) else quote.get("close")
+            if not ts or not close:
+                raise RuntimeError("Yahoo SPY history empty")
+            x = pd.DataFrame({
+                "source_date": pd.to_datetime(ts, unit="s", utc=True).tz_convert(None).normalize(),
+                "price": pd.to_numeric(close, errors="coerce"),
+            }).dropna().sort_values("source_date")
+            x["hh_60m"] = x["price"].rolling(1260, min_periods=1260).max()
+            x["top_ratio"] = x["price"] / x["hh_60m"]
+            x["top_prox90"] = ((x["top_ratio"] - 0.90) / 0.10).clip(0, 1)
+            x["top_prox95"] = ((x["top_ratio"] - 0.95) / 0.05).clip(0, 1)
+            x["date"] = x["source_date"] + pd.offsets.BDay(1)
+            return x, raw
+        except Exception as exc:
+            last_error = exc
+    raise RuntimeError(f"Yahoo SPY history failed: {last_error}")
 
 def strict_expanding_pct(s: pd.Series, min_obs: int) -> pd.Series:
     vals = s.to_numpy(dtype=float)
@@ -330,7 +353,7 @@ def main():
             "ofr_fsi":{"url":fsi_meta.get("source_url",FSI_URL),"sha256":sha256_bytes(raw_fsi),"meta":fsi_meta},
             "nypd_fails_deliver":{"mnemonic":"NYPD-PD_AFtD_TOT-A","sha256":sha256_bytes(raw_d)},
             "nypd_fails_receive":{"mnemonic":"NYPD-PD_AFtR_TOT-A","sha256":sha256_bytes(raw_r)},
-            "stooq_spx":{"url":STOOQ_URL,"sha256":sha256_bytes(raw_spx),"role":"research-only top-location proxy"},
+            "yahoo_spy":{"url":YAHOO_SPY_URL,"sha256":sha256_bytes(raw_spx),"role":"research-only broad-market top-location proxy"},
         },
         "coverage":{
             "fsi_source_start":str(fsi.source_date.min().date()),
@@ -359,7 +382,7 @@ def main():
         f"- OFR FSI SHA256: {manifest['sources']['ofr_fsi']['sha256']}",
         f"- NYPD FTD SHA256: {manifest['sources']['nypd_fails_deliver']['sha256']}",
         f"- NYPD FTR SHA256: {manifest['sources']['nypd_fails_receive']['sha256']}",
-        f"- Stooq ^SPX SHA256: {manifest['sources']['stooq_spx']['sha256']}",
+        f"- Yahoo SPY SHA256: {manifest['sources']['yahoo_spy']['sha256']}",
         "",
         "## Governance",
         "- Threshold grid 70/80/90 is diagnostic only; no threshold is promoted from this retrospective scan.",
