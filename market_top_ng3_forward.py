@@ -862,6 +862,11 @@ def update_episode_ledger(
             needs_new = open_episode is None
             if open_episode is not None:
                 last = str(open_episode["last_armed_effective_month"])
+                if current_month < last:
+                    raise ValueError(
+                        "out-of-order prospective episode update: "
+                        f"{current_month} < {last}"
+                    )
                 if current_month == last:
                     needs_new = False
                 elif current_month == add_months(last, 1):
