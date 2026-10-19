@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from research.build_market_top_ng3_first_release_panel_1986_1988 import parse_first_values
+from research.build_market_top_ng3_first_release_panel_1986_1988 import (\n    parse_first_values,\n    resolve_first_publication,\n)
 
 
 class MarketTopNG3FirstReleasePanelParserTests(unittest.TestCase):
@@ -83,3 +83,34 @@ class MarketTopNG3FirstReleasePanelParserTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+    def test_complete_table_row_is_primary_on_cross_path_conflict(self):
+        x = resolve_first_publication(
+            {
+                "finished_goods_mom_sa_pct": 0.5,
+                "intermediate_goods_mom_sa_pct": 1.3,
+            },
+            {
+                "finished_goods_mom_sa_pct": -0.2,
+                "intermediate_goods_mom_sa_pct": 0.8,
+            },
+        )
+        self.assertEqual(x["status"], "TABLE_A_PRIMARY_NARRATIVE_CONFLICT")
+        self.assertEqual(x["finished_goods_mom_sa_pct"], -0.2)
+        self.assertEqual(x["intermediate_goods_mom_sa_pct"], 0.8)
+        self.assertEqual(x["primary_source_path"], "TABLE_A_CURRENT_MONTH_ROW")
+        self.assertTrue(x["fg_conflict"])
+        self.assertTrue(x["im_conflict"])
+
+    def test_narrative_is_fallback_when_table_row_incomplete(self):
+        x = resolve_first_publication(
+            {
+                "finished_goods_mom_sa_pct": 0.3,
+                "intermediate_goods_mom_sa_pct": 0.5,
+            },
+            {"status": "ROW_NUMERIC_COLUMNS_INCOMPLETE"},
+        )
+        self.assertEqual(x["status"], "NARRATIVE_RECOVERED")
+        self.assertEqual(x["finished_goods_mom_sa_pct"], 0.3)
+        self.assertEqual(x["intermediate_goods_mom_sa_pct"], 0.5)
+
+
