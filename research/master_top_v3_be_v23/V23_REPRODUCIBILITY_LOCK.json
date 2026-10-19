@@ -1,0 +1,55 @@
+{
+  "run_date": "2026-10-19",
+  "stage": "RETROSPECTIVE_V23_ROBUSTNESS",
+  "promotable_to_production": false,
+  "has_true_oos": false,
+  "has_finra_actual_publication_vintages": false,
+  "repository": "galbbb2772/market-indicators-v1",
+  "branch": "research/market-top-v3-be-v23-robustness",
+  "input_files": {
+    "monthly_forward": {
+      "path": "research/master_top_v3_be_v2/v22_monthly_forward_outcomes.csv",
+      "git_blob_sha": "1f4d7d9840b28b6fcb62413d8b7af0e83b2d1cd8"
+    },
+    "hysteresis_states": {
+      "path": "research/master_top_v3_be_v2/state_v21_reheat_lifecycle.csv",
+      "git_blob_sha": "77f091077e83662b066d54368bbfdd9946365948"
+    }
+  },
+  "run_code": {
+    "path": "research/master_top_v3_be_v23/analyze_v23.py",
+    "code_uses": "Python standard library only"
+  },
+  "yearly_offsets": [
+    "01",
+    "04",
+    "07",
+    "10"
+  ],
+  "resampling": {
+    "iterations_per_anchor": 2500,
+    "generator": "LCG seed 20261019 (32bit), paired yearly resampling",
+    "note": "Not independent significance test due small n and shared regimes"
+  },
+  "outcome_window": {
+    "days": 365,
+    "horizon": "forward only",
+    "price_series": "SPY raw daily close, retrospective mirror",
+    "primary": "peak-to-trough MDD >=20%",
+    "alternate": "signal date to next minimum <=-20%"
+  },
+  "studied_periods": [
+    "pre2019",
+    "2019plus",
+    "all"
+  ],
+  "robustness_notes": [
+    "2019plus is not untouched OOS due historic model tuning",
+    "Four annual offsets are correlated, do not pool",
+    "Bootstrap intervals measure resampling instability, not calibrated future uncertainty",
+    "FINRA release lag is hypothetical not release-vintage validated",
+    "Past close data sourced from third-party mirrors",
+    "Bootstrap samples with only one target class omitted"
+  ],
+  "data_snapshot_as_of": "2026-10-19"
+}
