@@ -42,13 +42,13 @@ def normalize(text: str) -> str:
 
 def fetch_optional(url: str) -> tuple[str | None, str | None]:
     last = None
-    for delay in (0, 2):
+    for delay in (0, 1):
         if delay:
             time.sleep(delay)
         try:
             r = requests.get(
                 url,
-                timeout=(10, 25),
+                timeout=(5, 8),
                 headers={"User-Agent": "market-top-ng3-vintage-audit/1.1"},
             )
             r.raise_for_status()
