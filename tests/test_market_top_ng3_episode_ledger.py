@@ -17,6 +17,9 @@ def price_series():
     vals=pd.Series(100.0,index=idx,dtype=float)
     vals.iloc[80]=80.0
     vals.iloc[-1]=110.0
+    vals.attrs["source"]="Yahoo Finance SPY unadjusted Close"
+    vals.attrs["payload_sha256"]="c"*64
+    vals.attrs["latest_date"]=idx[-1].date().isoformat()
     return vals
 
 
@@ -135,6 +138,25 @@ class NG3EpisodeLedgerTests(unittest.TestCase):
         self.assertTrue(m["complete"])
         self.assertLessEqual(m["worst_return_from_anchor_pct"],-15.0)
         self.assertEqual(classify_252(m),"MAJOR_TOP")
+
+    def test_completed_horizon_carries_price_payload_provenance(self):
+        p=price_series()
+        m=evaluate_horizon(
+            p,
+            anchor_date="2026-12-31",
+            anchor_close=100.0,
+            sessions=252,
+        )
+        self.assertTrue(m["complete"])
+        self.assertEqual(
+            m["price_source"],
+            "Yahoo Finance SPY unadjusted Close",
+        )
+        self.assertEqual(m["price_payload_sha256"],"c"*64)
+        self.assertEqual(
+            m["price_latest_date"],
+            p.index[-1].date().isoformat(),
+        )
 
     def test_outcome_ledger_uses_current_observation_time_not_frozen_signal_time(self):
         p=price_series()
