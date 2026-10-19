@@ -184,3 +184,6 @@ SLF V0 may be considered for FROZEN_V3 only if:
 
 Until then:
 SLF status = DESIGN_PRE_REGISTERED / RESEARCH ONLY.
+
+---
+Runner note: GitHub Actions research workflow enabled on the base branch; this change only triggers the frozen preregistered implementation and does not alter the formula.
