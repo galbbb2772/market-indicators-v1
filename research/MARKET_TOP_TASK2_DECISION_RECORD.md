@@ -717,3 +717,50 @@ DELIVERY_TIMESTAMP_GAP_REMAINS
 ```
 
 This distinction is now frozen. Future work must not downgrade the recovered official Dec-2021 factor vintage back to "unknown," and must not upgrade the missing Wayback capture into an unsupported exact-byte timestamp claim.
+
+
+## Ken French pre-cutoff publication-page audit
+
+To separate factor-vintage content from web-delivery timing, a dedicated Wayback audit examined official Ken French pages captured before:
+
+```
+2022-01-03 23:59:59 UTC
+```
+
+The parser recognizes only the terminal month structurally attached to the:
+
+```
+Monthly Returns
+```
+
+line; unrelated nearby date text cannot satisfy the test.
+
+Live result:
+
+```
+qualifying page captures inspected = 2
+query errors = 0
+publication-page proof of 202111 = FALSE
+```
+
+The strongest parseable pre-cutoff FF3 page ended at:
+
+```
+Monthly Returns ... October 2021
+```
+
+No captured official page before the cutoff independently displayed a monthly terminal month of November 2021 or later.
+
+Therefore the frozen provenance split is:
+
+```
+official Dec-2021 factor-vintage content = RECOVERED
+numerical SizeWeakness replay = REPRODUCIBLE
+Route_B = 85.3338068250 = PASS
+
+exact pre-cutoff ZIP capture = ABSENT
+pre-cutoff official-page proof through 2021-11 = ABSENT
+exact Jan-3 web-delivery timing = UNPROVEN
+```
+
+This does not reopen the numerical input chain. It prevents an unsupported upgrade from recovered historical content to independently timestamped Jan-3 web availability.
