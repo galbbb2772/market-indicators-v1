@@ -1,6 +1,6 @@
-# Market Top Route_A NG3 — Prospective Evidence Protocol
+# Market Top Route_A NG3 — Prospective Evidence Protocol v2
 
-Status: **FROZEN BEFORE PROSPECTIVE START**
+Status: **FROZEN BEFORE PROSPECTIVE START / SUPERSEDES PROTOCOL v1**
 
 This protocol defines how future NG3 evidence is recorded. It does not change the NG3 score or state gate.
 
@@ -173,3 +173,70 @@ Once the monthly snapshot is frozen, later upstream revisions must not alter its
 Later runs may continue updating only the forward outcome path of already-opened prospective episodes.
 
 This prevents a revised Fama-French or credit history from rewriting what the model actually knew when the prospective month was first scored.
+
+
+## Protocol v2 — evidence-gap episode continuity
+
+Protocol v1 defined episode continuity only for observed consecutive monthly states.
+Before the first prospective effective month, a review found a conservative-evidence bug:
+
+```
+ARMED -> missing month -> ARMED
+```
+
+could be split into two episodes even though the missing month did not prove that
+the first episode ended. That could inflate the number of prospective episodes
+and make the four-episode promotion-review threshold reachable too early.
+
+Protocol v2 changes **only evidence bookkeeping**. It does not change:
+
+- NG3 score;
+- Route >= 85 threshold;
+- FinancialLeadGapRaw >= 10 phase gate;
+- 120-month warmup;
+- PIT lags;
+- top-location gate;
+- prospective start month;
+- 63 / 126 / 252-session outcome definitions.
+
+Frozen v2 rule:
+
+```
+observed ARMED
+-> one or more missing effective months
+-> observed ARMED
+
+= one episode
+  + continuity_evidence_gap = true
+  + missing_effective_months = [...]
+```
+
+This deliberately undercounts rather than overcounts episodes when continuity
+cannot be proven.
+
+If an episode has:
+
+```
+continuity_evidence_gap = true
+```
+
+its completed 252-session outcome remains stored, but it does **not** count
+toward the minimum four clean episodes required for:
+
+```
+review_eligible = true
+```
+
+The ledger reports both:
+
+```
+complete_252_session_episodes
+complete_252_session_episodes_without_continuity_gaps
+episodes_with_continuity_gaps
+```
+
+and only the second quantity drives promotion-review eligibility.
+
+This protocol hardening was made on 2026-10-19, before the first countable
+prospective effective month (2026-12), so it does not relabel or discard any
+prospective evidence.
