@@ -225,11 +225,14 @@ def parse_first_values(text: str, year: int, month: int) -> dict:
         for match in re.finditer(pat, seg, flags=re.I):
             body = match.group("body")
             context = body[:350].lower()
+            # Only reject an annual-rate candidate when the candidate's own
+            # sentence is annual. A subsequent sentence may discuss YoY rates.
+            first_sentence = re.split(r"(?<=[.!?])\s+", context, maxsplit=1)[0]
             annual_context = bool(
                 re.search(
                     r"(?:12 months|over the year|year earlier|"
                     r"from\s+[a-z]+\s+\d{4}\s+to\s+[a-z]+\s+\d{4})",
-                    context[:260],
+                    first_sentence,
                     flags=re.I,
                 )
             )
