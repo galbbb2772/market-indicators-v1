@@ -1,0 +1,71 @@
+{
+  "study": "MASTER TOP V3 / Bubble Exhaustion V2.4",
+  "date": "2026-10-19",
+  "model_runtime_note": "Research is statistical software (Python/JS); GPT-5.6 was not called or used as an API model. Assistant model version does not change historical outputs.",
+  "data_quality": "REVISED_MIRRORS_NOT_PIT",
+  "validation": "RETROSPECTIVE_WALK_FORWARD_NOT_UNTOUCHED_OOS",
+  "promote_to_production": false,
+  "repo": "galbbb2772/market-indicators-v1",
+  "branch": "research/market-top-v3-be-v24-conditional-incremental",
+  "source": {
+    "outcomes": {
+      "path": "research/master_top_v3_be_v2/v22_monthly_forward_outcomes.csv",
+      "blob_sha": "1f4d7d9840b28b6fcb62413d8b7af0e83b2d1cd8"
+    },
+    "features": {
+      "path": "research/master_top_v3_be_v2/extended_2026_mirror_monthly_lag25.csv",
+      "blob_sha": "6f82aa42be2decc1b620f08a0025ae98733a9d9e"
+    }
+  },
+  "train_protocol": {
+    "anchors": [
+      "01",
+      "04",
+      "07",
+      "10"
+    ],
+    "forecast_years": "2013-2025",
+    "label_maturity_purge_days": 395,
+    "minimum_train_rows": 11,
+    "require_both_classes": true,
+    "logistic_ridge_lambda": 2,
+    "predictors": [
+      "cape_pct",
+      "top_ratio",
+      "rollover",
+      "lev_memory"
+    ]
+  },
+  "results_2019_2025": {
+    "distinct_calendar_years": 7,
+    "forecasts": 27,
+    "models": {
+      "prior": {
+        "brier": 0.1995,
+        "auc": 0.332
+      },
+      "cape_top": {
+        "brier": 0.2088,
+        "auc": 0.293
+      },
+      "cape_top_roll": {
+        "brier": 0.2097,
+        "auc": 0.464
+      }
+    },
+    "paired_delta_brier_roll_minus_base": 0.00086575,
+    "year_cluster_bootstrap_ci": [
+      -0.0182426,
+      0.024117
+    ],
+    "bootstrap_resamples": 4000
+  },
+  "limitations": [
+    "Existing architecture informed by past returns; not untouched OOS",
+    "Four anchor months in a year are correlated, do not treat as independent events",
+    "No exact FINRA release-vintage data",
+    "Prediction target window peak-trough drawdown, not entry-price loss",
+    "No source-data SHA of original publications; mirror source is revised",
+    "Do not apply risk score as a calibrated crash probability"
+  ]
+}
