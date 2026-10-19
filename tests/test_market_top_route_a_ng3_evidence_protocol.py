@@ -25,6 +25,11 @@ class NG3EvidenceProtocolTests(unittest.TestCase):
         self.assertIn("-15",o["final_252_classification"]["major_top"])
         self.assertIn("-7.5",o["final_252_classification"]["clear_false"])
 
+    def test_prospective_source_bytes_must_be_fingerprinted(self):
+        p=self.x["source_provenance"]
+        self.assertIn("SHA-256",p["snapshot_requirement"])
+        self.assertIn("source_provenance_at_start",p["episode_start_requirement"])
+
     def test_completed_horizon_evidence_is_immutable(self):
         rule=self.x["outcome_tracking"]["completed_horizon_immutability"]
         self.assertIn("complete=true",rule)
