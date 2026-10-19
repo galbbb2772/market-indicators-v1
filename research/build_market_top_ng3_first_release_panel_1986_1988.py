@@ -371,38 +371,41 @@ def resolve_first_publication(narrative: dict, table_a: dict) -> dict:
     table_complete = tfg is not None and tim is not None
     narrative_complete = nfg is not None and nim is not None
 
-    if narrative_complete:
+    # The printed Table A current-month row is the primary numeric authority
+    # whenever all expected columns are recovered. Narrative prose is a
+    # cross-check, not a reason to override a complete table row.
+    if table_complete:
         fg_conflict = (
-            table_complete
+            narrative_complete
             and abs(float(nfg) - float(tfg)) > 0.051
         )
         im_conflict = (
-            table_complete
+            narrative_complete
             and abs(float(nim) - float(tim)) > 0.051
         )
-        if table_complete and not fg_conflict and not im_conflict:
+        if narrative_complete and not fg_conflict and not im_conflict:
             status = "VERIFIED_DUAL_PATH"
-        elif table_complete and (fg_conflict or im_conflict):
-            status = "NARRATIVE_PRIMARY_TABLE_OCR_CONFLICT"
+        elif narrative_complete and (fg_conflict or im_conflict):
+            status = "TABLE_A_PRIMARY_NARRATIVE_CONFLICT"
         else:
-            status = "NARRATIVE_RECOVERED"
+            status = "TABLE_A_ONLY_PROVISIONAL"
         return {
             "status": status,
-            "finished_goods_mom_sa_pct": float(nfg),
-            "intermediate_goods_mom_sa_pct": float(nim),
-            "fg_conflict": bool(fg_conflict),
-            "im_conflict": bool(im_conflict),
-            "primary_source_path": "CURRENT_REPORT_HEADLINE_NARRATIVE",
-        }
-
-    if table_complete:
-        return {
-            "status": "TABLE_A_ONLY_PROVISIONAL",
             "finished_goods_mom_sa_pct": float(tfg),
             "intermediate_goods_mom_sa_pct": float(tim),
+            "fg_conflict": bool(fg_conflict),
+            "im_conflict": bool(im_conflict),
+            "primary_source_path": "TABLE_A_CURRENT_MONTH_ROW",
+        }
+
+    if narrative_complete:
+        return {
+            "status": "NARRATIVE_RECOVERED",
+            "finished_goods_mom_sa_pct": float(nfg),
+            "intermediate_goods_mom_sa_pct": float(nim),
             "fg_conflict": False,
             "im_conflict": False,
-            "primary_source_path": "TABLE_A_CURRENT_MONTH_ROW",
+            "primary_source_path": "CURRENT_REPORT_HEADLINE_NARRATIVE",
         }
 
     return {
@@ -512,7 +515,7 @@ def main() -> None:
         for r in rows
     )
     narrative_conflicts = sum(
-        r["first_publication"]["status"] == "NARRATIVE_PRIMARY_TABLE_OCR_CONFLICT"
+        r["first_publication"]["status"] == "TABLE_A_PRIMARY_NARRATIVE_CONFLICT"
         for r in rows
     )
 
@@ -549,7 +552,7 @@ def main() -> None:
                 for r in rows
             ),
             "dual_path_verified": dual_verified,
-            "narrative_conflicts": narrative_conflicts,
+            "cross_path_conflicts": narrative_conflicts,
             "ambiguous_rows": sum(
                 r["first_publication"]["status"] == "AMBIGUOUS"
                 for r in rows
