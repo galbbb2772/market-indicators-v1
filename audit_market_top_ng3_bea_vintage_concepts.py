@@ -69,11 +69,21 @@ def frozen_contract_passes() -> bool:
     )
 
 
-def audit(strict_live: bool = False) -> dict:
+def audit(live: bool = False, strict_live: bool = False) -> dict:
     evidence = {}
     live_failures = 0
 
     for vintage, spec in SOURCES.items():
+        if not live:
+            evidence[vintage] = {
+                "url": spec["url"],
+                "concept_label": spec["concept_label"],
+                "required_phrase_checks": None,
+                "live_source_status": "SKIPPED",
+                "live_error": None,
+            }
+            continue
+
         raw, error = fetch_optional(spec["url"])
         if raw is None:
             live_failures += 1
@@ -118,6 +128,7 @@ def audit(strict_live: bool = False) -> dict:
         "research_only": True,
         "production_effect": "none",
         "status": status,
+        "live_requested": live,
         "strict_live": strict_live,
         "frozen_evidence_contract_pass": contract_pass,
         "live_source_failures": live_failures,
@@ -144,10 +155,12 @@ def audit(strict_live: bool = False) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output")
+    ap.add_argument("--live", action="store_true")
     ap.add_argument("--strict-live", action="store_true")
     args = ap.parse_args()
 
-    x = audit(strict_live=args.strict_live)
+    live = args.live or args.strict_live
+    x = audit(live=live, strict_live=args.strict_live)
     print(json.dumps(x, indent=2))
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
