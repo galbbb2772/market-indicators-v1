@@ -210,9 +210,27 @@ No production promotion review is allowed until at least:
 ```
 4 complete prospective episodes
 with full 252-session outcomes
+AND no continuity evidence gaps
 ```
 
 exist.
+
+Evidence protocol v2 freezes the conservative missing-month rule:
+
+```
+ARMED -> missing month(s) -> ARMED
+= one episode, not two
+```
+
+Such an episode is tagged:
+
+```
+continuity_evidence_gap = true
+```
+
+Its outcome remains in the ledger, but it is excluded from the four **clean**
+episodes required for `review_eligible=true`. This prevents missing data from
+artificially increasing the prospective sample size.
 
 No retrospective success rate may be invented for NG3.
 
@@ -259,3 +277,25 @@ evidence_gaps_present
 ```
 
 and each opened episode records the source-temporality tier that generated it.
+
+
+### Evidence protocol v2
+
+Canonical protocol:
+
+```
+market-top-route-a-ng3-evidence-protocol-2
+```
+
+Protocol v2 supersedes v1 before the first countable prospective effective
+month. It changes evidence accounting only; NG3 score, gates, lags, threshold,
+top-location rule, and 2026-12 prospective boundary are unchanged.
+
+The key hardening is that an unobserved effective month is not evidence that an
+episode ended. Promotion review therefore uses:
+
+```
+complete_252_session_episodes_without_continuity_gaps >= 4
+```
+
+rather than the raw number of completed episode rows.
