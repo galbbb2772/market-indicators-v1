@@ -21,6 +21,7 @@ class NG3EvidenceProtocolTests(unittest.TestCase):
         self.assertIn("IDLE",e["close"])
         self.assertTrue(e["overlapping_outcome_windows_allowed"])
         self.assertIn("rejected fail-closed",e["monotonic_time_rule"])
+        self.assertIn("open or closed",e["monotonic_time_rule"])
         self.assertIn("one episode",e["missing_month_bridge"])
         self.assertIn("may not be used as evidence",e["missing_month_conservative_bias"])
 
@@ -53,6 +54,14 @@ class NG3EvidenceProtocolTests(unittest.TestCase):
         self.assertIn("excluded",p["continuity_gap_rule"])
         self.assertTrue(
             self.x["immutability"]["out_of_order_episode_updates_forbidden"]
+        )
+        self.assertTrue(
+            self.x["immutability"]["global_ledger_time_monotonic"]
+        )
+        self.assertTrue(
+            self.x["immutability"][
+                "monotonic_rule_hardening_before_prospective_start"
+            ]
         )
         self.assertFalse(p["automatic_promotion"])
         self.assertIsNone(p["action_signal"])
