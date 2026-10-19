@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# API schema probe trigger: legacy NY Fed fails coverage
 """
 MASTER TOP V3 — SLF V0 research implementation
 Systemic Liquidity / Fragility（系统性流动性与金融脆弱性路线）
