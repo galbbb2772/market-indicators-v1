@@ -1,0 +1,26 @@
+{
+  "schema_version": "route-b-2022-ff-publication-page-wayback-evidence-1",
+  "status": "NO_PRE_CUTOFF_PUBLICATION_PAGE_PROOF",
+  "research_only": true,
+  "production_effect": "none",
+  "cutoff": "2022-01-03T23:59:59Z",
+  "target_month": "202111",
+  "snapshot_count": 2,
+  "query_errors": [],
+  "publication_time_202111_independently_proven": false,
+  "strongest_parseable_pre_cutoff_page": {
+    "monthly_returns_terminal": "October 2021",
+    "monthly_returns_terminal_ym": "202110"
+  },
+  "established_independently": {
+    "official_dec2021_factor_vintage_content": "RECOVERED",
+    "numerical_size_weakness_replay": "REPRODUCIBLE",
+    "conservative_route_b": "PASS",
+    "route_b": 85.33380682500024
+  },
+  "remaining_gap": {
+    "exact_zip_pre_cutoff_capture": "ABSENT",
+    "official_page_pre_cutoff_202111_publication_proof": "ABSENT",
+    "exact_jan3_web_delivery_timing": "UNPROVEN"
+  }
+}
