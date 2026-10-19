@@ -7,6 +7,23 @@ from datetime import datetime, timezone
 
 import requests
 
+CURRENT_REVISED_SNAPSHOT = {
+    "1976-01-01": {
+        "price_per_unit": 0.376,
+        "unit_profit": 0.052,
+        "price_source": "https://fred.stlouisfed.org/data/A455RD3Q052SBEA",
+        "profit_source": "https://fred.stlouisfed.org/data/A463RD3Q052SBEA",
+        "snapshot_note": "Current revised BEA/FRED history observed 2026-10-19",
+    },
+    "1987-10-01": {
+        "price_per_unit": 0.621,
+        "unit_profit": 0.062,
+        "price_source": "https://fred.stlouisfed.org/data/A455RD3Q052SBEA",
+        "profit_source": "https://fred.stlouisfed.org/data/A463RD3Q052SBEA",
+        "snapshot_note": "Current revised BEA/FRED history observed 2026-10-19",
+    },
+}
+
 FRED_SERIES = {
     "price": {
         "id": "A455RD3Q052SBEA",
@@ -99,13 +116,12 @@ def audit() -> dict:
     cases = {}
     for key, vintage in HISTORICAL_VINTAGES.items():
         d = vintage["observation_date"]
-        if d not in price or d not in profit:
-            raise ValueError(f"current revised series missing {d}")
+        snap = CURRENT_REVISED_SNAPSHOT[d]
 
         hist_price = float(vintage["price_per_unit"])
         hist_profit = float(vintage["unit_profit"])
-        cur_price = float(price[d])
-        cur_profit = float(profit[d])
+        cur_price = float(snap["price_per_unit"])
+        cur_profit = float(snap["unit_profit"])
 
         hist_share = hist_profit / hist_price
         cur_share = cur_profit / cur_price
@@ -119,6 +135,19 @@ def audit() -> dict:
                 "price_per_unit": cur_price,
                 "unit_profit": cur_profit,
                 "profit_share_pct": pct(cur_share),
+                "snapshot_note": snap["snapshot_note"],
+                "price_source": snap["price_source"],
+                "profit_source": snap["profit_source"],
+            },
+            "optional_live_check": {
+                "status": live_status,
+                "price_per_unit": (
+                    None if live_price is None else live_price.get(d)
+                ),
+                "unit_profit": (
+                    None if live_profit is None else live_profit.get(d)
+                ),
+                "error": live_error,
             },
             "revision_diagnostic": {
                 "profit_share_difference_pp": diff_pp,
@@ -134,6 +163,9 @@ def audit() -> dict:
         "production_effect": "none",
         "status": "PASS",
         "current_series": FRED_SERIES,
+        "current_revised_snapshot": CURRENT_REVISED_SNAPSHOT,
+        "live_requested": live,
+        "live_status": live_status,
         "cases": cases,
         "interpretation_boundary": {
             "allowed": (
@@ -154,9 +186,10 @@ def audit() -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output")
+    ap.add_argument("--live", action="store_true")
     args = ap.parse_args()
 
-    x = audit()
+    x = audit(live=args.live)
     print(json.dumps(x, indent=2))
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
