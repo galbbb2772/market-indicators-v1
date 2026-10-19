@@ -109,9 +109,20 @@ def pct(x: float) -> float:
     return 100.0 * x
 
 
-def audit() -> dict:
-    price = fetch_fred_table(FRED_SERIES["price"]["url"])
-    profit = fetch_fred_table(FRED_SERIES["profit"]["url"])
+def audit(live: bool = False) -> dict:
+    live_status = "SKIPPED"
+    live_price = None
+    live_profit = None
+    live_error = None
+
+    if live:
+        try:
+            live_price = fetch_fred_table(FRED_SERIES["price"]["url"])
+            live_profit = fetch_fred_table(FRED_SERIES["profit"]["url"])
+            live_status = "PASS"
+        except Exception as exc:
+            live_status = "UNAVAILABLE"
+            live_error = repr(exc)
 
     cases = {}
     for key, vintage in HISTORICAL_VINTAGES.items():
@@ -182,20 +193,3 @@ def audit() -> dict:
         },
     }
 
-
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--output")
-    ap.add_argument("--live", action="store_true")
-    args = ap.parse_args()
-
-    x = audit(live=args.live)
-    print(json.dumps(x, indent=2))
-    if args.output:
-        with open(args.output, "w", encoding="utf-8") as f:
-            json.dump(x, f, indent=2)
-            f.write("\n")
-
-
-if __name__ == "__main__":
-    main()
