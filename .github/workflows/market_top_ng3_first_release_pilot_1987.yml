@@ -1,0 +1,39 @@
+name: Market Top NG3 First-Release Pilot 1987
+
+on:
+  pull_request:
+    paths:
+      - "research/MARKET_TOP_NG3_FIRST_RELEASE_PILOT_1987.md"
+      - "research/market_top_ng3_first_release_pilot_1987.json"
+      - "validate_market_top_ng3_first_release_pilot_1987.py"
+      - "tests/test_market_top_ng3_first_release_pilot_1987.py"
+      - ".github/workflows/market_top_ng3_first_release_pilot_1987.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate frozen source-engineering evidence
+        run: |
+          python validate_market_top_ng3_first_release_pilot_1987.py \
+            --output market_top_ng3_first_release_pilot_validation.json
+
+      - name: Run contract tests
+        run: python -m unittest tests.test_market_top_ng3_first_release_pilot_1987 -v
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-top-ng3-first-release-pilot-1987
+          path: market_top_ng3_first_release_pilot_validation.json
+          if-no-files-found: error
