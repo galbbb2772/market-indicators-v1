@@ -857,6 +857,27 @@ def update_episode_ledger(
         None,
     )
 
+    # Evidence time is globally monotonic. This guard is deliberately broader
+    # than the open-episode continuity check below: an old IDLE rerun or an old
+    # ARMED rerun after a later episode has already closed must not rewrite or
+    # fork the prospective ledger.
+    episode_months = []
+    for ep in episodes:
+        for key in ("last_armed_effective_month", "closed_effective_month"):
+            value = ep.get(key)
+            if value:
+                episode_months.append(str(value))
+    latest_episode_month = max(episode_months) if episode_months else None
+    if (
+        is_prospective
+        and latest_episode_month is not None
+        and current_month < latest_episode_month
+    ):
+        raise ValueError(
+            "out-of-order prospective episode update: "
+            f"{current_month} < {latest_episode_month}"
+        )
+
     if is_prospective:
         if state == "ARMED":
             needs_new = open_episode is None
