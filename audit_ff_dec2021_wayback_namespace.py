@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import time
 from urllib.parse import unquote
 
 import requests
@@ -33,12 +34,21 @@ def _is_target_namespace(url: str) -> bool:
     ) in x
 
 
-def find_namespace_captures() -> tuple[list[dict], list[str]]:
-    s = session()
-    captures: list[dict] = []
-    errors: list[str] = []
+def _query_prefix(
+    s: requests.Session,
+    prefix: str,
+    *,
+    attempts: int = 2,
+    timeout: int = 45,
+) -> tuple[list | None, str | None]:
+    """Query one CDX prefix with bounded retry.
 
-    for prefix in PREFIXES:
+    The audit remains fail-closed: if every attempt fails, the caller records
+    a query error and CI rejects the coverage conclusion. Retrying only avoids
+    turning one transient Wayback timeout into a false negative.
+    """
+    last: Exception | None = None
+    for attempt in range(1, attempts + 1):
         try:
             r = s.get(
                 CDX,
@@ -54,25 +64,41 @@ def find_namespace_captures() -> tuple[list[dict], list[str]]:
                     "filter": "statuscode:200",
                     "collapse": "digest",
                 },
-                timeout=40,
+                timeout=timeout,
             )
             r.raise_for_status()
-            data = r.json()
-            if not data or len(data) < 2:
-                continue
-            hdr = data[0]
-            for row in data[1:]:
-                x = dict(zip(hdr, row))
-                ts = str(x.get("timestamp") or "")
-                original = str(x.get("original") or "")
-                if (
-                    ts
-                    and ts <= CUTOFF
-                    and _is_target_namespace(original)
-                ):
-                    captures.append(x)
+            return r.json(), None
         except Exception as exc:
-            errors.append(f"{prefix}: {exc!r}")
+            last = exc
+            if attempt < attempts:
+                time.sleep(2)
+
+    return None, f"{prefix}: {last!r}"
+
+
+def find_namespace_captures() -> tuple[list[dict], list[str]]:
+    s = session()
+    captures: list[dict] = []
+    errors: list[str] = []
+
+    for prefix in PREFIXES:
+        data, error = _query_prefix(s, prefix)
+        if error is not None:
+            errors.append(error)
+            continue
+        if not data or len(data) < 2:
+            continue
+        hdr = data[0]
+        for row in data[1:]:
+            x = dict(zip(hdr, row))
+            ts = str(x.get("timestamp") or "")
+            original = str(x.get("original") or "")
+            if (
+                ts
+                and ts <= CUTOFF
+                and _is_target_namespace(original)
+            ):
+                captures.append(x)
 
     dedup: dict[tuple[str, str, str], dict] = {}
     for x in captures:
