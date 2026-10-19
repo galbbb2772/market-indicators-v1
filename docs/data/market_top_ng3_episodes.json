@@ -1,9 +1,9 @@
 {
-  "schema_version": "market-top-route-a-ng3-episodes-1",
+  "schema_version": "market-top-route-a-ng3-episodes-2",
   "generated_at": "2026-10-19T05:18:41.094415+00:00",
   "research_only": true,
   "production_effect": "none",
-  "protocol": "market-top-route-a-ng3-evidence-protocol-1",
+  "protocol": "market-top-route-a-ng3-evidence-protocol-2",
   "prospective_start_effective_month": "202612",
   "episodes": [],
   "summary": {
@@ -14,6 +14,8 @@
     "automatic_promotion": false,
     "action_signal": null,
     "fully_post_preregistration_source_episodes": 0,
-    "straddling_or_pre_preregistration_source_episodes": 0
+    "straddling_or_pre_preregistration_source_episodes": 0,
+    "complete_252_session_episodes_without_continuity_gaps": 0,
+    "episodes_with_continuity_gaps": 0
   }
 }
