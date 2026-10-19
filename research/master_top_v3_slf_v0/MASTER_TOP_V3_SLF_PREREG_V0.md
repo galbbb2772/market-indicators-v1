@@ -82,6 +82,8 @@ Important:
 ### 4. Market-top contextualized variants
 Both variants are pre-declared and must always be reported together.
 
+Historical V0 price proxy is pre-frozen as Stooq ^SPX daily close (research only).
+
 Let:
 TopRatio_t = Price_t / HH_60M_t
 
