@@ -67,9 +67,9 @@ def fetch_text(year: int, month: int) -> dict:
 def norm(s: str) -> str:
     s = s.replace("\\u00ad", "")
     # Repair line-wrap hyphenation such as "per- cent" and OCR spacing such as "0 .4".
-    s = re.sub(r"(?<=\\w)-\\s+(?=\\w)", "", s)
-    s = re.sub(r"(?<=\\d)\\s+\\.(?=\\d)", ".", s)
-    s = re.sub(r"\\s+", " ", s)
+    s = re.sub(r"(?<=\w)-\s+(?=\w)", "", s)
+    s = re.sub(r"(?<=\d)\s+\.(?=\d)", ".", s)
+    s = re.sub(r"\s+", " ", s)
     return s.strip()
 
 def movement_segment(text: str, year: int, month: int) -> str:
