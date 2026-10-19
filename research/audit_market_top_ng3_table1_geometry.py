@@ -75,6 +75,13 @@ def main():
             "page_zero_based": page_idx,
             "finished": around_label(spans, "Finished goods"),
             "intermediate": around_label(spans, "Intermediate materials"),
+            "top_table_window": sorted(
+                [
+                    s for s in spans
+                    if 560 <= s["y"] <= 730
+                ],
+                key=lambda s: (-s["y"], s["x"]),
+            ) if key == "1988-05" else [],
         }
     print(json.dumps(result, indent=2))
 
