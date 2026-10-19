@@ -27,6 +27,7 @@ THRESHOLD = 85.0
 LEAD_GAP_MIN = 10.0
 WARMUP_MONTHS = 120
 FIRST_PROSPECTIVE_EFFECTIVE_MONTH = "202612"
+PREREGISTRATION_DATE = "2026-10-19"
 
 PINNED_COMMIT = "71af02cba3493ffa15ac47f512dc346598f2e23f"
 PINNED_BASE = (
@@ -84,6 +85,69 @@ def add_months(ym: str, n: int) -> str:
     y += m // 12
     m %= 12
     return f"{y:04d}{m+1:02d}"
+
+
+def source_temporality(
+    ff_source_month: str,
+    credit_source_month: str,
+) -> dict[str, Any]:
+    """Describe whether source months are fully post-preregistration.
+
+    This is an evidence-quality annotation only. It does not change the
+    preregistered NG3 prospective boundary or any model/state rule.
+    """
+    prereg = pd.Timestamp(PREREGISTRATION_DATE)
+
+    def bounds(ym: str) -> tuple[pd.Timestamp, pd.Timestamp]:
+        start = pd.Timestamp(
+            year=int(ym[:4]),
+            month=int(ym[4:6]),
+            day=1,
+        )
+        end = start + pd.offsets.MonthEnd(1)
+        return start, end
+
+    months = {
+        "fama_french": ff_source_month,
+        "credit": credit_source_month,
+    }
+    detail: dict[str, Any] = {}
+    fully_post = True
+    any_straddle = False
+    any_pre = False
+
+    for name, ym in months.items():
+        start, end = bounds(ym)
+        if start > prereg:
+            relation = "FULLY_POST_PREREGISTRATION"
+        elif start <= prereg <= end:
+            relation = "STRADDLES_PREREGISTRATION_DATE"
+            fully_post = False
+            any_straddle = True
+        else:
+            relation = "PRE_PREREGISTRATION"
+            fully_post = False
+            any_pre = True
+        detail[name] = {
+            "source_month": ym,
+            "relation": relation,
+        }
+
+    if fully_post:
+        tier = "FULL_SOURCE_MONTHS_POST_PREREGISTRATION"
+    elif any_straddle:
+        tier = "SOURCE_MONTH_STRADDLES_PREREGISTRATION"
+    elif any_pre:
+        tier = "SOURCE_MONTHS_INCLUDE_PRE_PREREGISTRATION"
+    else:
+        tier = "MIXED_SOURCE_TEMPORALITY"
+
+    return {
+        "preregistration_date": PREREGISTRATION_DATE,
+        "tier": tier,
+        "all_source_months_fully_post_preregistration": fully_post,
+        "detail": detail,
+    }
 
 
 def completed_month_ym(now: datetime) -> str:
@@ -472,6 +536,10 @@ def build_snapshot(
         if prospective
         else "RETROSPECTIVE_TRAINING_DIAGNOSTIC"
     )
+    temporality = source_temporality(
+        x["ff_source_month"],
+        x["credit_source_month"],
+    )
 
     return {
         "schema_version": "market-top-route-a-ng3-forward-1",
@@ -489,6 +557,7 @@ def build_snapshot(
             "fama_french": x["ff_source_month"],
             "credit": x["credit_source_month"],
         },
+        "source_temporality": temporality,
         "components": {
             "spread_shock_score": x["spread_shock_score"],
             "finance_weakness_score": x["finance_weakness_score"],
@@ -734,6 +803,9 @@ def update_episode_ledger(
                     "anchor_date": gate["asof"],
                     "anchor_close": float(gate["close"]),
                     "source_months_at_start": dict(snapshot["source_months"]),
+                    "source_temporality_at_start": dict(
+                        snapshot.get("source_temporality") or {}
+                    ),
                     "source_provenance_at_start": dict(
                         snapshot.get("sources") or {}
                     ),
