@@ -367,6 +367,8 @@ def parse_table1_aggregate_geometry(
 
     if len(good) == 1:
         return good[0]
+    if len(good) == 0 and len(labels) == 1 and len(diagnostics) == 1:
+        return diagnostics[0]
 
     return {
         "status": "AGGREGATE_ROW_NOT_UNIQUE",
