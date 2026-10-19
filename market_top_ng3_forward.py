@@ -399,6 +399,22 @@ def top_gate(price: pd.Series, ym: str) -> dict[str, Any]:
     }
 
 
+def select_completed_state(
+    states: list[dict[str, Any]],
+    completed_month: str,
+) -> dict[str, Any]:
+    eligible = [x for x in states if x["effective_month"] <= completed_month]
+    if not eligible:
+        raise ValueError("no completed effective NG3 state")
+    x = eligible[-1]
+    if x["effective_month"] != completed_month:
+        raise ValueError(
+            "NG3 monthly inputs are stale: "
+            f"latest effective {x['effective_month']} != completed {completed_month}"
+        )
+    return x
+
+
 def build_snapshot(
     now: datetime | None = None,
     price: pd.Series | None = None,
@@ -410,10 +426,7 @@ def build_snapshot(
     baa, gs10, credit_meta = fetch_credit(now)
     credit = build_credit_scores(baa, gs10)
     states = build_effective_states(ff, credit)
-    eligible_states = [x for x in states if x["effective_month"] <= completed]
-    if not eligible_states:
-        raise ValueError("no completed effective NG3 state")
-    x = eligible_states[-1]
+    x = select_completed_state(states, completed)
 
     phase_gate = (
         x["effective_history_months"] >= WARMUP_MONTHS
