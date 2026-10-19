@@ -76,6 +76,13 @@
       "effective_202612_all_source_months_fully_post_preregistration": false,
       "first_fully_post_preregistration_source_effective_month": "202701",
       "interpretation": "The December 2026 signal remains countable under the original preregistration because the October FF month was unfinished/unpublished at freeze time, but the October source month straddles the 2026-10-19 preregistration date. January 2027 is the first effective month whose required monthly source periods are wholly post-preregistration."
+    },
+    "evidence_protocol": "market-top-route-a-ng3-evidence-protocol-2",
+    "promotion_review_minimum_complete_252_session_episodes_without_continuity_gaps": 4,
+    "continuity_gap_policy": {
+      "rule": "ARMED -> missing effective month(s) -> ARMED remains one episode",
+      "marker": "continuity_evidence_gap=true",
+      "promotion_review_effect": "Gap-tainted completed episodes remain in the ledger but are excluded from the four clean episodes required for review_eligible."
     }
   },
   "evidence_governance": {
@@ -84,6 +91,8 @@
     "next_valid_evidence": "Prospective effective months from 2026-12 onward",
     "redesign_rule": "Any formula/gate/threshold change after NG3 preregistration requires NG4 or later",
     "monthly_evidence_gaps_must_be_explicit": true,
-    "silent_later_vintage_backfill_allowed": false
+    "silent_later_vintage_backfill_allowed": false,
+    "episode_count_inflation_from_missing_months_forbidden": true,
+    "promotion_review_uses_clean_episode_count": true
   }
 }
