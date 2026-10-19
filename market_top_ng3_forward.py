@@ -760,7 +760,7 @@ def load_episode_ledger() -> dict[str, Any]:
             "schema_version": "market-top-route-a-ng3-episodes-1",
             "research_only": True,
             "production_effect": "none",
-            "protocol": "market-top-route-a-ng3-evidence-protocol-1",
+            "protocol": "market-top-route-a-ng3-evidence-protocol-2",
             "episodes": [],
             "summary": {
                 "complete_252_session_episodes": 0,
@@ -868,11 +868,24 @@ def update_episode_ledger(
                     open_episode["last_armed_effective_month"] = current_month
                     needs_new = False
                 else:
-                    open_episode["signal_status"] = "CLOSED"
-                    open_episode["closed_reason"] = "NONCONTIGUOUS_EFFECTIVE_MONTH"
-                    open_episode["closed_before_effective_month"] = current_month
-                    open_episode = None
-                    needs_new = True
+                    # A missing effective month is not evidence that the prior
+                    # episode ended. Splitting here would inflate the number
+                    # of prospective episodes and could make promotion review
+                    # eligible too early. Conservatively bridge the gap into
+                    # one episode and mark continuity as uncertain.
+                    missing = month_sequence(
+                        add_months(last, 1),
+                        add_months(current_month, -1),
+                    )
+                    existing_missing = list(
+                        open_episode.get("missing_effective_months") or []
+                    )
+                    open_episode["missing_effective_months"] = sorted(
+                        set(existing_missing + missing)
+                    )
+                    open_episode["continuity_evidence_gap"] = True
+                    open_episode["last_armed_effective_month"] = current_month
+                    needs_new = False
 
             if needs_new:
                 gate = snapshot["gates"]["top_location"]
@@ -898,11 +911,25 @@ def update_episode_ledger(
                     ),
                     "outcomes": {},
                     "classification_252": None,
+                    "continuity_evidence_gap": False,
+                    "missing_effective_months": [],
                 }
                 episodes.append(open_episode)
         elif state == "IDLE" and open_episode is not None:
             last = str(open_episode["last_armed_effective_month"])
             if current_month > last:
+                missing = month_sequence(
+                    add_months(last, 1),
+                    add_months(current_month, -1),
+                )
+                if missing:
+                    existing_missing = list(
+                        open_episode.get("missing_effective_months") or []
+                    )
+                    open_episode["missing_effective_months"] = sorted(
+                        set(existing_missing + missing)
+                    )
+                    open_episode["continuity_evidence_gap"] = True
                 open_episode["signal_status"] = "CLOSED"
                 open_episode["closed_effective_month"] = current_month
                 open_episode["closed_reason"] = "FIRST_COMPLETED_IDLE_MONTH"
@@ -930,6 +957,17 @@ def update_episode_ledger(
         for ep in episodes
         if (ep.get("outcomes") or {}).get("252", {}).get("complete")
     )
+    complete_252_without_continuity_gaps = sum(
+        1
+        for ep in episodes
+        if (
+            (ep.get("outcomes") or {}).get("252", {}).get("complete")
+            and not bool(ep.get("continuity_evidence_gap"))
+        )
+    )
+    episodes_with_continuity_gaps = sum(
+        1 for ep in episodes if bool(ep.get("continuity_evidence_gap"))
+    )
     fully_post_source_episodes = sum(
         1
         for ep in episodes
@@ -949,12 +987,16 @@ def update_episode_ledger(
         "generated_at": observed_at or snapshot["generated_at"],
         "research_only": True,
         "production_effect": "none",
-        "protocol": "market-top-route-a-ng3-evidence-protocol-1",
+        "protocol": "market-top-route-a-ng3-evidence-protocol-2",
         "prospective_start_effective_month": FIRST_PROSPECTIVE_EFFECTIVE_MONTH,
         "episodes": episodes,
         "summary": {
             "prospective_episode_count": len(episodes),
             "complete_252_session_episodes": complete_252,
+            "complete_252_session_episodes_without_continuity_gaps": (
+                complete_252_without_continuity_gaps
+            ),
+            "episodes_with_continuity_gaps": episodes_with_continuity_gaps,
             "fully_post_preregistration_source_episodes": (
                 fully_post_source_episodes
             ),
@@ -962,7 +1004,9 @@ def update_episode_ledger(
                 straddling_or_pre_source_episodes
             ),
             "minimum_for_promotion_review": 4,
-            "review_eligible": bool(complete_252 >= 4),
+            "review_eligible": bool(
+                complete_252_without_continuity_gaps >= 4
+            ),
             "automatic_promotion": False,
             "action_signal": None,
         },
