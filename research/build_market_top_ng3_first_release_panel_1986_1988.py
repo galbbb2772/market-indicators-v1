@@ -40,7 +40,10 @@ def fetch_text(year: int, month: int) -> dict:
         for i, page in enumerate(reader.pages):
             if i >= 7:
                 break
-            pages.append(page.extract_text() or "")
+            try:
+                pages.append(page.extract_text(extraction_mode="layout") or "")
+            except TypeError:
+                pages.append(page.extract_text() or "")
         return {
             "source_month": f"{year:04d}-{month:02d}",
             "url": url,
@@ -59,7 +62,10 @@ def fetch_text(year: int, month: int) -> dict:
 
 def norm(s: str) -> str:
     s = s.replace("\u00ad", "")
-    s = re.sub(r"\s+", " ", s)
+    # Repair line-wrap hyphenation such as "per- cent" and OCR spacing such as "0 .4".
+    s = re.sub(r"(?<=\\w)-\\s+(?=\\w)", "", s)
+    s = re.sub(r"(?<=\\d)\\s+\\.(?=\\d)", ".", s)
+    s = re.sub(r"\\s+", " ", s)
     return s.strip()
 
 
