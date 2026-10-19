@@ -389,11 +389,32 @@ def update_payload(snapshot: ScoreSnapshot, price: pd.Series, out_path: Path) ->
     return payload
 
 
+def ensure_score_fresh(asof: str, max_calendar_days: int = 5) -> None:
+    """Fail closed on stale/as-yet-undated MarketParquet snapshots.
+
+    This is an operations gate, not a change to frozen signal parameters.
+    Weekend and ordinary holiday gaps are covered by five calendar days.
+    """
+    stamp = datetime.strptime(asof, "%Y-%m-%d").date()
+    today = datetime.now(timezone.utc).date()
+    age = (today - stamp).days
+    if age < 0:
+        raise RuntimeError(f"MarketParquet snapshot is dated in the future: {asof}")
+    if age > max_calendar_days:
+        raise RuntimeError(
+            f"MarketParquet breadth data stale by {age} calendar days "
+            f"(source as-of {asof}; max permitted {max_calendar_days}); "
+            "refusing to publish a stale score."
+        )
+
+
 def main() -> None:
     api_key = os.getenv("MARKETPARQUET_API_KEY", "").strip()
     if not api_key:
-        print("MARKETPARQUET_API_KEY is not configured; preserving the existing seed/current snapshot.")
-        return
+        raise RuntimeError(
+            "MARKETPARQUET_API_KEY is not configured: refusing a green workflow "
+            "that silently keeps a stale seed."
+        )
     baseline_env = os.getenv("MASTER_TOP_BASELINE_TRIGGER", "").strip()
     baseline = float(baseline_env) if baseline_env else None
     out = Path(os.getenv("MASTER_TOP_OUTPUT", "docs/data/master_top_v218.json"))
@@ -401,6 +422,8 @@ def main() -> None:
 
     stock = fetch_marketparquet_stock_history(api_key)
     snapshot, breadth, price = build_snapshot(stock, baseline_trigger=baseline)
+    # Operational validity guard. The frozen 2.1.8 score formula is unchanged.
+    ensure_score_fresh(snapshot.asof)
     payload = update_payload(snapshot, price, out)
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
