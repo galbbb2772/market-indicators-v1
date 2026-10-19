@@ -86,12 +86,13 @@ Prospective rule:
 ### 3. Price context
 SLF itself measures systemic liquidity stress. To test whether it is useful as a *market-top* route, two top-location contextualized variants will be reported side-by-side.
 
-Canonical market price source:
-- use the same canonical broad U.S. equity close series already accepted elsewhere in MASTER TOP
+Historical research price source for V0:
+- Stooq S&P 500 daily close (^SPX) is frozen now, before the first SLF legacy score run, as the research-only top-location proxy.
 - close at session t is usable only after that close
 - earliest executable interpretation is session t+1
+- a later production implementation must either preserve this source or prove date-by-date parity with the canonical MASTER TOP market-price feed before substitution
 
-No new price source may be selected after seeing SLF historical performance.
+No alternative price source may be selected after seeing SLF historical performance merely to improve results.
 
 ### 4. Alignment schema
 Every observation used by SLF must have:
