@@ -114,3 +114,39 @@ A future decision record must inspect the evidence-quality mix rather than prete
 This addendum is intentionally stricter in disclosure but does not alter model behavior.
 
 Changing the actual first countable effective month would violate the original NG3 no-retune rule and would require a new model/protocol version rather than silently editing NG3.
+
+
+## Late-backfill fail-closed rule
+
+Once a later prospective effective month has been frozen, an earlier missing prospective month may not subsequently be inserted from a later data vintage.
+
+Example:
+
+```
+2027-01 frozen
+2026-12 missing
+```
+
+A later attempt to freeze 2026-12 must fail rather than rewrite the evidence sequence.
+
+The missing month remains visible in:
+
+```
+missing_effective_months
+```
+
+This protects the meaning of "first successful post-month-close snapshot."
+
+## Outcome-source provenance
+
+Each 63 / 126 / 252-session horizon now stores the identity of the price payload used to calculate its latest metrics:
+
+```
+price_source
+price_payload_sha256
+price_latest_date
+```
+
+Once a horizon becomes complete, those fields freeze together with the completed outcome metrics.
+
+This does not prevent legitimate accumulation while a horizon is incomplete; it makes the final completed classification traceable to a specific upstream price payload.
