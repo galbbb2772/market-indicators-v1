@@ -53,6 +53,7 @@ YAHOO_SPY = (
 
 OUT_CURRENT = Path("docs/data/market_top_ng3_current.json")
 OUT_HISTORY = Path("docs/data/market_top_ng3_history.json")
+OUT_EPISODES = Path("docs/data/market_top_ng3_episodes.json")
 
 HTTP = requests.Session()
 HTTP.headers.update({"User-Agent": "market-top-ng3-forward/1.0"})
@@ -398,7 +399,10 @@ def top_gate(price: pd.Series, ym: str) -> dict[str, Any]:
     }
 
 
-def build_snapshot(now: datetime | None = None) -> dict[str, Any]:
+def build_snapshot(
+    now: datetime | None = None,
+    price: pd.Series | None = None,
+) -> dict[str, Any]:
     now = now or datetime.now(timezone.utc)
     completed = completed_month_ym(now)
 
@@ -416,7 +420,7 @@ def build_snapshot(now: datetime | None = None) -> dict[str, Any]:
         and x["financial_lead_gap_raw"] >= LEAD_GAP_MIN
     )
     route_gate = x["route_a_ng1"] >= THRESHOLD
-    price = fetch_spy()
+    price = price if price is not None else fetch_spy()
     gate = top_gate(price, x["effective_month"])
     armed = bool(phase_gate and route_gate and gate["passes"])
 
@@ -487,7 +491,183 @@ def load_history() -> list[dict[str, Any]]:
     return list(obj.get("history") or [])
 
 
-def write_outputs(snapshot: dict[str, Any]) -> None:
+def load_episode_ledger() -> dict[str, Any]:
+    if not OUT_EPISODES.exists():
+        return {
+            "schema_version": "market-top-route-a-ng3-episodes-1",
+            "research_only": True,
+            "production_effect": "none",
+            "protocol": "market-top-route-a-ng3-evidence-protocol-1",
+            "episodes": [],
+            "summary": {
+                "complete_252_session_episodes": 0,
+                "minimum_for_promotion_review": 4,
+                "review_eligible": False,
+                "automatic_promotion": False,
+                "action_signal": None,
+            },
+        }
+    return json.loads(OUT_EPISODES.read_text(encoding="utf-8"))
+
+
+def classify_252(metrics: dict[str, Any]) -> str | None:
+    if not metrics.get("complete"):
+        return None
+    worst = float(metrics["worst_return_from_anchor_pct"])
+    forward = float(metrics["forward_return_pct"])
+    if worst <= -15.0:
+        return "MAJOR_TOP"
+    if worst > -7.5 and forward > 0.0:
+        return "CLEAR_FALSE"
+    return "CORRECTION_OR_AMBIGUOUS"
+
+
+def evaluate_horizon(
+    price: pd.Series,
+    *,
+    anchor_date: str,
+    anchor_close: float,
+    sessions: int,
+) -> dict[str, Any]:
+    anchor = pd.Timestamp(anchor_date)
+    after = price.loc[price.index > anchor]
+    observed = min(len(after), sessions)
+    if observed == 0:
+        return {
+            "sessions_required": sessions,
+            "sessions_observed": 0,
+            "complete": False,
+            "asof": None,
+            "forward_return_pct": None,
+            "worst_return_from_anchor_pct": None,
+            "max_peak_to_trough_dd_pct": None,
+        }
+
+    path = after.iloc[:sessions]
+    forward = (float(path.iloc[-1]) / float(anchor_close) - 1.0) * 100.0
+    worst = (float(path.min()) / float(anchor_close) - 1.0) * 100.0
+
+    full = pd.concat(
+        [
+            pd.Series(
+                [float(anchor_close)],
+                index=pd.DatetimeIndex([anchor]),
+                dtype=float,
+            ),
+            path.astype(float),
+        ]
+    )
+    dd = (full / full.cummax() - 1.0) * 100.0
+
+    return {
+        "sessions_required": sessions,
+        "sessions_observed": observed,
+        "complete": bool(len(after) >= sessions),
+        "asof": pd.Timestamp(path.index[-1]).date().isoformat(),
+        "forward_return_pct": float(forward),
+        "worst_return_from_anchor_pct": float(worst),
+        "max_peak_to_trough_dd_pct": float(dd.min()),
+    }
+
+
+def update_episode_ledger(
+    snapshot: dict[str, Any],
+    price: pd.Series,
+) -> dict[str, Any]:
+    ledger = load_episode_ledger()
+    episodes = list(ledger.get("episodes") or [])
+
+    current_month = str(snapshot["effective_month"])
+    is_prospective = bool(snapshot["counts_toward_prospective_validation"])
+    state = str(snapshot["state"])
+
+    open_episode = next(
+        (x for x in reversed(episodes) if x.get("signal_status") == "OPEN"),
+        None,
+    )
+
+    if is_prospective:
+        if state == "ARMED":
+            needs_new = open_episode is None
+            if open_episode is not None:
+                last = str(open_episode["last_armed_effective_month"])
+                if current_month == last:
+                    needs_new = False
+                elif current_month == add_months(last, 1):
+                    open_episode["last_armed_effective_month"] = current_month
+                    needs_new = False
+                else:
+                    open_episode["signal_status"] = "CLOSED"
+                    open_episode["closed_reason"] = "NONCONTIGUOUS_EFFECTIVE_MONTH"
+                    open_episode["closed_before_effective_month"] = current_month
+                    open_episode = None
+                    needs_new = True
+
+            if needs_new:
+                gate = snapshot["gates"]["top_location"]
+                open_episode = {
+                    "episode_id": f"NG3-{current_month}",
+                    "signal_status": "OPEN",
+                    "start_effective_month": current_month,
+                    "last_armed_effective_month": current_month,
+                    "closed_effective_month": None,
+                    "closed_reason": None,
+                    "anchor_date": gate["asof"],
+                    "anchor_close": float(gate["close"]),
+                    "source_months_at_start": dict(snapshot["source_months"]),
+                    "start_score": float(snapshot["route_a_ng3_score"]),
+                    "start_financial_lead_gap_raw": float(
+                        snapshot["components"]["financial_lead_gap_raw"]
+                    ),
+                    "outcomes": {},
+                    "classification_252": None,
+                }
+                episodes.append(open_episode)
+        elif state == "IDLE" and open_episode is not None:
+            last = str(open_episode["last_armed_effective_month"])
+            if current_month > last:
+                open_episode["signal_status"] = "CLOSED"
+                open_episode["closed_effective_month"] = current_month
+                open_episode["closed_reason"] = "FIRST_COMPLETED_IDLE_MONTH"
+
+    for ep in episodes:
+        outcomes = {}
+        for horizon in (63, 126, 252):
+            outcomes[str(horizon)] = evaluate_horizon(
+                price,
+                anchor_date=str(ep["anchor_date"]),
+                anchor_close=float(ep["anchor_close"]),
+                sessions=horizon,
+            )
+        ep["outcomes"] = outcomes
+        ep["classification_252"] = classify_252(outcomes["252"])
+
+    complete_252 = sum(
+        1
+        for ep in episodes
+        if (ep.get("outcomes") or {}).get("252", {}).get("complete")
+    )
+    ledger = {
+        "schema_version": "market-top-route-a-ng3-episodes-1",
+        "generated_at": snapshot["generated_at"],
+        "research_only": True,
+        "production_effect": "none",
+        "protocol": "market-top-route-a-ng3-evidence-protocol-1",
+        "prospective_start_effective_month": FIRST_PROSPECTIVE_EFFECTIVE_MONTH,
+        "episodes": episodes,
+        "summary": {
+            "prospective_episode_count": len(episodes),
+            "complete_252_session_episodes": complete_252,
+            "minimum_for_promotion_review": 4,
+            "review_eligible": bool(complete_252 >= 4),
+            "automatic_promotion": False,
+            "action_signal": None,
+        },
+    }
+    return ledger
+
+
+def write_outputs(snapshot: dict[str, Any], price: pd.Series) -> None:
     OUT_CURRENT.parent.mkdir(parents=True, exist_ok=True)
     OUT_CURRENT.write_text(
         json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n",
@@ -527,14 +707,22 @@ def write_outputs(snapshot: dict[str, Any]) -> None:
     )
 
 
+    ledger = update_episode_ledger(snapshot, price)
+    OUT_EPISODES.write_text(
+        json.dumps(ledger, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
-    x = build_snapshot()
+    price = fetch_spy()
+    x = build_snapshot(price=price)
     print(json.dumps(x, ensure_ascii=False, indent=2))
     if not args.dry_run:
-        write_outputs(x)
+        write_outputs(x, price)
 
 
 if __name__ == "__main__":
