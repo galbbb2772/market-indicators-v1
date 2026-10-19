@@ -46,9 +46,18 @@ jobs:
           assert not any(r.get("has_202111") for r in attempts)
           usable = [r for r in attempts if r.get("last_month")]
           assert usable, "No usable archived ZIP was parsed"
-          newest = max(usable, key=lambda r: r["timestamp"])
-          assert newest["timestamp"] == "20210413020542"
-          assert newest["last_month"] == "202102"
+          latest_ts = max(str(r["timestamp"]) for r in usable)
+          latest_variants = [
+              r for r in usable if str(r["timestamp"]) == latest_ts
+          ]
+          latest_max_month = max(
+              str(r["last_month"]) for r in latest_variants
+          )
+          assert latest_ts == "20210413020542"
+          assert latest_max_month == "202102"
+          assert x["latest_usable_capture_timestamp"] == latest_ts
+          assert x["latest_usable_max_last_month"] == latest_max_month
+          assert len(x["latest_usable_variants"]) == len(latest_variants)
           print(
               "WAYBACK_VINTAGE_AUDIT",
               "status=", x["status"],
