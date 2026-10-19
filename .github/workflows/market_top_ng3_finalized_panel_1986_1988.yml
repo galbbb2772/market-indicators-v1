@@ -5,7 +5,7 @@ on:
     paths:
       - "research/build_market_top_ng3_first_release_panel_1986_1988.py"
       - "research/build_market_top_ng3_finalized_panel_1986_1988.py"
-      - "research/MARKET_TOP_NG3_FINALIZED_PANEL_1986_1988.md"
+      - "research/MARKET_TOP_NG3_FINALIZED_PANEL_1986_1988.md"\n      - "tests/test_market_top_ng3_finalized_panel.py"
       - ".github/workflows/market_top_ng3_finalized_panel_1986_1988.yml"
   workflow_dispatch:
 
@@ -23,7 +23,7 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: python -m pip install --upgrade pip requests pypdf
-      - name: Build four-month finalized panel
+      - name: Run finalized-panel contract tests\n        run: python -m unittest tests.test_market_top_ng3_finalized_panel -v\n      - name: Build four-month finalized panel
         run: |
           python research/build_market_top_ng3_finalized_panel_1986_1988.py \
             --output market_top_ng3_finalized_panel_1986_1988.json
