@@ -15,10 +15,26 @@ Replacing a closing-high/low cohort with intraday-high/low counts silently chang
 
 The current all-history partial gate audit (this PR) uses **only ^GSPC and DGS2**, which are invariant to the disputed stock H/L implementation. It explicitly labels actual H/L as unavailable. It therefore does not hide or rewrite this discrepancy.
 
-## Resolution gate before complete historical scoreboard
+## Archived freeze provenance resolved
 
-- Produce controlled, *same-symbol/date* comparisons of `close >= previous 252 closing highs` vs `intraday high > previous 252 highs` and corresponding lows, for 2018 and 2021–22.
-- Recover the authentic source-definition freeze decision from source history/commits if possible; if the original definition is irreducibly ambiguous, preserve `CLOSE_252` historical source as one labeled research reconstruction and test `INTRADAY_252` as **different source family**, not falsely identical retrospective scores.
-- Keep the threshold, policy/top gate, episode lock and prior score anchors untouched; disclose any difference in scores rather than selecting a better-looking variant after observing outcomes.
+The authentic original merged [PR #8, **2026-10-17 07:16:57 UTC**](https://github.com/galbbb2772/market-indicators-v1/pull/8) explicitly **added** the frozen production code with:
 
-**Status: SOURCE_DEFINITION_CONFLICT; no official complete historical V2.1.8 effectiveness estimates yet.**
+- `["date", "symbol", "close"]` as the MarketParquet input fields;
+- `prior_hi = rolling_252(max(prev closing prices))`;
+- `new_high = close >= prior_hi`;
+- `new_low = close <= prior_lo`.
+
+This predates the later `master-top-v218-live-source` branch, which substitutes intraday high/low price observations. **Therefore the original 2026-10-17 frozen implementation used CLOSING-price-based 252-session extremes, with inclusive comparisons on both sides.** Its written specification only states the 252 prior observations and does not explicitly contradict this implementation; the authentic code is the best dated evidence of the freeze-time comparator definition.
+
+**Resolution of version lineage:** `CLOSE_252_INCLUSIVE_FROZEN` is the original V2.1.8 scorer's source-definition contract. `INTRADAY_252_STRICT_POSTFREEZE_EXPERIMENT` is a distinct, later source-method research candidate. Do not merge its high/low definition into V2.1.8 while claiming frozen input invariance.
+
+This **does not resolve** historical symbol-universe or source completeness. A faithful complete retrospective reproduction still needs date-specific per-symbol closing prices including former/delisted stocks, consistent handling of ticker reuse, and a full first-published-data vs retrospective reconstruction distinction.
+
+## Remaining gate before complete historical scoreboard
+
+1. Recover genuine dated, as-of stock daily `close` observations for the required 252 prior sessions, including delisted/superseded tickers where appropriate. Do not substitute a 2026-survivor list for the historical daily universe.
+2. Lock `close >= prior_252_max_close` and `close <= prior_252_min_close` as the **original production reproduction**. Report the statistical impact of inclusive ties rather than changing them after looking at results.
+3. Any separate intraday high/low research should use a different `source_definition_id` and must **not** be presented as an unchanged original frozen historical signal.
+4. Preserve the original threshold 55, policy/top formula, and 126-session event lock. Do not manufacture missing past alarms.
+
+**Status: ORIGINAL_FREEZE_COMPARATOR_RESTORED_FROM_PR8; STOCK_UNIVERSE_PIT_AND_FULL_DATE_BREADTH_DATA_STILL_OPEN.**
