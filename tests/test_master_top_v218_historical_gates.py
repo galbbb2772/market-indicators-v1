@@ -20,7 +20,7 @@ def mock_rates(start="2021-01-01", end="2022-01-03", base=1.0):
     s = pd.Series(float(base), index=pd.bdate_range(start,end))
     # Positive 1M and 6M rate shocks both saturate to score=100.
     s.loc[s.index>=pd.Timestamp("2021-07-01")] = 1.0
-    s.loc[s.index>=pd.Timestamp("2021-12-02")] = 2.0
+    s.loc[s.index>=pd.Timestamp("2022-01-03")] = 2.0
     return s
 
 
