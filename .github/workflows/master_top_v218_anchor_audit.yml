@@ -1,0 +1,55 @@
+name: MASTER TOP V2.1.8 Historical Anchor Outcomes
+
+on:
+  push:
+    branches:
+      - 'research/master-top-v218-anchor-audit-20261023'
+    paths:
+      - 'research/master_top_v218_anchor_outcomes.py'
+      - 'tests/test_master_top_v218_anchor_outcomes.py'
+      - '.github/workflows/master_top_v218_anchor_audit.yml'
+  pull_request:
+    paths:
+      - 'research/master_top_v218_anchor_outcomes.py'
+      - 'tests/test_master_top_v218_anchor_outcomes.py'
+      - '.github/workflows/master_top_v218_anchor_audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: pip install -q pandas numpy requests pytest
+      - name: Freeze/coverage/censoring tests
+        run: python -m pytest -q tests/test_master_top_v218_anchor_outcomes.py
+      - name: Real-source historical SPY outcome replay (no secrets)
+        run: python research/master_top_v218_anchor_outcomes.py --provider auto
+      - name: Ensure historical source and audit scope are explicit
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('research/out/master_top_v218_anchor_outcomes.json').read_text())
+          assert d['source_first'] <= '1999-11-29'
+          assert d['source_last'] >= '2026-09-10'
+          assert d['anchor_count_in_frozen_evidence'] == 6
+          assert d['evidence_status'] == 'SPARSE_PRESELECTED_ANCHOR_OUTCOME_AUDIT_NOT_FULL_BACKTEST'
+          assert d['route_threshold_unchanged'] == 55.0
+          assert d['matured_reported_alert_anchors'] == 3
+          assert all(x['score_recomputed_here'] is False for x in d['results'])
+          print('Source coverage and frozen-evidence caveats: PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: master-top-v218-historical-anchor-audit
+          path: research/out/master_top_v218_anchor_outcomes.json
+          retention-days: 30
