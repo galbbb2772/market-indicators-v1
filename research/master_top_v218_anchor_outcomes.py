@@ -258,6 +258,21 @@ def main() -> None:
         "source": report["source"], "date_range": [report["source_first"],report["source_last"]],
         "price_fields": report["price_field_variants"],
         "anchor_outcomes": report["matured_reported_alerts_outcome"],
+        "raw_benchmark": [
+            {"date": x["anchor_date"], "reported_score": x["reported_frozen_route"],
+             "twelve_month_mdd_pct": x["forward_12m"]["mdd_pct"],
+             "twelve_month_class": x["outcome_class_12m"],
+             "63_sessions_mdd_pct": x["forward_63_session"]["mdd_pct"],
+             "126_sessions_mdd_pct": x["forward_126_session"]["mdd_pct"],
+             "252_sessions_mdd_pct": x["forward_252_session"]["mdd_pct"],
+             "censored": not x["forward_12m"]["matured"]}
+            for x in report["results"] if x["price_field"] == "close"
+        ],
+        "historical_mdd_differences_pp": [
+            {"date":x["anchor_date"],"difference_pp":x["difference_vs_reported_pp"]}
+            for x in report["results"] if x["price_field"] == "close"
+               and x["difference_vs_reported_pp"] is not None
+        ],
         "status": report["evidence_status"],"output":str(path)
     }, ensure_ascii=False))
 
