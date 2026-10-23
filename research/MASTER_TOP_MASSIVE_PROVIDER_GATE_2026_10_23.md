@@ -25,6 +25,10 @@ The file hard-codes both `production_eligible=false` and `frozen_score_comparabl
 
 The separate `.github/workflows/master_top_massive_provider_audit.yml` runs no-secret offline tests on a PR/push and supports optional credentialed **manual** source audits; only the manual job reads `MASSIVE_API_KEY` and saves a 30-day artifact.
 
+## Rate-limit finding (same-day live source inspection)
+
+The connected Massive research session successfully fetched five consecutive `CS` reference-list pages of 1,000 symbols each after the initial grouped-bars request. Additional CS and ADRC pagination calls then returned a `RATE_LIMIT` warning. **This is partial source coverage, not a complete CS/ADRC stock count.** Provider access is real, but the connected session's burst quota prevents an unlimited instant historical backfill. The research audit client therefore now paces authenticated requests at >=13 seconds per call and uses bounded, secret-safe HTTP 429 retries. This does **not** establish which quota is available to a separately configured GitHub repository key.
+
 ## Promotion / go-no-go requirements
 
 1. Confirm that **this repository** (not only `box-strategy-lab`) has a usable `MASSIVE_API_KEY` secret, and run the manual provider audit with the exact observation date; no private key values in logs.
