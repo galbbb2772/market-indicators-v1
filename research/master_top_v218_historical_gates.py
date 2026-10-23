@@ -77,17 +77,51 @@ def fetch_gspc() -> pd.Series:
     raise RuntimeError("No valid Yahoo ^GSPC history available; no proxy accepted")
 
 
-def fetch_dgs2() -> pd.Series:
-    response = requests.get(FRED_DGS2, timeout=60, headers={"User-Agent": "Mozilla/5.0"})
-    response.raise_for_status()
-    table = pd.read_csv(io.StringIO(response.text))
-    date_col = "DATE" if "DATE" in table.columns else "observation_date"
-    if "DGS2" not in table.columns or date_col not in table.columns:
-        raise RuntimeError("FRED public graph CSV lacks DGS2/DATE")
-    s = pd.Series(pd.to_numeric(table["DGS2"], errors="coerce").to_numpy(),
-                  index=pd.to_datetime(table[date_col], errors="coerce")).dropna().sort_index()
+UST_GITHUB_MIRROR = ("https://raw.githubusercontent.com/fujiapple852/yield/"
+                     "master/data/us_treasury_yield_curve_history.csv")
+# These Treasury daily 2Y CMT values were independently cross-checked against
+# the connected Massive treasury-yields endpoint in this research session.
+CMT_SPOT_CHECKS = {"2006-06-29": 5.21, "2022-01-03": 0.78, "2026-10-21": 4.81}
+
+
+def treasury_mirror_csv(content: str) -> pd.Series:
+    table = pd.read_csv(io.StringIO(content))
+    if not {"date","2Y"}.issubset(table.columns):
+        raise RuntimeError("U.S. Treasury CMT mirror lacks date/2Y column")
+    s = pd.Series(pd.to_numeric(table["2Y"],errors="coerce").to_numpy(),
+        index=pd.to_datetime(table["date"],errors="coerce")).dropna().sort_index()
     validate_rates(s)
+    for date, expected in CMT_SPOT_CHECKS.items():
+        day=pd.Timestamp(date)
+        if day not in s.index or abs(float(s.loc[day])-expected)>1e-6:
+            raise RuntimeError("U.S. Treasury mirror 2Y anchor disagrees with independent source: "+date)
+    s.attrs["provider"]="US Treasury 2Y CMT via fujiapple852/yield public normalized mirror"
+    s.attrs["note"]="Non-FRED fallback; historical official Treasury rates may not be original publication vintages"
     return s
+
+
+def fetch_dgs2() -> pd.Series:
+    # Source priority: original frozen public FRED DGS2 graph, then same-tenor
+    # U.S. Treasury constant-maturity rates from public historic Treasury XML mirror.
+    # Preserve the selected provider in report; NEVER silently label a fallback FRED.
+    try:
+        response = requests.get(FRED_DGS2, timeout=12, headers={"User-Agent": "Mozilla/5.0"})
+        response.raise_for_status()
+        table = pd.read_csv(io.StringIO(response.text))
+        date_col = "DATE" if "DATE" in table.columns else "observation_date"
+        if "DGS2" not in table.columns or date_col not in table.columns:
+            raise RuntimeError("FRED public graph CSV lacks DGS2/DATE")
+        s = pd.Series(pd.to_numeric(table["DGS2"], errors="coerce").to_numpy(),
+                      index=pd.to_datetime(table[date_col], errors="coerce")).dropna().sort_index()
+        validate_rates(s)
+        s.attrs["provider"]="FRED public DGS2 graph CSV (frozen source)"
+        s.attrs["note"]="Latest historical source; exact first-release vintages not proven"
+        return s
+    except (requests.RequestException,ValueError,RuntimeError) as exc:
+        print("FRED DGS2 unavailable ("+type(exc).__name__+"); trying separately labeled public Treasury CMT mirror")
+    response = requests.get(UST_GITHUB_MIRROR, timeout=40, headers={"User-Agent":"Mozilla/5.0"})
+    response.raise_for_status()
+    return treasury_mirror_csv(response.text)
 
 
 def validate_price(series: pd.Series, name: str) -> None:
@@ -210,7 +244,8 @@ def audit(price: pd.Series, rates: pd.Series) -> tuple[pd.DataFrame, dict]:
         "breadth": "NOT_AVAILABLE_HL_IS_NOT_COMPUTED",
         "status": "UPPER_BOUND_AND_GATE_AUDIT_ONLY_NOT_FULL_V218_BACKTEST",
         "source_gspc": "Yahoo Finance ^GSPC daily close",
-        "source_dgs2": "FRED public DGS2 CSV latest available vintage",
+        "source_dgs2": rates.attrs.get("provider","unattributed DGS2 rate input"),
+        "source_rate_note": rates.attrs.get("note","No original release-vintage evidence"),
         "source_price_sha256": sha256_series(price),
         "source_rates_sha256": sha256_series(rates),
         "source_price_first": price.index[0].date().isoformat(),
@@ -225,7 +260,7 @@ def audit(price: pd.Series, rates: pd.Series) -> tuple[pd.DataFrame, dict]:
             "If frozen route score assuming HL=100 is <55, alarm is impossible.",
             "Otherwise missing actual 20D new-high/new-low HL means alarm is UNCONFIRMED.",
             "Candidate days do not imply actual triggers, episodes, hit-rate, or lead time.",
-            "DGS2 historical observations are latest-vintage dates; original publication vintages not verified.",
+            "DGS2 or U.S. Treasury 2Y CMT historical observations are latest-vintage; original publication vintages not verified.",
             "Both Yahoo index closes and FRED rates are historical observations; publication-time/execution lag must be audited before PIT production.",
         ],
     }
