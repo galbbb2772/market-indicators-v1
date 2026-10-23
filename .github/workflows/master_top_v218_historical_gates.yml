@@ -32,7 +32,7 @@ jobs:
       - name: Deterministic formula no-lookahead tests
         run: python -m pytest -q tests/test_master_top_v218_historical_gates.py
       - name: Fetch official rate observations and real S&P 500 history
-        run: python research/master_top_v218_historical_gates.py
+        run: python -m research.master_top_v218_historical_gates
       - name: Enforce source dates, no fabricated breadth and status partitions
         run: |
           python - <<'PY'
