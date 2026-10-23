@@ -114,8 +114,9 @@ def reference_universe(
             metas.append({"ticker": ticker, "type": security_type, "exchange": item.get("primary_exchange")})
         next_url = payload.get("next_url")
         if not next_url:
-            if page == PAGE_LIMIT and len(rows) >= 1000:
-                raise RuntimeError("Reference universe possibly truncated")
+            # A full page without a continuation token cannot certify completeness.
+            if len(rows) >= 1000:
+                raise RuntimeError("Reference universe possibly truncated: full page without cursor")
             return symbols, metas, page
         if not isinstance(next_url, str):
             raise RuntimeError("Invalid reference pagination link")
