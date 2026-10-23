@@ -17,7 +17,7 @@ def inputs(periods=1100, nh=0, nl=200):
         "date":days,"issues":16000,
         "nh":nh,"nl":nl,
     })
-    bs["hl_balance"]=np.where(nh+nl>0,(nh-nl)/(nh+nl),np.nan)
+    bs["hl_balance"]=((nh-nl)/(nh+nl)) if (nh+nl)>0 else np.nan
     bs["hl_persist_score"]=[
         hl_persistence_score(bs["hl_balance"].iloc[max(0,i-19):i+1].to_numpy())
         for i in range(len(bs))
