@@ -72,14 +72,14 @@ The 346 are **NOT confirmed triggers** or episodes; they must not be counted as 
 
 ## Additional important source-definition gap
 
-`main:master_top_v218.py` uses **closing-price-based** 252-session highs/lows (`close >= prior max(close)`) while the separately archived `master-top-v218-live-source` branch uses **intraday high/low** with strict breakout tests (`high > prior max(high)`, `low < prior min(low)`). The frozen spec does not fully settle the comparator definition. This changes breadth and can change crossing of 55. Details in `MASTER_TOP_V218_FREEZE_INPUT_PARITY_2026_10_23.md`.
+`main:master_top_v218.py` uses **closing-price-based** 252-session highs/lows (`close >= prior max(close)`) while the separately archived `master-top-v218-live-source` branch uses **intraday high/low** with strict breakout tests (`high > prior max(high)`, `low < prior min(low)`). The dated **2026-10-17 original frozen PR #8** confirms `CLOSE_252_INCLUSIVE_FROZEN` as the authentic production comparator, while the later intraday-price branch is a **distinct non-equivalent experiment**. It must not silently replace the original frozen model. Details in `MASTER_TOP_V218_FREEZE_INPUT_PARITY_2026_10_23.md`.
 
-Until the 252-session *point-in-time stock universe* and consistent H/L methodology are audited, **full model recall, historical misfires, forward outcomes and per-crisis confusion matrices remain unknown**. No retrofitted substitute is allowed to count as the original frozen route.
+Until the 252-session *point-in-time stock universe* and original close-inclusive H/L methodology are restored, **full model recall, historical misfires, forward outcomes and per-crisis confusion matrices remain unknown**. No retrofitted substitute is allowed to count as the original frozen route.
 
 ## Evidence status
 
 `REAL_FULL_DATE_POLICY_AND_TOP_REPLAY_VERIFIED;`
-`FULL_BREADTH_AND_EPISODE_BACKTEST_BLOCKED_INPUT_DATA_AND_PARITY;`
+`FULL_BREADTH_AND_EPISODE_BACKTEST_BLOCKED_PIT_INPUT_DATA;`
 `NO_NEW_V218_PRODUCTION_SCORE;`
 `NO_FORMULA_RETUNING.`
 
