@@ -8,7 +8,7 @@ import pandas as pd
 import pytest
 
 from research.master_top_v218_historical_gates import (
-    one_day, asof_rate, EVENTS, SCHEMA, sha256_series
+    one_day, asof_rate, EVENTS, SCHEMA, sha256_series, treasury_mirror_csv
 )
 from master_top_v218 import route_score, policy_score
 
@@ -84,3 +84,15 @@ def test_digest_changes_if_rate_changes():
     a=pd.Series([1.0],index=[DAY])
     b=pd.Series([1.1],index=[DAY])
     assert sha256_series(a)!=sha256_series(b)
+
+
+def test_public_treasury_mirror_requires_independent_pin_checks(monkeypatch):
+    import research.master_top_v218_historical_gates as h
+    monkeypatch.setattr(h,"validate_rates",lambda s: None)
+    csv=("date,2Y\n2006-06-29,5.21\n2022-01-03,0.78\n2026-10-21,4.81\n")
+    s=treasury_mirror_csv(csv)
+    assert s.attrs["provider"].startswith("US Treasury 2Y CMT")
+    assert s.loc[pd.Timestamp("2026-10-21")]==4.81
+    broken=csv.replace("2022-01-03,0.78","2022-01-03,1.78")
+    with pytest.raises(RuntimeError,match="disagrees"):
+        treasury_mirror_csv(broken)
