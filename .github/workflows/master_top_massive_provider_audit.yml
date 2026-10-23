@@ -1,0 +1,74 @@
+name: MASTER TOP Massive Provider Audit (research only)
+
+on:
+  pull_request:
+    paths:
+      - 'research/provider_audit_massive_v218.py'
+      - 'tests/test_provider_audit_massive_v218.py'
+      - '.github/workflows/master_top_massive_provider_audit.yml'
+  push:
+    branches:
+      - 'research/master-top-v218-massive-universe-audit-20261023'
+    paths:
+      - 'research/provider_audit_massive_v218.py'
+      - 'tests/test_provider_audit_massive_v218.py'
+      - '.github/workflows/master_top_massive_provider_audit.yml'
+  workflow_dispatch:
+    inputs:
+      audit_date:
+        description: 'Trading date YYYY-MM-DD; empty = preceding New York weekday'
+        type: string
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests pytest
+      - run: python -m py_compile research/provider_audit_massive_v218.py
+      - run: python -m pytest -q tests/test_provider_audit_massive_v218.py
+
+  manual-provider-audit:
+    if: github.event_name == 'workflow_dispatch'
+    needs: [deterministic-tests]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MASSIVE_API_KEY: ${{ secrets.MASSIVE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: Check private provider credential
+        shell: bash
+        run: |
+          if [ -z "$MASSIVE_API_KEY" ]; then
+            echo 'MASSIVE_API_KEY_NOT_CONFIGURED'
+            exit 2
+          fi
+          echo 'Massive source credential is configured; no secret will be printed'
+      - name: Audit dated grouped bars plus PIT stock classes
+        env:
+          AUDIT_DATE: ${{ inputs.audit_date }}
+        run: |
+          if [ -n "$AUDIT_DATE" ]; then
+            python research/provider_audit_massive_v218.py --date "$AUDIT_DATE"
+          else
+            python research/provider_audit_massive_v218.py
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: massive-v218-provider-audit
+          path: research/out/master_top_massive_source_audit.json
+          retention-days: 30
