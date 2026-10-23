@@ -70,7 +70,7 @@ def audit_grouped(payload: dict, requested_date: str) -> tuple[dict, set[str]]:
             stamp = datetime.fromtimestamp(float(row["t"]) / 1000, timezone.utc)
         except (ValueError, TypeError, OverflowError, KeyError, OSError):
             raise RuntimeError("Missing or invalid Massive OHLC or timestamp") from None
-        if not (0 < low <= high and 0 < close <= high and stamp.astimezone(ny).date().isoformat() == requested_date):
+        if not (0 < low <= close <= high and stamp.astimezone(ny).date().isoformat() == requested_date):
             raise RuntimeError("Massive bar price range or market date mismatch")
         usable.append((ticker, close, high, low))
     fingerprint = sha256_json(sorted(usable))
