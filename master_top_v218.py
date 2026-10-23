@@ -279,6 +279,7 @@ def build_snapshot(stock: pd.DataFrame, baseline_trigger: float | None = None) -
     top_ratio = close / high_60m
 
     dgs2 = fetch_dgs2()
+    ensure_input_alignment(score_date, price, dgs2)
     y = asof_value(dgs2, score_date)
     y1 = asof_value(dgs2, score_date - pd.DateOffset(months=1))
     y6 = asof_value(dgs2, score_date - pd.DateOffset(months=6))
@@ -406,6 +407,38 @@ def ensure_score_fresh(asof: str, max_calendar_days: int = 5) -> None:
             f"(source as-of {asof}; max permitted {max_calendar_days}); "
             "refusing to publish a stale score."
         )
+
+
+def ensure_input_alignment(
+    score_date: pd.Timestamp,
+    price: pd.Series,
+    rates: pd.Series,
+    max_price_lag_days: int = 5,
+    max_rate_lag_days: int = 7,
+) -> None:
+    """Reject mixed-date source snapshots before publishing the frozen score.
+
+    These are data-integrity limits, not changes to the frozen signal formula.
+    Rates for 1M/6M anchors must also exist close to their target dates.
+    """
+    asof = pd.Timestamp(score_date).normalize()
+    targets = (
+        ("S&P 500 close", price, asof, max_price_lag_days),
+        ("DGS2 current", rates, asof, max_rate_lag_days),
+        ("DGS2 1M anchor", rates, asof - pd.DateOffset(months=1), max_rate_lag_days),
+        ("DGS2 6M anchor", rates, asof - pd.DateOffset(months=6), max_rate_lag_days),
+    )
+    for name, series, target, limit in targets:
+        available = series.loc[series.index <= target]
+        if available.empty:
+            raise RuntimeError(f"{name} has no observation on/before {target.date()}")
+        observed = pd.Timestamp(available.index[-1]).normalize()
+        lag = (target - observed).days
+        if lag < 0 or lag > limit:
+            raise RuntimeError(
+                f"{name} is stale relative to {target.date()}: "
+                f"last observation {observed.date()}, lag {lag} days, maximum {limit}"
+            )
 
 
 def main() -> None:
