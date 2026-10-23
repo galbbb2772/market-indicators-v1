@@ -102,6 +102,27 @@ def test_request_json_never_exposes_key_in_http_error():
     assert "TOP_SECRET_VALUE" not in str(e.value)
 
 
+def test_request_json_retries_429_without_credential_leak(monkeypatch):
+    sleeps = []
+    monkeypatch.setattr(m.time, "sleep", lambda seconds: sleeps.append(seconds))
+    class FakeResponse:
+        def __init__(self, status):
+            self.status_code = status
+            self.headers = {"Retry-After": "20"}
+        def json(self):
+            return {"status": "OK", "results": []}
+    class FakeSession:
+        calls = 0
+        def get(self, *args, **kwargs):
+            self.calls += 1
+            return FakeResponse(429 if self.calls == 1 else 200)
+    s = FakeSession()
+    report = m.request_json(s, m.BASE + "/v3/reference/tickers", "SENSITIVE_KEY")
+    assert report["status"] == "OK"
+    assert s.calls == 2
+    assert sleeps and any(t >= 20 for t in sleeps)
+
+
 def test_full_audit_does_not_promote_frozen_score(monkeypatch):
     tickers = [f"C{i:04d}" for i in range(1001)]
     rows = [bar(ticker) for ticker in tickers] + [bar("SPY")]
