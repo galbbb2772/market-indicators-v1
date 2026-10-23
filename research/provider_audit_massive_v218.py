@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import os
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlparse
@@ -21,6 +22,7 @@ BASE = "https://api.massive.com"
 ELIGIBLE_TYPES = ("CS", "ADRC")
 PAGE_LIMIT = 25
 MIN_GROUPED_ROWS = 1000
+MIN_API_GAP_SECONDS = 13.0  # Safe pacing for accounts restricted to ~5 requests/minute.
 
 
 def sha256_json(value: object) -> str:
@@ -34,15 +36,35 @@ def request_json(session: requests.Session, url: str, api_key: str, params: dict
         raise RuntimeError("Untrusted pagination host")
     query = dict(params or {})
     query["apiKey"] = api_key
-    try:
-        response = session.get(url, params=query, timeout=60)
+    for attempt in range(3):
+        # Pace across grouped and dated reference API calls in this session.
+        last = getattr(session, "_massive_last_call", None)
+        now = time.monotonic()
+        if last is not None and now < last + MIN_API_GAP_SECONDS:
+            time.sleep(last + MIN_API_GAP_SECONDS - now)
+        setattr(session, "_massive_last_call", time.monotonic())
+        try:
+            response = session.get(url, params=query, timeout=60)
+        except requests.RequestException:
+            raise RuntimeError("Massive connection failed (request details suppressed)") from None
+        if response.status_code == 429:
+            if attempt >= 2:
+                raise RuntimeError("Massive rate limit persisted after bounded retries")
+            # Do not print credential-bearing request URLs, even on throttling.
+            retry_after = (getattr(response, "headers", None) or {}).get("Retry-After", "")
+            try:
+                seconds = max(15.0, min(120.0, float(retry_after)))
+            except (TypeError, ValueError):
+                seconds = 60.0
+            time.sleep(seconds)
+            continue
         if response.status_code != 200:
             raise RuntimeError(f"Massive returned HTTP {response.status_code}")
-        payload = response.json()
-    except requests.RequestException:
-        raise RuntimeError("Massive connection failed (request details suppressed)") from None
-    except ValueError:
-        raise RuntimeError("Massive returned invalid JSON") from None
+        try:
+            payload = response.json()
+        except ValueError:
+            raise RuntimeError("Massive returned invalid JSON") from None
+        break
     if not isinstance(payload, dict) or payload.get("status") not in ("OK", "DELAYED"):
         raise RuntimeError("Massive returned an unsuccessful or malformed response")
     return payload
