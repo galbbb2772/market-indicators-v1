@@ -111,7 +111,12 @@ def test_full_audit_does_not_promote_frozen_score(monkeypatch):
         if params and params.get("type") == "CS":
             return {"status": "OK", "results": [
                 {"ticker": t, "type": "CS", "market": "stocks", "active": True, "primary_exchange": "XNYS"}
-                for t in tickers
+                for t in tickers[:1000]
+            ], "next_url": "https://api.massive.com/v3/reference/tickers?cursor=second"}
+        if "cursor=second" in url:
+            return {"status": "OK", "results": [
+                {"ticker": tickers[1000], "type": "CS", "market": "stocks", "active": True,
+                 "primary_exchange": "XNYS"}
             ]}
         return {"status": "OK", "results": []}
     monkeypatch.setattr(m, "request_json", fake_request)
