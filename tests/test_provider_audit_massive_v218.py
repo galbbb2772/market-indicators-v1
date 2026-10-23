@@ -79,6 +79,18 @@ def test_reference_rejects_bad_ticker_type(monkeypatch):
         m.reference_universe(None, "dummy", DAY, "CS")
 
 
+def test_reference_full_page_without_cursor_is_not_certified(monkeypatch):
+    def fake_request(*args, **kwargs):
+        return {"status": "OK", "results": [
+            {"ticker": f"C{i:04d}", "type": "CS", "market": "stocks",
+             "active": True, "primary_exchange": "XNYS"}
+            for i in range(1000)
+        ]}
+    monkeypatch.setattr(m, "request_json", fake_request)
+    with pytest.raises(RuntimeError, match="possibly truncated"):
+        m.reference_universe(None, "dummy", DAY, "CS")
+
+
 def test_request_json_never_exposes_key_in_http_error():
     class FakeResponse:
         status_code = 403
