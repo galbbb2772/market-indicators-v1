@@ -6,7 +6,7 @@ import pytest
 
 from research.master_top_v218_anchor_outcomes import (
     ARCHIVED_ANCHORS, FREEZE_DATE, THRESHOLD, forward_mdd,
-    outcome_class, validate_price_data,
+    outcome_class, validate_price_data, evaluate,
 )
 
 
@@ -65,3 +65,18 @@ def test_duplicate_price_dates_are_fatal():
 def test_nontrading_signal_never_uses_future_price_as_entry():
     with pytest.raises(ValueError, match="Missing exact anchor"):
         forward_mdd(prices(), "2026-01-03", "12m")
+
+
+def test_untriggered_negative_control_not_a_false_positive():
+    dates = pd.bdate_range("1998-01-02", "2026-10-22")
+    data = pd.DataFrame({"date":dates,"close":100.0,"adjusted_close":float("nan")})
+    data.attrs["provider"] = "synthetic test only"
+    report = evaluate(data)
+    ctrl = next(x for x in report["results"] if x["anchor_date"]=="2006-06-29")
+    assert ctrl["reported_trigger"] is False
+    assert ctrl["forward_12m"]["matured"] is True
+    assert ctrl["underlying_market_path_class_12m"] == "FALSE_POSITIVE"
+    assert ctrl["outcome_class_12m"] == "NOT_APPLICABLE_NO_ALERT"
+    seed = next(x for x in report["results"] if x["anchor_date"]=="2026-09-10")
+    assert seed["outcome_class_12m"] == "CENSORED"
+    assert report["matured_reported_alert_anchors"] == 3
