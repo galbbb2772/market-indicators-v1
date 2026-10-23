@@ -179,7 +179,9 @@ def evaluate(df: pd.DataFrame) -> dict:
                 "forward_63_session": forward_mdd(closes, date, "63"),
                 "forward_126_session": forward_mdd(closes, date, "126"),
                 "forward_252_session": forward_mdd(closes, date, "252"),
-                "outcome_class_12m": outcome_class(twelve["mdd_pct"]),
+                "outcome_class_12m": (outcome_class(twelve["mdd_pct"])
+                    if reported_route >= THRESHOLD else "NOT_APPLICABLE_NO_ALERT"),
+                "underlying_market_path_class_12m": outcome_class(twelve["mdd_pct"]),
                 "previously_reported_mdd_pct": archived_mdd,
                 "difference_vs_reported_pp": (
                     round(twelve["mdd_pct"]-archived_mdd, 4)
