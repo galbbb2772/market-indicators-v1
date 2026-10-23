@@ -1,0 +1,46 @@
+{
+  "schema_version": "v24-legacy-provenance-gap-1",
+  "research_only": true,
+  "accepted_fixture": {
+    "event": "2022",
+    "accepted_trigger_window": "2021-10",
+    "accepted_trigger_type": "EARLY_BREADTH",
+    "status": "LEGACY_ACCEPTED_OUTPUT",
+    "formula_reproducible": false,
+    "code_artifact_recovered": false,
+    "exact_route_c_definition_recovered": false,
+    "exact_breadth_definition_recovered": false,
+    "exact_delta_breadth_3m_input_recovered": false
+  },
+  "searches": {
+    "personal_context": "NO_MATCH",
+    "library_files": "NO_FINAL_V24_ARTIFACT_FOUND",
+    "repositories_checked": [
+      "galbbb2772/market-indicators-v1",
+      "galbbb2772/frozen-v4",
+      "galbbb2772/frozen-v4-dashboard",
+      "galbbb2772/market-structure-lab",
+      "galbbb2772/market-research-terminal"
+    ],
+    "old_market_indicators_branches": [
+      "research/backtest-v2-vs-indexes",
+      "research/market-model-v2-box"
+    ],
+    "result": "NO_FINAL_MARKET_TOP_ROUTE_C_OR_EARLY_BREADTH_CODE_FOUND"
+  },
+  "replacement_evidence": {
+    "A1": "REJECTED",
+    "A2": "REJECTED",
+    "C1": "REJECTED",
+    "C2": "REJECTED",
+    "C3": "REJECTED"
+  },
+  "policy": {
+    "preserve_legacy_fixture": true,
+    "may_use_fixture_as_formula_golden": false,
+    "may_claim_exact_reproduction": false,
+    "may_tune_replacement_to_fixture": false,
+    "production_effect": "none"
+  },
+  "conclusion": "The accepted 2021-10 Early Breadth label is preserved as a legacy research result with an explicit provenance gap. It cannot validate or define a replacement Route_C until its original implementation is recovered."
+}

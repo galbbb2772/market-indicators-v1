@@ -1,0 +1,117 @@
+{
+  "schema_version": "route-b-2022-ff-revision-sensitivity-1",
+  "status": "PASS_REVISION_SENSITIVITY_EXACT_VINTAGE_UNRESOLVED",
+  "research_only": true,
+  "event": "2022",
+  "signal_month": "2021-11",
+  "valuation": 98.5807214666,
+  "policy_shock": 74.3886192578,
+  "route_b_threshold": 85,
+  "critical_size_weakness": 83.74488435047371,
+  "official_archive_note": {
+    "source": "Kenneth R. French Historical Data - Fama/French 3 Factors",
+    "policy": "Official historical archives are annual July data cuts released in August; an exact 2022-01-03 monthly vintage is not directly provided by that archive page.",
+    "exact_2022_01_03_vintage_recovered": false
+  },
+  "variants": [
+    {
+      "id": "current_canonical",
+      "source": "engineerinvestor/summitward-research static F-F_Research_Data_Factors.csv",
+      "smb_202106_to_202111": [
+        1.7,
+        -3.93,
+        -0.32,
+        0.66,
+        -2.26,
+        -1.31
+      ],
+      "cum_smb_6m_pct": -5.437448330996986,
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.33429175696244,
+      "passes": true
+    },
+    {
+      "id": "static_variant_a",
+      "source": "PixelatedMike/RSM338-lab-reports static F-F_Research_Data_Factors.txt",
+      "smb_202106_to_202111": [
+        1.7,
+        -3.93,
+        -0.32,
+        0.66,
+        -2.26,
+        -1.31
+      ],
+      "cum_smb_6m_pct": -5.437448330996986,
+      "size_weakness": 84.64912280701755,
+      "route_b": 85.30483566495808,
+      "passes": true
+    },
+    {
+      "id": "static_variant_b",
+      "source": "JulianHe1991/Better_Millennium-Retail_Investor_Solution static F-F_Research_Data_Factors.CSV",
+      "smb_202106_to_202111": [
+        1.76,
+        -3.96,
+        -0.46,
+        0.75,
+        -2.3,
+        -1.36
+      ],
+      "cum_smb_6m_pct": -5.54617099316147,
+      "size_weakness": 85.26315789473684,
+      "route_b": 85.51060277836655,
+      "passes": true
+    },
+    {
+      "id": "static_variant_c",
+      "source": "cosmoSEucl/APT_assignments static F-F_Research_Data_Factors.csv",
+      "smb_202106_to_202111": [
+        1.7,
+        -3.93,
+        -0.32,
+        0.66,
+        -2.27,
+        -1.31
+      ],
+      "cum_smb_6m_pct": -5.447123239086727,
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.33429175696244,
+      "passes": true
+    },
+    {
+      "id": "static_variant_d",
+      "source": "hmunzinger/Fama-French-portfolio-rolling static F-F_Research_Data_Factors.csv",
+      "smb_202106_to_202111": [
+        1.6,
+        -3.94,
+        -0.46,
+        0.67,
+        -2.37,
+        -1.32
+      ],
+      "cum_smb_6m_pct": -5.779278532161869,
+      "size_weakness": 85.70175438596492,
+      "route_b": 85.65697520162985,
+      "passes": true
+    }
+  ],
+  "observed_range": {
+    "size_weakness_min": 84.64912280701755,
+    "size_weakness_max": 85.70175438596492,
+    "route_b_min": 85.30483566495808,
+    "route_b_max": 85.65697520162985,
+    "minimum_margin_above_route_threshold": 0.30483566495808,
+    "minimum_size_weakness_margin_above_critical": 0.90423845654384
+  },
+  "conclusion": "Third-party static historical variants independently support the same revision-robustness conclusion, but the preferred evidence is now the live-audited Ken French official 2022-2026 archive lattice. Exact Jan-3-2022 monthly vintage remains unresolved.",
+  "evidence_tier": "SUPPLEMENTAL_THIRD_PARTY_STATIC_CROSSCHECK",
+  "preferred_revision_evidence": "research/route_b_2022_ff_revision_lattice.json",
+  "official_lattice_summary": {
+    "source": "Kenneth R. French official historical archives",
+    "archive_count": 5,
+    "years": "2022-2026",
+    "route_b_min": 85.33429175696243,
+    "route_b_max": 85.65697520162983,
+    "all_pass": true
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": "v24-shadow-event-matrix-1",
+  "note": "Accepted historical outputs are provenance fixtures, not freshly recomputed daily V2.4 results. Fresh computations are explicitly marked.",
+  "events": [
+    {
+      "id": "1998",
+      "full_model_status": "NO",
+      "accepted_trigger": null,
+      "accepted_trigger_type": null,
+      "evidence_level": "accepted_historical_output",
+      "shadow_policy_result": "RateShock about 1.7; no claim of a newly recomputed full event"
+    },
+    {
+      "id": "2000",
+      "full_model_status": "YES",
+      "accepted_trigger_window": "1999-08_to_2000-05",
+      "accepted_trigger_type": "BREADTH_TO_PRICE",
+      "mdd12_pct": -25.9,
+      "mdd24_pct": -33.1,
+      "evidence_level": "accepted_historical_output",
+      "shadow_policy_result": "Pure RateShock cannot independently arm Route_B because PolicyShock max without taper is 60 and Route_B max is 84.34"
+    },
+    {
+      "id": "2007",
+      "full_model_status": "YES",
+      "accepted_trigger_window": "2007-12",
+      "accepted_trigger_type": "PRICE",
+      "mdd12_pct": -38.2,
+      "mdd24_pct": -48.1,
+      "evidence_level": "accepted_historical_output",
+      "shadow_policy_result": "6M 2Y change about -58bp => RateShock 0; Policy patch does not replace the credit route"
+    },
+    {
+      "id": "2011",
+      "full_model_status": "NO",
+      "accepted_trigger": null,
+      "accepted_trigger_type": null,
+      "evidence_level": "accepted_historical_output",
+      "shadow_policy_result": "RateShock about 28.3; even TaperShock=100 gives Route_B upper bound below 85"
+    },
+    {
+      "id": "2018",
+      "full_model_status": "NO",
+      "accepted_trigger": null,
+      "accepted_trigger_type": null,
+      "evidence_level": "accepted_historical_output",
+      "shadow_policy_result": "RateShock about 61.7; without a valid QE-to-taper shock Route_B remains below the armed threshold"
+    },
+    {
+      "id": "2022",
+      "full_model_status": "YES",
+      "accepted_trigger_window": "2021-10",
+      "accepted_trigger_type": "EARLY_BREADTH",
+      "mdd12_pct": -25,
+      "mdd24_pct": -25,
+      "evidence_level": "mixed",
+      "shadow_policy_result": {
+        "asof": "2022-01-03",
+        "route_b_strict_pit": 85.3342917569589,
+        "state": "ARMED",
+        "earliest_drawdown_gate_date": "2022-01-18",
+        "formal_price_trigger_date": "UNRESOLVED_UNTIL_FROZEN_T_SCORE_IS_SUPPLIED",
+        "computation_status": "freshly_recomputed_policy_route_with_conservative_monthly_publication_lag_plus_known_price_gate",
+        "monthly_input_asof": "2021-11"
+      },
+      "shadow_v24r_result": {
+        "armed_at": "2022-01-03",
+        "route_b_strict_pit": 85.3342917569589,
+        "price_confirmation_proxy": "SPY",
+        "price_breakdown_v24r_at": "2022-01-20",
+        "t_v24r": 73.079,
+        "dd12_pct": 6.481,
+        "status": "FRESH_RESEARCH_REPLAY",
+        "note": "New T_v2.4R path; does not replace the accepted historical 2021-10 Early Breadth label.",
+        "monthly_input_asof": "2021-11"
+      }
+    }
+  ],
+  "new_price_confirmation_candidate": {
+    "model": "T_v2.4R",
+    "status": "research_only",
+    "known_event_first_confirmations": {
+      "1998": "1998-08-04",
+      "2000": "2000-04-14",
+      "2007": "2007-11-09",
+      "2011": "2011-06-10",
+      "2018": "2018-10-11",
+      "2022": "2022-01-20"
+    }
+  }
+}

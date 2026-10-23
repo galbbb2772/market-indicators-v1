@@ -1,0 +1,27 @@
+{
+  "schema_version": "route-b-2022-ff-dec2021-wayback-exact-evidence-1",
+  "status": "NO_PRE_CUTOFF_CAPTURE_OF_DEC2021_ARCHIVE_URL",
+  "research_only": true,
+  "production_effect": "none",
+  "cutoff": "2022-01-03T23:59:59Z",
+  "snapshot_count": 0,
+  "exact_sha_capture_found": false,
+  "pre_cutoff_vintage_capture_found": false,
+  "errors": [],
+  "exact_official_archive_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/Historical_Archives/12%202021%20Update/ftp/F-F_Research_Data_Factors_CSV.zip",
+  "recovered_official_vintage": {
+    "status": "RECOVERED_OUTSIDE_WAYBACK",
+    "crsp_database": "202111",
+    "last_month": "202111",
+    "zip_sha256": "e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86",
+    "size_weakness": 84.73684210526316,
+    "route_b": 85.33380682500024,
+    "passes": true
+  },
+  "interpretation": {
+    "wayback_delivery_proof": "ABSENT",
+    "factor_vintage_content": "RECOVERED",
+    "numerical_replay": "PASS",
+    "statement": "Wayback has no pre-cutoff capture of the exact official December-2021 Historical_Archives URL. This prevents an independent archival timestamp proof for web delivery, but does not reopen the factor-vintage content gap because the official December-2021 file has been recovered directly and internally identifies the 202111 CRSP database."
+  }
+}

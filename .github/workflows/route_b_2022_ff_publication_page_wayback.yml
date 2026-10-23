@@ -1,0 +1,60 @@
+name: Route_B 2022 FF Publication Page Wayback Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_ff_publication_page_wayback.py"
+      - "tests/test_audit_ff_publication_page_wayback.py"
+      - ".github/workflows/route_b_2022_ff_publication_page_wayback.yml"
+  workflow_dispatch:
+
+jobs:
+  publication-page-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install requests
+
+      - name: Parser contracts
+        run: python -m unittest tests.test_audit_ff_publication_page_wayback -v
+
+      - name: Audit pre-cutoff Ken French publication page
+        run: |
+          python audit_ff_publication_page_wayback.py --output /tmp/ff_publication_page.json
+          python - <<'PY'
+          import json
+
+          x = json.load(open("/tmp/ff_publication_page.json"))
+          assert x["cutoff"] == "20220103235959"
+          assert x["target_month"] == "202111"
+          assert x["query_errors"] == [], (
+              "A Wayback page query failed, so publication evidence is incomplete."
+          )
+          assert x["snapshot_count"] > 0, (
+              "No pre-cutoff Ken French page snapshots were inspected."
+          )
+
+          if x["status"] == "PRE_CUTOFF_PUBLICATION_PAGE_PROVES_202111":
+              assert x["publication_time_202111_independently_proven"] is True
+              r = x["recovered_snapshot"]
+              assert r["timestamp"] <= x["cutoff"]
+              assert r["has_factor_identity"] is True
+              assert r["target_202111_publication_visible"] is True
+          else:
+              assert x["status"] == "NO_PRE_CUTOFF_PUBLICATION_PAGE_PROOF"
+              assert x["publication_time_202111_independently_proven"] is False
+
+          print(
+              "FF_PUBLICATION_PAGE_WAYBACK",
+              "status=", x["status"],
+              "snapshots=", x["snapshot_count"],
+              "recovered=", x.get("recovered_snapshot"),
+          )
+          PY

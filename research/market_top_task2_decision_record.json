@@ -1,0 +1,329 @@
+{
+  "schema_version": "market-top-task2-decision-record-2",
+  "task": "Repair the 2022 Market Top Trigger miss without retuning the rest of V2.4",
+  "status": "CORE_TASK_PASS_FORWARD_SHADOW_OPERATIONAL_WITH_LEGACY_PROVENANCE_GAPS",
+  "production_effect": "none",
+  "passed": [
+    {
+      "component": "PolicyShock V2.1.1",
+      "result": "PASS",
+      "evidence": "2022 conservative publication-lag Route_B = 85.334291757 > 85; pure-rate-only invariant remains below 85"
+    },
+    {
+      "component": "2022 shadow state path",
+      "result": "PASS",
+      "evidence": "2022-01-03 Route_B arms; 2022-01-20 T_v2.4R + DD12 confirms price breakdown"
+    },
+    {
+      "component": "T_v2.4R",
+      "result": "PASS_RESEARCH_CANDIDATE",
+      "evidence": "preregistered, known-event confirmations frozen, SPY snapshot invariance passes, SPY/index dates match for 2011/2018/2022"
+    },
+    {
+      "component": "Canonical Route_B inputs",
+      "result": "RESTORED",
+      "evidence": "Valuation = expanding Shiller CAPE percentile; SizeWeakness = expanding percentile of -CumSMB_6m"
+    },
+    {
+      "component": "2026-10-16 research-live Route_B",
+      "result": "NOT_ARMED",
+      "evidence": "Route_B = 65.5810427181; T_v2.4R = 13.7747; no price breakdown"
+    }
+  ],
+  "legacy_only": [
+    {
+      "component": "Accepted 2021-10 Early Breadth trigger",
+      "status": "LEGACY_ACCEPTED_OUTPUT_WITH_MISSING_FORMULA_PROVENANCE",
+      "preserve": true,
+      "reproducible_formula": false
+    },
+    {
+      "component": "Original V2.4 T",
+      "status": "UNRESOLVED_ORIGINAL_FORMULA",
+      "replacement": "T_v2.4R is separately versioned and not silently renamed T"
+    }
+  ],
+  "unresolved": [
+    {
+      "component": "Original Route_A",
+      "status": "UNRESOLVED",
+      "rejected_replacements": [
+        "A1_LEVEL_CREDIT",
+        "A2_SPREAD_SHOCK"
+      ]
+    },
+    {
+      "component": "Original Route_C",
+      "status": "UNRESOLVED",
+      "rejected_replacements": [
+        "C1_ABSOLUTE_SECTOR_PARTICIPATION",
+        "C2_RELATIVE_PARTICIPATION_ARITHMETIC",
+        "C3_RELATIVE_PARTICIPATION_GEOMETRIC"
+      ]
+    }
+  ],
+  "frozen_conclusions": {
+    "2022_policy_route_repaired": true,
+    "2022_policy_arm_date": "2022-01-03",
+    "2022_price_breakdown_v24r_date": "2022-01-20",
+    "accepted_historical_2022_label_remains": "2021-10 EARLY_BREADTH",
+    "current_full_pressure_authoritative": false,
+    "reason_full_pressure_not_authoritative": "Original Route_A and Route_C child formulas are not reproducible",
+    "do_not_tune_failed_ac_candidates": true
+  },
+  "next_valid_actions": [
+    "Recover an authentic original Route_A/Route_C artifact if one later becomes available",
+    "Otherwise design a separately named next-generation A/C model from a fresh preregistered hypothesis rather than tuning failed V2.4R candidates",
+    "Keep the validated Route_B + T_v2.4R shadow path running independently"
+  ],
+  "forward_shadow": {
+    "status": "LIVE_DRY_RUN_PASS",
+    "asof": "2026-10-16",
+    "route_b": 65.58104271810248,
+    "route_b_state": "NOT_ARMED",
+    "top_location_gate": true,
+    "t_v24r": 13.775261410890886,
+    "price_breakdown": false,
+    "policy_path_state": "IDLE",
+    "sources": {
+      "two_year": "U.S. Treasury Daily Treasury Par Yield Curve Rates",
+      "walcl": "FRED WALCL via market-weather-map static GitHub mirror",
+      "valuation": "Robert Shiller / Yale",
+      "size_factor": "Ken French Data Library",
+      "price": "Yahoo Finance unadjusted SPY Close"
+    },
+    "provider_failover": {
+      "fred_direct_issue": "GitHub Actions read timeout on FRED CSV",
+      "resolution": "Treasury primary for 2Y; static WALCL mirror primary; FRED retained as fallback"
+    },
+    "dashboard": "docs/index.html Market Top Shadow Route_B Forward card",
+    "full_pressure_authoritative": false,
+    "freshness": {
+      "status": "PASS",
+      "market_lag_days": 1,
+      "dgs2_lag_days": 0,
+      "walcl_lag_days": 2,
+      "valuation_signal_month": "2026-09",
+      "ff_factor_month": "2026-08",
+      "limits": {
+        "market_days": 5,
+        "dgs2_days": 7,
+        "walcl_days": 14,
+        "ff_factor_months": 3
+      }
+    },
+    "walcl_eod_semantics": "H.4.1 release-aware; Thursday ~4:30 p.m. ET and federal-holiday shifts are gated to the next eligible market EOD"
+  },
+  "vintage_robustness": {
+    "official_july_2022_archive": {
+      "status": "PASS",
+      "size_weakness": 85.43859649122807,
+      "route_b": 85.56921184591258,
+      "threshold": 85,
+      "route_margin": 0.5692118459125766
+    },
+    "cross_version_static_histories": {
+      "status": "PASS",
+      "route_b_min": 85.30483566495808,
+      "route_b_max": 85.65697520162985,
+      "all_sampled_variants_pass": true
+    },
+    "conclusion": "The 2022 Route_B pass now survives a direct official December-2021 Ken French factor vintage built from the 202111 CRSP database, a genuine pre-cutoff Shiller valuation, and the primary-source PolicyShock chain. The factor-vintage content gap is closed. Exact Jan-3 web-delivery bytes remain unproven because Wayback lacks a recent capture and current HTTP Last-Modified metadata is later.",
+    "wayback": {
+      "status": "NO_PRE_CUTOFF_SNAPSHOT_WITH_202111",
+      "cutoff": "2022-01-03T23:59:59Z",
+      "latest_usable_capture": "2021-04-13T02:05:42Z",
+      "latest_usable_last_month": "2021-02",
+      "archive_access_worked": true,
+      "conclusion": "Wayback cannot prove the exact Jan-3 web-delivery bytes. This no longer blocks the factor-vintage content replay because the official December-2021 Historical_Archives vintage has been recovered directly."
+    },
+    "shiller_wayback": {
+      "status": "NO_PRE_CUTOFF_SHILLER_SNAPSHOT_WITH_202111",
+      "cutoff": "2022-01-03T23:59:59Z",
+      "exact_2022_01_03_valuation_vintage_recovered": false,
+      "latest_usable_capture": "2021-10-12T12:29:41Z",
+      "latest_usable_last_month": "2021-09",
+      "archived_cape": 38.34227971263208,
+      "archived_valuation": 98.57904085257549,
+      "route_b_with_official_2022_size": 85.56872557898132,
+      "route_b_with_lower_current_size": 85.33380682501917,
+      "parser_guard": "Exact CAPE or canonical column M only; Excess CAPE Yield scale rejected; temporal archive consistency enforced"
+    },
+    "failure_boundaries": {
+      "critical_size_weakness": 83.74488435047371,
+      "critical_valuation_with_official_size": 96.62648331605354,
+      "critical_valuation_with_lower_current_size": 97.4267026395819,
+      "critical_policy_shock_with_archived_valuation_and_lower_current_size": 73.51905461361983,
+      "actual_policy_shock": 74.3886192578,
+      "policy_margin": 0.8695646441801728
+    },
+    "pit_uncertainty_budget": {
+      "status": "PASS_BUT_NARROW_MARGIN",
+      "conservative_route_b": 85.33380682500024,
+      "threshold": 85,
+      "score_margin": 0.33380682500024,
+      "one_input_failure_drop_pct": 1.1689484934753858,
+      "two_inputs_equal_failure_drop_pct_each": 0.5861923541178204,
+      "three_inputs_equal_failure_drop_pct_each": 0.3911777025075169,
+      "interpretation": "Observed vintages all pass, but the minimum reconstructed Route_B margin is narrow. Exact PIT bytes remain partly unresolved; do not describe the 2022 pass as a large-cushion result."
+    },
+    "official_december_2021_monthly_vintage": {
+      "status": "PASS_OFFICIAL_DEC2021_VINTAGE_CONTENT",
+      "factor_vintage_content_recovered": true,
+      "exact_jan3_url_bytes_proven": false,
+      "last_month": "202111",
+      "crsp_database": "202111",
+      "size_weakness": 84.73684210526316,
+      "valuation_pre_cutoff": 98.57904085257549,
+      "policy_shock_primary_pit": 74.38861925775049,
+      "route_b": 85.33380682500024,
+      "threshold": 85,
+      "route_margin": 0.33380682500023795,
+      "zip_sha256": "e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86",
+      "server_last_modified": "Tue, 29 Nov 2022 17:09:26 GMT"
+    },
+    "official_dec2021_factor_vintage_content_recovered": true,
+    "exact_2022_01_03_web_delivery_timestamp_proven": false,
+    "ambiguous_exact_monthly_vintage_flag_removed": true,
+    "evidence_boundary": "FACTOR_CONTENT_RECOVERED_DELIVERY_TIMESTAMP_UNPROVEN"
+  },
+  "route_b_2022_vintage_robustness": {
+    "exact_2022_01_03_monthly_bytes_recovered": false,
+    "shiller_pre_cutoff_archive": {
+      "capture": "2021-10-12",
+      "last_month": "2021-09",
+      "valuation": 98.57904085257549,
+      "route_b_with_lower_current_size": 85.33380682501917,
+      "pass": true
+    },
+    "official_fama_french_revision_lattice": {
+      "source": "Kenneth R. French official annual historical archives",
+      "cuts": [
+        "JULY_2022",
+        "JULY_2023",
+        "JULY_2024",
+        "JULY_2025",
+        "AUGUST_2026"
+      ],
+      "all_pass": true,
+      "size_weakness_min": 84.73684210526316,
+      "size_weakness_max": 85.70175438596492,
+      "route_b_min": 85.33429175696243,
+      "route_b_max": 85.65697520162983,
+      "minimum_margin_above_85": 0.3342917569624291
+    },
+    "supplemental_static_variants": {
+      "status": "PASS",
+      "evidence_tier": "SUPPLEMENTAL_THIRD_PARTY_STATIC_CROSSCHECK"
+    },
+    "conclusion": "Official December-2021 Fama-French vintage content is now recovered and preserves Route_B > 85 together with the genuine pre-cutoff Shiller valuation and primary-source PolicyShock. Only exact Jan-3 web-delivery byte provenance remains unresolved.",
+    "official_dec2021_monthly_vintage": {
+      "factor_vintage_content_recovered": true,
+      "exact_jan3_web_bytes_recovered": false,
+      "last_month": "202111",
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.33380682500024,
+      "pass": true
+    }
+  },
+  "policyshock_primary_source_pit": {
+    "status": "PASS_PRIMARY_SOURCE_PIT_CHAIN",
+    "asof": "2022-01-03",
+    "workflow_run_id": 39114505423,
+    "strict_live_verification_passed": true,
+    "treasury": {
+      "latest_date": "2021-12-31",
+      "latest_2y_pct": 0.73,
+      "anchor_date": "2021-06-30",
+      "anchor_2y_pct": 0.25,
+      "evidence_level": "OFFICIAL_HISTORICAL_SERIES_NOT_ARCHIVED_JAN3_BYTES"
+    },
+    "h41": {
+      "evidence_level": "DATED_OFFICIAL_RELEASE_PAGES",
+      "releases": [
+        {
+          "release_date": "2021-07-01",
+          "observation_date": "2021-06-30",
+          "total_assets_millions": 8078544
+        },
+        {
+          "release_date": "2021-09-30",
+          "observation_date": "2021-09-29",
+          "total_assets_millions": 8447981
+        },
+        {
+          "release_date": "2021-12-30",
+          "observation_date": "2021-12-29",
+          "total_assets_millions": 8757460
+        }
+      ],
+      "verification_method": "bounded local DOM match with bounded raw-HTML fallback; page-wide coincidence rejected"
+    },
+    "rate_shock": 63.33333333333333,
+    "taper_shock": 90.97154814437624,
+    "policy_shock": 74.38861925775049,
+    "conservative_cross_vintage_route_b": {
+      "valuation_pre_cutoff": 98.5790408526,
+      "size_weakness_lower_observed": 84.73684210526316,
+      "route_b": 85.33380682500731,
+      "threshold": 85,
+      "pass": true,
+      "critical_policy_shock": 73.51905461360154,
+      "policy_margin": 0.8695646441489515
+    },
+    "remaining_gap": "Exact archived Jan-3 Treasury page bytes and exact Jan-3 web-delivery bytes for the Ken French file remain unrecovered. The official December-2021 factor-vintage content itself is recovered and passes."
+  },
+  "scope_audit": {
+    "status": "PASS_WITH_PRESENTATION_EFFECT",
+    "production_scoring_effect": "none",
+    "market_model_v2_core_modified": false,
+    "production_market_model_current_json_modified": false,
+    "presentation_effect_if_merged": "docs/index.html adds the Market Top Route_B Shadow research card",
+    "interpretation": "The PR does not alter Market Model V2 production scoring, but merge would intentionally change the dashboard presentation."
+  },
+  "route_b_2022_evidence_closure": {
+    "status": "NUMERICAL_INPUT_CHAIN_CLOSED_DELIVERY_TIMESTAMP_GAP",
+    "valuation": {
+      "content": "REAL_PRE_CUTOFF_SHILLER_ARCHIVE",
+      "source_month": "2021-09",
+      "score": 98.57904085257549
+    },
+    "policy_shock": {
+      "content": "PRIMARY_SOURCE_REPRODUCED",
+      "score": 74.38861925775049,
+      "h41_pre_cutoff_release_pages": true,
+      "treasury_official_historical_series": true
+    },
+    "size_weakness": {
+      "content": "OFFICIAL_DEC2021_FF_VINTAGE_RECOVERED",
+      "crsp_database": "202111",
+      "score": 84.73684210526316,
+      "zip_sha256": "e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86"
+    },
+    "route_b": {
+      "score": 85.33380682500024,
+      "threshold": 85,
+      "pass": true,
+      "margin": 0.33380682500023795
+    },
+    "unresolved_delivery_provenance": {
+      "exact_jan3_ff_archive_wayback_capture": false,
+      "exact_jan3_ff_archive_snapshot_count": 0,
+      "exact_jan3_treasury_page_bytes": false,
+      "official_page_pre_cutoff_202111_publication_proof": false,
+      "dec2021_namespace_wayback_capture": false,
+      "dec2021_namespace_capture_count": 0,
+      "publication_time_pre_cutoff_proven": false
+    },
+    "interpretation": "The 2022 Route_B numerical input chain is now reproduced from historically appropriate official/pre-cutoff content. Remaining gaps concern independent web-delivery timestamps for exact Jan-3 bytes, not the factor/valuation/policy values used in the replay.",
+    "publication_page_wayback": {
+      "status": "NO_PRE_CUTOFF_PUBLICATION_PAGE_PROOF",
+      "cutoff": "2022-01-03T23:59:59Z",
+      "snapshots_inspected": 2,
+      "query_errors": [],
+      "strongest_parseable_terminal_month": "202110",
+      "november_2021_publication_independently_proven": false,
+      "interpretation": "Official Dec-2021 factor-vintage content is recovered and numerically reproducible, but surviving pre-cutoff Ken French page captures do not independently prove publication through 2021-11."
+    }
+  }
+}

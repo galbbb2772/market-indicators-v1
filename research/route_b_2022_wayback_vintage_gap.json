@@ -1,0 +1,37 @@
+{
+  "schema_version": "route-b-2022-wayback-vintage-gap-2",
+  "status": "WAYBACK_CAPTURE_GAP_FACTOR_VINTAGE_CONTENT_RECOVERED_ELSEWHERE",
+  "cutoff": "20220103235959",
+  "exact_or_pre_cutoff_vintage": false,
+  "snapshot_count": 6,
+  "older_snapshots": [
+    {
+      "timestamp": "20200714125505",
+      "last_month": "202005"
+    },
+    {
+      "timestamp": "20200503165317",
+      "last_month": "202003"
+    }
+  ],
+  "errors": [],
+  "conclusion": "Wayback did not capture a sufficiently recent Ken French ZIP before 2022-01-03, so exact Jan-3 web-delivery bytes remain unavailable. Separately, the official Kenneth French December-2021 Historical_Archives vintage has now been recovered and internally identifies the 202111 CRSP database, closing the factor-vintage content gap.",
+  "research_effect": "The Wayback gap is now a web-delivery provenance gap only. The frozen SizeWeakness input is reproduced from the official December-2021 vintage and preserves Route_B > 85; exact Jan-3 URL-byte availability is not independently proven.",
+  "official_dec2021_factor_vintage": {
+    "status": "RECOVERED_OFFICIAL_DEC2021_VINTAGE_CONTENT",
+    "source": "Kenneth R. French Historical_Archives/12 2021 Update",
+    "last_month": "202111",
+    "crsp_header": "This file was created by CMPT_ME_BEME_RETS using the 202111 CRSP database.",
+    "size_weakness": 84.73684210526316,
+    "route_b_with_pre_cutoff_shiller_and_primary_policy": 85.33380682500024,
+    "pass": true,
+    "zip_sha256": "e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86"
+  },
+  "latest_usable_capture": {
+    "timestamp": "20210413020542",
+    "max_last_month": "202102",
+    "observed_digest": "EFKVXSQUQYCV73HEGEYBAHTQBIGZDSKZ",
+    "has_202111": false,
+    "note": "Wayback/CDX may return duplicate rows for HTTP/HTTPS aliases at the same capture time; coverage is evaluated by the maximum last_month across all usable variants at the latest timestamp."
+  }
+}

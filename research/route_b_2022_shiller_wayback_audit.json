@@ -1,0 +1,49 @@
+{
+  "schema_version": "route-b-2022-shiller-wayback-audit-evidence-2",
+  "status": "NO_PRE_CUTOFF_SHILLER_SNAPSHOT_WITH_202111",
+  "cutoff": "20220103235959",
+  "exact_2022_01_03_valuation_vintage": false,
+  "snapshot_count": 25,
+  "latest_usable_snapshot": {
+    "timestamp": "20211012122941",
+    "original": "http://www.econ.yale.edu/%7Eshiller/data/ie_data.xls",
+    "last_month": "202109",
+    "cape": 38.34227971263208,
+    "valuation": 98.57904085257549
+  },
+  "route_b_sensitivity": {
+    "policy_shock": 74.3886192578,
+    "with_official_2022_size_weakness": {
+      "size_weakness": 85.43859649122807,
+      "route_b": 85.56872557898132,
+      "margin_above_85": 0.56872557898132,
+      "critical_valuation": 96.62648331605354
+    },
+    "with_current_conservative_size_weakness": {
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.33380682501917,
+      "margin_above_85": 0.33380682501917,
+      "critical_valuation": 97.4267026395819
+    }
+  },
+  "parser_protection": {
+    "exact_cape_or_column_m": true,
+    "rejects_excess_cape_yield_scale": true,
+    "temporal_consistency_check": true
+  },
+  "evidence": {
+    "github_actions_live_download_passed": true,
+    "workflow": "Route_B 2022 Shiller Wayback Audit",
+    "note": "Exact 2021-11 Shiller workbook was not captured, but an older pre-cutoff September-2021 valuation already preserves Route_B > 85 under both tested SizeWeakness vintages."
+  },
+  "conclusion": "Exact Jan-3-2022 Shiller Valuation vintage remains unresolved. However, a real pre-cutoff 2021-10-12 workbook with data through 2021-09 yields Valuation 98.5790, which is already sufficient for Route_B to remain above 85 using either the official July-2022 SizeWeakness or the lower current-vintage conservative SizeWeakness.",
+  "early_stop_proof": {
+    "candidate_order": "timestamp_descending",
+    "temporal_consistency_rule": "workbook_last_month <= capture_month",
+    "target_month": "202111",
+    "newest_usable_capture_month": "202110",
+    "older_candidates_can_legitimately_contain_target": false,
+    "proof_complete": true,
+    "explanation": "Once the newest temporally valid usable capture is October 2021, every remaining older capture is <= October 2021. Under the enforced last_month <= capture_month rule, none can legitimately contain a November 2021 row."
+  }
+}

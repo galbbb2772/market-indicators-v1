@@ -1,0 +1,37 @@
+name: Market Top NG1-A Case Component Diagnostic
+
+on:
+  pull_request:
+    paths:
+      - "diagnose_ng1_a_component_cases.py"
+      - "audit_market_top_ng1_a_independent.py"
+      - "tests/test_diagnose_ng1_a_component_cases.py"
+      - ".github/workflows/market_top_ng1_a_case_diagnostic.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install pandas requests
+      - name: Static contract
+        run: python -m unittest tests.test_diagnose_ng1_a_component_cases -v
+      - name: Recompute frozen NG1-A case components
+        run: |
+          python diagnose_ng1_a_component_cases.py --output /tmp/ng1_cases.json
+          python - <<'PY'
+          import json
+          x=json.load(open("/tmp/ng1_cases.json"))
+          assert x["formula_changed"] is False
+          for key in ("1998-11","2007-11","2012-02"):
+              assert key in x["cases"]
+          print("NG1_A_CASE_COMPONENTS")
+          for key,row in x["cases"].items():
+              print(key, "route=", row["route_a_ng1"], row["components"])
+          PY
