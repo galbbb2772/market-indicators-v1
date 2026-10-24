@@ -1,0 +1,44 @@
+name: V2.1.8 Simplification Ablation QA
+
+on:
+  push:
+    branches:
+      - research/v218-simplification-ablation-20261024
+    paths:
+      - 'research/v218_simplification_ablation.py'
+      - 'tests/test_v218_simplification_ablation.py'
+      - '.github/workflows/v218_simplification_ablation_qa.yml'
+  pull_request:
+    paths:
+      - 'research/v218_simplification_ablation.py'
+      - 'tests/test_v218_simplification_ablation.py'
+      - '.github/workflows/v218_simplification_ablation_qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-ablation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deterministic test dependencies
+        run: python -m pip install -q pandas numpy pytest
+      - name: Verify component-removal semantics
+        run: python -m pytest -q tests/test_v218_simplification_ablation.py
+      - name: Assert production model remains frozen
+        run: |
+          python - <<'PY'
+          import master_top_v218 as m
+          assert m.VERSION == 'MASTER-TOP-V2.1.8-FROZEN'
+          assert m.TRIGGER_THRESHOLD == 55.0
+          assert m.HL_GATE == 75.0
+          assert m.TOP_ELIGIBLE == 0.95
+          assert m.EPISODE_LOCK_SESSIONS == 126
+          print('FROZEN V2.1.8 UNCHANGED; ABLATIONS ARE RESEARCH ONLY')
+          PY
