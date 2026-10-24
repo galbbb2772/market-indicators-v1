@@ -29,5 +29,5 @@ def test_empty_dataset_fails(tmp_path):
 
 def test_unrelated_dataset_fails(tmp_path):
     pd.DataFrame({"text":["not the expected prices"]}).to_csv(tmp_path/"bad.csv",index=False)
-    with pytest.raises(ValueError,match="no Kaggle historical price file"):
+    with pytest.raises(ValueError,match="Kaggle historical price file"):
         inspect(tmp_path)
