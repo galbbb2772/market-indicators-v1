@@ -1,0 +1,67 @@
+name: MASTER TOP V2.1.8 Full-Date Two-Gate Historical Audit
+
+on:
+  push:
+    branches:
+      - research/master-top-v218-historical-eligibility-audit-20261023
+    paths:
+      - 'research/master_top_v218_historical_gates.py'
+      - 'tests/test_master_top_v218_historical_gates.py'
+      - '.github/workflows/master_top_v218_historical_gates.yml'
+  pull_request:
+    paths:
+      - 'research/master_top_v218_historical_gates.py'
+      - 'tests/test_master_top_v218_historical_gates.py'
+      - '.github/workflows/master_top_v218_historical_gates.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-two-gate-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -q pandas numpy requests pytest
+      - name: Deterministic formula no-lookahead tests
+        run: python -m pytest -q tests/test_master_top_v218_historical_gates.py
+      - name: Fetch official rate observations and real S&P 500 history
+        run: python -m research.master_top_v218_historical_gates
+      - name: Enforce source dates, no fabricated breadth and status partitions
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          root=Path("research/out/v218_historical_gates")
+          j=json.loads((root/"summary.json").read_text())
+          df=pd.read_csv(root/"all_days.csv")
+          assert len(df)>=6000, len(df)
+          assert j["source_price_first"] <= "1995-01-01"
+          assert j["score_days_first"] <= "2000-01-01"
+          assert j["score_days_last"] >= "2026-09-01"
+          assert j["source_rates_last"] >= "2026-09-01"
+          assert j["frozen_threshold"] == 55
+          assert j["breadth"] == "NOT_AVAILABLE_HL_IS_NOT_COMPUTED"
+          assert all(df["status"].isin([
+              "TOP_GATE_IMPOSSIBLE","POLICY_UPPER_BOUND_IMPOSSIBLE",
+              "RATE_DATA_UNAVAILABLE","CONDITIONALLY_POSSIBLE_IF_MISSING_HL_SUFFICIENT"
+          ]))
+          assert sum(j["total"][k] for k in (
+              "top_gate_impossible","policy_upper_bound_impossible",
+              "rate_data_unavailable","conditionally_possible_with_unobserved_breadth"
+          ))==len(df)
+          assert "2017_control" in j["control_windows"] and "2023_control" in j["control_windows"]
+          print("FULL DATE GATE COVERAGE VALIDATED; NOT FULL HISTORICAL V218 BACKTEST")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: master-top-v218-historical-two-gate-full-dates
+          path: research/out/v218_historical_gates/
+          retention-days: 30
