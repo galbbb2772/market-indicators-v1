@@ -71,22 +71,21 @@ def stream_wiki_counts(csvpath:Path, memory_limit:str="3GB")->tuple[pd.DataFrame
     conn.execute("SET temp_directory='/tmp/v218_wiki_duckdb_temp'")
     safe_path=str(csvpath).replace("'","''")
     # read_csv_auto understands WIKI's 14-column format. Scope dates first,
-    # then order by ticker/date. Use record batches to cap Python RAM usage.
+    # then order by ticker/date. Use 50k-row fetchmany batches to cap Python RAM usage.
     sql=(f"SELECT trim(ticker) AS ticker, date, "
          f"TRY_CAST(adj_close AS DOUBLE) AS adj_close "
          f"FROM read_csv_auto('{safe_path}', header=true, all_varchar=true) "
          f"WHERE date BETWEEN '{WARMUP_START}' AND '{END}' "
          f"ORDER BY ticker, date")
-    reader=conn.execute(sql).fetch_record_batch(rows_per_batch=50000)
+    cursor=conn.execute(sql)
     counters=defaultdict(lambda:[0,0,0,0])
     valid=0;invalid=0;symbols=0;older_rows=0
     previous_symbol=None;prev_date=""
     state=None
-    for batch in reader:
-        for ticker,date_str,p in zip(
-            batch.column(0).to_pylist(),batch.column(1).to_pylist(),
-            batch.column(2).to_pylist()
-        ):
+    while True:
+        rows=cursor.fetchmany(50000)
+        if not rows:break
+        for ticker,date_str,p in rows:
             if not ticker or not date_str:invalid+=1;continue
             if ticker!=previous_symbol:
                 if previous_symbol is not None and ticker<=previous_symbol:
