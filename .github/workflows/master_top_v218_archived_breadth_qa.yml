@@ -1,0 +1,62 @@
+name: MASTER TOP V2.1.8 Archived Breadth Exploratory Replay QA
+
+on:
+  push:
+    branches:
+      - 'research/v218-replay-existing-2019-2026-breadth-20261023'
+    paths:
+      - 'research/master_top_v218_archived_breadth_exploration.py'
+      - 'tests/test_master_top_v218_archived_breadth_exploration.py'
+      - 'research/v218_universe_quality_audit.py'
+      - 'research/v218_raw_archive_count_reconciliation.py'
+      - 'tests/test_v218_raw_archive_count_reconciliation.py'
+      - 'research/v218_2021_hilo_256_sensitivity.py'
+      - 'research/v218_public_source_repair_gate.py'
+      - 'research/v218_secondary_2024_recovery_parity.py'
+      - 'research/v218_full_archive_ingest.py'
+      - 'tests/test_v218_full_archive_ingest.py'
+      - 'tests/test_v218_secondary_2024_recovery_parity.py'
+      - 'tests/test_v218_public_source_repair_gate.py'
+      - 'tests/test_v218_2021_hilo_256_sensitivity.py'
+      - 'tests/test_v218_universe_quality_audit.py'
+      - '.github/workflows/master_top_v218_archived_breadth_qa.yml'
+  pull_request:
+    paths:
+      - 'research/master_top_v218_archived_breadth_exploration.py'
+      - 'tests/test_master_top_v218_archived_breadth_exploration.py'
+      - 'research/v218_universe_quality_audit.py'
+      - 'tests/test_v218_universe_quality_audit.py'
+      - 'research/v218_raw_archive_count_reconciliation.py'
+      - 'tests/test_v218_raw_archive_count_reconciliation.py'
+      - 'research/v218_2021_hilo_256_sensitivity.py'
+      - 'tests/test_v218_2021_hilo_256_sensitivity.py'
+      - '.github/workflows/master_top_v218_archived_breadth_qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install small reproducibility dependencies
+        run: python -m pip install -q pandas numpy pytest requests
+      - name: Test frozen maths and no-population-certification guards
+        run: python -m pytest -q tests/test_master_top_v218_archived_breadth_exploration.py tests/test_v218_universe_quality_audit.py tests/test_v218_raw_archive_count_reconciliation.py tests/test_v218_2021_hilo_256_sensitivity.py tests/test_v218_public_source_repair_gate.py tests/test_v218_secondary_2024_recovery_parity.py tests/test_v218_full_archive_ingest.py
+      - name: Verify no production data sources or snapshot writers are touched
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('research/master_top_v218_archived_breadth_exploration.py').read_text()
+          assert 'MARKETPARQUET_API_KEY' not in s
+          assert 'MASSIVE_API_KEY' not in s
+          assert 'docs/data/master_top_v218.json' not in s
+          assert 'EXPLORATORY_ARCHIVED_UNIVERSE_NONPIT' in s
+          print('RESEARCH-ONLY NO-LIVE-SCORE GUARDS PASS')
+          PY
