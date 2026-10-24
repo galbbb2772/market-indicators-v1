@@ -1,0 +1,31 @@
+name: Direct Index History (research)
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/direct_index_history.yml"
+      - "research/fetch_direct_index_history.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fetch-direct-indices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout research branch
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install data dependencies
+        run: python -m pip install --upgrade pip yfinance pandas
+      - name: Fetch direct index history
+        run: python research/fetch_direct_index_history.py --start 2000-01-01 --output direct_index_history.csv
+      - name: Upload direct index data artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: direct-index-history
+          path: direct_index_history.csv
+          if-no-files-found: error
+          retention-days: 7
