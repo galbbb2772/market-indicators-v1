@@ -86,3 +86,20 @@ def test_daily_universe_comparison_does_not_create_fake_scores():
     assert summary["ready_for_frozen_252_prior_sessions"] is False
     assert summary["cross_day_universe"][0]["overlap_symbols"] == 1001
     assert summary["cross_day_universe"][0]["jaccard"] == 1.0
+
+
+def test_vendor_stock_partition_never_guarantees_no_ETF_without_independent_type_master():
+    t=stock_table()
+    t.loc[12,"symbol"]="SPY" # vendor labels ETF incorrectly as Stock in this test
+    receipt,_=audit_table(t,"2026-10-22","0"*64,1234)
+    assert receipt["stock_only_vendor_partition_validated"] is True
+    assert receipt["known_etf_symbols_present"] == ["SPY"]
+    assert receipt["eligible_for_frozen_pit_stock_only_breadth"] is False
+    assert receipt["independent_common_stock_type_coverage_complete"] is False
+
+
+def test_no_known_ETF_in_sample_still_does_not_prove_complete_classification():
+    t=stock_table()
+    receipt,_=audit_table(t,"2026-10-22","0"*64,1234)
+    assert receipt["known_etf_count_present"] == 0
+    assert receipt["eligible_for_frozen_pit_stock_only_breadth"] is False
