@@ -12,6 +12,8 @@ on:
       - 'tests/test_v218_raw_archive_count_reconciliation.py'
       - 'research/v218_2021_hilo_256_sensitivity.py'
       - 'research/v218_public_source_repair_gate.py'
+      - 'research/v218_secondary_2024_recovery_parity.py'
+      - 'tests/test_v218_secondary_2024_recovery_parity.py'
       - 'tests/test_v218_public_source_repair_gate.py'
       - 'tests/test_v218_2021_hilo_256_sensitivity.py'
       - 'tests/test_v218_universe_quality_audit.py'
@@ -44,7 +46,7 @@ jobs:
       - name: Install small reproducibility dependencies
         run: python -m pip install -q pandas numpy pytest requests
       - name: Test frozen maths and no-population-certification guards
-        run: python -m pytest -q tests/test_master_top_v218_archived_breadth_exploration.py tests/test_v218_universe_quality_audit.py tests/test_v218_raw_archive_count_reconciliation.py tests/test_v218_2021_hilo_256_sensitivity.py tests/test_v218_public_source_repair_gate.py
+        run: python -m pytest -q tests/test_master_top_v218_archived_breadth_exploration.py tests/test_v218_universe_quality_audit.py tests/test_v218_raw_archive_count_reconciliation.py tests/test_v218_2021_hilo_256_sensitivity.py tests/test_v218_public_source_repair_gate.py tests/test_v218_secondary_2024_recovery_parity.py
       - name: Verify no production data sources or snapshot writers are touched
         run: |
           python - <<'PY'
