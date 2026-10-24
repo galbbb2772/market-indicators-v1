@@ -84,6 +84,10 @@ def audit_table(table: pd.DataFrame, requested: str, blob_sha256: str, blob_byte
     # Hash of sorted symbol names is a universe fingerprint without exposing
     # or redistributing vendor-supplied security-level market prices.
     digest = hashlib.sha256("\n".join(names).encode()).hexdigest()
+    # Public symbol-list cross-check; this is NOT a complete dated ETF master.
+    # Full PIT security-type certification must use comprehensive dated ref data.
+    known_etfs = ("SPY", "QQQ", "TLT", "GLD", "IWM", "DIA", "IVV", "VOO")
+    etf_overlap = sorted(set(names).intersection(known_etfs))
     out = {
         "date": requested,
         "rows": len(table),
@@ -94,6 +98,11 @@ def audit_table(table: pd.DataFrame, requested: str, blob_sha256: str, blob_byte
         "needs_date_normalization": "date" not in table.columns,
         "stock_only_vendor_partition_validated": True if "asset_type" in table.columns else None,
         "verified_positive_closes": True,
+        "known_etf_probe_symbols": list(known_etfs),
+        "known_etf_symbols_present": etf_overlap,
+        "known_etf_count_present": len(etf_overlap),
+        "independent_common_stock_type_coverage_complete": False,
+        "eligible_for_frozen_pit_stock_only_breadth": False,
         "stock_symbol_universe_sha256": digest,
         "downloaded_parquet_sha256": blob_sha256,
         "downloaded_bytes": blob_bytes,
