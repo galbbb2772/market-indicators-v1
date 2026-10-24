@@ -63,7 +63,7 @@ def hash_file(p:Path)->str:
     return sha.hexdigest()
 
 
-def stream_wiki_counts(csvpath:Path, memory_limit:str="3GB")->tuple[pd.DataFrame,dict]:
+def stream_wiki_counts(csvpath:Path,market_sessions:set[str],memory_limit:str="3GB")->tuple[pd.DataFrame,dict]:
     import duckdb
     if not csvpath.is_file():raise FileNotFoundError(csvpath)
     conn=duckdb.connect(database=":memory:")
@@ -80,6 +80,9 @@ def stream_wiki_counts(csvpath:Path, memory_limit:str="3GB")->tuple[pd.DataFrame
     cursor=conn.execute(sql)
     counters=defaultdict(lambda:[0,0,0,0])
     valid=0;invalid=0;symbols=0;older_rows=0
+    nontrading_rows=0;nontrading_dates=set()
+    if len(market_sessions)<5000:
+        raise ValueError("Incomplete actual S&P 500 market calendar for WIKI-source QA")
     previous_symbol=None;prev_date=""
     state=None
     while True:
@@ -96,6 +99,10 @@ def stream_wiki_counts(csvpath:Path, memory_limit:str="3GB")->tuple[pd.DataFrame
             if date_str<=prev_date:
                 raise ValueError(f"duplicated or disordered ticker/day: {ticker}/{date_str}")
             prev_date=date_str
+            if date_str not in market_sessions:
+                nontrading_rows+=1
+                nontrading_dates.add(date_str)
+                continue
             if p is None or not math.isfinite(p) or p<=0:
                 invalid+=1
                 continue
@@ -117,6 +124,9 @@ def stream_wiki_counts(csvpath:Path, memory_limit:str="3GB")->tuple[pd.DataFrame
     daily["hl_persistence"]=[hl_persistence_score(z[max(0,i-19):i+1])
                                  for i in range(len(z))]
     profile={"selected_input_valid_bars_including_1997_1999_warmup":valid,
+             "excluded_US_market_closed_date_price_rows":nontrading_rows,
+             "excluded_US_market_closed_unique_dates":len(nontrading_dates),
+             "market_closed_sample_dates":sorted(nontrading_dates)[:15],
              "selected_invalid_or_missing_rows":invalid,
              "warmup_valid_bars_before_2000":older_rows,
              "all_sample_ticker_strings_from_1997":symbols,
@@ -145,8 +155,10 @@ def main():
     if len(filenames)!=1:raise ValueError(f"Expected one WIKI_PRICES.csv, got {len(filenames)}")
     file=filenames[0]
     profile_sha=hash_file(file)
-    dates,profile=stream_wiki_counts(file)
-    gates,macros=audit(fetch_gspc(),fetch_dgs2())
+    gspc=fetch_gspc()
+    market_calendar=set(gspc.index.strftime("%Y-%m-%d"))
+    dates,profile=stream_wiki_counts(file,market_calendar)
+    gates,macros=audit(gspc,fetch_dgs2())
     result,events=combine(dates,gates,min_required_gspc_sessions=4500)
     years=[]
     for year,g in result.groupby(result.date.dt.year):
