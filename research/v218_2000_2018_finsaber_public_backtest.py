@@ -111,12 +111,12 @@ def raw_breadth(df:pd.DataFrame)->pd.DataFrame:
     daily["hl_persistence"]=[hl_persistence_score(values[max(0,i-19):i+1]) for i in range(len(values))]
     return daily.reset_index()
 
-def combine(daily:pd.DataFrame,gates:pd.DataFrame)->tuple[pd.DataFrame,list[dict]]:
+def combine(daily:pd.DataFrame,gates:pd.DataFrame,min_required_gspc_sessions:int=4000)->tuple[pd.DataFrame,list[dict]]:
     x=gates.copy()
     x["date"]=pd.to_datetime(x.date)
     m=daily.merge(x[["date","gspc_close","policy","top_ratio","route_upper_bound_if_hl100"]],
                   on="date",how="left",validate="one_to_one")
-    if m.gspc_close.notna().sum()<4000:raise ValueError("Incomplete public ^GSPC macro gate series")
+    if m.gspc_close.notna().sum()<min_required_gspc_sessions:raise ValueError("Incomplete public ^GSPC macro gate series")
     def score(row):
         if pd.isna(row.hl_persistence) or pd.isna(row.policy) or pd.isna(row.top_ratio):
             return float("nan")
