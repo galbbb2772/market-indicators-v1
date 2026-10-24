@@ -10039,7 +10039,35 @@
       "old_value": 199000.0,
       "new_value": 200000.0,
       "detected_at": "2026-10-23T08:28:18.660243+00:00"
+    },
+    {
+      "source_id": "LOANINV",
+      "observation_date": "2026-06-01",
+      "old_value": 19654.1956,
+      "new_value": 19654.4971,
+      "detected_at": "2026-10-24T08:03:15.862876+00:00"
+    },
+    {
+      "source_id": "LOANINV",
+      "observation_date": "2026-07-01",
+      "old_value": 19745.1949,
+      "new_value": 19746.3426,
+      "detected_at": "2026-10-24T08:03:15.862876+00:00"
+    },
+    {
+      "source_id": "LOANINV",
+      "observation_date": "2026-08-01",
+      "old_value": 19827.2699,
+      "new_value": 19828.6916,
+      "detected_at": "2026-10-24T08:03:15.862876+00:00"
+    },
+    {
+      "source_id": "LOANINV",
+      "observation_date": "2026-09-01",
+      "old_value": 19881.3514,
+      "new_value": 19882.6426,
+      "detected_at": "2026-10-24T08:03:15.862876+00:00"
     }
   ],
-  "updated_at": "2026-10-23T08:28:18.660243+00:00"
+  "updated_at": "2026-10-24T08:03:15.862876+00:00"
 }
