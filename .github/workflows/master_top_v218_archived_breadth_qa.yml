@@ -18,6 +18,12 @@ on:
     paths:
       - 'research/master_top_v218_archived_breadth_exploration.py'
       - 'tests/test_master_top_v218_archived_breadth_exploration.py'
+      - 'research/v218_universe_quality_audit.py'
+      - 'tests/test_v218_universe_quality_audit.py'
+      - 'research/v218_raw_archive_count_reconciliation.py'
+      - 'tests/test_v218_raw_archive_count_reconciliation.py'
+      - 'research/v218_2021_hilo_256_sensitivity.py'
+      - 'tests/test_v218_2021_hilo_256_sensitivity.py'
       - '.github/workflows/master_top_v218_archived_breadth_qa.yml'
   workflow_dispatch:
 
