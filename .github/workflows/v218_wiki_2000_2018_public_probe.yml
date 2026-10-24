@@ -1,0 +1,54 @@
+name: V2.1.8 WIKI free 2000–2018 Historical Source Probe
+
+on:
+  push:
+    branches:
+      - research/v218-2000-2018-finsaber-public-20261024
+    paths:
+      - 'research/v218_wiki_free_2000_2018_schema_probe.py'
+      - 'tests/test_v218_wiki_free_2000_2018_schema_probe.py'
+      - '.github/workflows/v218_wiki_2000_2018_public_probe.yml'
+  pull_request:
+    paths:
+      - 'research/v218_wiki_free_2000_2018_schema_probe.py'
+      - 'tests/test_v218_wiki_free_2000_2018_schema_probe.py'
+      - '.github/workflows/v218_wiki_2000_2018_public_probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wikidata-free-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare public Kaggle API client and Python CSV/Parquet readers
+        run: python -m pip install -q 'kagglehub>=1.0.2' pandas pyarrow pytest
+      - name: Test all unverified-source guardrails
+        run: python -m pytest -q tests/test_v218_wiki_free_2000_2018_schema_probe.py
+      - name: Actually attempt legal public 3199-equity WIKI prices retrieval
+        run: python -m research.v218_wiki_free_2000_2018_schema_probe --outdir research/out/v218_wiki_public_probe
+      - name: Forbid promotion of an unchecked WIKI schema to original model
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/out/v218_wiki_public_probe/schema_audit.json')
+          r=json.loads(p.read_text())
+          assert r['status']=='WIKI_1962_2018_DOWNLOADED_SCHEMA_ONLY_PIT_STILL_UNCERTIFIED'
+          assert r['dataset_handle']=='marketneutral/quandl-wiki-prices-us-equites'
+          assert r['real_prices_actually_scored'] is False
+          assert r['full_all_US_delisted_stock_universe_PIT_proven'] is False
+          assert r['data_ingested_into_approved_2019_2026_history'] is False
+          print('WIKI PUBLIC SOURCE READ; NO REAL V2.1.8 SIGNALS CLAIMED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v218-wiki-2000-2018-public-dataset-metadata-only
+          path: research/out/v218_wiki_public_probe/
+          retention-days: 30

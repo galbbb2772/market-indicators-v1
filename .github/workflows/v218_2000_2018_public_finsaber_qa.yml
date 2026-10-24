@@ -1,0 +1,64 @@
+name: V2.1.8 2000-2018 public FINSABER breadth PROXY audit
+
+on:
+  push:
+    branches:
+      - research/v218-2000-2018-finsaber-public-20261024
+    paths:
+      - 'research/v218_2000_2018_finsaber_public_backtest.py'
+      - 'tests/test_v218_2000_2018_finsaber_public_backtest.py'
+      - '.github/workflows/v218_2000_2018_public_finsaber_qa.yml'
+  pull_request:
+    paths:
+      - 'research/v218_2000_2018_finsaber_public_backtest.py'
+      - 'tests/test_v218_2000_2018_finsaber_public_backtest.py'
+      - '.github/workflows/v218_2000_2018_public_finsaber_qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  academic-data-2000-2018:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install reproducible source and data QA dependencies
+        run: python -m pip install -q pandas numpy requests pytest
+      - name: Verify 252 strictly prior observations and non-all-US proxy flags
+        run: python -m pytest -q tests/test_v218_2000_2018_finsaber_public_backtest.py
+      - name: Actually retrieve public 2000-2018 historical subset and recompute scores
+        run: |
+          python -m research.v218_2000_2018_finsaber_public_backtest \
+            --scratch ${{ runner.temp }}/v218_finsaber \
+            --outdir research/out/v218_2000_2018_public_sp500
+      - name: Fail closed on all-US original model qualification and publication of raw bars
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          root=Path('research/out/v218_2000_2018_public_sp500')
+          r=json.loads((root/'source_receipt.json').read_text())
+          days=pd.read_csv(root/'daily_2000_2018_scored_SP500_PROXY.csv')
+          assert r['status']=='REAL_PUBLIC_S_AND_P_500_UNIVERSE_PROXY_NOT_ALL_US_PIT_V218'
+          assert r['trading_dates_in_source']>=4500
+          assert r['profile']['selected_distinct_ticker_strings']>=200
+          assert r['profile']['date_first']<='2000-01-04'
+          assert r['profile']['date_last']>='2018-12-28'
+          assert len(days)==r['trading_dates_in_source']
+          assert r['original_all_US_V218_backtest_validated'] is False
+          assert r['PIT_full_common_stock_universe_proven'] is False
+          assert r['first_year_warmup_not_available'] is True
+          assert r['raw_licensed_prices_committed_to_public_git'] is False
+          print('HISTORICAL REAL S&P500 DELISTED-INCLUDING SUBSET REPLAYED; FROZEN ALL-US MODEL NOT CERTIFIED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v218-2000-2018-FINSABER-raw-public-price-proxy-replay
+          path: research/out/v218_2000_2018_public_sp500/
+          retention-days: 45
