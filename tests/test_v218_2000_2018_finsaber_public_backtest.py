@@ -36,7 +36,7 @@ def test_zero_policy_cannot_create_a_signal_even_with_negative_breadth():
     out=raw_breadth(small_prices())
     gates=pd.DataFrame({"date":out.date,"gspc_close":1000.0,"policy":0.0,
         "top_ratio":1.0,"route_upper_bound_if_hl100":0.0})
-    scored,ep=combine(out,gates)
+    scored,ep=combine(out,gates,min_required_gspc_sessions=200)
     assert not scored.proxy_alert_day.any()
     assert not ep
 
