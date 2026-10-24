@@ -1,0 +1,57 @@
+name: MASTER TOP V2.1.8 Real MarketParquet Anonymous Sample
+
+on:
+  pull_request:
+    paths:
+      - 'research/master_top_v218_marketparquet_public_sample.py'
+      - 'tests/test_master_top_v218_marketparquet_public_sample.py'
+      - '.github/workflows/master_top_v218_public_sample.yml'
+  push:
+    branches:
+      - 'research/master-top-v218-marketparquet-anon-schema-20261023'
+    paths:
+      - 'research/master_top_v218_marketparquet_public_sample.py'
+      - 'tests/test_master_top_v218_marketparquet_public_sample.py'
+      - '.github/workflows/master_top_v218_public_sample.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install -q pandas requests pytest pyarrow
+      - name: Deterministic provider and frozen source contract tests
+        run: python -m pytest -q tests/test_master_top_v218_marketparquet_public_sample.py
+      - name: Live market provider anonymous stock_daily schema and universe QA
+        run: |
+          python -m research.master_top_v218_marketparquet_public_sample \
+            --dates 2026-10-20 2026-10-21 2026-10-22
+      - name: Enforce no false 252-day scoring or raw licensed data output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('research/out/v218_marketparquet_anonymous_source.json').read_text())
+          assert len(x['audit_days']) == 3
+          assert x['ready_to_score_v218'] is False
+          assert x['ready_for_frozen_252_prior_sessions'] is False
+          assert x['original_frozen_comparator_definition'] == 'CLOSE_252_INCLUSIVE_FROZEN'
+          assert all(z['rows']>1000 and z['unique_symbols']==z['rows'] for z in x['audit_days'])
+          assert 'close' in x['audit_days'][0]['columns']
+          assert all(not any(k in z for k in ('full_prices','rows_detail','bars')) for z in x['audit_days'])
+          print('ANONYMOUS SAMPLE QA COMPLETE, FULL-BREADTH NOT CLAIMED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: master-top-v218-public-parquet-schema-audit
+          path: research/out/v218_marketparquet_anonymous_source.json
+          retention-days: 30
