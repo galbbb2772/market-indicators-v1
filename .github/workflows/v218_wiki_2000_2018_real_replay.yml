@@ -1,0 +1,62 @@
+name: V2.1.8 Kaggle WIKI 2000-2018 REAL Price Replay (Research)
+
+on:
+  push:
+    branches:
+      - research/v218-2000-2018-finsaber-public-20261024
+    paths:
+      - 'research/v218_wiki_2000_2018_real_price_replay.py'
+      - 'tests/test_v218_wiki_2000_2018_real_price_replay.py'
+      - '.github/workflows/v218_wiki_2000_2018_real_replay.yml'
+  pull_request:
+    paths:
+      - 'research/v218_wiki_2000_2018_real_price_replay.py'
+      - 'tests/test_v218_wiki_2000_2018_real_price_replay.py'
+      - '.github/workflows/v218_wiki_2000_2018_real_replay.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wiki-historical-proxy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public-source reproducibility tools
+        run: python -m pip install -q 'kagglehub>=1.0.2' pandas numpy pyarrow duckdb requests pytest
+      - name: Compare causal 252-prior-close engine against independent oracle
+        run: python -m pytest -q tests/test_v218_wiki_2000_2018_real_price_replay.py
+      - name: Actually download 1.8GB public WIKI historical US equity CSV and calculate original frozen mathematical route
+        run: |
+          python -m research.v218_wiki_2000_2018_real_price_replay \
+            --outdir research/out/v218_wiki_2000_2018_real_replay
+      - name: Fail if any source-scope, reuse, or first-date score guard is violated
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+          from pathlib import Path
+          root=Path('research/out/v218_wiki_2000_2018_real_replay')
+          r=json.loads((root/'source_receipt.json').read_text())
+          d=pd.read_csv(root/'v218_wiki_2000_2018_daily_proxy.csv')
+          assert r['classification']=='REAL_WIKI_2000_2018_BROADER_US_SAMPLE_PROXY_NOT_ALL_US_PIT_V218'
+          assert r['input_profile']['all_sample_ticker_strings_from_1997']>=2500
+          assert len(d)>4500
+          assert r['valid_route_score_days']>4400
+          assert r['user_approved_2019_2026_data_modified'] is False
+          assert r['full_2000_2026_certified'] is False
+          assert r['all_US_stock_universe_PIT_proven'] is False
+          assert r['freeze_threshold']==55.0
+          assert r['freeze_episode_sessions']==126
+          print('REAL PUBLIC WIKI STOCK BREADTH CALCULATED; BROADER-SAMPLE ONLY NOT ORIGINAL ALL-US PIT')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v218-WIKI-2000-2018-REAL-EOD-broader-sample-PROXY
+          path: research/out/v218_wiki_2000_2018_real_replay/
+          retention-days: 45
