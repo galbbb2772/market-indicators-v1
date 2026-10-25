@@ -1,0 +1,209 @@
+name: Market Top Route_A NG3 Forward
+
+on:
+  pull_request:
+    paths:
+      - "market_top_ng3_forward.py"
+      - "audit_market_top_ng1_a_independent.py"
+      - "research/MARKET_TOP_ROUTE_A_NG3_PREREGISTRATION.md"
+      - "research/market_top_route_a_ng3_preregistration.json"
+      - "tests/test_market_top_route_a_ng3_preregistration.py"
+      - "tests/test_market_top_ng3_forward.py"
+      - "tests/test_market_top_ng3_forward_data.py"
+      - "tests/test_market_top_ng3_dashboard_contract.py"
+      - "tests/test_market_top_route_a_ng_decision_record.py"
+      - "tests/test_market_top_route_a_ng3_evidence_protocol.py"
+      - "tests/test_market_top_ng3_episode_ledger.py"
+      - "tests/test_market_top_ng3_monthly_freeze.py"
+      - "tests/test_market_top_ng3_source_temporality_addendum.py"
+      - "research/MARKET_TOP_ROUTE_A_NG3_SOURCE_TEMPORALITY_ADDENDUM.md"
+      - "research/market_top_route_a_ng3_source_temporality_addendum.json"
+      - "research/MARKET_TOP_ROUTE_A_NG3_EVIDENCE_PROTOCOL.md"
+      - "research/market_top_route_a_ng3_evidence_protocol.json"
+      - "research/MARKET_TOP_ROUTE_A_NG_DECISION_RECORD.md"
+      - "research/market_top_route_a_ng_decision_record.json"
+      - "docs/index.html"
+      - "docs/data/market_top_ng3_current.json"
+      - "docs/data/market_top_ng3_history.json"
+      - "docs/data/market_top_ng3_episodes.json"
+      - "docs/data/market_top_ng3_monthly_snapshots.json"
+      - ".github/workflows/market_top_ng3_forward.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "45 2 * * 2-6"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: market-top-ng3-forward
+  cancel-in-progress: false
+
+jobs:
+  ng3-forward:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install pandas requests
+      - name: Preregistration contracts
+        run: python -m unittest tests.test_market_top_route_a_ng3_preregistration -v
+      - name: Forward unit contracts
+        run: |
+          python -m unittest tests.test_market_top_ng3_forward -v
+          python -m unittest tests.test_market_top_ng3_forward_data -v
+          python -m unittest tests.test_market_top_ng3_dashboard_contract -v
+          python -m unittest tests.test_market_top_route_a_ng_decision_record -v
+          python -m unittest tests.test_market_top_route_a_ng3_evidence_protocol -v
+          python -m unittest tests.test_market_top_ng3_episode_ledger -v
+          python -m unittest tests.test_market_top_ng3_monthly_freeze -v
+          python -m unittest tests.test_market_top_ng3_source_temporality_addendum -v
+      - name: Live source dry-run on PR
+        if: github.event_name == 'pull_request'
+        run: |
+          python - <<'PY'
+          import json
+          from market_top_ng3_forward import build_snapshot, fetch_spy
+
+          def is_sha256(x):
+              return isinstance(x, str) and len(x) == 64 and all(
+                  c in "0123456789abcdef" for c in x.lower()
+              )
+
+          price = fetch_spy()
+          x = build_snapshot(price=price)
+
+          ff = x["sources"]["fama_french"]
+          for key in ("ff25_provenance", "ff12_provenance", "ff3_provenance"):
+              assert is_sha256(ff[key]["zip_sha256"])
+
+          credit = x["sources"]["credit"]
+          if credit["source"] == "FRED direct monthly CSV":
+              assert is_sha256(credit["baa_payload_sha256"])
+              assert is_sha256(credit["gs10_payload_sha256"])
+          else:
+              for key in (
+                  "manifest_sha256",
+                  "baa_extension_sha256",
+                  "gs10_extension_sha256",
+                  "baa_pinned_base_sha256",
+                  "gs10_pinned_base_sha256",
+              ):
+                  assert is_sha256(credit[key])
+
+          assert is_sha256(x["sources"]["price"]["payload_sha256"])
+          print(json.dumps(x, ensure_ascii=False, indent=2))
+          PY
+      - name: Refresh NG3 prospective monitor
+        if: github.event_name != 'pull_request'
+        run: python market_top_ng3_forward.py
+      - name: Validate research-only boundary
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open("docs/data/market_top_ng3_current.json"))
+          assert x["research_only"] is True
+          assert x["production_effect"] == "none"
+          assert x["validation_status"] == "PROSPECTIVE_VALIDATION_PENDING"
+          assert x["governance"]["historical_validation_authorized"] is False
+          assert x["governance"]["production_promotion_authorized"] is False
+          ep=json.load(open("docs/data/market_top_ng3_episodes.json"))
+          monthly=json.load(open("docs/data/market_top_ng3_monthly_snapshots.json"))
+          assert ep["production_effect"] == "none"
+          assert monthly["production_effect"] == "none"
+          assert ep["schema_version"] == "market-top-route-a-ng3-episodes-2"
+          assert ep["protocol"] == "market-top-route-a-ng3-evidence-protocol-2"
+          assert "complete_252_session_episodes_without_continuity_gaps" in ep["summary"]
+          assert "episodes_with_continuity_gaps" in ep["summary"]
+          clean_complete = ep["summary"][
+              "complete_252_session_episodes_without_continuity_gaps"
+          ]
+          assert ep["summary"]["review_eligible"] == (clean_complete >= 4)
+          strict_complete = ep["summary"][
+              "complete_252_clean_fully_post_source_episodes"
+          ]
+          assert strict_complete <= clean_complete
+          assert ep["summary"]["strict_temporal_evidence_ready"] == (
+              strict_complete >= 4
+          )
+          assert ep["summary"][
+              "strict_temporal_evidence_ready_is_diagnostic_only"
+          ] is True
+          assert ep["summary"]["automatic_promotion"] is False
+          assert ep["summary"]["action_signal"] is None
+          def is_sha256(v):
+              return isinstance(v,str) and len(v)==64 and all(
+                  c in "0123456789abcdef" for c in v.lower()
+              )
+          ff=x["sources"]["fama_french"]
+          for k in ("ff25_provenance","ff12_provenance","ff3_provenance"):
+              assert is_sha256(ff[k]["zip_sha256"])
+          credit=x["sources"]["credit"]
+          if credit["source"] == "FRED direct monthly CSV":
+              assert is_sha256(credit["baa_payload_sha256"])
+              assert is_sha256(credit["gs10_payload_sha256"])
+          else:
+              for k in (
+                  "manifest_sha256","baa_extension_sha256",
+                  "gs10_extension_sha256","baa_pinned_base_sha256",
+                  "gs10_pinned_base_sha256",
+              ):
+                  assert is_sha256(credit[k])
+          assert is_sha256(x["sources"]["price"]["payload_sha256"])
+          temporal=x["source_temporality"]
+          assert temporal["preregistration_date"] == "2026-10-19"
+          if x["effective_month"] >= "202701":
+              assert temporal[
+                  "all_source_months_fully_post_preregistration"
+              ] is True
+          if x["effective_month"] == "202612":
+              assert temporal["tier"] == (
+                  "SOURCE_MONTH_STRADDLES_PREREGISTRATION"
+              )
+              assert temporal[
+                  "all_source_months_fully_post_preregistration"
+              ] is False
+          assert "missing_effective_months" in monthly["summary"]
+          assert "evidence_gaps_present" in monthly["summary"]
+          if x["effective_month"] < "202612":
+              assert ep["episodes"] == []
+              assert monthly["snapshots"] == []
+              assert ep["summary"]["review_eligible"] is False
+              assert x["counts_toward_prospective_validation"] is False
+              assert x["evidence_phase"] == "RETROSPECTIVE_TRAINING_DIAGNOSTIC"
+          print(
+              "NG3_FORWARD",
+              x["effective_month"],
+              x["evidence_phase"],
+              "score=", x["route_a_ng3_score"],
+              "lead=", x["components"]["financial_lead_gap_raw"],
+              "state=", x["state"],
+          )
+          PY
+      - name: Commit NG3 research monitor
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/market_top_ng3_current.json docs/data/market_top_ng3_history.json docs/data/market_top_ng3_episodes.json docs/data/market_top_ng3_monthly_snapshots.json
+          if git diff --cached --quiet; then
+            echo "No NG3 monitor change."
+          else
+            git commit -m "data: refresh Route_A NG3 prospective monitor"
+            branch="${GITHUB_REF_NAME}"
+            for attempt in 1 2 3; do
+              git pull --rebase origin "$branch"
+              if git push origin HEAD:"$branch"; then
+                exit 0
+              fi
+              echo "Push race on attempt $attempt; retrying after rebase."
+              sleep 5
+            done
+            echo "Failed to push after 3 attempts."
+            exit 1
+          fi

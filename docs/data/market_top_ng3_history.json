@@ -1,0 +1,17 @@
+{
+  "schema_version": "market-top-route-a-ng3-history-1",
+  "research_only": true,
+  "history": [
+    {
+      "effective_month": "202609",
+      "generated_at": "2026-10-19T05:34:04.574571+00:00",
+      "evidence_phase": "RETROSPECTIVE_TRAINING_DIAGNOSTIC",
+      "counts_toward_prospective_validation": false,
+      "route_a_ng3_score": 39.42423064841047,
+      "financial_lead_gap_raw": -7.4313425704730065,
+      "phase_gate": false,
+      "top_location_pass": true,
+      "state": "IDLE"
+    }
+  ]
+}

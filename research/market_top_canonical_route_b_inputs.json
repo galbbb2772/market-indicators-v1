@@ -1,0 +1,55 @@
+{
+  "schema_version": "market-top-canonical-route-b-inputs-1",
+  "formulas": {
+    "valuation": "expanding percentile of Shiller CAPE",
+    "size_block": "B_size = - compounded SMB return over the last 6 monthly observations",
+    "size_weakness": "expanding percentile of B_size",
+    "percentile_rule": "100 * count(history <= current) / N, current-inclusive"
+  },
+  "current_2026_10_16": {
+    "valuation": {
+      "signal_month": "2026-09",
+      "cape": 40.58087409538742,
+      "expanding_percentile": 98.9136649514008,
+      "reason": "last completed month; October current-month CAPE is context only"
+    },
+    "size_weakness": {
+      "latest_published_factor_month": "2026-08",
+      "cum_smb_6m_pct": 0.7635365253771065,
+      "b_size": -0.7635365253771065,
+      "expanding_percentile": 45.4469507101086,
+      "data_vintage": "Fama-French/CRSP August 2026 current vintage"
+    },
+    "policy_shock": 62.744246712042916,
+    "route_b": 65.58104271810248,
+    "route_b_threshold": 85,
+    "policy_route_state": "NOT_ARMED"
+  },
+  "conservative_2022_01_03": {
+    "monthly_input_month": "2021-11",
+    "valuation": {
+      "cape": 38.582627497719216,
+      "expanding_percentile": 98.58072146658782
+    },
+    "size_weakness": {
+      "cum_smb_6m_pct": -5.437448330996986,
+      "b_size": 5.437448330996986,
+      "expanding_percentile": 84.73684210526316,
+      "reconstruction_vintage": "current Fama-French/CRSP August 2026 vintage",
+      "vintage_note": "Historical 2022 archive should be checked separately; current CRSP history may be revised."
+    },
+    "policy_shock": 74.3886192578,
+    "route_b": 85.3342917569589,
+    "route_b_threshold": 85,
+    "policy_route_state": "ARMED_BY_ROUTE_B",
+    "note": "Conservative monthly publication-lag replay. Replaces the prior 88.72 strict-PIT label."
+  },
+  "comparison_only": {
+    "later_month_data_2022": {
+      "valuation_2022_01": 97.87359716479622,
+      "size_weakness_2022_01_current_vintage": 95.27145359019265,
+      "resulting_route_b_approx": 88.71590968258032,
+      "status": "NOT_VALID_FOR_2022_01_03_PIT"
+    }
+  }
+}

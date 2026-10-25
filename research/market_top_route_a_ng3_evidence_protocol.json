@@ -1,0 +1,72 @@
+{
+  "schema_version": "market-top-route-a-ng3-evidence-protocol-2",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START_SUPERSEDES_V1",
+  "frozen_date": "2026-10-19",
+  "prospective_start_effective_month": "202612",
+  "research_only": true,
+  "production_effect": "none",
+  "episode_definition": {
+    "start": "first completed prospective effective month with NG3 state ARMED",
+    "same_episode": "consecutive completed effective months with state ARMED",
+    "close": "first completed effective month with state IDLE after an ARMED run",
+    "reopen": "an ARMED month after at least one completed IDLE effective month starts a new episode",
+    "episode_id": "NG3-<first_armed_effective_month>",
+    "anchor": "last trading day of first ARMED effective month",
+    "overlapping_outcome_windows_allowed": true,
+    "missing_month_bridge": "ARMED -> missing effective month(s) -> ARMED remains one episode; record continuity_evidence_gap=true and missing_effective_months.",
+    "missing_month_conservative_bias": "Unknown monthly state may not be used as evidence that an episode ended.",
+    "monotonic_time_rule": "For the prospective ledger as a whole, any incoming effective_month earlier than the latest month already represented by any open or closed episode is rejected fail-closed, regardless of ARMED/IDLE state."
+  },
+  "outcome_tracking": {
+    "price": "SPY unadjusted Close",
+    "horizons_sessions": [
+      63,
+      126,
+      252
+    ],
+    "path_start": "first trading session after anchor",
+    "metrics": [
+      "forward_return_pct",
+      "worst_return_from_anchor_pct",
+      "max_peak_to_trough_dd_pct"
+    ],
+    "final_252_classification": {
+      "major_top": "worst_return_from_anchor_pct <= -15",
+      "clear_false": "worst_return_from_anchor_pct > -7.5 AND forward_return_pct > 0",
+      "other": "CORRECTION_OR_AMBIGUOUS"
+    },
+    "completed_horizon_immutability": "Once a horizon has complete=true, its stored metrics are frozen and must not be recomputed from a later rolling price window.",
+    "incomplete_horizon_path_coverage": "Fail closed when the first available price observation after the episode anchor is more than 10 calendar days later; a rolling provider window may not silently drop the beginning of an unfinished outcome path."
+  },
+  "promotion_review": {
+    "minimum_complete_252_session_episodes": 4,
+    "automatic_promotion": false,
+    "action_signal": null,
+    "rule": "When four complete 252-session prospective episodes without continuity evidence gaps exist, only set review_eligible=true. A separate decision record is required for any promotion.",
+    "minimum_complete_252_session_episodes_without_continuity_gaps": 4,
+    "continuity_gap_rule": "A completed episode with continuity_evidence_gap=true is retained in the ledger but excluded from review_eligible episode count."
+  },
+  "immutability": {
+    "model_inputs_unchanged": true,
+    "model_score_unchanged": true,
+    "state_gate_unchanged": true,
+    "retrospective_episodes_forbidden": true,
+    "protocol_change_requires_new_version": true,
+    "out_of_order_episode_updates_forbidden": true,
+    "global_ledger_time_monotonic": true,
+    "monotonic_rule_hardening_before_prospective_start": true,
+    "incomplete_outcome_path_must_cover_anchor_neighborhood": true
+  },
+  "source_provenance": {
+    "snapshot_requirement": "Every prospective snapshot records cryptographic SHA-256 fingerprints for the Fama-French ZIP vintages, credit payloads/extension snapshot, and SPY payload used to compute the state.",
+    "episode_start_requirement": "Each new episode permanently stores source_provenance_at_start copied from the opening snapshot.",
+    "purpose": "Prevent later upstream revisions or rolling API windows from changing the identity of the evidence vintage."
+  },
+  "monthly_signal_immutability": {
+    "lock_rule": "For effective_month >= 202612, the first successful snapshot produced after that month is complete becomes the canonical signal snapshot for that effective month.",
+    "later_revisions": "Later scheduled runs may update forward outcome observations, but must not overwrite the frozen monthly signal state, score, gates, source months, or source fingerprints.",
+    "failure_behavior": "If required inputs are stale or unavailable, no monthly snapshot is frozen; the workflow retries on a later scheduled run.",
+    "purpose": "Preserve true prospective point-in-time evidence against later upstream revisions."
+  },
+  "supersedes": "market-top-route-a-ng3-evidence-protocol-1"
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "market-top-shadow-forward-history-1",
+  "research_only": true,
+  "history": [
+    {
+      "asof": "2026-10-16",
+      "generated_at": "2026-10-17T06:24:27.130882+00:00",
+      "policy_shock": 62.744246712042916,
+      "rate_shock": 100,
+      "taper_shock": 6.860616780107296,
+      "valuation": 98.9136649514008,
+      "size_weakness": 45.4469507101086,
+      "route_b": 65.58104271810248,
+      "route_b_pressure_pass": false,
+      "top_location_gate": true,
+      "t_v24r": 13.775261410890886,
+      "dd12_pct": 2.0331446058168163,
+      "price_breakdown_v24r": false,
+      "policy_path_state": "IDLE",
+      "armed_at": null,
+      "triggered_at": null
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+name: Route_B 2022 FF Dec-2021 Exact Wayback Audit
+
+on:
+  pull_request:
+    paths:
+      - "audit_ff_dec2021_wayback_exact.py"
+      - "audit_ff_2022_archive.py"
+      - "tests/test_audit_ff_dec2021_wayback_exact.py"
+      - ".github/workflows/route_b_2022_ff_dec2021_wayback_exact.yml"
+  workflow_dispatch:
+
+jobs:
+  exact-wayback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install requests
+      - name: Static contract
+        run: python -m unittest tests.test_audit_ff_dec2021_wayback_exact -v
+      - name: Query exact December-2021 archive URL in Wayback
+        run: |
+          python audit_ff_dec2021_wayback_exact.py --output /tmp/ff_dec2021_wayback.json
+          python - <<'PY'
+          import json
+          x=json.load(open("/tmp/ff_dec2021_wayback.json"))
+          assert x["cutoff"]=="20220103235959"
+          assert x["errors"]==[], "Wayback exact-URL query failed"
+          assert x["status"] in {
+              "EXACT_DEC2021_ARCHIVE_BYTES_CAPTURED_PRE_CUTOFF",
+              "PRE_CUTOFF_DEC2021_VINTAGE_CAPTURED_DIFFERENT_BYTES",
+              "NO_PRE_CUTOFF_CAPTURE_OF_DEC2021_ARCHIVE_URL",
+          }
+          print(
+              "FF_DEC2021_EXACT_WAYBACK",
+              "status=",x["status"],
+              "snapshots=",x["snapshot_count"],
+              "exact_sha=",x["exact_sha_capture_found"],
+              "vintage_capture=",x["pre_cutoff_vintage_capture_found"],
+          )
+          PY

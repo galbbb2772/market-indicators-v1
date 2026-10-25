@@ -1,0 +1,68 @@
+{
+  "schema_version": "policyshock-2022-primary-source-pit-evidence-1",
+  "status": "PASS_PRIMARY_SOURCE_PIT_CHAIN",
+  "asof": "2022-01-03",
+  "strict_same_day_market_input_excluded": true,
+  "treasury": {
+    "source": "U.S. Treasury Daily Treasury Par Yield Curve Rates",
+    "strict_lag_asof": "2021-12-31",
+    "latest_date": "2021-12-31",
+    "latest_2y_pct": 0.73,
+    "anchor_target": "2021-06-30",
+    "anchor_date": "2021-06-30",
+    "anchor_2y_pct": 0.25,
+    "delta_6m_bp": 48,
+    "evidence_level": "OFFICIAL_HISTORICAL_SERIES_NOT_ARCHIVED_JAN3_BYTES"
+  },
+  "h41": [
+    {
+      "release_date": "2021-07-01",
+      "observation_date": "2021-06-30",
+      "total_assets_millions": 8078544,
+      "url": "https://www.federalreserve.gov/releases/h41/20210701/",
+      "evidence_level": "DATED_OFFICIAL_RELEASE_PAGE"
+    },
+    {
+      "release_date": "2021-09-30",
+      "observation_date": "2021-09-29",
+      "total_assets_millions": 8447981,
+      "url": "https://www.federalreserve.gov/releases/h41/20210930/",
+      "evidence_level": "DATED_OFFICIAL_RELEASE_PAGE"
+    },
+    {
+      "release_date": "2021-12-30",
+      "observation_date": "2021-12-29",
+      "total_assets_millions": 8757460,
+      "url": "https://www.federalreserve.gov/releases/h41/20211230/",
+      "evidence_level": "DATED_OFFICIAL_RELEASE_PAGE"
+    }
+  ],
+  "walcl_spacing_days": {
+    "w0_minus_w13": 91,
+    "w13_minus_w26": 91
+  },
+  "rate_shock": 63.33333333333333,
+  "taper_shock": 90.97154814437624,
+  "policy_shock": 74.38861925775049,
+  "conservative_route_b_check": {
+    "valuation_pre_cutoff": 98.5790408526,
+    "size_weakness_current_conservative": 84.73684210526316,
+    "route_b": 85.33380682500731,
+    "threshold": 85,
+    "passes": true,
+    "critical_policy_shock": 73.51905461360154,
+    "policy_margin_above_critical": 0.8695646441489515
+  },
+  "evidence": {
+    "github_actions_live_download_passed": true,
+    "workflow": "PolicyShock 2022 Primary Source PIT Audit",
+    "primary_source_chain": {
+      "treasury": "official U.S. Treasury historical daily par-yield table",
+      "walcl": "dated Federal Reserve H.4.1 historical release pages"
+    },
+    "workflow_run_id": 39114505423,
+    "strict_h41_live_verification_passed": true,
+    "h41_verification_method": "bounded local DOM match with bounded raw-HTML fallback; page-wide coincidence rejected"
+  },
+  "caveat": "The H.4.1 balance-sheet values are directly established by dated pre-cutoff official release pages. The Treasury rate values are validated against the current official historical table, not archived Jan-3 page bytes."
+}
