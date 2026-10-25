@@ -11,6 +11,7 @@ body{margin:0}.wrap{max-width:1080px;margin:auto;padding:28px 18px 60px}.top{dis
 </head>
 <body><div class="wrap">
 <div class="top"><div><div class="label">Frozen supplemental top-risk route</div><h1>MASTER TOP V2.1.8</h1><div class="muted">Policy × persistent H/L breadth × continuous top proximity</div></div><div class="pill" id="freeze">loading</div></div>
+<div id="dataQuality" class="warn" role="status" aria-live="polite">检查数据时效性中…</div>
 <div class="grid">
   <div class="card"><div class="label">Route</div><div class="big" id="route">—</div><div class="bar"><div class="fill" id="fill"></div></div><div class="muted">Trigger ≥ 55</div></div>
   <div class="card"><div class="label">Policy</div><div class="big" id="policy">—</div><div class="muted">sqrt(R6 × R1)</div></div>
@@ -32,12 +33,21 @@ Route = 0 unless TopRatio ≥ .95 and HL ≥ 75</div></div>
 <div class="footer" id="source"></div>
 </div>
 <script>
-(async()=>{const r=await fetch('./data/master_top_v218.json?'+Date.now());const d=await r.json();const x=d.latest||{};
+(async()=>{const r=await fetch('./data/master_top_v218.json?'+Date.now());if(!r.ok)throw Error('HTTP '+r.status);const d=await r.json();const x=d.latest||{};
+// UTC calendar-day age matches the workflow's five-day operational freshness gate.
+const parsed=/^\d{4}-\d{2}-\d{2}$/.test(x.asof||'')?Date.parse(x.asof+'T00:00:00Z'):NaN;
+const utcDay=Math.floor(Date.now()/86400000);
+const ageDays=Number.isFinite(parsed)?utcDay-Math.floor(parsed/86400000):NaN;
+const isSeed=x.price_symbol!=='^GSPC'||!String(x.breadth_source||'').startsWith('MarketParquet stock_daily')||/seed/i.test(x.research_status||'');
+const stale=!Number.isFinite(ageDays)||ageDays<0||ageDays>5;
+const isLive=d.version==='MASTER-TOP-V2.1.8-FROZEN'&&d.formula_frozen===true&&!isSeed&&!stale;
+const quality=isSeed?'仅历史种子数据｜尚未验证实时数据源':stale?'数据已过期｜不能作为当前市场预警':'数据源与日期基本有效｜研究模型，非完整基线';
+document.querySelector('#dataQuality').textContent=quality+'；截至 '+(x.asof||'未知')+(Number.isFinite(ageDays)?'（距今 '+ageDays+' 个自然日）':'');
 const f=n=>Number.isFinite(Number(n))?Number(n).toFixed(2):'—';
 document.querySelector('#freeze').textContent='FROZEN '+d.freeze_date;
 document.querySelector('#route').textContent=f(x.supplemental_route);document.querySelector('#policy').textContent=f(x.policy);document.querySelector('#hl').textContent=f(x.hl_persistence);document.querySelector('#topratio').textContent=Number.isFinite(Number(x.top_ratio))?(Number(x.top_ratio)*100).toFixed(2)+'%':'—';
 document.querySelector('#fill').style.width=Math.min(100,Number(x.supplemental_route||0))+'%';
-const trig=Number(x.supplemental_route)>=55;document.querySelector('#state').innerHTML=`<div class="big ${trig?'ok':'safe'}">${trig?'TRIGGERED':'NO TRIGGER'}</div><div class="row"><span>As of</span><b>${x.asof||'—'}</b></div><div class="row"><span>Threshold</span><b>55</b></div>`;
+const trig=Number(x.supplemental_route)>=55;const label=!isLive?'NOT LIVE / 不可用':(trig?'TRIGGERED':'NO TRIGGER');document.querySelector('#state').innerHTML=`<div class="big ${isLive?(trig?'ok':'safe'):'muted'}">${label}</div><div class="row"><span>As of</span><b>${x.asof||'—'}</b></div><div class="row"><span>Threshold</span><b>55</b></div><div class="row"><span>Score type</span><b>${isSeed?'SEED / 历史复现':(stale?'STALE / 过期':'RESEARCH LIVE / 研究数据')}</b></div>`;
 const e=(d.events||[]).slice(-1)[0]||{};document.querySelector('#episode').innerHTML=`<div class="big">${e.status||'—'}</div><div class="row"><span>Start</span><b>${e.start_date||'—'}</b></div><div class="row"><span>Last trigger</span><b>${e.last_trigger_date||'—'}</b></div><div class="row"><span>Type</span><b>${e.type||'—'}</b></div>`;
 document.querySelector('#audit').innerHTML=(d.retrospective_audit||[]).map(a=>`<tr><td>${a.start_date}</td><td>${f(a.route)}</td><td>${f(a.mdd_12m_pct)}%</td><td>${a.class}</td></tr>`).join('');
 document.querySelector('#source').textContent=`Breadth: ${x.breadth_source||'—'} · Rates: ${x.rate_source||'—'} · Price: ${x.price_source||'—'}`;

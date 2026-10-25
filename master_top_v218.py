@@ -279,6 +279,7 @@ def build_snapshot(stock: pd.DataFrame, baseline_trigger: float | None = None) -
     top_ratio = close / high_60m
 
     dgs2 = fetch_dgs2()
+    ensure_input_alignment(score_date, price, dgs2)
     y = asof_value(dgs2, score_date)
     y1 = asof_value(dgs2, score_date - pd.DateOffset(months=1))
     y6 = asof_value(dgs2, score_date - pd.DateOffset(months=6))
@@ -389,11 +390,64 @@ def update_payload(snapshot: ScoreSnapshot, price: pd.Series, out_path: Path) ->
     return payload
 
 
+def ensure_score_fresh(asof: str, max_calendar_days: int = 5) -> None:
+    """Fail closed on stale/as-yet-undated MarketParquet snapshots.
+
+    This is an operations gate, not a change to frozen signal parameters.
+    Weekend and ordinary holiday gaps are covered by five calendar days.
+    """
+    stamp = datetime.strptime(asof, "%Y-%m-%d").date()
+    today = datetime.now(timezone.utc).date()
+    age = (today - stamp).days
+    if age < 0:
+        raise RuntimeError(f"MarketParquet snapshot is dated in the future: {asof}")
+    if age > max_calendar_days:
+        raise RuntimeError(
+            f"MarketParquet breadth data stale by {age} calendar days "
+            f"(source as-of {asof}; max permitted {max_calendar_days}); "
+            "refusing to publish a stale score."
+        )
+
+
+def ensure_input_alignment(
+    score_date: pd.Timestamp,
+    price: pd.Series,
+    rates: pd.Series,
+    max_price_lag_days: int = 5,
+    max_rate_lag_days: int = 7,
+) -> None:
+    """Reject mixed-date source snapshots before publishing the frozen score.
+
+    These are data-integrity limits, not changes to the frozen signal formula.
+    Rates for 1M/6M anchors must also exist close to their target dates.
+    """
+    asof = pd.Timestamp(score_date).normalize()
+    targets = (
+        ("S&P 500 close", price, asof, max_price_lag_days),
+        ("DGS2 current", rates, asof, max_rate_lag_days),
+        ("DGS2 1M anchor", rates, asof - pd.DateOffset(months=1), max_rate_lag_days),
+        ("DGS2 6M anchor", rates, asof - pd.DateOffset(months=6), max_rate_lag_days),
+    )
+    for name, series, target, limit in targets:
+        available = series.loc[series.index <= target]
+        if available.empty:
+            raise RuntimeError(f"{name} has no observation on/before {target.date()}")
+        observed = pd.Timestamp(available.index[-1]).normalize()
+        lag = (target - observed).days
+        if lag < 0 or lag > limit:
+            raise RuntimeError(
+                f"{name} is stale relative to {target.date()}: "
+                f"last observation {observed.date()}, lag {lag} days, maximum {limit}"
+            )
+
+
 def main() -> None:
     api_key = os.getenv("MARKETPARQUET_API_KEY", "").strip()
     if not api_key:
-        print("MARKETPARQUET_API_KEY is not configured; preserving the existing seed/current snapshot.")
-        return
+        raise RuntimeError(
+            "MARKETPARQUET_API_KEY is not configured: refusing a green workflow "
+            "that silently keeps a stale seed."
+        )
     baseline_env = os.getenv("MASTER_TOP_BASELINE_TRIGGER", "").strip()
     baseline = float(baseline_env) if baseline_env else None
     out = Path(os.getenv("MASTER_TOP_OUTPUT", "docs/data/master_top_v218.json"))
@@ -401,6 +455,8 @@ def main() -> None:
 
     stock = fetch_marketparquet_stock_history(api_key)
     snapshot, breadth, price = build_snapshot(stock, baseline_trigger=baseline)
+    # Operational validity guard. The frozen 2.1.8 score formula is unchanged.
+    ensure_score_fresh(snapshot.asof)
     payload = update_payload(snapshot, price, out)
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
