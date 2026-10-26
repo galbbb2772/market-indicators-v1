@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2",
-  "generated_at": "2026-10-25T08:22:15.603637+00:00",
+  "generated_at": "2026-10-26T08:50:47.540029+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -496,11 +496,11 @@
       "canonical_ic10": -0.1981,
       "canonical_ic10_2022_present": -0.2046,
       "canonical_partial_ic10": -0.1772,
-      "canonical_partial_ic10_2022_present": -0.1874,
+      "canonical_partial_ic10_2022_present": -0.1873,
       "canonical_phase_same_sign_pct10": 100.0,
       "canonical_loyo_univariate_improvement_pct": -1.527,
-      "canonical_loyo_ablation_delta_pct": -1.109,
-      "canonical_snapshot_generated_at": "2026-10-25T08:20:14.678824+00:00",
+      "canonical_loyo_ablation_delta_pct": -1.115,
+      "canonical_snapshot_generated_at": "2026-10-26T08:48:36.904914+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     },
@@ -515,12 +515,12 @@
       "readiness_status": "ready",
       "canonical_ic10": 0.0217,
       "canonical_ic10_2022_present": 0.0003,
-      "canonical_partial_ic10": -0.0327,
+      "canonical_partial_ic10": -0.0326,
       "canonical_partial_ic10_2022_present": 0.0172,
       "canonical_phase_same_sign_pct10": 90.0,
       "canonical_loyo_univariate_improvement_pct": -0.698,
-      "canonical_loyo_ablation_delta_pct": -0.648,
-      "canonical_snapshot_generated_at": "2026-10-25T08:20:14.678824+00:00",
+      "canonical_loyo_ablation_delta_pct": -0.649,
+      "canonical_snapshot_generated_at": "2026-10-26T08:48:36.904914+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     }
@@ -542,7 +542,7 @@
     "canonical_factor_map_available": true,
     "configured_count": 17,
     "canonical_nonempty_count": 17,
-    "canonical_snapshot_generated_at": "2026-10-25T08:20:14.678824+00:00"
+    "canonical_snapshot_generated_at": "2026-10-26T08:48:36.904914+00:00"
   },
   "status_counts": {
     "regime_or_descriptive": 21,
