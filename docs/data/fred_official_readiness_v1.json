@@ -1,6 +1,6 @@
 {
   "schema": "FRED-OFFICIAL-READINESS-V1",
-  "generated_at": "2026-10-26T08:48:41.918746+00:00",
+  "generated_at": "2026-10-27T08:54:41.659899+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -17,8 +17,8 @@
   "empty_canonical_ids": [],
   "missing_transport_ids": [],
   "revision_ledger_count": 1438,
-  "source_provenance_generated_at": "2026-10-26T08:48:36.904914+00:00",
-  "canonical_generated_at": "2026-10-26T08:48:36.904914+00:00",
+  "source_provenance_generated_at": "2026-10-27T08:54:36.510128+00:00",
+  "canonical_generated_at": "2026-10-27T08:54:36.510128+00:00",
   "next_action": "Run Canonical FRED Factor Map V1/V2.",
   "guardrails": {
     "may_change_production": false,
