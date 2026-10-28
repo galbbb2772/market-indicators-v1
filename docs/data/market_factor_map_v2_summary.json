@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2-SUMMARY",
-  "generated_at": "2026-10-27T08:56:43.999154+00:00",
+  "generated_at": "2026-10-28T09:36:20.515618+00:00",
   "research_only": true,
   "frozen_through_market_date": "2026-10-02",
   "design": "evidence_registry_not_weighted_score",
@@ -17,7 +17,7 @@
     "canonical_factor_map_available": true,
     "configured_count": 17,
     "canonical_nonempty_count": 17,
-    "canonical_snapshot_generated_at": "2026-10-27T08:54:36.510128+00:00"
+    "canonical_snapshot_generated_at": "2026-10-28T09:34:12.226075+00:00"
   },
   "forward_oos_representatives": [
     {
@@ -86,7 +86,7 @@
       "source_stability": "source_invariant",
       "forward_observation_count": 16,
       "matured_10d_count": 6,
-      "discrepancy_count": 3,
+      "discrepancy_count": 4,
       "role": "prospective_return_factor_candidate"
     }
   ],
@@ -505,14 +505,14 @@
       "official_source_ready": true,
       "canonical_evidence_available": true,
       "readiness_status": "ready",
-      "canonical_ic10": -0.1994,
-      "canonical_ic10_2022_present": -0.2045,
-      "canonical_partial_ic10": -0.1775,
-      "canonical_partial_ic10_2022_present": -0.1871,
+      "canonical_ic10": -0.1989,
+      "canonical_ic10_2022_present": -0.2038,
+      "canonical_partial_ic10": -0.1772,
+      "canonical_partial_ic10_2022_present": -0.1862,
       "canonical_phase_same_sign_pct10": 100.0,
-      "canonical_loyo_univariate_improvement_pct": -1.528,
-      "canonical_loyo_ablation_delta_pct": -1.046,
-      "canonical_snapshot_generated_at": "2026-10-27T08:54:36.510128+00:00",
+      "canonical_loyo_univariate_improvement_pct": -1.527,
+      "canonical_loyo_ablation_delta_pct": -1.029,
+      "canonical_snapshot_generated_at": "2026-10-28T09:34:12.226075+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     },
@@ -525,14 +525,14 @@
       "official_source_ready": true,
       "canonical_evidence_available": true,
       "readiness_status": "ready",
-      "canonical_ic10": 0.0247,
-      "canonical_ic10_2022_present": 0.0017,
-      "canonical_partial_ic10": -0.0322,
-      "canonical_partial_ic10_2022_present": 0.018,
+      "canonical_ic10": 0.0256,
+      "canonical_ic10_2022_present": 0.0029,
+      "canonical_partial_ic10": -0.0314,
+      "canonical_partial_ic10_2022_present": 0.019,
       "canonical_phase_same_sign_pct10": 90.0,
-      "canonical_loyo_univariate_improvement_pct": -0.689,
-      "canonical_loyo_ablation_delta_pct": -0.647,
-      "canonical_snapshot_generated_at": "2026-10-27T08:54:36.510128+00:00",
+      "canonical_loyo_univariate_improvement_pct": -0.682,
+      "canonical_loyo_ablation_delta_pct": -0.643,
+      "canonical_snapshot_generated_at": "2026-10-28T09:34:12.226075+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     }
