@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2",
-  "generated_at": "2026-10-31T09:34:40.134570+00:00",
+  "generated_at": "2026-11-01T10:23:55.187343+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -500,7 +500,7 @@
       "canonical_phase_same_sign_pct10": 100.0,
       "canonical_loyo_univariate_improvement_pct": -1.524,
       "canonical_loyo_ablation_delta_pct": -0.986,
-      "canonical_snapshot_generated_at": "2026-10-31T09:32:36.616696+00:00",
+      "canonical_snapshot_generated_at": "2026-11-01T10:22:15.523819+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     },
@@ -513,14 +513,14 @@
       "official_source_ready": true,
       "canonical_evidence_available": true,
       "readiness_status": "ready",
-      "canonical_ic10": 0.0274,
+      "canonical_ic10": 0.0275,
       "canonical_ic10_2022_present": 0.005,
       "canonical_partial_ic10": -0.0298,
       "canonical_partial_ic10_2022_present": 0.0213,
       "canonical_phase_same_sign_pct10": 90.0,
       "canonical_loyo_univariate_improvement_pct": -0.668,
       "canonical_loyo_ablation_delta_pct": -0.627,
-      "canonical_snapshot_generated_at": "2026-10-31T09:32:36.616696+00:00",
+      "canonical_snapshot_generated_at": "2026-11-01T10:22:15.523819+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     }
@@ -542,7 +542,7 @@
     "canonical_factor_map_available": true,
     "configured_count": 17,
     "canonical_nonempty_count": 17,
-    "canonical_snapshot_generated_at": "2026-10-31T09:32:36.616696+00:00"
+    "canonical_snapshot_generated_at": "2026-11-01T10:22:15.523819+00:00"
   },
   "status_counts": {
     "regime_or_descriptive": 21,
