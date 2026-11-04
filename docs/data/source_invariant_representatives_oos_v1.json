@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-INVARIANT-REPRESENTATIVES-OOS-V1",
-  "generated_at": "2026-11-03T03:58:27.537096+00:00",
+  "generated_at": "2026-11-04T03:06:08.645537+00:00",
   "research_only": true,
   "observation_only": true,
   "production_effect": "none",
@@ -163,11 +163,11 @@
           "score": 20.767195767195773,
           "impact_polarity": -1,
           "spy_close_first_seen": 769.0499877929688,
-          "outcome_10d_pct": null,
-          "maturity_market_date": null,
-          "outcome_matured_at": null,
-          "entry_close_at_maturity": null,
-          "exit_close_at_maturity": null
+          "outcome_10d_pct": -1.9114508081870651,
+          "maturity_market_date": "2026-11-03",
+          "outcome_matured_at": "2026-11-04T03:06:08.645537+00:00",
+          "entry_close_at_maturity": 769.0499877929688,
+          "exit_close_at_maturity": 754.3499755859375
         },
         {
           "market_date": "2026-10-21",
@@ -280,6 +280,19 @@
           "score": 28.439153439153444,
           "impact_polarity": -1,
           "spy_close_first_seen": 752.0999755859375,
+          "outcome_10d_pct": null,
+          "maturity_market_date": null,
+          "outcome_matured_at": null,
+          "entry_close_at_maturity": null,
+          "exit_close_at_maturity": null
+        },
+        {
+          "market_date": "2026-11-03",
+          "first_seen_at": "2026-11-04T03:06:08.645537+00:00",
+          "first_seen_market_date": "2026-11-03",
+          "score": 54.76190476190476,
+          "impact_polarity": -1,
+          "spy_close_first_seen": 754.3499755859375,
           "outcome_10d_pct": null,
           "maturity_market_date": null,
           "outcome_matured_at": null,
@@ -445,11 +458,11 @@
           "score": 72.48677248677248,
           "impact_polarity": -1,
           "spy_close_first_seen": 769.0499877929688,
-          "outcome_10d_pct": null,
-          "maturity_market_date": null,
-          "outcome_matured_at": null,
-          "entry_close_at_maturity": null,
-          "exit_close_at_maturity": null
+          "outcome_10d_pct": -1.9114508081870651,
+          "maturity_market_date": "2026-11-03",
+          "outcome_matured_at": "2026-11-04T03:06:08.645537+00:00",
+          "entry_close_at_maturity": 769.0499877929688,
+          "exit_close_at_maturity": 754.3499755859375
         },
         {
           "market_date": "2026-10-21",
@@ -562,6 +575,19 @@
           "score": 42.32804232804233,
           "impact_polarity": -1,
           "spy_close_first_seen": 752.0999755859375,
+          "outcome_10d_pct": null,
+          "maturity_market_date": null,
+          "outcome_matured_at": null,
+          "entry_close_at_maturity": null,
+          "exit_close_at_maturity": null
+        },
+        {
+          "market_date": "2026-11-03",
+          "first_seen_at": "2026-11-04T03:06:08.645537+00:00",
+          "first_seen_market_date": "2026-11-03",
+          "score": 37.56613756613757,
+          "impact_polarity": -1,
+          "spy_close_first_seen": 754.3499755859375,
           "outcome_10d_pct": null,
           "maturity_market_date": null,
           "outcome_matured_at": null,
@@ -727,11 +753,11 @@
           "score": 32.319223985890645,
           "impact_polarity": -1,
           "spy_close_first_seen": 769.0499877929688,
-          "outcome_10d_pct": null,
-          "maturity_market_date": null,
-          "outcome_matured_at": null,
-          "entry_close_at_maturity": null,
-          "exit_close_at_maturity": null
+          "outcome_10d_pct": -1.9114508081870651,
+          "maturity_market_date": "2026-11-03",
+          "outcome_matured_at": "2026-11-04T03:06:08.645537+00:00",
+          "entry_close_at_maturity": 769.0499877929688,
+          "exit_close_at_maturity": 754.3499755859375
         },
         {
           "market_date": "2026-10-21",
@@ -849,6 +875,19 @@
           "outcome_matured_at": null,
           "entry_close_at_maturity": null,
           "exit_close_at_maturity": null
+        },
+        {
+          "market_date": "2026-11-03",
+          "first_seen_at": "2026-11-04T03:06:08.645537+00:00",
+          "first_seen_market_date": "2026-11-03",
+          "score": 23.32451499118166,
+          "impact_polarity": -1,
+          "spy_close_first_seen": 754.3499755859375,
+          "outcome_10d_pct": null,
+          "maturity_market_date": null,
+          "outcome_matured_at": null,
+          "entry_close_at_maturity": null,
+          "exit_close_at_maturity": null
         }
       ],
       "source_recompute_discrepancies": [
@@ -912,32 +951,32 @@
     "First-seen scores are immutable; later recomputation disagreements are logged separately.",
     "Adjusted-close forward returns are frozen at first maturity and are not rewritten later."
   ],
-  "latest_completed_market_date": "2026-11-02",
+  "latest_completed_market_date": "2026-11-03",
   "status": {
     "counts": {
       "fear_volatility::c15": {
-        "forward_observation_count": 21,
-        "matured_10d_count": 11,
+        "forward_observation_count": 22,
+        "matured_10d_count": 12,
         "first_forward_market_date": "2026-10-05",
-        "latest_forward_market_date": "2026-11-02",
+        "latest_forward_market_date": "2026-11-03",
         "discrepancy_count": 0
       },
       "fear_volatility::c10": {
-        "forward_observation_count": 21,
-        "matured_10d_count": 11,
+        "forward_observation_count": 22,
+        "matured_10d_count": 12,
         "first_forward_market_date": "2026-10-05",
-        "latest_forward_market_date": "2026-11-02",
+        "latest_forward_market_date": "2026-11-03",
         "discrepancy_count": 0
       },
       "sentiment_event::c2": {
-        "forward_observation_count": 21,
-        "matured_10d_count": 11,
+        "forward_observation_count": 22,
+        "matured_10d_count": 12,
         "first_forward_market_date": "2026-10-05",
-        "latest_forward_market_date": "2026-11-02",
+        "latest_forward_market_date": "2026-11-03",
         "discrepancy_count": 7
       }
     },
-    "minimum_matured_count_across_candidates": 11,
+    "minimum_matured_count_across_candidates": 12,
     "sample_gate_ready": false,
     "calendar_gate_ready": false,
     "confirmatory_lock_ready": false,
