@@ -1,0 +1,38 @@
+{
+  "schema_version": "route-b-2022-pit-uncertainty-budget-1",
+  "status": "PASS_BUT_NARROW_MARGIN",
+  "research_only": true,
+  "baseline": {
+    "valuation": 98.57904085257549,
+    "policy_shock": 74.38861925775049,
+    "size_weakness": 84.73684210526316,
+    "route_b": 85.33380682500024,
+    "threshold": 85,
+    "margin": 0.33380682500024
+  },
+  "single_input_failure_boundaries": {
+    "valuation": 97.42670263964675,
+    "policy_shock": 73.51905461361983,
+    "size_weakness": 83.74631206605501,
+    "proportional_drop_to_fail_pct": 1.1689484934753858
+  },
+  "equal_proportional_joint_stress": {
+    "one_input_drop_pct": 1.1689484934753858,
+    "two_inputs_each_drop_pct": 0.5861923541178204,
+    "three_inputs_each_drop_pct": 0.3911777025075169
+  },
+  "observed_vintage_variation": {
+    "valuation_observed_min": 98.57904085257549,
+    "valuation_current_reconstruction": 98.5807214666,
+    "valuation_observed_span_points": 0.0016806140245146926,
+    "size_weakness_observed_min": 84.73684210526316,
+    "size_weakness_observed_max": 85.70175438596492,
+    "size_weakness_observed_span_points": 0.9649122807017532,
+    "policy_shock_primary_source": 74.38861925775049
+  },
+  "interpretation": {
+    "classification": "NARROW_BUT_OBSERVED_VINTAGE_ROBUST_PASS",
+    "statement": "Every observed vintage combination tested remains above 85, but the most conservative reconstructed Route_B is only 0.3338 points above threshold. Exact PIT bytes remain partly unresolved, so the result must not be described as having a large safety margin.",
+    "no_parameter_tuning": true
+  }
+}

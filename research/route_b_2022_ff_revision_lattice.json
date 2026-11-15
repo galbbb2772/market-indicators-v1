@@ -1,0 +1,131 @@
+{
+  "schema_version": "route-b-2022-ff-revision-lattice-evidence-1",
+  "source": "Kenneth R. French official historical archive",
+  "target_month": "202111",
+  "valuation": 98.5807214666,
+  "policy_shock": 74.3886192578,
+  "threshold": 85,
+  "archive_count": 5,
+  "all_archives_pass": true,
+  "size_weakness": {
+    "min": 84.73684210526316,
+    "max": 85.70175438596492,
+    "range": 0.9649122807017534
+  },
+  "route_b": {
+    "min": 85.33429175696243,
+    "max": 85.65697520162983,
+    "range": 0.32268344466740473,
+    "minimum_margin_above_threshold": 0.3342917569624291
+  },
+  "raw_smb_revision_range": {
+    "202106": {
+      "min": 1.6,
+      "max": 1.7,
+      "range": 0.09999999999999987
+    },
+    "202107": {
+      "min": -3.99,
+      "max": -3.93,
+      "range": 0.06000000000000005
+    },
+    "202108": {
+      "min": -0.46,
+      "max": -0.32,
+      "range": 0.14
+    },
+    "202109": {
+      "min": 0.66,
+      "max": 0.72,
+      "range": 0.05999999999999994
+    },
+    "202110": {
+      "min": -2.37,
+      "max": -2.26,
+      "range": 0.11000000000000032
+    },
+    "202111": {
+      "min": -1.32,
+      "max": -1.31,
+      "range": 0.010000000000000009
+    }
+  },
+  "archives": [
+    {
+      "id": "JULY_2022",
+      "size_weakness": 85.43859649122807,
+      "route_b": 85.56921184591258,
+      "route_margin": 0.5692118459125766,
+      "smb": [
+        1.7,
+        -3.99,
+        -0.43,
+        0.72,
+        -2.35,
+        -1.32
+      ]
+    },
+    {
+      "id": "JULY_2023",
+      "size_weakness": 85.35087719298245,
+      "route_b": 85.53991735137885,
+      "route_margin": 0.5399173513788469,
+      "smb": [
+        1.68,
+        -3.97,
+        -0.42,
+        0.71,
+        -2.35,
+        -1.32
+      ]
+    },
+    {
+      "id": "JULY_2024",
+      "size_weakness": 85.70175438596492,
+      "route_b": 85.65697520162983,
+      "route_margin": 0.6569752016298338,
+      "smb": [
+        1.6,
+        -3.94,
+        -0.46,
+        0.67,
+        -2.37,
+        -1.32
+      ]
+    },
+    {
+      "id": "JULY_2025",
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.33429175696243,
+      "route_margin": 0.3342917569624291,
+      "smb": [
+        1.7,
+        -3.93,
+        -0.32,
+        0.66,
+        -2.27,
+        -1.31
+      ]
+    },
+    {
+      "id": "AUGUST_2026",
+      "size_weakness": 84.73684210526316,
+      "route_b": 85.33429175696243,
+      "route_margin": 0.3342917569624291,
+      "smb": [
+        1.7,
+        -3.93,
+        -0.32,
+        0.66,
+        -2.26,
+        -1.31
+      ]
+    }
+  ],
+  "evidence": {
+    "github_actions_live_download_passed": true,
+    "workflow": "Route_B 2022 Official Archive Audit",
+    "run_id": 39087272624
+  },
+  "conclusion": "Every official annual Fama-French archive cut from 2022 through 2026 preserves Route_B > 85. Historical revisions change SizeWeakness by less than one percentile point and Route_B by about 0.323 points; the worst observed official cut still retains +0.3343 margin."
+}

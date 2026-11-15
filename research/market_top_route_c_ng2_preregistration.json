@@ -1,0 +1,36 @@
+{
+  "schema_version": "market-top-route-c-ng2-preregistration-1",
+  "status": "PREREGISTERED_PROSPECTIVE_ONLY",
+  "research_only": true,
+  "production_effect": "none",
+  "legacy_route_c_recovery": false,
+  "hypothesis_origin": "Generated from consumed NG1 failure cases; historical validation prohibited.",
+  "frozen_formula": {
+    "route_c_ng2_score": "Route_C_NG1",
+    "leadership_handoff_share": "clip((LeaderGapRaw - BigGrowthGapRaw) / max(LeaderGapRaw, eps), 0, 1)",
+    "handoff_gate_min": 0.4,
+    "route_threshold": 85,
+    "effective_history_months_min": 120,
+    "top_location": "within 5% of trailing 24-calendar-month high AND high age <= 3 calendar months"
+  },
+  "pit": {
+    "fama_french_lag_months": 2,
+    "shiller_cape_lag_months": 1,
+    "percentile": "expanding_current_inclusive",
+    "interpolation": false
+  },
+  "prospective_boundary": {
+    "preregistration_date": "2026-10-19",
+    "first_countable_effective_month": "2027-01",
+    "reason": "First effective month whose required FF and Shiller source months are wholly post-preregistration.",
+    "required_source_months": {
+      "fama_french": "2026-11 or later",
+      "shiller_cape": "2026-12 or later"
+    }
+  },
+  "state_rule": "ARMED iff Route_C_NG1 >= 85 AND LeadershipHandoffShare >= 0.40 AND effective_history_months >= 120 AND top_location passes",
+  "direct_trigger_authorized": false,
+  "historical_validation_authorized": false,
+  "post_preregistration_tuning_allowed": false,
+  "promotion_rule": "No production review before >=4 clean prospective episodes with complete 252-session outcomes and no continuity evidence gaps."
+}

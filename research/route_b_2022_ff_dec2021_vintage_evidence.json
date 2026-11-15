@@ -1,0 +1,65 @@
+{
+  "schema_version": "route-b-2022-ff-dec2021-vintage-evidence-1",
+  "status": "PASS_OFFICIAL_DEC2021_VINTAGE_CONTENT",
+  "research_only": true,
+  "production_effect": "none",
+  "source": {
+    "name": "Kenneth R. French official Historical_Archives December 2021 Update",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/Historical_Archives/12%202021%20Update/ftp/F-F_Research_Data_Factors_CSV.zip",
+    "zip_member": "Historical_Archives/12 2021 Update/ftp/F-F_Research_Data_Factors.CSV",
+    "zip_sha256": "e3c1eb5dd56764be0ed851ef1c7cedb48fab895bc24302c932a15d8474938d86",
+    "internal_header": "This file was created by CMPT_ME_BEME_RETS using the 202111 CRSP database.",
+    "last_month": "202111",
+    "http_last_modified": "Tue, 29 Nov 2022 17:09:26 GMT"
+  },
+  "smb_202106_to_202111": [
+    {
+      "ym": "202106",
+      "smb": 1.8
+    },
+    {
+      "ym": "202107",
+      "smb": -3.96
+    },
+    {
+      "ym": "202108",
+      "smb": -0.48
+    },
+    {
+      "ym": "202109",
+      "smb": 0.8
+    },
+    {
+      "ym": "202110",
+      "smb": -2.28
+    },
+    {
+      "ym": "202111",
+      "smb": -1.35
+    }
+  ],
+  "frozen_replay": {
+    "valuation_pre_cutoff": 98.57904085257549,
+    "policy_shock_primary_pit": 74.38861925775049,
+    "size_weakness": 84.73684210526316,
+    "route_b": 85.33380682500024,
+    "threshold": 85,
+    "passes": true,
+    "critical_size_weakness": 83.74631206605501,
+    "size_margin_above_critical": 0.9905300392081529,
+    "route_margin_above_threshold": 0.33380682500023795
+  },
+  "evidence_interpretation": {
+    "factor_vintage_content": "RECOVERED_OFFICIAL_DEC2021_VINTAGE",
+    "publication_time_bytes": "NOT_PROVEN_BY_HTTP_METADATA_OR_WAYBACK",
+    "why": "The official Historical_Archives file identifies itself as built from the 202111 CRSP database and its monthly table ends at 202111. Current server Last-Modified metadata is from 2022-11-29, so that header cannot be used as proof of Jan-3-2022 URL availability.",
+    "allowed_claim": "The frozen SizeWeakness input has been reproduced from an official December-2021 Ken French historical vintage, and the conservative Route_B remains above 85.",
+    "prohibited_claim": "The exact bytes at this URL are independently proven to have been downloadable on 2022-01-03."
+  },
+  "workflow": {
+    "name": "Route_B 2022 FF Dec-2021 Vintage Audit",
+    "live_download_passed": true,
+    "crsp_header_assertion_passed": true,
+    "sha256_recorded": true
+  }
+}

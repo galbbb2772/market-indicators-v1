@@ -1,0 +1,150 @@
+{
+  "schema_version": "market-top-ng1-a-post2022-holdout-1",
+  "research_only": true,
+  "candidate": "Route_A_NG1",
+  "preregistration": "research/market_top_ng1_a_post2022_holdout_prereg.json",
+  "status": "ARMED_EPISODES_WITH_COMPLETE_OUTCOMES",
+  "holdout": {
+    "start_effective_month": "2023-01",
+    "end_effective_month": "2026-07",
+    "monthly_states": 43,
+    "no_interpolation": true
+  },
+  "source_cutoffs": {
+    "ff25_last_source_month": "2026-05",
+    "ff12_last_source_month": "2026-05",
+    "ff3_last_source_month": "2026-05",
+    "baa_last_source_month": "2026-06",
+    "gs10_last_source_month": "2026-06",
+    "signal_price_snapshot_last_date": "2026-07-23",
+    "outcome_price_source": "Massive SPY daily aggregates, adjusted=false",
+    "outcome_price_last_date": "2026-10-16"
+  },
+  "frozen_parameters": {
+    "threshold": 85,
+    "fama_french_lag_months": 2,
+    "credit_lag_months": 1,
+    "top_gate": {
+      "within_trailing_24m_high_pct": 5,
+      "high_age_months_max": 3
+    },
+    "changed_after_preregistration": false
+  },
+  "armed_episodes": [
+    {
+      "start": "2025-07",
+      "end": "2025-07",
+      "route_a_ng1": 85.41092859223849,
+      "source_months": {
+        "fama_french": "2025-05",
+        "credit_spread": "2025-06"
+      },
+      "components": {
+        "spread_shock_score": 79.56,
+        "finance_weakness_score": 73.27,
+        "size_weakness_score": 96.79,
+        "portfolio_exhaustion_score": 94.33
+      },
+      "top_location": {
+        "passes": true,
+        "anchor_date": "2025-07-31",
+        "anchor_close": 632.08,
+        "high24_close": 637.0999755859375,
+        "high24_date": "2025-07-25"
+      },
+      "outcomes": {
+        "h63": {
+          "end_date": "2025-10-29",
+          "end_close": 687.39,
+          "forward_return_pct": 8.750474623465365,
+          "worst_return_from_anchor_pct": -1.6390330337931913,
+          "worst_return_date": "2025-08-01",
+          "max_peak_to_trough_dd_pct": -2.984653325608,
+          "max_dd_date": "2025-10-10"
+        },
+        "h126": {
+          "end_date": "2026-01-30",
+          "end_close": 691.97,
+          "forward_return_pct": 9.475066447285151,
+          "worst_return_from_anchor_pct": -1.6390330337931913,
+          "worst_return_date": "2025-08-01",
+          "max_peak_to_trough_dd_pct": -5.071356871644916,
+          "max_dd_date": "2025-11-20"
+        },
+        "h252": {
+          "end_date": "2026-08-03",
+          "end_close": 757.67,
+          "forward_return_pct": 19.86932033919755,
+          "worst_return_from_anchor_pct": -1.6390330337931913,
+          "worst_return_date": "2025-08-01",
+          "max_peak_to_trough_dd_pct": -9.133129160735598,
+          "max_dd_date": "2026-03-30"
+        }
+      },
+      "interpretation": "CLEAR_TOP_FALSE_POSITIVE"
+    },
+    {
+      "start": "2025-09",
+      "end": "2025-09",
+      "route_a_ng1": 85.3933032004825,
+      "source_months": {
+        "fama_french": "2025-07",
+        "credit_spread": "2025-08"
+      },
+      "components": {
+        "spread_shock_score": 73.93,
+        "finance_weakness_score": 81.84,
+        "size_weakness_score": 89.78,
+        "portfolio_exhaustion_score": 97.89
+      },
+      "top_location": {
+        "passes": true,
+        "anchor_date": "2025-09-30",
+        "anchor_close": 666.18,
+        "high24_close": 666.8400268554688,
+        "high24_date": "2025-09-22"
+      },
+      "outcomes": {
+        "h63": {
+          "end_date": "2025-12-30",
+          "end_close": 687.01,
+          "forward_return_pct": 3.126782551262419,
+          "worst_return_from_anchor_pct": -2.0489957669098446,
+          "worst_return_date": "2025-11-20",
+          "max_peak_to_trough_dd_pct": -5.071356871644916,
+          "max_dd_date": "2025-11-20"
+        },
+        "h126": {
+          "end_date": "2026-04-01",
+          "end_close": 655.24,
+          "forward_return_pct": -1.642198805127737,
+          "worst_return_from_anchor_pct": -5.135248731574038,
+          "worst_return_date": "2026-03-30",
+          "max_peak_to_trough_dd_pct": -9.133129160735598,
+          "max_dd_date": "2026-03-30"
+        },
+        "h252": {
+          "end_date": "2026-10-01",
+          "end_close": 763.99,
+          "forward_return_pct": 14.682218019153993,
+          "worst_return_from_anchor_pct": -5.135248731574038,
+          "worst_return_date": "2026-03-30",
+          "max_peak_to_trough_dd_pct": -9.133129160735598,
+          "max_dd_date": "2026-03-30"
+        }
+      },
+      "interpretation": "CORRECTION_RISK_NOT_MAJOR_TOP"
+    }
+  ],
+  "research_conclusion": {
+    "armed_episode_count": 2,
+    "major_top_confirmed_count": 0,
+    "clear_false_top_count": 1,
+    "correction_not_major_top_count": 1,
+    "statement": "The untouched 2023-2026 temporal holdout reinforces that NG1-A is a credit/breadth stress detector with poor top specificity. Both holdout ARMED episodes completed 252 sessions without a durable major top.",
+    "legacy_route_a_recovered": false,
+    "production_ready": false,
+    "parameters_retuned": false,
+    "next_step": "Do not tune NG1. Freeze it as a stress diagnostic and require a separately preregistered NG2 for any top-specific redesign."
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": "market-top-ng1-ac-screen-1",
+  "research_only": true,
+  "source_vintage": "BuyRisk mirror of Ken French/FRED current historical files; 202605 CRSP cut for French data",
+  "sample": {
+    "start": "1993-01",
+    "end": "2022-12",
+    "months": 360
+  },
+  "point_in_time": {
+    "fama_french_lag_months": 2,
+    "shiller_cape_lag_months": 1,
+    "credit_spread_lag_months": 1,
+    "top_location": "SPY daily close; within 5% of trailing 24-calendar-month close high; high age <=3 calendar months"
+  },
+  "route_c_ng1": {
+    "decision": "REJECT",
+    "positive_windows": {
+      "2000-01_to_2000-04": [
+        {
+          "month": "2000-03",
+          "score": 92.36471488068139
+        }
+      ],
+      "2021-10_to_2022-01": [
+        {
+          "month": "2021-10",
+          "score": 95.59454198430768
+        },
+        {
+          "month": "2021-11",
+          "score": 89.445
+        },
+        {
+          "month": "2021-12",
+          "score": 93.71
+        }
+      ]
+    },
+    "failed_negative_window": {
+      "window": "1998-06_to_1998-10",
+      "hits": [
+        {
+          "month": "1998-06",
+          "score": 93.051
+        }
+      ]
+    },
+    "other_negative_windows_passed": [
+      "2004-01_to_2005-12",
+      "2011-03_to_2011-07",
+      "2018-08_to_2018-12",
+      "2020-01_to_2020-04"
+    ],
+    "armed_episodes": [
+      [
+        "1995-07",
+        "1995-07"
+      ],
+      [
+        "1996-03",
+        "1996-04"
+      ],
+      [
+        "1997-01",
+        "1997-01"
+      ],
+      [
+        "1997-04",
+        "1997-04"
+      ],
+      [
+        "1998-04",
+        "1998-06"
+      ],
+      [
+        "1998-11",
+        "1999-04"
+      ],
+      [
+        "1999-06",
+        "1999-06"
+      ],
+      [
+        "2000-03",
+        "2000-03"
+      ],
+      [
+        "2017-07",
+        "2017-10"
+      ],
+      [
+        "2019-10",
+        "2019-10"
+      ],
+      [
+        "2020-08",
+        "2020-08"
+      ],
+      [
+        "2020-11",
+        "2020-11"
+      ],
+      [
+        "2021-10",
+        "2021-12"
+      ]
+    ],
+    "interpretation": "The new FF25 cross-sectional concentration construct detects the intended 2000/2022 regimes but fails the preregistered 1998 negative control and produces too many additional ARMED episodes. NG1 C is rejected without retuning."
+  },
+  "route_a_ng1": {
+    "decision": "ACCEPT_SCREENING_CANDIDATE",
+    "primary_positive": {
+      "window": "2007-05_to_2007-11",
+      "hit": {
+        "month": "2007-11",
+        "score": 86.71555267259926
+      }
+    },
+    "negative_windows": {
+      "2000-01_to_2000-04": [],
+      "2011-03_to_2011-07": [],
+      "2018-08_to_2018-12": []
+    },
+    "armed_episodes": [
+      {
+        "start": "1998-11",
+        "end": "1999-03",
+        "max_score": 97.2958209412528
+      },
+      {
+        "start": "2007-11",
+        "end": "2007-11",
+        "max_score": 86.71555267259926
+      },
+      {
+        "start": "2012-02",
+        "end": "2012-02",
+        "max_score": 87.45551741218588
+      }
+    ],
+    "additional_episode_count": 2,
+    "preregistered_max_additional_episodes": 2,
+    "interpretation": "NG1 A passes the preregistered first screening exactly at the allowed false/additional-episode ceiling. It is a research screening candidate only and requires independent source/vintage validation and prospective evidence before any promotion."
+  },
+  "no_posthoc_tuning": true,
+  "legacy_v24_route_a_status": "UNRESOLVED",
+  "legacy_v24_route_c_status": "UNRESOLVED"
+}

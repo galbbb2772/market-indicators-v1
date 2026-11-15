@@ -1,0 +1,93 @@
+{
+  "schema_version": "market-top-route-c-ng2-forward-1",
+  "generated_at": "2026-10-19T11:46:20.508904+00:00",
+  "research_only": true,
+  "production_effect": "none",
+  "validation_status": "PROSPECTIVE_VALIDATION_PENDING",
+  "effective_month": "202609",
+  "evidence_phase": "RETROSPECTIVE_HYPOTHESIS_DIAGNOSTIC",
+  "counts_toward_prospective_validation": false,
+  "prospective_start_effective_month": "202701",
+  "source_months": {
+    "fama_french": "202607",
+    "shiller_cape": "202608"
+  },
+  "components": {
+    "portfolio_exhaustion_score": 27.34113712374582,
+    "leader_gap_score": 96.15384615384616,
+    "big_growth_gap_score": 10.618729096989966,
+    "concentration_breadth_ng1": 30.33555360831475,
+    "leader_gap_raw": 39.263928312687256,
+    "big_growth_gap_raw": -12.110813730067461,
+    "leadership_handoff_share": 1,
+    "leader_6m": 54.50767462174062,
+    "big_growth_6m": 3.132932578985903,
+    "median_6m": 15.243746309053364,
+    "valuation": 98.97025171624713,
+    "cape": 40.98739354965891,
+    "effective_history_months": 1196
+  },
+  "route_c_ng1_score": 54.79340632381436,
+  "route_c_ng2_score": 54.79340632381436,
+  "gates": {
+    "route_ge_85": false,
+    "handoff_ge_40pct": true,
+    "warmup_ge_120": true,
+    "top_location": {
+      "asof": "2026-09-30",
+      "close": 762.6300048828125,
+      "high24": 777.8800048828125,
+      "high24_date": "2026-08-13",
+      "within_5pct": true,
+      "high_within_3m": true,
+      "passes": true
+    }
+  },
+  "state": "IDLE",
+  "source_temporality": {
+    "preregistration_date": "2026-10-19",
+    "all_source_months_fully_post_preregistration": false,
+    "detail": {
+      "fama_french": {
+        "source_month": "202607",
+        "relation": "PRE_PREREGISTRATION"
+      },
+      "shiller_cape": {
+        "source_month": "202608",
+        "relation": "PRE_PREREGISTRATION"
+      }
+    }
+  },
+  "sources": {
+    "fama_french": {
+      "source": "Kenneth R. French official current ZIPs",
+      "ff25_last_month": "202608",
+      "ff3_last_month": "202608",
+      "ff25_provenance": {
+        "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/25_Portfolios_5x5_CSV.zip",
+        "zip_member": "25_Portfolios_5x5.csv",
+        "zip_sha256": "e02edcd282d8995cf3133e71181665f888ecb57c202a99a9cbd6cdf7fc6b8429"
+      },
+      "ff3_provenance": {
+        "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
+        "zip_member": "F-F_Research_Data_Factors.csv",
+        "zip_sha256": "593f4fbef03181bc0b22ff6292f217689dd1fb79355049ca905d95b262040a66"
+      }
+    },
+    "shiller": {
+      "source": "Robert Shiller - Yale Economics",
+      "latest_date": "2026-10-01"
+    },
+    "price": {
+      "source": "Yahoo Finance SPY unadjusted Close",
+      "payload_sha256": "a256982726c87ac330f8f657877be2100867d0053c05dfebb730d643089aa63c",
+      "latest_date": "2026-10-16"
+    }
+  },
+  "governance": {
+    "historical_validation_authorized": false,
+    "production_promotion_authorized": false,
+    "post_preregistration_tuning_allowed": false,
+    "legacy_route_c_recovery": false
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "market-top-route-a-ng1-independent-audit-1",
+  "status": "PASS_INDEPENDENT_SOURCE_REPLAY",
+  "research_only": true,
+  "production_effect": "none",
+  "formula_version": "Route_A_NG1",
+  "effective_month": "2007-11",
+  "source_months": {
+    "fama_french": "200709",
+    "credit_spread": "200710"
+  },
+  "scores": {
+    "spread_shock_score": 75.80893682588598,
+    "finance_weakness_score": 92.57731958762886,
+    "size_weakness_score": 87.62886597938144,
+    "portfolio_exhaustion_score": 92.26804123711341,
+    "route_a_ng1": 86.79223562387321,
+    "threshold": 85,
+    "margin": 1.7922356238732107
+  },
+  "raw": {
+    "spread_shock": 0.2999999999999998,
+    "baa_200710": 6.48,
+    "gs10_200710": 4.53
+  },
+  "top_location": {
+    "passes": true
+  },
+  "sources": {
+    "fama_french": "Kenneth R. French official live ZIPs: 25 Portfolios 5x5, 12 Industry, FF3",
+    "credit_snapshot_repository": "Snow-Ouyang/Market-Regime-Clustering",
+    "credit_snapshot_commit": "71af02cba3493ffa15ac47f512dc346598f2e23f",
+    "credit_definition": "FRED monthly BAA and GS10 snapshots; full common history from 1953-04",
+    "spy": "Yahoo Finance SPY unadjusted close"
+  },
+  "parity": {
+    "independent_credit_vs_first_screen_target": true,
+    "baa_200710_expected": 6.48,
+    "gs10_200710_expected": 4.53,
+    "spread_shock_raw_expected": 0.3,
+    "spread_shock_score_expected": 75.80893682588598
+  },
+  "interpretation": {
+    "promotion": "SOURCE_VALIDATED_SCREENING_CANDIDATE",
+    "legacy_route_a_recovered": false,
+    "production_ready": false,
+    "prospective_validated": false,
+    "parameters_changed": false,
+    "statement": "The preregistered 2007-11 NG1-A hit survives an independent-source replay. It remains a research candidate and must not be substituted for unresolved legacy Route_A."
+  }
+}

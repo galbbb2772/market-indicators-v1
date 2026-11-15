@@ -1,0 +1,75 @@
+{
+  "schema_version": "market-top-route-c-ng1-component-diagnostic-1",
+  "status": "HYPOTHESIS_GENERATION_ONLY",
+  "research_only": true,
+  "production_effect": "none",
+  "source": "BuyRisk mirror of Ken French 25 portfolios / FF3, 202605 CRSP cut; canonical Shiller feed",
+  "formula_context": {
+    "portfolio_exhaustion": "expanding_pct(1 - count(portfolio6m > market6m)/25)",
+    "leader_gap": "expanding_pct(max(portfolio6m) - median(portfolio6m))",
+    "big_growth_gap": "expanding_pct(BIG_LoBM_6m - median(portfolio6m))",
+    "concentration_breadth_ng1": "cbrt(exhaustion_score * leader_gap_score * big_growth_gap_score)"
+  },
+  "derived_hypothesis_metric": {
+    "name": "LeadershipHandoffShare",
+    "formula": "clip((LeaderGapRaw - BigGrowthGapRaw) / max(LeaderGapRaw, eps), 0, 1)",
+    "interpretation": "Fraction of the leader-vs-median premium not explained by the BIG LoBM portfolio itself."
+  },
+  "cases": [
+    {
+      "effective_month": "199806",
+      "classification": "FALSE_POSITIVE",
+      "route_c_ng1": 93.05104092450718,
+      "leader_gap_raw": 16.334292005820238,
+      "big_growth_gap_raw": 11.151743801979853,
+      "leader_6m": 31.104311668245966,
+      "big_growth_6m": 25.92176346440558,
+      "handoff_share": 0.317280247101848
+    },
+    {
+      "effective_month": "200003",
+      "classification": "TARGET_TOP",
+      "route_c_ng1": 92.36471488068139,
+      "leader_gap_raw": 56.960524847041235,
+      "big_growth_gap_raw": 9.786730026767266,
+      "leader_6m": 58.95313271803182,
+      "big_growth_6m": 11.779337897757847,
+      "handoff_share": 0.8281839914037303
+    },
+    {
+      "effective_month": "201707",
+      "classification": "FALSE_POSITIVE",
+      "route_c_ng1": 86.34477942388102,
+      "leader_gap_raw": 11.878794971259078,
+      "big_growth_gap_raw": 11.878794971259078,
+      "leader_6m": 16.625209532612818,
+      "big_growth_6m": 16.625209532612818,
+      "handoff_share": 0
+    },
+    {
+      "effective_month": "202008",
+      "classification": "FALSE_POSITIVE",
+      "route_c_ng1": 94.11454506349615,
+      "leader_gap_raw": 29.266982600403914,
+      "big_growth_gap_raw": 27.846599359389366,
+      "leader_6m": 12.698905669660965,
+      "big_growth_6m": 11.27852242864642,
+      "handoff_share": 0.048531933079939214
+    },
+    {
+      "effective_month": "202110",
+      "classification": "TARGET_TOP",
+      "route_c_ng1": 95.59454198430768,
+      "leader_gap_raw": 21.76010544569058,
+      "big_growth_gap_raw": 11.93086860253101,
+      "leader_6m": 29.902605827575645,
+      "big_growth_6m": 20.073368984416074,
+      "handoff_share": 0.45170906306918535
+    }
+  ],
+  "conclusion": {
+    "static_level_failure": "High concentration severity can persist in non-top regimes; level-only concentration is insufficient for top timing.",
+    "generated_hypothesis": "A leadership handoff away from BIG LoBM while concentration remains extreme may carry phase information.",
+    "historical_validation_authorized": false
+  }
+}

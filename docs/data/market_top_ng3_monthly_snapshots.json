@@ -1,0 +1,16 @@
+{
+  "schema_version": "market-top-route-a-ng3-monthly-snapshots-1",
+  "research_only": true,
+  "production_effect": "none",
+  "prospective_start_effective_month": "202612",
+  "snapshots": [],
+  "summary": {
+    "frozen_prospective_months": 0,
+    "first_frozen_effective_month": null,
+    "latest_frozen_effective_month": null,
+    "missing_effective_months": [],
+    "evidence_gaps_present": false,
+    "fully_post_preregistration_source_months": 0,
+    "straddling_or_pre_preregistration_source_months": 0
+  }
+}

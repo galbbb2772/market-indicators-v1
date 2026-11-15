@@ -1,0 +1,71 @@
+{
+  "schema_version": "market-top-ng1-decision-record-1",
+  "status": "NG1_CLOSED_NO_TOP_ROUTE_PROMOTION",
+  "research_only": true,
+  "production_effect": "none",
+  "legacy_v24": {
+    "route_a": "UNRESOLVED",
+    "route_c": "UNRESOLVED",
+    "replaced_by_ng1": false
+  },
+  "route_c_ng1": {
+    "decision": "REJECT",
+    "reason": "Fails preregistered 1998 negative control and produces excessive additional ARMED episodes despite detecting 2000 and 2021-2022 concentration regimes.",
+    "parameter_retuning_allowed": false
+  },
+  "route_a_ng1": {
+    "first_screen": "ACCEPT_SCREENING_CANDIDATE",
+    "independent_source_replay": "PASS",
+    "independent_2007_score": 86.79223562387321,
+    "independent_2007_margin": 1.7922356238732107,
+    "final_top_route_decision": "DO_NOT_PROMOTE",
+    "retained_use": "RESEARCH_CREDIT_BREADTH_STRESS_DIAGNOSTIC",
+    "parameter_retuning_allowed": false,
+    "episode_evidence": [
+      {
+        "episode": "1998-11_to_1999-03",
+        "class": "CLEAR_TOP_FALSE_POSITIVE",
+        "h252_forward_return_pct": 19.940796555435945
+      },
+      {
+        "episode": "2007-11",
+        "class": "MAJOR_TOP_HIT",
+        "note": "Preregistered primary positive window and independent-source replay pass."
+      },
+      {
+        "episode": "2012-02",
+        "class": "CORRECTION_RISK_NOT_MAJOR_TOP",
+        "h252_forward_return_pct": 11.604140662556105,
+        "max_peak_to_trough_dd_pct": -9.686964458177227
+      },
+      {
+        "episode": "2025-07",
+        "class": "CLEAR_TOP_FALSE_POSITIVE",
+        "h252_forward_return_pct": 19.86932033919755,
+        "worst_return_from_anchor_pct": -1.6390330337931913
+      },
+      {
+        "episode": "2025-09",
+        "class": "CORRECTION_RISK_NOT_MAJOR_TOP",
+        "h252_forward_return_pct": 14.682218019153993,
+        "max_peak_to_trough_dd_pct": -9.133129160735598
+      }
+    ],
+    "episode_summary": {
+      "evaluated": 5,
+      "major_top_hits": 1,
+      "clear_top_false_positives": 2,
+      "correction_not_major_top": 2
+    },
+    "interpretation": "NG1-A identifies a real credit/breadth stress state, but the evidence does not support sufficient specificity for a market-top route. It remains useful as a research stress diagnostic only."
+  },
+  "frozen_rules": {
+    "do_not_rename_ng1_as_legacy_route_a": true,
+    "do_not_merge_ng1_into_pressure": true,
+    "do_not_use_ng1_as_production_signal": true,
+    "do_not_tune_ng1_after_holdout": true,
+    "any_top_specific_redesign_requires_new_version": "NG2_or_later",
+    "any_new_version_must_be_preregistered_before_testing": true
+  },
+  "next_research_step": "Use NG1 false/correction cases only to generate a new mechanistic hypothesis. Any NG2 must be explicitly preregistered and independently versioned before historical testing."
+}

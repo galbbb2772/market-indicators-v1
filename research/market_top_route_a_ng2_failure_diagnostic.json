@@ -1,0 +1,115 @@
+{
+  "schema_version": "market-top-route-a-ng2-failure-diagnostic-1",
+  "research_only": true,
+  "production_effect": "none",
+  "status": "HYPOTHESIS_GENERATION_ONLY",
+  "ng2_decision_locked": "REJECT_NG2_TOP_ROUTE",
+  "formula_changed": false,
+  "sample": {
+    "first_effective_month": "195311",
+    "last_effective_month": "199212",
+    "months": 470
+  },
+  "counts": {
+    "route_ng2_ge_85_without_price_gate": 1,
+    "top_location_gate_pass_months": 191,
+    "ng2_armed_months": 0,
+    "ng1_armed_months_under_same_price_gate": 2
+  },
+  "maxima": {
+    "max_route_ng2": {
+      "effective_month": "195311",
+      "route_a_ng1": 83.26661874332494,
+      "financial_lead_gap_raw": -33.850931677018636,
+      "financial_lead_gap_score": 100,
+      "route_a_ng2": 91.25054451526574,
+      "top_location_pass": false
+    },
+    "max_route_ng2_when_top_gate_passes": {
+      "effective_month": "196403",
+      "route_a_ng1": 70.97332329651016,
+      "financial_lead_gap_raw": 56.412556053811656,
+      "financial_lead_gap_score": 91.2,
+      "route_a_ng2": 80.45350883983699,
+      "top_location_pass": true
+    }
+  },
+  "early_sample_artifact": {
+    "present": true,
+    "month": "195311",
+    "observation": "FinancialLeadGapRaw is negative (-33.85) but its first expanding-percentile observation scores 100, creating the only Route_A_NG2 >=85 month.",
+    "implication": "A derived expanding percentile needs explicit warmup governance in any future version."
+  },
+  "ng1_pre1993_armed": [
+    {
+      "effective_month": "195511",
+      "route_a_ng1": 88.93154985368709,
+      "lead_gap_raw": 20.242774566473983,
+      "lead_gap_score": 44,
+      "route_a_ng2": 62.55388232206081,
+      "outcome_252": {
+        "forward_return_pct": -2.48296483211099,
+        "worst_return_from_anchor_pct": -5.27356141440698,
+        "max_peak_to_trough_dd_pct": -10.596290060853796,
+        "classification": "CORRECTION_OR_AMBIGUOUS"
+      }
+    },
+    {
+      "effective_month": "199102",
+      "route_a_ng1": 92.4731419574873,
+      "lead_gap_raw": -3.5008940182054573,
+      "lead_gap_score": 47.098214285714285,
+      "route_a_ng2": 65.99484718966332,
+      "outcome_252": {
+        "forward_return_pct": 12.746881274343934,
+        "worst_return_from_anchor_pct": -0.13349517589986704,
+        "max_peak_to_trough_dd_pct": -5.603791573506445,
+        "classification": "CLEAR_FALSE"
+      }
+    }
+  ],
+  "hypothesis_generation_cases": {
+    "1998-11": {
+      "classification": "CLEAR_TOP_FALSE_POSITIVE",
+      "route_a_ng1": 96.30209044973515,
+      "lead_gap_raw": -5.210339193124355,
+      "lead_gap_score": 48.79852125693161,
+      "route_a_ng2": 68.55216705472083
+    },
+    "2007-11": {
+      "classification": "MAJOR_TOP_HIT",
+      "route_a_ng1": 86.79223562387321,
+      "lead_gap_raw": 16.768382761742885,
+      "lead_gap_score": 65.63944530046226,
+      "route_a_ng2": 75.47843534903235
+    },
+    "2012-02": {
+      "classification": "CORRECTION_RISK_NOT_MAJOR_TOP",
+      "route_a_ng1": 86.29534166484534,
+      "lead_gap_raw": 4.19756541206101,
+      "lead_gap_score": 54.285714285714285,
+      "route_a_ng2": 68.44416893940557
+    },
+    "2025-07": {
+      "classification": "CLEAR_TOP_FALSE_POSITIVE",
+      "route_a_ng1": 85.44920372108801,
+      "lead_gap_raw": -6.293001291144165,
+      "lead_gap_score": 43.786295005807204,
+      "route_a_ng2": 61.16783502906473
+    },
+    "2025-09": {
+      "classification": "CORRECTION_RISK_NOT_MAJOR_TOP",
+      "route_a_ng1": 85.39523061455401,
+      "lead_gap_raw": 7.99751808587267,
+      "lead_gap_score": 58.516801853997684,
+      "route_a_ng2": 70.68985633843299
+    }
+  },
+  "conclusion": {
+    "lead_lag_contains_discriminating_information": true,
+    "ng2_error": "Treating lead-gap percentile as a multiplicative score over-compresses the retained NG1 stress signal; even the 2007 training hit falls from 86.79 to 75.48.",
+    "future_hypothesis": "If explored in NG3, lead-lag should be considered as a phase/eligibility gate with explicit warmup, not another geometric severity component.",
+    "historical_validation_remaining": false,
+    "reason": "All 1953-2026 U.S. historical periods used by this line are now consumed for hypothesis generation or validation; any NG3 top-specificity claim requires prospective evidence."
+  }
+}

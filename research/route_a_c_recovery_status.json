@@ -1,0 +1,35 @@
+{
+  "schema_version": "market-top-route-a-c-recovery-1",
+  "route_a": {
+    "structural_formula": "sqrt(Credit * Breadth)",
+    "status": "CHILD_DEFINITIONS_UNRESOLVED",
+    "confirmed_role": "credit/breadth breakdown route",
+    "quarantined_fragments": [
+      "Breadth candidate family: AD/NHNL/MA/equal-weight/size components with a top-location gate",
+      "Credit candidate families include BAA10Y/SLOOS/delinquency/credit-growth/funding-stress blocks"
+    ],
+    "reason": "Prior research contains multiple evolving Credit/Breadth versions and no final V2.4 code artifact was recovered. Selecting one would be version fabrication."
+  },
+  "route_c": {
+    "structural_formula": "sqrt(Valuation * ConcentrationBreadth)",
+    "status": "CONCENTRATION_BREADTH_DEFINITION_UNRESOLVED",
+    "confirmed_role": "bubble/concentration/breadth-exhaustion route",
+    "valuation_status": "RESTORED_CANONICAL",
+    "quarantined_fragments": [
+      "12-sector 6-month participation/exhaustion concept",
+      "leader-versus-median gap / concentration concept"
+    ],
+    "reason": "The exact final mapping/aggregation of sector participation and leader-gap evidence was not recovered."
+  },
+  "live_contract": {
+    "route_a_can_change_state": false,
+    "route_c_can_change_state": false,
+    "full_pressure_authoritative": false,
+    "route_b_current_authoritative": 65.58104271810248,
+    "route_b_state": "NOT_ARMED",
+    "t_v24r_current": 13.774666666666668,
+    "price_breakdown_current": false,
+    "overall_state": "PARTIAL_ROUTE_COVERAGE",
+    "rule": "Do not label the full model IDLE or ARMED until canonical Route_A and Route_C are recovered or explicitly replaced under new version names."
+  }
+}
