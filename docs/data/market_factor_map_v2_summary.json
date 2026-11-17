@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2-SUMMARY",
-  "generated_at": "2026-11-16T12:42:22.162189+00:00",
+  "generated_at": "2026-11-17T13:17:35.061352+00:00",
   "research_only": true,
   "frozen_through_market_date": "2026-10-02",
   "design": "evidence_registry_not_weighted_score",
@@ -17,7 +17,7 @@
     "canonical_factor_map_available": true,
     "configured_count": 17,
     "canonical_nonempty_count": 17,
-    "canonical_snapshot_generated_at": "2026-11-16T12:40:08.384453+00:00"
+    "canonical_snapshot_generated_at": "2026-11-17T13:15:46.734080+00:00"
   },
   "forward_oos_representatives": [
     {
@@ -38,8 +38,8 @@
       "q5_minus_q1_10d_pp": -0.8318,
       "screening_gate_pass_count": 7,
       "source_stability": "source_invariant",
-      "forward_observation_count": 30,
-      "matured_10d_count": 20,
+      "forward_observation_count": 31,
+      "matured_10d_count": 21,
       "discrepancy_count": 0,
       "role": "prospective_return_factor_candidate"
     },
@@ -61,8 +61,8 @@
       "q5_minus_q1_10d_pp": -0.814,
       "screening_gate_pass_count": 7,
       "source_stability": "source_invariant",
-      "forward_observation_count": 30,
-      "matured_10d_count": 20,
+      "forward_observation_count": 31,
+      "matured_10d_count": 21,
       "discrepancy_count": 0,
       "role": "prospective_return_factor_candidate"
     },
@@ -84,9 +84,9 @@
       "q5_minus_q1_10d_pp": -0.5812,
       "screening_gate_pass_count": 7,
       "source_stability": "source_invariant",
-      "forward_observation_count": 30,
-      "matured_10d_count": 20,
-      "discrepancy_count": 30,
+      "forward_observation_count": 31,
+      "matured_10d_count": 21,
+      "discrepancy_count": 31,
       "role": "prospective_return_factor_candidate"
     }
   ],
@@ -505,14 +505,14 @@
       "official_source_ready": true,
       "canonical_evidence_available": true,
       "readiness_status": "ready",
-      "canonical_ic10": -0.1954,
-      "canonical_ic10_2022_present": -0.2051,
-      "canonical_partial_ic10": -0.1796,
-      "canonical_partial_ic10_2022_present": -0.1867,
+      "canonical_ic10": -0.1956,
+      "canonical_ic10_2022_present": -0.2054,
+      "canonical_partial_ic10": -0.1806,
+      "canonical_partial_ic10_2022_present": -0.188,
       "canonical_phase_same_sign_pct10": 100.0,
-      "canonical_loyo_univariate_improvement_pct": -1.519,
-      "canonical_loyo_ablation_delta_pct": -0.683,
-      "canonical_snapshot_generated_at": "2026-11-16T12:40:08.384453+00:00",
+      "canonical_loyo_univariate_improvement_pct": -1.522,
+      "canonical_loyo_ablation_delta_pct": -0.61,
+      "canonical_snapshot_generated_at": "2026-11-17T13:15:46.734080+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     },
@@ -526,13 +526,13 @@
       "canonical_evidence_available": true,
       "readiness_status": "ready",
       "canonical_ic10": 0.0271,
-      "canonical_ic10_2022_present": 0.0124,
-      "canonical_partial_ic10": -0.0281,
-      "canonical_partial_ic10_2022_present": 0.0182,
+      "canonical_ic10_2022_present": 0.0118,
+      "canonical_partial_ic10": -0.0288,
+      "canonical_partial_ic10_2022_present": 0.0154,
       "canonical_phase_same_sign_pct10": 90.0,
-      "canonical_loyo_univariate_improvement_pct": -0.633,
-      "canonical_loyo_ablation_delta_pct": -0.569,
-      "canonical_snapshot_generated_at": "2026-11-16T12:40:08.384453+00:00",
+      "canonical_loyo_univariate_improvement_pct": -0.634,
+      "canonical_loyo_ablation_delta_pct": -0.556,
+      "canonical_snapshot_generated_at": "2026-11-17T13:15:46.734080+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     }
