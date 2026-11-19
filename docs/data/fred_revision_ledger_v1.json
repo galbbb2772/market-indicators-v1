@@ -13014,7 +13014,329 @@
       "old_value": 2818757.0,
       "new_value": 2858902.0,
       "detected_at": "2026-11-18T12:58:41.995521+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2015-12-25",
+      "old_value": -0.363,
+      "new_value": -0.362,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2017-11-03",
+      "old_value": -0.6,
+      "new_value": -0.601,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2018-06-22",
+      "old_value": -0.546,
+      "new_value": -0.545,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2018-08-10",
+      "old_value": -0.583,
+      "new_value": -0.584,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2019-09-20",
+      "old_value": -0.513,
+      "new_value": -0.512,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-03-13",
+      "old_value": 0.037,
+      "new_value": 0.038,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-04-03",
+      "old_value": 0.312,
+      "new_value": 0.313,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-05-08",
+      "old_value": -0.036,
+      "new_value": -0.035,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2020-06-12",
+      "old_value": -0.347,
+      "new_value": -0.346,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-02-25",
+      "old_value": -0.438,
+      "new_value": -0.437,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-07-22",
+      "old_value": -0.194,
+      "new_value": -0.193,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-08-19",
+      "old_value": -0.232,
+      "new_value": -0.231,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-09-30",
+      "old_value": -0.097,
+      "new_value": -0.096,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-11-25",
+      "old_value": -0.175,
+      "new_value": -0.174,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2022-12-09",
+      "old_value": -0.184,
+      "new_value": -0.183,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-01-27",
+      "old_value": -0.304,
+      "new_value": -0.303,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-03-31",
+      "old_value": -0.146,
+      "new_value": -0.145,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-04-07",
+      "old_value": -0.149,
+      "new_value": -0.148,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-04-14",
+      "old_value": -0.16,
+      "new_value": -0.159,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-05-12",
+      "old_value": -0.203,
+      "new_value": -0.202,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-05-26",
+      "old_value": -0.211,
+      "new_value": -0.21,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-08-25",
+      "old_value": -0.333,
+      "new_value": -0.332,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-09-01",
+      "old_value": -0.338,
+      "new_value": -0.337,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2023-09-15",
+      "old_value": -0.332,
+      "new_value": -0.331,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-03-15",
+      "old_value": -0.439,
+      "new_value": -0.438,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-04-05",
+      "old_value": -0.427,
+      "new_value": -0.426,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-07-26",
+      "old_value": -0.359,
+      "new_value": -0.358,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-08-09",
+      "old_value": -0.359,
+      "new_value": -0.358,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-08-23",
+      "old_value": -0.378,
+      "new_value": -0.377,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-10-25",
+      "old_value": -0.444,
+      "new_value": -0.445,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2024-12-13",
+      "old_value": -0.48,
+      "new_value": -0.479,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-02-28",
+      "old_value": -0.48,
+      "new_value": -0.479,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-03-21",
+      "old_value": -0.425,
+      "new_value": -0.424,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-07-25",
+      "old_value": -0.518,
+      "new_value": -0.517,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-08-15",
+      "old_value": -0.525,
+      "new_value": -0.524,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2025-09-19",
+      "old_value": -0.527,
+      "new_value": -0.526,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-07-10",
+      "old_value": -0.523,
+      "new_value": -0.522,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-08-21",
+      "old_value": -0.548,
+      "new_value": -0.549,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-08-28",
+      "old_value": -0.546,
+      "new_value": -0.547,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-09-18",
+      "old_value": -0.521,
+      "new_value": -0.52,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-09-25",
+      "old_value": -0.509,
+      "new_value": -0.507,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-10-02",
+      "old_value": -0.497,
+      "new_value": -0.494,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-10-09",
+      "old_value": -0.488,
+      "new_value": -0.484,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-10-16",
+      "old_value": -0.479,
+      "new_value": -0.476,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-10-30",
+      "old_value": -0.465,
+      "new_value": -0.47,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
+    },
+    {
+      "source_id": "NFCI",
+      "observation_date": "2026-11-06",
+      "old_value": -0.462,
+      "new_value": -0.473,
+      "detected_at": "2026-11-19T12:56:38.465595+00:00"
     }
   ],
-  "updated_at": "2026-11-18T12:58:41.995521+00:00"
+  "updated_at": "2026-11-19T12:56:38.465595+00:00"
 }
