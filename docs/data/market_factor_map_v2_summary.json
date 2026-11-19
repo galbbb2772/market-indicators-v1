@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-V2-SUMMARY",
-  "generated_at": "2026-11-18T13:00:23.590767+00:00",
+  "generated_at": "2026-11-19T12:58:00.620256+00:00",
   "research_only": true,
   "frozen_through_market_date": "2026-10-02",
   "design": "evidence_registry_not_weighted_score",
@@ -17,7 +17,7 @@
     "canonical_factor_map_available": true,
     "configured_count": 17,
     "canonical_nonempty_count": 17,
-    "canonical_snapshot_generated_at": "2026-11-18T12:58:41.995521+00:00"
+    "canonical_snapshot_generated_at": "2026-11-19T12:56:38.465595+00:00"
   },
   "forward_oos_representatives": [
     {
@@ -38,8 +38,8 @@
       "q5_minus_q1_10d_pp": -0.8318,
       "screening_gate_pass_count": 7,
       "source_stability": "source_invariant",
-      "forward_observation_count": 32,
-      "matured_10d_count": 22,
+      "forward_observation_count": 33,
+      "matured_10d_count": 23,
       "discrepancy_count": 0,
       "role": "prospective_return_factor_candidate"
     },
@@ -61,8 +61,8 @@
       "q5_minus_q1_10d_pp": -0.814,
       "screening_gate_pass_count": 7,
       "source_stability": "source_invariant",
-      "forward_observation_count": 32,
-      "matured_10d_count": 22,
+      "forward_observation_count": 33,
+      "matured_10d_count": 23,
       "discrepancy_count": 0,
       "role": "prospective_return_factor_candidate"
     },
@@ -84,8 +84,8 @@
       "q5_minus_q1_10d_pp": -0.5812,
       "screening_gate_pass_count": 7,
       "source_stability": "source_invariant",
-      "forward_observation_count": 32,
-      "matured_10d_count": 22,
+      "forward_observation_count": 33,
+      "matured_10d_count": 23,
       "discrepancy_count": 31,
       "role": "prospective_return_factor_candidate"
     }
@@ -505,14 +505,14 @@
       "official_source_ready": true,
       "canonical_evidence_available": true,
       "readiness_status": "ready",
-      "canonical_ic10": -0.1957,
-      "canonical_ic10_2022_present": -0.2047,
-      "canonical_partial_ic10": -0.1816,
-      "canonical_partial_ic10_2022_present": -0.1875,
+      "canonical_ic10": -0.1954,
+      "canonical_ic10_2022_present": -0.2039,
+      "canonical_partial_ic10": -0.1819,
+      "canonical_partial_ic10_2022_present": -0.1868,
       "canonical_phase_same_sign_pct10": 100.0,
-      "canonical_loyo_univariate_improvement_pct": -1.521,
-      "canonical_loyo_ablation_delta_pct": -0.564,
-      "canonical_snapshot_generated_at": "2026-11-18T12:58:41.995521+00:00",
+      "canonical_loyo_univariate_improvement_pct": -1.516,
+      "canonical_loyo_ablation_delta_pct": -0.516,
+      "canonical_snapshot_generated_at": "2026-11-19T12:56:38.465595+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     },
@@ -525,14 +525,14 @@
       "official_source_ready": true,
       "canonical_evidence_available": true,
       "readiness_status": "ready",
-      "canonical_ic10": 0.0268,
-      "canonical_ic10_2022_present": 0.0112,
-      "canonical_partial_ic10": -0.0295,
-      "canonical_partial_ic10_2022_present": 0.0128,
+      "canonical_ic10": 0.0266,
+      "canonical_ic10_2022_present": 0.0107,
+      "canonical_partial_ic10": -0.0299,
+      "canonical_partial_ic10_2022_present": 0.0105,
       "canonical_phase_same_sign_pct10": 90.0,
-      "canonical_loyo_univariate_improvement_pct": -0.633,
-      "canonical_loyo_ablation_delta_pct": -0.552,
-      "canonical_snapshot_generated_at": "2026-11-18T12:58:41.995521+00:00",
+      "canonical_loyo_univariate_improvement_pct": -0.631,
+      "canonical_loyo_ablation_delta_pct": -0.546,
+      "canonical_snapshot_generated_at": "2026-11-19T12:56:38.465595+00:00",
       "source_stability": "official_canonical_snapshot",
       "interpretation": "Official-source readiness removes source uncertainty, but evidence status is still determined by robustness/LOYO rather than by source availability alone."
     }
