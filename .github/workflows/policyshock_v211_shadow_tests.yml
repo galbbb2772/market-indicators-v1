@@ -1,0 +1,170 @@
+name: PolicyShock V2.1.1 Shadow Tests
+
+on:
+  pull_request:
+    paths:
+      - "policyshock_v211.py"
+      - "market_top_canonical_inputs.py"
+      - "market_top_shadow_live.py"
+      - "shadow_replay_v24.py"
+      - "t_v24r.py"
+      - "research/POLICYSHOCK_V2_1_1_FROZEN.md"
+      - "research/MARKET_TOP_CANONICAL_ROUTE_B_INPUTS.md"
+      - "research/market_top_canonical_route_b_inputs.json"
+      - "research/MARKET_TOP_SHADOW_LIVE_2026_10_16.md"
+      - "research/market_top_shadow_snapshot_2026_10_16.json"
+      - "research/ROUTE_A_C_RECOVERY_STATUS.md"
+      - "research/route_a_c_recovery_status.json"
+      - "research/V2_4_SHADOW_REPLAY.md"
+      - "research/V2_4_EVENT_MATRIX.md"
+      - "research/v24_event_matrix.json"
+      - "research/T_V24_RECOVERY.md"
+      - "research/t_v24_recovery_fingerprints.json"
+      - "research/T_V24R_PREREGISTRATION.md"
+      - "research/T_V24R_VALIDATION.md"
+      - "research/t_v24r_validation.json"
+      - "research/T_V24R_SOURCE_INVARIANCE.md"
+      - "research/t_v24r_source_invariance.json"
+      - "tests/test_policyshock_v211.py"
+      - "tests/test_market_top_canonical_inputs.py"
+      - "tests/test_market_top_shadow_live.py"
+      - "tests/test_route_a_c_recovery_contract.py"
+      - "tests/test_shadow_replay_v24.py"
+      - "tests/test_v24_event_matrix.py"
+      - "tests/test_t_v24_recovery_contract.py"
+      - "tests/test_t_v24r.py"
+      - "tests/test_t_v24r_validation_contract.py"
+      - "tests/test_t_v24r_source_invariance.py"
+      - "research/ROUTE_C_V24R_C3_PREREGISTRATION.md"
+      - "research/route_c_v24r_c3_preregistration.json"
+      - "research/ROUTE_A_C_REPLACEMENT_SCREEN.md"
+      - "research/route_a_c_replacement_screen.json"
+      - "research/V2_4_LEGACY_EARLY_BREADTH_PROVENANCE.md"
+      - "research/v24_legacy_early_breadth_provenance_gap.json"
+      - "tests/test_route_a_c_replacement_screen.py"
+      - "tests/test_v24_legacy_early_breadth_provenance.py"
+      - "research/MARKET_TOP_TASK2_DECISION_RECORD.md"
+      - "research/market_top_task2_decision_record.json"
+      - "tests/test_market_top_task2_decision_contract.py"
+      - "update_market_top_shadow.py"
+      - "tests/test_update_market_top_shadow.py"
+      - "docs/data/market_top_shadow_current.json"
+      - "docs/data/market_top_shadow_history.json"
+      - "tests/test_market_top_shadow_data_contract.py"
+      - "research/MARKET_TOP_CROSS_MODEL_BOUNDARY.md"
+      - "research/market_top_cross_model_boundary.json"
+      - "tests/test_market_top_cross_model_boundary.py"
+      - "research/ROUTE_B_2022_FF_REVISION_SENSITIVITY.md"
+      - "research/ROUTE_B_2022_FF_REVISION_LATTICE.md"
+      - "research/route_b_2022_ff_revision_lattice.json"
+      - "tests/test_route_b_2022_ff_revision_lattice.py"
+      - "audit_ff_revision_lattice.py"
+      - "tests/test_audit_ff_revision_lattice.py"
+      - "research/route_b_2022_ff_revision_sensitivity.json"
+      - "research/ROUTE_B_2022_OFFICIAL_ARCHIVE_AUDIT.md"
+      - "research/route_b_2022_official_archive_audit.json"
+      - "tests/test_route_b_2022_ff_revision_sensitivity.py"
+      - "tests/test_route_b_2022_official_archive_contract.py"
+      - "research/ROUTE_B_2022_WAYBACK_VINTAGE_GAP.md"
+      - "research/route_b_2022_wayback_vintage_gap.json"
+      - "tests/test_route_b_2022_wayback_vintage_gap.py"
+      - "market_top_cross_monitor.py"
+      - "research/MARKET_TOP_CROSS_MODEL_MONITOR.md"
+      - "docs/data/market_top_cross_monitor_current.json"
+      - "docs/data/market_top_cross_monitor_history.json"
+      - "tests/test_market_top_cross_monitor.py"
+      - "tests/test_market_top_cross_monitor_data.py"
+      - "research/ROUTE_B_2022_SHILLER_WAYBACK_AUDIT.md"
+      - "research/route_b_2022_shiller_wayback_audit.json"
+      - "research/ROUTE_B_2022_VINTAGE_ROBUSTNESS_LATTICE.md"
+      - "research/route_b_2022_vintage_robustness_lattice.json"
+      - "tests/test_route_b_2022_vintage_robustness.py"
+      - "audit_shiller_wayback_202201.py"
+      - "tests/test_audit_shiller_wayback_202201.py"
+      - "research/POLICYSHOCK_2022_PRIMARY_SOURCE_PIT_AUDIT.md"
+      - "research/policyshock_2022_primary_source_pit_audit.json"
+      - "tests/test_policyshock_2022_primary_source_evidence.py"
+      - "research/ROUTE_B_2022_PIT_UNCERTAINTY_BUDGET.md"
+      - "research/route_b_2022_pit_uncertainty_budget.json"
+      - "tests/test_route_b_2022_pit_uncertainty_budget.py"
+      - "research/MARKET_TOP_NG1_AC_PREREGISTRATION.md"
+      - "research/market_top_ng1_ac_preregistration.json"
+      - "research/MARKET_TOP_NG1_AC_SCREEN.md"
+      - "research/market_top_ng1_ac_screen.json"
+      - "tests/test_market_top_ng1_ac_screen.py"
+      - "research/MARKET_TOP_NG1_A_INDEPENDENT_AUDIT.md"
+      - "research/market_top_ng1_a_independent_audit.json"
+      - "research/MARKET_TOP_NG1_A_EXTRA_EPISODES.md"
+      - "research/market_top_ng1_a_extra_episode_cases.json"
+      - "tests/test_market_top_ng1_a_independent_evidence.py"
+      - "tests/test_market_top_ng1_a_extra_episode_cases.py"
+      - "research/MARKET_TOP_NG1_A_POST2022_HOLDOUT_PREREG.md"
+      - "research/market_top_ng1_a_post2022_holdout_prereg.json"
+      - "research/MARKET_TOP_NG1_A_POST2022_HOLDOUT.md"
+      - "research/market_top_ng1_a_post2022_holdout.json"
+      - "tests/test_market_top_ng1_a_post2022_holdout.py"
+      - "research/MARKET_TOP_NG1_DECISION_RECORD.md"
+      - "research/market_top_ng1_decision_record.json"
+      - "tests/test_market_top_ng1_decision_record.py"
+      - "research/ROUTE_B_2022_FF_DEC2021_VINTAGE.md"
+      - "research/route_b_2022_ff_dec2021_vintage_evidence.json"
+      - "tests/test_route_b_2022_ff_dec2021_vintage_evidence.py"
+      - "research/ROUTE_B_2022_FF_DEC2021_WAYBACK_EXACT.md"
+      - "research/route_b_2022_ff_dec2021_wayback_exact_evidence.json"
+      - "tests/test_route_b_2022_ff_dec2021_wayback_exact_evidence.py"
+      - "research/ROUTE_B_2022_FF_PUBLICATION_PAGE_WAYBACK.md"
+      - "research/route_b_2022_ff_publication_page_wayback_evidence.json"
+      - "tests/test_route_b_2022_ff_publication_page_wayback_evidence.py"
+      - ".github/workflows/policyshock_v211_shadow_tests.yml"
+  workflow_dispatch:
+
+jobs:
+  frozen-shadow-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Run frozen PolicyShock and V2.4 shadow contracts
+        run: |
+          python -m unittest \
+            tests.test_policyshock_v211 \
+            tests.test_market_top_canonical_inputs \
+            tests.test_market_top_shadow_live \
+            tests.test_route_a_c_recovery_contract \
+            tests.test_route_a_c_replacement_screen \
+            tests.test_v24_legacy_early_breadth_provenance \
+            tests.test_market_top_task2_decision_contract \
+            tests.test_update_market_top_shadow \
+            tests.test_market_top_shadow_data_contract \
+            tests.test_policyshock_2022_primary_source_evidence \
+            tests.test_route_b_2022_vintage_robustness \
+            tests.test_route_b_2022_pit_uncertainty_budget \
+            tests.test_market_top_ng1_ac_screen \
+            tests.test_market_top_ng1_a_independent_evidence \
+            tests.test_market_top_ng1_a_extra_episode_cases \
+            tests.test_market_top_ng1_a_post2022_holdout \
+            tests.test_market_top_ng1_decision_record \
+            tests.test_market_top_cross_model_boundary \
+            tests.test_route_b_2022_ff_revision_sensitivity \
+            tests.test_route_b_2022_ff_revision_lattice \
+            tests.test_audit_ff_revision_lattice \
+            tests.test_route_b_2022_official_archive_contract \
+            tests.test_route_b_2022_wayback_vintage_gap \
+            tests.test_route_b_2022_ff_dec2021_vintage_evidence \
+            tests.test_route_b_2022_ff_dec2021_wayback_exact_evidence \
+            tests.test_route_b_2022_ff_publication_page_wayback_evidence \
+            tests.test_market_top_cross_monitor \
+            tests.test_market_top_cross_monitor_data \
+            tests.test_shadow_replay_v24 \
+            tests.test_v24_event_matrix \
+            tests.test_t_v24_recovery_contract \
+            tests.test_t_v24r \
+            tests.test_t_v24r_validation_contract \
+            tests.test_t_v24r_source_invariance -v

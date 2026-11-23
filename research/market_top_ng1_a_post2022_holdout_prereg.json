@@ -1,0 +1,44 @@
+{
+  "schema_version": "market-top-ng1-a-post2022-holdout-prereg-1",
+  "status": "PREREGISTERED_NOT_EVALUATED",
+  "research_only": true,
+  "candidate": "Route_A_NG1",
+  "holdout": {
+    "start_effective_month": "2023-01",
+    "end_rule": "latest common effective month with all required inputs; no interpolation"
+  },
+  "frozen": {
+    "threshold": 85,
+    "fama_french_lag_months": 2,
+    "credit_lag_months": 1,
+    "top_gate": {
+      "within_trailing_24m_high_pct": 5,
+      "high_age_months_max": 3
+    },
+    "formula_changes_allowed": false
+  },
+  "outcome_protocol": {
+    "anchor": "last trading day of first ARMED month",
+    "horizons_sessions": [
+      63,
+      126,
+      252
+    ],
+    "metrics": [
+      "forward_return_pct",
+      "worst_return_from_anchor_pct",
+      "max_peak_to_trough_dd_pct"
+    ],
+    "incomplete_252_label": "OPEN_OUTCOME",
+    "hide_unfavorable_episodes": false
+  },
+  "decision_labels": [
+    "NO_ARMED_EPISODES",
+    "ARMED_EPISODES_WITH_COMPLETE_OUTCOMES",
+    "ARMED_EPISODES_WITH_OPEN_OUTCOMES",
+    "MIXED_COMPLETE_AND_OPEN"
+  ],
+  "retrospective_temporal_holdout": true,
+  "pure_prospective_claim": false,
+  "post_holdout_retuning_allowed": false
+}

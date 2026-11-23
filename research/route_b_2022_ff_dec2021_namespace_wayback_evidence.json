@@ -1,0 +1,18 @@
+{
+  "schema_version": "route-b-2022-ff-dec2021-namespace-wayback-evidence-1",
+  "status": "NO_PRE_CUTOFF_DEC2021_NAMESPACE_CAPTURE",
+  "research_only": true,
+  "production_effect": "none",
+  "cutoff": "2022-01-03T23:59:59Z",
+  "query_variants": 4,
+  "query_errors": [],
+  "capture_count": 0,
+  "namespace_pre_cutoff_delivery_evidence": false,
+  "scope": "Kenneth French Historical_Archives/12 2021 Update/ namespace prefix",
+  "interpretation": {
+    "proven": "No qualifying Wayback capture was found anywhere under the tested official Dec-2021 Historical_Archives namespace before the cutoff.",
+    "not_proven": "This does not prove the archive was unpublished; it proves only that surviving Wayback coverage cannot timestamp its delivery.",
+    "relation_to_content": "Official Dec-2021 factor-vintage content is independently recovered and numerically reproducible.",
+    "delivery_status": "ARCHIVE_COVERAGE_GAP_REMAINS"
+  }
+}

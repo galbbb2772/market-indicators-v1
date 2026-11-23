@@ -1,0 +1,93 @@
+{
+  "schema_version": "t-v24r-source-invariance-1",
+  "model": "T_v2.4R",
+  "status": "PASS_WITH_COVERAGE_LIMIT",
+  "frozen_formula_unchanged": true,
+  "snapshot_invariance": {
+    "source_a": {
+      "name": "soGeneri/MarketDatasets SPY_1993-2023_D.csv",
+      "rows": 7536,
+      "range": [
+        "1993-01-29",
+        "2022-12-30"
+      ],
+      "provider_provenance": "not independently documented in this study"
+    },
+    "source_b": {
+      "name": "Setooooo/etf-insight data/raw/SPY.csv",
+      "rows": 8427,
+      "range": [
+        "1993-01-29",
+        "2026-07-23"
+      ],
+      "provider_provenance": "Yahoo Finance chart API, documented by source repository"
+    },
+    "overlap_rows": 7536,
+    "exact_float_rows": 2265,
+    "max_close_abs_diff_usd": 4.931640660288394e-7,
+    "mean_close_abs_diff_usd": 1.8508930559197168e-7,
+    "all_six_event_dates_equal": true,
+    "event_dates": {
+      "1998": "1998-08-04",
+      "2000": "2000-04-14",
+      "2007": "2007-11-09",
+      "2011": "2011-06-10",
+      "2018": "2018-10-11",
+      "2022": "2022-01-20"
+    },
+    "interpretation": "Strong snapshot/serialization invariance. Not counted as full provider independence because source A provenance is not established and source B is Yahoo."
+  },
+  "index_crosscheck": {
+    "2011": {
+      "source": "legacy SP500 index snapshot, urgedata/pythondata examples/SP500.csv",
+      "provenance_level": "index_snapshot_provenance_not_fully_established",
+      "first_confirmation": "2011-06-10",
+      "sp500_dd12_pct": 6.793,
+      "sp500_t_v24r": 77.24,
+      "spy_first_confirmation": "2011-06-10",
+      "date_match": true
+    },
+    "2018": {
+      "source": "SP500 index snapshot with FRED-style series_id/realtime fields; values cross-checked to official FRED SP500",
+      "provenance_level": "official_FRED_value_crosscheck",
+      "first_confirmation": "2018-10-11",
+      "sp500_dd12_pct": 6.905,
+      "sp500_t_v24r": 83.672,
+      "spy_first_confirmation": "2018-10-11",
+      "date_match": true
+    },
+    "2022": {
+      "source": "SP500 index snapshot with FRED-style series_id/realtime fields; values cross-checked to official FRED SP500",
+      "provenance_level": "official_FRED_value_crosscheck",
+      "first_confirmation": "2022-01-20",
+      "sp500_dd12_pct": 6.543,
+      "sp500_t_v24r": 73.904,
+      "spy_first_confirmation": "2022-01-20",
+      "date_match": true,
+      "official_fred_points": {
+        "2022-01-03": 4796.56,
+        "2022-01-18": 4577.11,
+        "2022-01-19": 4532.76,
+        "2022-01-20": 4482.73
+      }
+    }
+  },
+  "coverage": {
+    "full_six_event_snapshot_invariance": true,
+    "provider_or_index_crosscheck_events": [
+      "2011",
+      "2018",
+      "2022"
+    ],
+    "official_fred_crosscheck_events": [
+      "2018",
+      "2022"
+    ],
+    "unresolved_provider_independence_events": [
+      "1998",
+      "2000",
+      "2007"
+    ],
+    "conclusion": "T_v2.4R confirmation dates are stable across independent snapshots for all six events and across SPY-vs-index crosschecks for 2011/2018/2022. Full non-Yahoo provider coverage for 1998/2000/2007 remains open."
+  }
+}

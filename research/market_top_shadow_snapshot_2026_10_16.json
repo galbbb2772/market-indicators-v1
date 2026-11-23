@@ -1,0 +1,84 @@
+{
+  "schema_version": "market-top-shadow-live-2",
+  "research_only": true,
+  "production_effect": "none",
+  "asof": "2026-10-16",
+  "freshness": {
+    "market_close": "2026-10-16",
+    "dgs2_latest_used": "2026-10-15",
+    "walcl_latest_observation": "2026-10-14",
+    "walcl_release_available": "2026-10-15",
+    "valuation_signal_month": "2026-09",
+    "size_factor_latest_published_month": "2026-08",
+    "market_model_proxy_asof": "2026-10-15"
+  },
+  "policy": {
+    "dgs2_latest_pct": 4.77,
+    "dgs2_anchor_date": "2026-04-15",
+    "dgs2_anchor_pct": 3.76,
+    "delta_6m_bp": 101,
+    "rate_shock": 100,
+    "walcl_26w": 6705696,
+    "walcl_13w": 6743028,
+    "walcl_now": 6755639,
+    "g_prev_pct": 0.5567207341340863,
+    "g_cur_pct": 0.18702280340523458,
+    "decel_pp": 0.3696979307288517,
+    "taper_shock": 6.860616780107296,
+    "policy_shock": 62.744246712042916
+  },
+  "price_confirmation": {
+    "instrument": "SPY",
+    "close": 763.25,
+    "high12_close": 779.09,
+    "dd12_pct": 2.0331,
+    "ma10m_prev": 720.884,
+    "ma_gap_pct": 0,
+    "t_v24r": 13.774666666666668,
+    "price_breakdown_v24r": false
+  },
+  "valuation": {
+    "current_context_cape": 40.54,
+    "signal_month": "2026-09",
+    "signal_cape": 40.58087409538742,
+    "canonical_score": 98.9136649514008,
+    "canonical_status": "RESTORED",
+    "formula": "expanding percentile of Shiller CAPE",
+    "diagnostic_proxy": {
+      "id": "valuation_percentile",
+      "asof": "2026-10-15",
+      "score": 47.22,
+      "raw_spy_ma200_ratio": 1.0697
+    }
+  },
+  "size_weakness": {
+    "latest_factor_month": "2026-08",
+    "cum_smb_6m_pct": 0.7635365253771065,
+    "b_size": -0.7635365253771065,
+    "canonical_score": 45.4469507101086,
+    "canonical_status": "RESTORED_CURRENT_VINTAGE",
+    "formula": "expanding percentile of -CumSMB_6m",
+    "diagnostic_proxy": {
+      "source_id": "sme_survival_growth",
+      "asof": "2026-10-15",
+      "supportive_score": 6.42,
+      "raw_iwm_minus_spy_60d_pct": -9.6423,
+      "weakness_score_inverted": 93.58
+    }
+  },
+  "route_b": {
+    "authoritative": 65.58104271810248,
+    "authoritative_status": "NOT_ARMED",
+    "diagnostic_proxy": 65.20701368567535,
+    "armed_threshold": 85,
+    "proxy_can_change_state": false
+  },
+  "state": {
+    "overall": "PARTIAL_ROUTE_COVERAGE",
+    "policy_route": "NOT_ARMED",
+    "price_breakdown": false,
+    "route_a": "UNRESOLVED",
+    "route_c": "UNRESOLVED",
+    "note": "Canonical Route_B is now resolved. Overall Pressure=max(A,B,C) is not yet authoritative until Route_A and Route_C are restored."
+  }
+}

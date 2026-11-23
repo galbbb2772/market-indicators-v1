@@ -1,0 +1,75 @@
+{
+  "schema_version": "t-v24r-validation-1",
+  "model": "T_v2.4R",
+  "status": "PREREGISTERED_FORMULA_VALIDATED_RESEARCH_ONLY",
+  "data_source": {
+    "repository": "soGeneri/MarketDatasets",
+    "file": "SPY_1993-2023_D.csv",
+    "rows_in_source": 7537,
+    "signal_price": "unadjusted Close"
+  },
+  "usable_daily_rows": 7345,
+  "usable_range": [
+    "1993-11-01",
+    "2022-12-30"
+  ],
+  "unconditional": {
+    "flagged_days": 2218,
+    "flagged_share_pct": 30.2,
+    "note": "Expected to remain high through corrections/bear markets; this score is not a standalone top signal and must be gated by ARMED."
+  },
+  "event_windows": {
+    "1998": {
+      "top": "1998-07-17",
+      "first_breakdown": "1998-08-04"
+    },
+    "2000": {
+      "top": "2000-03-24",
+      "first_breakdown": "2000-04-14"
+    },
+    "2007": {
+      "top": "2007-10-09",
+      "first_breakdown": "2007-11-09"
+    },
+    "2011": {
+      "top": "2011-04-29",
+      "first_breakdown": "2011-06-10"
+    },
+    "2018": {
+      "top": "2018-09-20",
+      "first_breakdown": "2018-10-11"
+    },
+    "2022": {
+      "top": "2022-01-03",
+      "first_breakdown": "2022-01-20"
+    }
+  },
+  "spy_2022": [
+    {
+      "date": "2022-01-03",
+      "dd12_pct": 0,
+      "ma10m_prev": 437.071,
+      "t_v24r": 0
+    },
+    {
+      "date": "2022-01-18",
+      "dd12_pct": 4.442,
+      "ma10m_prev": 437.071,
+      "t_v24r": 45.894
+    },
+    {
+      "date": "2022-01-19",
+      "dd12_pct": 5.434,
+      "ma10m_prev": 437.071,
+      "t_v24r": 59.123
+    },
+    {
+      "date": "2022-01-20",
+      "dd12_pct": 6.481,
+      "ma10m_prev": 437.071,
+      "t_v24r": 73.079
+    }
+  ],
+  "frozen_after_preregistration": true,
+  "interpretation": "Use only as price confirmation after ARMED. It is not the missing original V2.4 T."
+}

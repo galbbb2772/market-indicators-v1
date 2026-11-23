@@ -1,0 +1,50 @@
+{
+  "schema_version": "market-top-route-a-ng2-preregistration-1",
+  "status": "PREREGISTERED_NOT_VALIDATED",
+  "research_only": true,
+  "legacy_recovery": false,
+  "hypothesis_generation_cases": [
+    "1998-11",
+    "2007-11",
+    "2012-02",
+    "2025-07",
+    "2025-09"
+  ],
+  "formula": {
+    "spread_shock_score": "expanding_pct(max(delta3m(BAA-GS10),delta6m(BAA-GS10)))",
+    "finance_weakness_score": "expanding_pct(-(Finance6M-Market6M))",
+    "size_weakness": "expanding_pct(-CumSMB_6m)",
+    "portfolio_exhaustion_score": "expanding_pct(1-count(FF25_6m>Market6M)/25)",
+    "route_a_ng1": "fourth_root(spread_shock_score*finance_weakness_score*size_weakness*portfolio_exhaustion_score)",
+    "financial_lead_gap_raw": "finance_weakness_score-spread_shock_score",
+    "financial_lead_gap_score": "expanding_pct(financial_lead_gap_raw)",
+    "route_a_ng2": "sqrt(route_a_ng1*financial_lead_gap_score)"
+  },
+  "point_in_time": {
+    "fama_french_effective_lag_months": 2,
+    "credit_spread_effective_lag_months": 1,
+    "percentiles": "expanding_current_inclusive",
+    "interpolation": false,
+    "event_specific_lags": false
+  },
+  "state_gate": {
+    "route_threshold": 85,
+    "within_24m_high_pct": 5,
+    "high_age_months_max": 3,
+    "direct_trigger": false
+  },
+  "validation": {
+    "first_holdout": "pre-1993",
+    "end_month": "1992-12",
+    "anchor": "last trading day of first ARMED month",
+    "horizon_sessions": 252,
+    "major_top": "worst_return_from_anchor_252 <= -15%",
+    "clear_false": "worst_return_from_anchor_252 > -7.5% AND forward_return_252 > 0%",
+    "other": "CORRECTION_OR_AMBIGUOUS",
+    "minimum_evaluable_episodes": 2,
+    "minimum_major_top_share": 0.5,
+    "maximum_clear_false_share": 0.25
+  },
+  "post_validation_tuning_allowed": false,
+  "production_effect": "none"
+}

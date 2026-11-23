@@ -1,0 +1,83 @@
+{
+  "schema_version": "market-top-ng1-a-component-diagnostic-1",
+  "research_only": true,
+  "production_effect": "none",
+  "formula_changed": false,
+  "hypothesis_generation_only": true,
+  "cases": {
+    "1998-11": {
+      "outcome": "CLEAR_TOP_FALSE_POSITIVE",
+      "route_a_ng1": 96.30209044973515,
+      "spread_shock_score": 96.85767097966728,
+      "finance_weakness_score": 91.64733178654292,
+      "size_weakness_score": 98.37587006960557,
+      "portfolio_exhaustion_score": 98.49187935034803,
+      "finance_lead_gap": -5.210339193124355,
+      "credit_pair_geometric": 94.21649063908811,
+      "breadth_pair_geometric": 98.43385761962753,
+      "spread_d1": 0.37,
+      "spread_d3": 0.96
+    },
+    "2007-11": {
+      "outcome": "MAJOR_TOP_HIT",
+      "route_a_ng1": 86.79223562387321,
+      "spread_shock_score": 75.80893682588598,
+      "finance_weakness_score": 92.57731958762886,
+      "size_weakness_score": 87.62886597938144,
+      "portfolio_exhaustion_score": 92.26804123711341,
+      "finance_lead_gap": 16.768382761742885,
+      "credit_pair_geometric": 83.77462725747226,
+      "breadth_pair_geometric": 89.9185399111165,
+      "spread_d1": -0.12,
+      "spread_d3": 0.3
+    },
+    "2012-02": {
+      "outcome": "CORRECTION_RISK_NOT_MAJOR_TOP",
+      "route_a_ng1": 86.29534166484534,
+      "spread_shock_score": 85.71428571428571,
+      "finance_weakness_score": 89.91185112634672,
+      "size_weakness_score": 82.2722820763957,
+      "portfolio_exhaustion_score": 87.46327130264447,
+      "finance_lead_gap": 4.19756541206101,
+      "credit_pair_geometric": 87.7879837822011,
+      "breadth_pair_geometric": 84.82807865285817,
+      "spread_d1": -0.01,
+      "spread_d3": 0.04
+    },
+    "2025-07": {
+      "outcome": "CLEAR_TOP_FALSE_POSITIVE",
+      "route_a_ng1": 85.41092859223849,
+      "spread_shock_score": 79.56,
+      "finance_weakness_score": 73.27,
+      "size_weakness_score": 96.79,
+      "portfolio_exhaustion_score": 94.33,
+      "finance_lead_gap": -6.29,
+      "spread_d1": -0.1,
+      "spread_d3": 0.12
+    },
+    "2025-09": {
+      "outcome": "CORRECTION_RISK_NOT_MAJOR_TOP",
+      "route_a_ng1": 85.3933032004825,
+      "spread_shock_score": 73.93,
+      "finance_weakness_score": 81.84,
+      "size_weakness_score": 89.78,
+      "portfolio_exhaustion_score": 97.89,
+      "finance_lead_gap": 7.91,
+      "spread_d1": 0.03,
+      "spread_d3": -0.13
+    }
+  },
+  "conclusions": {
+    "monotonic_reweighting": "REJECTED_AS_NG2_DIRECTION",
+    "reason": "1998 false positive is more extreme than 2007 on all four monotonic NG1 component scores, so any monotone positive reweighting preserves or worsens that false-positive ranking.",
+    "current_spread_widening_gate": "REJECTED_AS_SEPARATOR",
+    "current_spread_reason": "1998 had stronger current 1m/3m spread widening than 2007, so a simple worsening-direction gate would favor the false positive.",
+    "new_hypothesis": "FINANCIAL_EQUITY_WEAKNESS_LEADS_CREDIT_SPREAD_SHOCK",
+    "diagnostic_variable": "FinanceWeaknessScore - SpreadShockScore",
+    "observed_training_case_values": {
+      "false_or_correction_max": 7.91,
+      "major_top_2007": 16.768382761742885
+    },
+    "validation_rule": "These cases may generate the NG2 hypothesis but may never be counted as independent validation for NG2."
+  }
+}

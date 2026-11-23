@@ -1,0 +1,88 @@
+{
+  "schema_version": "market-top-ng1-a-extra-episode-cases-1",
+  "research_only": true,
+  "candidate": "Route_A_NG1",
+  "status": "SOURCE_VALIDATED_SCREENING_CANDIDATE_WITH_KNOWN_FALSE_POSITIVE",
+  "metric_protocol": {
+    "anchor": "last trading day of first ARMED month",
+    "horizons_sessions": [
+      63,
+      126,
+      252
+    ],
+    "price": "SPY unadjusted Close",
+    "metrics": [
+      "forward_return_pct",
+      "worst_return_from_anchor_pct",
+      "max_peak_to_trough_dd_pct"
+    ],
+    "parameters_retuned": false
+  },
+  "source_invariance": {
+    "sources": [
+      "soGeneri/MarketDatasets SPY_1993-2023_D.csv",
+      "Setooooo/etf-insight data/raw/SPY.csv"
+    ],
+    "anchors_and_outcomes_match": true
+  },
+  "episodes": {
+    "1998-11_to_1999-03": {
+      "anchor": {
+        "date": "1998-11-30",
+        "close": 116.125
+      },
+      "h63": {
+        "end_date": "1999-03-03",
+        "forward_return_pct": 6.3240043057050555,
+        "worst_return_from_anchor_pct": -2.0452099031216364,
+        "max_peak_to_trough_dd_pct": -5.112524461839529
+      },
+      "h126": {
+        "end_date": "1999-06-02",
+        "forward_return_pct": 11.840688912809473,
+        "worst_return_from_anchor_pct": -2.0452099031216364,
+        "max_peak_to_trough_dd_pct": -6.393629124004551
+      },
+      "h252": {
+        "end_date": "1999-11-30",
+        "forward_return_pct": 19.940796555435945,
+        "worst_return_from_anchor_pct": -2.0452099031216364,
+        "max_peak_to_trough_dd_pct": -11.943587483472895
+      },
+      "interpretation": "CLEAR_TOP_FALSE_POSITIVE",
+      "note": "Price never fell more than about 2.05% below the first signal close during the next 252 sessions and ended roughly 19.94% higher. A later local peak-to-trough correction does not rescue this as a top call."
+    },
+    "2012-02": {
+      "anchor": {
+        "date": "2012-02-29",
+        "close": 137.020004
+      },
+      "h63": {
+        "end_date": "2012-05-30",
+        "forward_return_pct": -3.8388620978291543,
+        "worst_return_from_anchor_pct": -5.313092094202543,
+        "max_peak_to_trough_dd_pct": -8.530732756083847
+      },
+      "h126": {
+        "end_date": "2012-08-28",
+        "forward_return_pct": 3.1966062415236696,
+        "worst_return_from_anchor_pct": -6.5099968906729755,
+        "max_peak_to_trough_dd_pct": -9.686964458177227
+      },
+      "h252": {
+        "end_date": "2013-03-04",
+        "forward_return_pct": 11.604140662556105,
+        "worst_return_from_anchor_pct": -6.5099968906729755,
+        "max_peak_to_trough_dd_pct": -9.686964458177227
+      },
+      "interpretation": "CORRECTION_RISK_NOT_MAJOR_TOP",
+      "note": "The signal preceded a roughly 9.69% peak-to-trough correction, but SPY recovered and finished the 252-session horizon about 11.60% above the signal close."
+    }
+  },
+  "research_conclusion": {
+    "statement": "The independent 2007 hit is real, but NG1-A is not a clean market-top classifier. It can fire during credit/breadth stress that resolves into either no meaningful decline or a medium correction.",
+    "legacy_route_a_recovered": false,
+    "production_ready": false,
+    "next_gate": "Freeze and inspect an untouched post-2022 holdout before considering any NG2 redesign. NG1 parameters remain unchanged."
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "schema_version": "market-top-a-c-replacement-screen-1",
+  "research_only": true,
+  "decision": "KEEP_ORIGINAL_ROUTE_A_AND_ROUTE_C_UNRESOLVED",
+  "rules": {
+    "no_posthoc_threshold_tuning": true,
+    "original_armed_threshold": 85,
+    "original_early_breadth_delta_3m_threshold": 10,
+    "monthly_effective_lag_months": 2,
+    "posthoc_threshold_tuning": false
+  },
+  "route_a_candidates": [
+    {
+      "id": "A1_LEVEL_CREDIT",
+      "formula": "Credit=0.5*Pct(BAA-GS10)+0.5*Pct(SLOOS_lag1Q); Breadth=0.5*SizeWeakness+0.5*AbsoluteSectorExhaustion; Route_A=sqrt(Credit*Breadth)",
+      "decision": "REJECTED",
+      "reason": "2007 route remains far below 85 near the top and does not cross until 2008-02",
+      "fingerprints": {
+        "aug_2007": 60.4356,
+        "dec_2007": 78.7113,
+        "jan_2008": 83.0615,
+        "feb_2008": 85.5587
+      }
+    },
+    {
+      "id": "A2_SPREAD_SHOCK",
+      "formula": "CreditBreakdown=0.5*Pct(max(delta3m_spread,delta6m_spread))+0.5*Pct(SLOOS_lag1Q); Route_A=sqrt(CreditBreakdown*Breadth)",
+      "decision": "REJECTED",
+      "reason": "Credit speed improves separation but 2007 still crosses 85 only in 2008-02",
+      "fingerprints": {
+        "aug_2007": 64.6495,
+        "dec_2007": 81.1545,
+        "jan_2008": 84.4828,
+        "feb_2008": 85.8563
+      }
+    }
+  ],
+  "route_c_candidates": [
+    {
+      "id": "C1_ABSOLUTE_SECTOR_PARTICIPATION",
+      "formula": "SectorExhaustion=Pct(1-positive_12industry_6m_share); CB=0.5*SectorExhaustion+0.5*LeaderGapScore; Route_C=sqrt(Valuation*CB)",
+      "decision": "REJECTED",
+      "full_sample_1993_2022": {
+        "route_c_85_months": 41,
+        "early_breadth_months": 9,
+        "armed_c_months": 17
+      },
+      "false_or_unaccepted_early_episodes": [
+        "1998-03",
+        "2000-08",
+        "2000-10_to_2000-11",
+        "2004-11",
+        "2005-08",
+        "2022-03",
+        "2022-08"
+      ],
+      "note": "It detects 2000 and 2022 structure but generates unacceptable false/unaccepted episodes."
+    },
+    {
+      "id": "C2_RELATIVE_PARTICIPATION_ARITHMETIC",
+      "formula": "RelativeParticipation=Pct(1-count(industry6m>market6m)/12); CB=0.5*RelativeParticipation+0.5*LeaderGapScore; Route_C=sqrt(Valuation*CB)",
+      "decision": "REJECTED",
+      "full_sample_1993_2022": {
+        "route_c_85_months": 70,
+        "early_breadth_months": 16,
+        "armed_c_months": 52
+      },
+      "false_early_episodes": [
+        "1995-03",
+        "1997-03",
+        "1998-02",
+        "1998-08",
+        "1999-01_to_1999-03",
+        "2005-04",
+        "2005-08",
+        "2011-03_to_2011-05",
+        "2020-03",
+        "2021-08_to_2021-09"
+      ],
+      "accepted_2021_10_reproduction": false,
+      "route_c_effective_2021_10": 79.0401
+    },
+    {
+      "id": "C3_RELATIVE_PARTICIPATION_GEOMETRIC",
+      "preregistered_before_validation": true,
+      "formula": "CB=sqrt(RelativeParticipationScore*LeaderGapScore); Route_C=sqrt(Valuation*CB)",
+      "decision": "REJECTED",
+      "full_sample_1993_2022": {
+        "route_c_85_months": 68,
+        "early_breadth_months": 16,
+        "armed_c_months": 51
+      },
+      "false_early_episodes": [
+        "1995-03",
+        "1997-03",
+        "1998-02",
+        "1998-08",
+        "1999-01_to_1999-03",
+        "2005-04",
+        "2005-08",
+        "2011-03_to_2011-05",
+        "2020-03",
+        "2021-08_to_2021-09"
+      ],
+      "accepted_2021_10_reproduction": false,
+      "route_c_effective_2021_10": 73.1901,
+      "key_2000_values": {
+        "effective_2000_01": 99.1564,
+        "effective_2000_03": 99.4716,
+        "effective_2000_04": 99.7332
+      }
+    }
+  ],
+  "conclusion": {
+    "route_a": "UNRESOLVED",
+    "route_c": "UNRESOLVED",
+    "interpretation": "The recovered economic motifs are insufficient to reconstruct the final V2.4 child formulas. Reweighting or threshold tuning these failed candidates is prohibited.",
+    "next_recovery_target": "Find the actual accepted 2021-10 Early Breadth Breadth/Route_C definition or code artifact."
+  }
+}
