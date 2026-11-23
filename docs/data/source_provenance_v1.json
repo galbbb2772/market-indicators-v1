@@ -1,6 +1,6 @@
 {
   "schema": "SOURCE-PROVENANCE-V1",
-  "generated_at": "2026-11-22T12:31:02.140801+00:00",
+  "generated_at": "2026-11-23T14:30:15.721218+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
@@ -25,18 +25,26 @@
       "WALCL",
       "LOANINV"
     ],
-    "available_count": 17,
+    "available_count": 16,
     "configured_count": 17,
-    "direct_complete": true,
+    "direct_complete": false,
     "api_key_configured": true,
-    "api_available_count": 17,
+    "api_available_count": 16,
     "csv_available_count": 0,
-    "api_complete": true,
-    "api_errors": {},
-    "initial_chunk_errors": {},
-    "single_series_recovery_errors": {},
+    "api_complete": false,
+    "api_errors": {
+      "fred_api:ICSA": "HTTPError('500 Server Error: Internal Server Error for url: https://api.stlouisfed.org/fred/series/observations?series_id=ICSA&api_key=64d21e5108e22cbf015781a50852f88d&file_type=json&observation_start=2015-01-01')"
+    },
+    "initial_chunk_errors": {
+      "fred:ICSA": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))"
+    },
+    "single_series_recovery_errors": {
+      "fred:ICSA": "ReadTimeout(ReadTimeoutError(\"HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=8)\"))"
+    },
     "recovered_by_single_series_retry": [],
-    "unresolved_ids": [],
+    "unresolved_ids": [
+      "ICSA"
+    ],
     "series_transport": {
       "NFCI": "fred_api",
       "BAMLH0A0HYM2": "fred_api",
@@ -50,7 +58,6 @@
       "BUSINV": "fred_api",
       "MTSDS133FMS": "fred_api",
       "UNRATE": "fred_api",
-      "ICSA": "fred_api",
       "DFF": "fred_api",
       "ECBDFR": "fred_api",
       "WALCL": "fred_api",
@@ -178,13 +185,13 @@
         "recovered_by_single_series_retry": false
       },
       "ICSA": {
-        "available": true,
-        "observations": 620,
-        "start": "2015-01-03",
-        "end": "2026-11-14",
-        "latest_value": 203000.0,
-        "sha256": "91f36f82550b22cd1fb4fd727c60d4bd59651c13d1e0aa0aea3d464cbbd9a5ba",
-        "transport": "fred_api",
+        "available": false,
+        "observations": 0,
+        "start": null,
+        "end": null,
+        "latest_value": null,
+        "sha256": null,
+        "transport": null,
         "recovered_by_single_series_retry": false
       },
       "DFF": {
@@ -199,11 +206,11 @@
       },
       "ECBDFR": {
         "available": true,
-        "observations": 4342,
+        "observations": 4345,
         "start": "2015-01-01",
-        "end": "2026-11-20",
+        "end": "2026-11-23",
         "latest_value": 2.5,
-        "sha256": "f0e8e4cfcb8d9ba3e36abd5e61e79991282e939ca82f9b1a57f8b861ed6a7006",
+        "sha256": "04aa357f403e3612ad5d57650775f0b754f8f42551db39572a02e5871cbdfb4e",
         "transport": "fred_api",
         "recovered_by_single_series_retry": false
       },
