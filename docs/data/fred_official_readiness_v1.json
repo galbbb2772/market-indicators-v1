@@ -1,31 +1,25 @@
 {
   "schema": "FRED-OFFICIAL-READINESS-V1",
-  "generated_at": "2026-11-23T14:30:42.256909+00:00",
+  "generated_at": "2026-11-24T14:48:10.709563+00:00",
   "research_only": true,
   "diagnostic_only": true,
   "production_effect": "none",
   "study_spec": "research/fred_official_readiness_v1/STUDY_SPEC.md",
-  "status": "blocked_incomplete_official_series",
-  "official_factor_map_ready": false,
+  "status": "ready",
+  "official_factor_map_ready": true,
   "configured_count": 17,
-  "canonical_nonempty_count": 16,
+  "canonical_nonempty_count": 17,
   "api_key_configured": true,
-  "direct_complete": false,
-  "api_available_count": 16,
+  "direct_complete": true,
+  "api_available_count": 17,
   "csv_available_count": 0,
-  "unresolved_ids": [
-    "ICSA"
-  ],
-  "empty_canonical_ids": [
-    "ICSA"
-  ],
-  "missing_transport_ids": [
-    "ICSA"
-  ],
+  "unresolved_ids": [],
+  "empty_canonical_ids": [],
+  "missing_transport_ids": [],
   "revision_ledger_count": 1911,
-  "source_provenance_generated_at": "2026-11-23T14:30:15.721218+00:00",
-  "canonical_generated_at": "2026-11-23T14:30:15.721218+00:00",
-  "next_action": "Configure repository secret FRED_API_KEY and rerun Source Provenance V1.",
+  "source_provenance_generated_at": "2026-11-24T14:48:02.694579+00:00",
+  "canonical_generated_at": "2026-11-24T14:48:02.694579+00:00",
+  "next_action": "Run Canonical FRED Factor Map V1/V2.",
   "guardrails": {
     "may_change_production": false,
     "may_reweight_model": false,
