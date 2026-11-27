@@ -1,6 +1,6 @@
 {
   "schema": "MARKET-FACTOR-MAP-CANONICAL-FRED-V1-SUMMARY",
-  "generated_at": "2026-11-26T13:51:29.096308+00:00",
+  "generated_at": "2026-11-27T13:48:15.859997+00:00",
   "research_only": true,
   "coverage": {
     "spy_start": "2016-11-28",
@@ -22,7 +22,7 @@
       "ic20": -0.2603,
       "ic10_2022_present": -0.1974,
       "partial_ic10": -0.1827,
-      "partial_ic10_2022_present": -0.1858,
+      "partial_ic10_2022_present": -0.1857,
       "loyo_univariate_improvement_pct": -1.417,
       "loyo_ablation_delta_pct": -0.289,
       "rolling_positive_pct10": 3.7,
@@ -37,7 +37,7 @@
       "ic10": 0.0612,
       "ic20": 0.0764,
       "ic10_2022_present": -0.0161,
-      "partial_ic10": 0.0906,
+      "partial_ic10": 0.0907,
       "partial_ic10_2022_present": 0.0989,
       "loyo_univariate_improvement_pct": -0.988,
       "loyo_ablation_delta_pct": 1.505,
@@ -56,7 +56,7 @@
       "partial_ic10": -0.086,
       "partial_ic10_2022_present": -0.1459,
       "loyo_univariate_improvement_pct": -0.643,
-      "loyo_ablation_delta_pct": 1.904,
+      "loyo_ablation_delta_pct": 1.903,
       "rolling_positive_pct10": 46.08,
       "phase_same_sign_pct10": 100.0
     },
@@ -70,7 +70,7 @@
       "ic20": -0.1051,
       "ic10_2022_present": -0.0172,
       "partial_ic10": 0.0687,
-      "partial_ic10_2022_present": 0.0931,
+      "partial_ic10_2022_present": 0.0932,
       "loyo_univariate_improvement_pct": -0.487,
       "loyo_ablation_delta_pct": 1.44,
       "rolling_positive_pct10": 8.33,
@@ -88,7 +88,7 @@
       "partial_ic10": -0.0682,
       "partial_ic10_2022_present": 0.0497,
       "loyo_univariate_improvement_pct": -1.833,
-      "loyo_ablation_delta_pct": -0.634,
+      "loyo_ablation_delta_pct": -0.635,
       "rolling_positive_pct10": 45.37,
       "phase_same_sign_pct10": 100.0
     },
@@ -133,7 +133,7 @@
       "ic10": 0.0486,
       "ic20": 0.0629,
       "ic10_2022_present": -0.0481,
-      "partial_ic10": -0.0234,
+      "partial_ic10": -0.0235,
       "partial_ic10_2022_present": -0.0788,
       "loyo_univariate_improvement_pct": -0.144,
       "loyo_ablation_delta_pct": -0.251,
@@ -168,7 +168,7 @@
       "ic20": -0.2603,
       "ic10_2022_present": -0.1974,
       "partial_ic10": -0.1827,
-      "partial_ic10_2022_present": -0.1858,
+      "partial_ic10_2022_present": -0.1857,
       "loyo_univariate_improvement_pct": -1.417,
       "loyo_ablation_delta_pct": -0.289,
       "rolling_positive_pct10": 3.7,
@@ -183,7 +183,7 @@
       "ic10": 0.0612,
       "ic20": 0.0764,
       "ic10_2022_present": -0.0161,
-      "partial_ic10": 0.0906,
+      "partial_ic10": 0.0907,
       "partial_ic10_2022_present": 0.0989,
       "loyo_univariate_improvement_pct": -0.988,
       "loyo_ablation_delta_pct": 1.505,
@@ -202,7 +202,7 @@
       "partial_ic10": -0.086,
       "partial_ic10_2022_present": -0.1459,
       "loyo_univariate_improvement_pct": -0.643,
-      "loyo_ablation_delta_pct": 1.904,
+      "loyo_ablation_delta_pct": 1.903,
       "rolling_positive_pct10": 46.08,
       "phase_same_sign_pct10": 100.0
     },
@@ -216,7 +216,7 @@
       "ic20": -0.1051,
       "ic10_2022_present": -0.0172,
       "partial_ic10": 0.0687,
-      "partial_ic10_2022_present": 0.0931,
+      "partial_ic10_2022_present": 0.0932,
       "loyo_univariate_improvement_pct": -0.487,
       "loyo_ablation_delta_pct": 1.44,
       "rolling_positive_pct10": 8.33,
@@ -234,7 +234,7 @@
       "partial_ic10": -0.0682,
       "partial_ic10_2022_present": 0.0497,
       "loyo_univariate_improvement_pct": -1.833,
-      "loyo_ablation_delta_pct": -0.634,
+      "loyo_ablation_delta_pct": -0.635,
       "rolling_positive_pct10": 45.37,
       "phase_same_sign_pct10": 100.0
     },
@@ -279,7 +279,7 @@
       "ic10": 0.0486,
       "ic20": 0.0629,
       "ic10_2022_present": -0.0481,
-      "partial_ic10": -0.0234,
+      "partial_ic10": -0.0235,
       "partial_ic10_2022_present": -0.0788,
       "loyo_univariate_improvement_pct": -0.144,
       "loyo_ablation_delta_pct": -0.251,
@@ -313,8 +313,8 @@
     {
       "a": "crowding_mega",
       "b": "fear_volatility",
-      "rho_5d_change": -0.389,
-      "abs_rho": 0.389
+      "rho_5d_change": -0.3889,
+      "abs_rho": 0.3889
     },
     {
       "a": "fear_volatility",
@@ -325,8 +325,8 @@
     {
       "a": "breadth_participation",
       "b": "crowding_mega",
-      "rho_5d_change": 0.3419,
-      "abs_rho": 0.3419
+      "rho_5d_change": 0.342,
+      "abs_rho": 0.342
     },
     {
       "a": "fear_volatility",
@@ -361,14 +361,14 @@
     {
       "a": "cross_asset_commodity",
       "b": "rates_policy",
-      "rho_5d_change": 0.2217,
-      "abs_rho": 0.2217
+      "rho_5d_change": 0.2216,
+      "abs_rho": 0.2216
     },
     {
       "a": "liquidity_credit",
       "b": "valuation_price_structure",
-      "rho_5d_change": 0.1939,
-      "abs_rho": 0.1939
+      "rho_5d_change": 0.1938,
+      "abs_rho": 0.1938
     },
     {
       "a": "fear_volatility",
@@ -385,14 +385,14 @@
     {
       "a": "liquidity_credit",
       "b": "rates_policy",
-      "rho_5d_change": -0.1174,
-      "abs_rho": 0.1174
+      "rho_5d_change": -0.1173,
+      "abs_rho": 0.1173
     },
     {
       "a": "fear_volatility",
       "b": "macro_cycle_labor_fiscal",
-      "rho_5d_change": 0.1128,
-      "abs_rho": 0.1128
+      "rho_5d_change": 0.1127,
+      "abs_rho": 0.1127
     },
     {
       "a": "crowding_mega",
@@ -415,8 +415,8 @@
     {
       "a": "crowding_mega",
       "b": "liquidity_credit",
-      "rho_5d_change": -0.062,
-      "abs_rho": 0.062
+      "rho_5d_change": -0.0619,
+      "abs_rho": 0.0619
     },
     {
       "a": "fear_volatility",
@@ -425,7 +425,7 @@
       "abs_rho": 0.0601
     }
   ],
-  "multivariate_full_mse": 10.848483,
+  "multivariate_full_mse": 10.848572,
   "guardrails": {
     "may_change_production": false,
     "may_reweight_model": false,
@@ -435,8 +435,8 @@
   },
   "study_spec": "research/factor_map_canonical_fred_v1/STUDY_SPEC.md",
   "canonical_fred_snapshot": {
-    "canonical_generated_at": "2026-11-26T13:49:36.367431+00:00",
-    "provenance_generated_at": "2026-11-26T13:49:36.367431+00:00",
+    "canonical_generated_at": "2026-11-27T13:47:11.607253+00:00",
+    "provenance_generated_at": "2026-11-27T13:47:11.607253+00:00",
     "configured_ids": [
       "NFCI",
       "BAMLH0A0HYM2",
@@ -471,7 +471,7 @@
       "UNRATE": "97bf2e0335e8ff0407f2dbc2981deb847d2b41ac250bb4ac196dfc45b9c626c9",
       "ICSA": "3219bdeedbe879ead68abaa9a8b4c494b93faa9fb0c2eca8f6fe9e1cd672205f",
       "DFF": "4f87005b8ba777ce02510e547588e7cbf905bc0f3ef01a91b76dca34726d8b8b",
-      "ECBDFR": "778c0fe5ff34ad2ff772cf19161a40ad6d1785cffa773796dec8bfb464cb3e3b",
+      "ECBDFR": "505bbe3f0507388e92ffc3f21c1265c888735ba1d8438fda6115a0abc1546db0",
       "WALCL": "dec3919178b42f0b7aca85bd7aa1263b8f5fffb8ae143348bb78e7f1ee6e71eb",
       "LOANINV": "f14eb8d5cc11bf6ff79d9001cbebd80858120f891eaeb7037462c849042f0390"
     },
@@ -509,7 +509,7 @@
         "ic10": 0.0486,
         "ic20": 0.0629,
         "ic10_2022_present": -0.0481,
-        "partial_ic10": -0.0234,
+        "partial_ic10": -0.0235,
         "partial_ic10_2022_present": -0.0788,
         "loyo_univariate_improvement_pct": -0.144,
         "loyo_ablation_delta_pct": -0.251,
@@ -533,7 +533,7 @@
         "phase_same_sign_pct10": 90.0
       },
       "ic10_delta_canonical_minus_invariant": 0.0152,
-      "partial_ic10_delta_canonical_minus_invariant": 0.0256
+      "partial_ic10_delta_canonical_minus_invariant": 0.0255
     },
     {
       "family": "cross_asset_commodity",
@@ -549,7 +549,7 @@
         "partial_ic10": -0.086,
         "partial_ic10_2022_present": -0.1459,
         "loyo_univariate_improvement_pct": -0.643,
-        "loyo_ablation_delta_pct": 1.904,
+        "loyo_ablation_delta_pct": 1.903,
         "rolling_positive_pct10": 46.08,
         "phase_same_sign_pct10": 100.0
       },
@@ -583,7 +583,7 @@
         "ic10": 0.0612,
         "ic20": 0.0764,
         "ic10_2022_present": -0.0161,
-        "partial_ic10": 0.0906,
+        "partial_ic10": 0.0907,
         "partial_ic10_2022_present": 0.0989,
         "loyo_univariate_improvement_pct": -0.988,
         "loyo_ablation_delta_pct": 1.505,
@@ -607,7 +607,7 @@
         "phase_same_sign_pct10": 100.0
       },
       "ic10_delta_canonical_minus_invariant": 0.0027,
-      "partial_ic10_delta_canonical_minus_invariant": 0.0026
+      "partial_ic10_delta_canonical_minus_invariant": 0.0027
     },
     {
       "family": "fear_volatility",
@@ -621,7 +621,7 @@
         "ic20": -0.1051,
         "ic10_2022_present": -0.0172,
         "partial_ic10": 0.0687,
-        "partial_ic10_2022_present": 0.0931,
+        "partial_ic10_2022_present": 0.0932,
         "loyo_univariate_improvement_pct": -0.487,
         "loyo_ablation_delta_pct": 1.44,
         "rolling_positive_pct10": 8.33,
@@ -658,7 +658,7 @@
         "ic20": -0.2603,
         "ic10_2022_present": -0.1974,
         "partial_ic10": -0.1827,
-        "partial_ic10_2022_present": -0.1858,
+        "partial_ic10_2022_present": -0.1857,
         "loyo_univariate_improvement_pct": -1.417,
         "loyo_ablation_delta_pct": -0.289,
         "rolling_positive_pct10": 3.7,
@@ -682,7 +682,7 @@
         "partial_ic10": -0.0682,
         "partial_ic10_2022_present": 0.0497,
         "loyo_univariate_improvement_pct": -1.833,
-        "loyo_ablation_delta_pct": -0.634,
+        "loyo_ablation_delta_pct": -0.635,
         "rolling_positive_pct10": 45.37,
         "phase_same_sign_pct10": 100.0
       },
